@@ -118,7 +118,7 @@ class MicrodataExtractor(object):
             return node.get("datetime", "")
 
         # not in W3C specs but used in schema.org examples
-        elif node.tag in ("meta",) and node.get("content"):
+        elif node.get("content"):
             return node.get("content")
 
         else:

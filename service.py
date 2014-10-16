@@ -9,7 +9,7 @@ monkey.patch_all()
 
 from bottle import route, run, request
 
-from schemaorg.microdata import parse_microdata
+from schemaorg.w3cmicrodata import MicrodataExtractor
 
 
 def JSON(func):
@@ -20,7 +20,8 @@ def JSON(func):
 
 def async_extruct(url):
     resp = requests.get(url)
-    items = parse_microdata(resp.content)
+    extractor = MicrodataExtractor(nested=True)
+    items = extractor.extract(resp.content, url, resp.encoding)
     return {'url': url, 'microdata': items, 'status': 'ok'}
 
 @route('/')

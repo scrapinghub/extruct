@@ -9,7 +9,7 @@ monkey.patch_all()
 
 from bottle import route, run, request
 
-from schemaorg.w3cmicrodata import MicrodataExtractor
+from extruct.w3cmicrodata import MicrodataExtractor
 
 
 def JSON(func):

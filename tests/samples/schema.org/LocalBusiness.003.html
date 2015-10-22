@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+    <title>schmea.org -- Creative Work</title>
+</head>
+
+<body>
+
+<div itemscope itemtype="http://schema.org/Invoice">
+  <h1 itemprop="description">New furnace and installation</h1>
+  <div itemprop="broker" itemscope itemtype="http://schema.org/LocalBusiness">
+    <b itemprop="name">ACME Home Heating</b>
+  </div>
+  <div itemprop="customer" itemscope itemtype="http://schema.org/Person">
+    <b itemprop="name">Jane Doe</b>
+  </div>
+  <span itemprop="paymentDueDate">2015-01-30</span>
+  <div itemprop="minimumPaymentDue" itemscope itemtype="http://schema.org/PriceSpecification">
+    <span itemprop="price">0.00</span>
+    <span itemprop="priceCurrency">USD</span>
+  </div>
+  <div itemprop="totalPaymentDue" itemscope itemtype="http://schema.org/PriceSpecification">
+    <span itemprop="price">0.00</span>
+    <span itemprop="priceCurrency">USD</span>
+  </div>
+  <meta itemprop="paymentStatus" content="http://schema.org/PaymentComplete" />
+  <div itemprop="referencesOrder" itemscope itemtype="http://schema.org/Order">
+    <span itemprop="description">furnace</span>
+    <span itemprop="orderDate">2014-12-01</span>
+    <span itemprop="orderNumber">123ABC</span>
+    <div itemprop="orderedItem" itemscope itemtype="http://schema.org/Product">
+      <span itemprop="name">ACME Furnace 3000</span>
+      <meta itemprop="productId" content="ABC123" />
+    </div>
+  </div>
+  <div itemprop="referencesOrder" itemscope itemtype="http://schema.org/Order">
+    <span itemprop="description">furnace installation</span>
+    <span itemprop="orderDate">2014-12-02</span>
+    <div itemprop="orderedItem" itemscope itemtype="http://schema.org/Service">
+      <span itemprop="description">furnace installation</span>
+    </div>
+  </div>
+</div>
+
+</body>
+
+</html>

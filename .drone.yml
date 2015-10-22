@@ -1,0 +1,24 @@
+image: bradrydzewski/python:2.7-scrapinghub
+
+env:
+  - DRONE_BUILD=True
+
+script:
+  - git restore-mtime
+  - env
+  - pip install -U tox
+  - tox
+
+# Exampe deploy section
+#deploy:
+#  bash:
+#    command: 'shub deploy'
+#    when:
+#      branch: master
+
+# Example publish section
+#publish:
+#  docker:
+#    docker_host: $DOCKER_HOST
+#    image_name: i.scrapinghub.com/extruct/$CI_BRANCH
+#    keep_build: true

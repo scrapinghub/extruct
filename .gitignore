@@ -1,3 +1,15 @@
+# Python
 *.pyc
-build
+*.pyo
+/build/
+/dist/
+*.egg-info
 
+# Mac OS
+*.DS_Store
+
+# IDE
+/.idea/
+
+.cache/
+.tox/

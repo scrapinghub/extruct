@@ -24,7 +24,13 @@ setup(
     url='https://github.com/scrapinghub/extruct',
     packages=find_packages(include=['extruct']),
     package_data={'extruct': ['VERSION']},
-    install_requires=requirements,
+    install_requires=['lxml'],
+    extras_require={
+        'service': [
+            'bottle',
+            'gevent',
+        ]
+    },
     keywords='extruct',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',

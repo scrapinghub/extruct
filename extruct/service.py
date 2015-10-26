@@ -37,9 +37,9 @@ def async_extruct(url, microdata=True, jsonld=True):
 
     if jsonld:
         jsonlde = JsonLdExtractor()
-        jsonld = jsonlde.extract_items(lxmldoc)
-        if jsonld:
-            result['json-ld'] = jsonld
+        jsonldata = jsonlde.extract_items(lxmldoc)
+        if jsonldata.get('items', []):
+            result['json-ld'] = jsonldata
 
     return result
 

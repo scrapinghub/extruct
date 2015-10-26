@@ -16,3 +16,15 @@ install:
 
 # command to run tests, e.g. python setup.py test
 script: tox
+
+# config to deploy in PyPI when a tag is pushed
+deploy:
+  provider: pypi
+  distributions: sdist bdist_wheel
+  user: redapple
+  password:
+    secure: +ZR1Ay0jsto8ELID6ftCUSuWmfknggGizl8PoRsizRHazB9taBHWey716oVFqtq6o9m7Rtf22ms2xKIVbLlk40I6YT31rxo3YaCgt2Is1ixvNyNzKCNQTWQvP9Cjeg4zckrNCLrPcdb5rgxO75Cb3sNrNJdlDeTDluoxBAk3RDN+PgJpon5Rh+Dm9aZo2a3+EPa45GiR/Sbuc6AACDor+zXpO2DObh+dAOdHfGTw11Iy9m74zzkRRw4YhKACm6dD6xaCw03ow7TMnyqfqFqKP1Z3az7oNbm5kckxVg2zw7k6En9HzvOt52SwxLsi3GyBhBhlkJoBnsKz1CZdWuIAS5xkBT8hvAyXaFve8XQmIwvBmC4mpMybGXSJXwUSuU3V2mRApJyWUQhhVPILPrn/YA6GoI6rs+AtcrYWDvRI/X88ccCCZWP2TjTdbRNsxlwwPi9is1lG9/VCgZCYxpWg2hLi2k16XmwnQ2vlgEoig4W+4xIo8nHcyD+vHe1fkYYgPiDh343MY5BIkoAo+Uz5fKK+onTczaUf32Vz0Qofp+oEAJMrBe7zqUbCkXOypMtkcn7f8P4raOZ6Y5R/NSm+C7vjKpjb7MqT+0YylrH0aia+qUgzA4iVF9JPVymlM7cYYtrsELzce5TeYvPwm2PVbofrEIVxQVNO/JEt7rlarRw=
+  on:
+    tags: true
+    repo: scrapinghub/extruct
+    condition: $TOXENV == py27

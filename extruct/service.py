@@ -9,7 +9,9 @@ monkey.patch_all()
 
 from bottle import route, run, request
 
+import lxml.html
 from extruct.w3cmicrodata import MicrodataExtractor
+from extruct.jsonld import JsonLdExtractor
 
 
 def JSON(func):
@@ -18,11 +20,29 @@ def JSON(func):
             yield json.dumps(e)
     return _decorated
 
-def async_extruct(url):
-    resp = requests.get(url)
-    extractor = MicrodataExtractor(nested=True)
-    items = extractor.extract(resp.content, url, resp.encoding)
-    return {'url': url, 'microdata': items, 'status': 'ok'}
+
+def async_extruct(url, microdata=True, jsonld=True):
+    resp = requests.get(url, timeout=30)
+
+    parser = lxml.html.HTMLParser(encoding=resp.encoding)
+    lxmldoc = lxml.html.fromstring(resp.content, parser=parser)
+
+    result = {'url': url, 'status': 'ok'}
+
+    if microdata:
+        mde = MicrodataExtractor(nested=True)
+        microdata = mde.extract_items(lxmldoc, url)
+        if microdata.get('items', []):
+            result['microdata'] = microdata
+
+    if jsonld:
+        jsonlde = JsonLdExtractor()
+        jsonld = jsonlde.extract_items(lxmldoc)
+        if jsonld:
+            result['json-ld'] = jsonld
+
+    return result
+
 
 @route('/')
 def extruct_root():

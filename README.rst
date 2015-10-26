@@ -9,18 +9,18 @@ extruct
 
 It also has a built-in HTTP server to test its output as JSON.
 
-Currently, *extruct* only supports `W3C's HTML Microdata`_.
+Currently, *extruct* only supports `W3C's HTML Microdata`_
+and `embedded JSON-LD`_.
 
 .. _W3C's HTML Microdata: http://www.w3.org/TR/microdata/
+.. _embedded JSON-LD: http://www.w3.org/TR/json-ld/#embedding-json-ld-in-html-documents
 
 
 Roadmap
 -------
 
-- support for `embedded JSON-LD`_
 - support for `RDFa Lite`_ (e.g. Facebook `Open Graph protocol metadata`_)
 
-.. _embedded JSON-LD: http://www.w3.org/TR/json-ld/#embedding-json-ld-in-html-documents
 .. _RDFa Lite: http://www.w3.org/TR/rdfa-lite/
 .. _Open Graph protocol metadata: http://ogp.me/#metadata
 

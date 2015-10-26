@@ -7,7 +7,6 @@ def get_version():
     path = os.path.join(
         os.path.dirname(__file__), 'extruct', 'VERSION')
     with open(path) as f:
-        #return f.read().decode('ascii').strip()
         return f.read().strip()
 
 
@@ -16,7 +15,7 @@ requirements = []
 setup(
     name='extruct',
     version=get_version(),
-    description='Extract structured information from web pages',
+    description='Extract embedded metadata from HTML markup',
     author='Scrapinghub',
     author_email='info@scrapinghub.com',
     maintainer='Scrapinghub',

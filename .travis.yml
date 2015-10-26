@@ -16,3 +16,15 @@ install:
 
 # command to run tests, e.g. python setup.py test
 script: tox
+
+# config to deploy in PyPI when a tag is pushed
+deploy:
+  provider: pypi
+  distributions: sdist bdist_wheel
+  user: scrapinghub
+  password:
+    secure: PLEASE_REPLACE_ME
+  on:
+    tags: true
+    repo: scrapinghub/extruct
+    condition: $TOXENV == py27

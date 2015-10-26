@@ -1,5 +1,5 @@
+# project requirements, install them using following command:
+# pip install -r requirements.txt
+lxml
 bottle
 gevent
-scrapy
-
-

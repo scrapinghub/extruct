@@ -1,0 +1,10 @@
+# project requirements for development, install them using following command:
+# pip install -r requirements-dev.txt
+
+-r requirements.txt
+
+pytest
+tox
+flake8
+
+bumpversion

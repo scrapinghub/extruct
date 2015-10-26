@@ -1,0 +1,15 @@
+{"items": [{"properties": {"location": {"properties": {"address": {"properties": {"addressLocality": "Denver",
+                                                                                  "addressRegion": "CO",
+                                                                                  "postalCode": "80209",
+                                                                                  "streetAddress": "7 S. Broadway"},
+                                                                   "type": "http://schema.org/PostalAddress"},
+                                                       "name": "The Hi-Dive"},
+                                        "type": "http://schema.org/Place"},
+                           "name": "Typhoon with Radiation City",
+                           "offers": {"properties": {"price": "13.00",
+                                                     "priceCurrency": "USD",
+                                                     "url": "http://www.ticketfly.com/purchase/309433"},
+                                      "type": "http://schema.org/Offer"},
+                           "startDate": "2013-09-14T21:30"},
+            "type": "http://schema.org/Event"}]}
+

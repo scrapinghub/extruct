@@ -1,0 +1,44 @@
+{
+  "items": [
+    {
+      "type": [ "http://schema.org/BlogPosting" ],
+      "properties": {
+        "headline": [ "Progress report" ],
+        "datePublished": [ "2013-08-29" ],
+        "url": [ "http://blog.example.com/progress-report?comments=0" ],
+        "comment": [
+          {
+            "type": [ "http://schema.org/UserComments" ],
+            "properties": {
+              "url": [ "http://blog.example.com/progress-report#c1" ],
+              "creator": [
+                {
+                  "type": [ "http://schema.org/Person" ],
+                  "properties": {
+                    "name": [ "Greg" ]
+                  }
+                }
+              ],
+              "commentTime": [ "2013-08-29" ]
+            }
+          },
+          {
+            "type": [ "http://schema.org/UserComments" ],
+            "properties": {
+              "url": [ "http://blog.example.com/progress-report#c2" ],
+              "creator": [
+                {
+                  "type": [ "http://schema.org/Person" ],
+                  "properties": {
+                    "name": [ "Charlotte" ]
+                  }
+                }
+              ],
+              "commentTime": [ "2013-08-29" ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -16,13 +16,12 @@ class TestJsonLD(unittest.TestCase):
 
             jsonlde = JsonLdExtractor()
             data = jsonlde.extract(body)
-            self.assertListEqual(data, expected)
-
+            self.assertDictEqual(data, expected)
 
     def test_songkick(self):
         for page in [
-                #"Elysian Fields Brooklyn Tickets, The Owl Music Parlor, 31 Oct 2015",
-                "Maxïmo Park Gigography, Tour History & Past Concerts",
+                "Elysian Fields Brooklyn Tickets, The Owl Music Parlor, 31 Oct 2015",
+                #"Maxïmo Park Gigography, Tour History & Past Concerts",
                 #"Years & Years Tickets, Tour Dates 2015 & Concerts",
             ]:
             body = get_testdata('songkick', '{}.html'.format(page))
@@ -30,4 +29,4 @@ class TestJsonLD(unittest.TestCase):
 
             jsonlde = JsonLdExtractor()
             data = jsonlde.extract(body)
-            self.assertListEqual(data, expected)
+            self.assertDictEqual(data, expected)

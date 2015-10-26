@@ -18,9 +18,10 @@ class JsonLdExtractor(object):
         return self.extract_items(lxmldoc)
 
     def extract_items(self, document):
-        return [item
-                for item in map(self.extract_item, self._xp_jsonld(document))
-                if item]
+        return {"items" : [item
+                           for item in map(self.extract_item,
+                                           self._xp_jsonld(document))
+                           if item]}
 
     def extract_item(self, node):
         return json.loads(node.xpath('string()'))

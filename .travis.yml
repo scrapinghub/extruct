@@ -8,7 +8,6 @@ python:
 env:
   - TOXENV=py27
   - TOXENV=py34
-  - TOXENV=pypy
 
 # command to install dependencies
 install:

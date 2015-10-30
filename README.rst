@@ -15,6 +15,9 @@ and `embedded JSON-LD`_.
 .. _W3C's HTML Microdata: http://www.w3.org/TR/microdata/
 .. _embedded JSON-LD: http://www.w3.org/TR/json-ld/#embedding-json-ld-in-html-documents
 
+The microdata algorithm is a revisit of `this Scrapinghub blog post`_ showing how to use EXSLT extensions.
+
+.. _this Scrapinghub blog post: http://blog.scrapinghub.com/2014/06/18/extracting-schema-org-microdata-using-scrapy-selectors-and-xpath/
 
 Roadmap
 -------

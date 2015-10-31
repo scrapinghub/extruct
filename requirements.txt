@@ -3,3 +3,4 @@
 lxml
 bottle
 gevent
+requests

@@ -92,10 +92,11 @@ Dependencies
 
 * bottle_ (Web framework)
 * gevent_ (Aysnc framework)
+* requests_
 
 .. _bottle: https://pypi.python.org/pypi/bottle
 .. _gevent: http://www.gevent.org/
-
+.. _requests: http://docs.python-requests.org/
 
 Usage
 +++++

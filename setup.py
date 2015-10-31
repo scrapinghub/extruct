@@ -28,6 +28,7 @@ setup(
         'service': [
             'bottle',
             'gevent',
+            'requests',
         ]
     },
     keywords='extruct',

@@ -7,7 +7,7 @@ from gevent import monkey
 # gevent monkey patching
 monkey.patch_all()
 
-from bottle import route, run, request
+from bottle import route, run, request, response
 
 import lxml.html
 from extruct.w3cmicrodata import MicrodataExtractor
@@ -22,6 +22,7 @@ def JSON(func):
 
 
 def async_extruct(url, microdata=True, jsonld=True):
+    response.content_type = 'application/json'
     resp = requests.get(url, timeout=30)
 
     parser = lxml.html.HTMLParser(encoding=resp.encoding)

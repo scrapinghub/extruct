@@ -1,7 +1,10 @@
 import requests
 import json
 
-from cStringIO import StringIO
+try:
+    from cStringIO import StringIO as BytesIO
+except ImportError:
+    from io import BytesIO
 from gevent import monkey
 
 # gevent monkey patching
@@ -79,14 +82,14 @@ def extruct(url=None):
         return
     try:
         yield async_extruct(url)
-    except Exception, e:
+    except Exception as e:
         yield {'url': url, 'status': 'error', 'message': repr(e)}
 
 @route('/extruct/batch', method='POST')
 def extruct_batch():
     urlsparam = request.params.get('urls')
     try:
-        flobj = StringIO(urlsparam) if urlsparam else request.files.get('urlsfile').file
+        flobj = BytesIO(urlsparam) if urlsparam else request.files.get('urlsfile').file
     except AttributeError:
         yield json.dumps({'message': 'No url provided'})
         return

@@ -4,3 +4,4 @@ lxml
 bottle
 gevent
 requests
+six

@@ -2,7 +2,7 @@
 extruct
 =======
 
-.. image:: https://img.shields.io/travis/scrapinghub/extruct.svg
+.. image:: https://img.shields.io/travis/scrapinghub/extruct/branch.svg
     :target: https://travis-ci.org/scrapinghub/extruct
 
 *extruct* is a library for extracting embedded metadata from HTML markup.

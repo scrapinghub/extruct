@@ -5,6 +5,10 @@ extruct
 .. image:: https://img.shields.io/travis/scrapinghub/extruct/master.svg
     :target: https://travis-ci.org/scrapinghub/extruct
 
+.. image:: https://img.shields.io/codecov/c/github/scrapinghub/extruct/master.svg?maxAge=2592000
+    :target: https://codecov.io/gh/scrapinghub/extruct
+
+
 *extruct* is a library for extracting embedded metadata from HTML markup.
 
 It also has a built-in HTTP server to test its output as JSON.

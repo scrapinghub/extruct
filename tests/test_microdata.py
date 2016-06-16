@@ -97,3 +97,16 @@ class TestMicrodataFlat(unittest.TestCase):
         mde = MicrodataExtractor(nested=False, strict=True)
         data = mde.extract(body, 'http://blog.example.com/progress-report')
         self.assertDictEqual(data, expected)
+
+
+class TestMicrodataWithText(unittest.TestCase):
+
+    maxDiff = None
+
+    def test_w3c_5_2(self):
+        body = get_testdata('w3c', 'microdata.5.2.html')
+        expected = json.loads(get_testdata('w3c', 'microdata.5.2.withtext.json').decode('UTF-8'))
+
+        mde = MicrodataExtractor(add_text_content=True)
+        data = mde.extract(body)
+        self.assertDictEqual(data, expected)

@@ -137,7 +137,7 @@ class LxmlMicrodataExtractor(object):
             return urljoin(self.url, node.get("href", ""))
 
         elif node.tag in ("object",):
-            return node.get("data", "")
+            return urljoin(self.url, node.get("data", ""))
 
         elif node.tag in ("data", "meter"):
             return node.get("value", "")

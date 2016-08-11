@@ -45,6 +45,22 @@ class TestMicrodata(unittest.TestCase):
             data = mde.extract(body)
             self.assertDictEqual(data, expected)
 
+    def test_w3c_textContent_values(self):
+        body = get_testdata('w3c', 'microdata.4.2.strings.html')
+        expected = json.loads(get_testdata('w3c', 'microdata.4.2.strings.json').decode('UTF-8'))
+
+        mde = MicrodataExtractor(strict=True)
+        data = mde.extract(body)
+        self.assertDictEqual(data, expected)
+
+    def test_w3c_textContent_values_unclean(self):
+        body = get_testdata('w3c', 'microdata.4.2.strings.unclean.html')
+        expected = json.loads(get_testdata('w3c', 'microdata.4.2.strings.unclean.json').decode('UTF-8'))
+
+        mde = MicrodataExtractor(strict=True)
+        data = mde.extract(body)
+        self.assertDictEqual(data, expected)
+
     def test_w3c_5_2(self):
         body = get_testdata('w3c', 'microdata.5.2.html')
         expected = json.loads(get_testdata('w3c', 'microdata.5.2.json').decode('UTF-8'))

@@ -43,6 +43,9 @@ Installation
 Usage
 -----
 
+Microdata extraction
+++++++++++++++++++++
+
 ::
 
     >>> from pprint import pprint
@@ -84,6 +87,58 @@ Usage
                                'title': u'The mailbox.',
                                'work': 'http://www.example.com/images/mailbox.jpeg'},
                 'type': 'http://n.whatwg.org/work'}]}
+
+JSON-LD extraction
+++++++++++++++++++
+
+::
+
+    >>> from pprint import pprint
+    >>>
+    >>> from extruct.jsonld import JsonLdExtractor
+    >>>
+    >>> html = """<!DOCTYPE HTML>
+    ... <html>
+    ...  <head>
+    ...   <title>Some Person Page</title>
+    ...  </head>
+    ...  <body>
+    ...   <h1>This guys</h1>
+    ...     <script type="application/ld+json">
+    ...     {
+    ...       "@context": "http://schema.org",
+    ...       "@type": "Person",
+    ...       "name": "John Doe",
+    ...       "jobTitle": "Graduate research assistant",
+    ...       "affiliation": "University of Dreams",
+    ...       "additionalName": "Johnny",
+    ...       "url": "http://www.example.com",
+    ...       "address": {
+    ...         "@type": "PostalAddress",
+    ...         "streetAddress": "1234 Peach Drive",
+    ...         "addressLocality": "Wonderland",
+    ...         "addressRegion": "Georgia"
+    ...       }
+    ...     }
+    ...     </script>
+    ...  </body>
+    ... </html>"""
+    >>>
+    >>> jslde = JsonLdExtractor()
+    >>>
+    >>> data = jslde.extract(html)
+    >>> pprint(data)
+    {'items': [{u'@context': u'http://schema.org',
+                u'@type': u'Person',
+                u'additionalName': u'Johnny',
+                u'address': {u'@type': u'PostalAddress',
+                             u'addressLocality': u'Wonderland',
+                             u'addressRegion': u'Georgia',
+                             u'streetAddress': u'1234 Peach Drive'},
+                u'affiliation': u'University of Dreams',
+                u'jobTitle': u'Graduate research assistant',
+                u'name': u'John Doe',
+                u'url': u'http://www.example.com'}]}
 
 
 REST API service

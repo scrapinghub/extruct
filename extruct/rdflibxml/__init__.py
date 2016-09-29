@@ -16,14 +16,20 @@ different project. (The version numbering has been continued, though, to avoid a
 (Simple) Usage
 ==============
 From a Python file, expecting a Turtle output::
- from pyRdfa import pyRdfa
- print pyRdfa().rdf_from_source('filename')
+
+    from pyRdfa import pyRdfa
+    print pyRdfa().rdf_from_source('filename')
+
 Other output formats are also possible. E.g., to produce RDF/XML output, one could use::
- from pyRdfa import pyRdfa
- print pyRdfa().rdf_from_source('filename', outputFormat='pretty-xml')
+
+    from pyRdfa import pyRdfa
+    print pyRdfa().rdf_from_source('filename', outputFormat='pretty-xml')
+
 It is also possible to embed an RDFa processing. Eg, using::
- from pyRdfa import pyRdfa
- graph = pyRdfa().graph_from_source('filename')
+
+    from pyRdfa import pyRdfa
+    graph = pyRdfa().graph_from_source('filename')
+
 returns an RDFLib.Graph object instead of a serialization thereof. See the the description of the
 L{pyRdfa class<pyRdfa.pyRdfa>} for further possible entry points details.
 
@@ -79,9 +85,10 @@ Vocabularies
 RDFa 1.1 has the notion of vocabulary files (using the C{@vocab} attribute) that may be used to expand the generated RDF graph. Expansion is based on some very simply RDF Schema and OWL statements on sub-properties and sub-classes, and equivalences.
 
 pyRdfa implements this feature, although it does not do this by default. The extra C{vocab_expansion} parameter should be used for this extra step, for example::
- from pyRdfa.options import Options
- options = Options(vocab_expansion=True)
- print pyRdfa(options=options).rdf_from_source('filename')
+
+    from pyRdfa.options import Options
+    options = Options(vocab_expansion=True)
+    print pyRdfa(options=options).rdf_from_source('filename')
 
 The triples in the vocabulary files themselves (i.e., the small ontology in RDF Schema and OWL) are removed from the result, leaving the inferred property and type relationships only (additionally to the “core” RDF content).
 
@@ -132,10 +139,11 @@ The function may perform any type of change on the DOM tree; the typical behavio
  - Implementing the Dublin Core dialect to include DC statements from the header.  See L{transform.DublinCore} for further details.
 
 The user of the package may refer add these transformers to L{Options} instance. Here is a possible usage with the “openid” transformer added to the call::
- from pyRdfa.options import Options
- from pyRdfa.transform.OpenID import OpenID_transform
- options = Options(transformers=[OpenID_transform])
- print pyRdfa(options=options).rdf_from_source('filename')
+
+    from pyRdfa.options import Options
+    from pyRdfa.transform.OpenID import OpenID_transform
+    options = Options(transformers=[OpenID_transform])
+    print pyRdfa(options=options).rdf_from_source('filename')
 
 
 @summary: RDFa parser (distiller)
@@ -352,7 +360,7 @@ builtInTransformers = [
 ]
 
 #########################################################################################################
-class pyRdfa(object):
+class PyRdfa(object):
     """Main processing class for the distiller
 
     @ivar options: an instance of the L{Options} class

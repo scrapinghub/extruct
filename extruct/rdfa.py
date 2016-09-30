@@ -15,7 +15,7 @@ from rdflib import Graph
 from rdflib.plugins.parsers.structureddata import RDFaParser
 from rdflib.plugin import register, Parser
 
-from rdflibxml import PyRdfa, Options
+from extruct.rdflibxml import PyRdfa, Options
 
 # load the JSON-LD serializer
 register('json-ld', Parser, 'rdflib_jsonld.parser', 'JsonLDParser')
@@ -68,6 +68,10 @@ class DomHtmlMixin(object):
     @property
     def tagName(self):
         return self.tag
+
+    @property
+    def localName(self):
+        return self.xpath('local-name(.)')
 
     def hasAttribute(self, name):
         return name in self.attrib
@@ -138,46 +142,24 @@ class XmlDomHTMLParser(HTMLParser):
         self.set_element_class_lookup(parser_lookup)
 
 
-class LxmlRDFaParser(RDFaParser):
-    def _process(self, graph, pgraph, baseURI, orig_source,
-                 media_type="",
-                 rdfa_version=None,
-                 embedded_rdf=False,
-                 space_preserve=True,
-                 vocab_expansion=False,
-                 vocab_cache=False,
-                 vocab_cache_report=False,
-                 refresh_vocab_cache=False,
-                 check_lite=False):
-
-        processor_graph = pgraph if pgraph is not None else Graph()
-        self.options = Options(output_processor_graph=True,
-                               embedded_rdf=embedded_rdf,
-                               space_preserve=space_preserve,
-                               vocab_expansion=vocab_expansion,
-                               vocab_cache=vocab_cache,
-                               vocab_cache_report=vocab_cache_report,
-                               refresh_vocab_cache=refresh_vocab_cache,
-                               check_lite=check_lite)
-
-        if media_type is None:
-            media_type = ""
-
-        processor = PyRdfa(self.options,
-                           base=baseURI,
-                           media_type=media_type,
-                           rdfa_version=rdfa_version)
-        domparser = XmlDomHTMLParser()
-        tree = fromstring(orig_source.getvalue().encode('utf-8'), parser=domparser)
-        processor.graph_from_DOM(tree, graph=graph, pgraph=processor_graph)
-
-
 class RDFaExtractor(object):
 
     def extract(self, htmlstring, url='http://www.example.com/', encoding="UTF-8"):
-        g = Graph()
-        g.parse(data=htmlstring, format='rdfa-lxml')
-        jsonld_string = g.serialize(format='json-ld')
+
+        domparser = XmlDomHTMLParser()
+        tree = fromstring(htmlstring.encode('utf-8'), parser=domparser)
+
+        options = Options(output_processor_graph=True,
+                          embedded_rdf=False,
+                          space_preserve=True,
+                          vocab_expansion=False,
+                          vocab_cache=False,
+                          vocab_cache_report=False,
+                          refresh_vocab_cache=False,
+                          check_lite=False)
+
+        g = PyRdfa(options, base=url).graph_from_DOM(tree, graph=Graph(), pgraph=Graph())
+        jsonld_string = g.serialize(format='json-ld').decode('utf-8')
         return {"items": json.loads(jsonld_string)}
 
 

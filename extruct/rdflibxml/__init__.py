@@ -50,9 +50,10 @@ The package also implements some optional features that are not part of the RDFa
  - extra, built-in transformers are executed on the DOM tree prior to RDFa processing (see below). These transformers can be provided by the end user.
 
 Options are collected in an instance of the L{Options} class and may be passed to the processing functions as an extra argument. E.g., to allow the inclusion of embedded content::
- from pyRdfa.options import Options
- options = Options(embedded_rdf=True)
- print pyRdfa(options=options).rdf_from_source('filename')
+
+    from pyRdfa.options import Options
+    options = Options(embedded_rdf=True)
+    print pyRdfa(options=options).rdf_from_source('filename')
 
 See the description of the L{Options} class for the details.
 
@@ -457,7 +458,7 @@ class PyRdfa(object):
                 return name
         except HTTPError :
             raise sys.exc_info()[1]
-        except RDFaError, e :
+        except RDFaError as e :
             raise e
         except :
             (type, value, traceback) = sys.exc_info()
@@ -579,7 +580,7 @@ class PyRdfa(object):
             input = None
             try :
                 input = self._get_input(name)
-            except FailedSource,ex :
+            except FailedSource as ex :
                 f = sys.exc_info()[1]
                 self.http_status = 400
                 if not rdfOutput : raise f
@@ -593,7 +594,7 @@ class PyRdfa(object):
                 err = self.options.add_error("HTTP Error: %s (%s)" % (h.http_code,h.msg), HTError, name)
                 self.options.processor_graph.add_http_context(err, h.http_code)
                 return copyErrors(graph, self.options)
-            except RDFaError, ex:
+            except RDFaError as ex:
                 e = sys.exc_info()[1]
                 self.http_status = 500
                 # Something nasty happened:-(

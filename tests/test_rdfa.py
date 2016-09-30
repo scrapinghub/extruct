@@ -6,9 +6,18 @@ from extruct.rdfa import RDFaExtractor
 from tests import get_testdata
 
 
+
+
+
 class TestRDFa(unittest.TestCase):
 
     maxDiff = None
+
+    def assertItemsEqual(self, a, b):
+        json_kwargs = dict(indent=2, separators=(',', ': '), sort_keys=True, ensure_ascii=True)
+        sa = set(json.dumps(i, **json_kwargs) for i in a['items'])
+        sb = set(json.dumps(i, **json_kwargs) for i in b['items'])
+        self.assertEqual(sa, sb)
 
     def test_example(self):
         sample = '''
@@ -55,6 +64,5 @@ class TestRDFa(unittest.TestCase):
                       u'http://xmlns.com/foaf/0.1/knows': [{u'@id': u'http://example.org/alice#me'}],
                       u'http://xmlns.com/foaf/0.1/topic_interest': [{u'@id': u'http://www.wikidata.org/entity/Q12418'}]}]
         }
-
-        self.assertDictEqual(data, expected)
+        self.assertItemsEqual(data, expected)
 

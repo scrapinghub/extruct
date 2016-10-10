@@ -8,7 +8,7 @@ import json
 from xml.dom import Node
 from xml.dom.minidom import Attr, NamedNodeMap
 
-from lxml.etree import ElementBase, _ElementStringResult, _ElementUnicodeResult
+from lxml.etree import ElementBase, _ElementStringResult, _ElementUnicodeResult, XPath
 from lxml.html import fromstring, HTMLParser, HtmlElementClassLookup
 
 from rdflib import Graph
@@ -24,10 +24,11 @@ register('json-ld', Parser, 'rdflib_jsonld.parser', 'JsonLDParser')
 class DomElementUnicodeResult(object):
     def __init__(self, text):
         self.text = text
+        self.nodeType = Node.TEXT_NODE
 
-    @property
-    def nodeType(self):
-        return Node.TEXT_NODE
+    #@property
+    #def nodeType(self):
+        #return Node.TEXT_NODE
 
     @property
     def data(self):
@@ -35,6 +36,12 @@ class DomElementUnicodeResult(object):
             return self.text
         else:
             raise RuntimeError
+
+
+class DomTextNode(object):
+    def __init__(self, text):
+        self.data = text
+        self.nodeType = Node.TEXT_NODE
 
 
 def lxmlDomNodeType(node):
@@ -52,13 +59,15 @@ def lxmlDomNodeType(node):
 
 class DomHtmlMixin(object):
 
+    _xp_childrennodes = XPath('child::node()')
     @property
     def documentElement(self):
         return self.getroottree().getroot()
 
     @property
     def nodeType(self):
-        return lxmlDomNodeType(self)
+        #return lxmlDomNodeType(self)
+        return Node.ELEMENT_NODE
 
     @property
     def nodeName(self):
@@ -74,6 +83,7 @@ class DomHtmlMixin(object):
         return self.xpath('local-name(.)')
 
     def hasAttribute(self, name):
+        raise RuntimeError
         return name in self.attrib
 
     def getAttribute(self, name):
@@ -84,6 +94,7 @@ class DomHtmlMixin(object):
 
     @property
     def attributes(self):
+        raise RuntimeError
         attrs = {}
         for name, value in self.attrib.items():
             a = Attr(name)
@@ -96,18 +107,30 @@ class DomHtmlMixin(object):
         return self.getparent()
 
     @property
-    def childNodes(self):
-        for n in self.xpath('child::node()'):
-            nt = lxmlDomNodeType(n)
-            if nt == Node.TEXT_NODE:
-                # somehow one cannot set attributes on _ElementUnicodeResult instance
-                # so we build an object out of it
+    def childNodes_xpath(self):
+        for n in self._xp_childrennodes(self):
+
+            if isinstance(n, ElementBase):
+                yield n
+
+            elif isinstance(n, (_ElementStringResult, _ElementUnicodeResult)):
+
                 if isinstance(n, _ElementUnicodeResult):
                     n = DomElementUnicodeResult(n)
                 else:
-                    n.nodeType = nt
+                    n.nodeType = Node.TEXT_NODE
                     n.data = n
+                yield n
+
+    @property
+    def childNodes(self):
+        raise RuntimeError
+        if self.text:
+            yield DomTextNode(self.text)
+        for n in self.iterchildren():
             yield n
+            if n.tail:
+                yield DomTextNode(n.tail)
 
     def getElementsByTagName(self, name):
         #print("getElementsByTagName(%r)" % (name,))
@@ -127,9 +150,17 @@ class DomHtmlMixin(object):
 
 
 class DomHtmlElementClassLookup(HtmlElementClassLookup):
+    _lookups = {}
     def lookup(self, node_type, document, namespace, name):
-        cur = super(DomHtmlElementClassLookup, self).lookup(node_type, document, namespace, name)
-        return type('Dom'+cur.__name__, (cur, DomHtmlMixin), {})
+        k = (node_type, document, namespace, name)
+        t = self._lookups.get(k)
+        if t is None:
+            cur = super(DomHtmlElementClassLookup, self).lookup(node_type, document, namespace, name)
+            newtype = type('Dom'+cur.__name__, (cur, DomHtmlMixin), {})
+            self._lookups[k] = newtype
+            return newtype
+        else:
+            return t
 
 
 class XmlDomHTMLParser(HTMLParser):
@@ -159,7 +190,7 @@ class RDFaExtractor(object):
                           check_lite=False)
 
         g = PyRdfa(options, base=url).graph_from_DOM(tree, graph=Graph(), pgraph=Graph())
-        jsonld_string = g.serialize(format='json-ld').decode('utf-8')
+        jsonld_string = g.serialize(format='json-ld', auto_compact=True).decode('utf-8')
         return {"items": json.loads(jsonld_string)}
 
 

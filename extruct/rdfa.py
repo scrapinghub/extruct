@@ -66,7 +66,6 @@ class DomHtmlMixin(object):
 
     @property
     def nodeType(self):
-        #return lxmlDomNodeType(self)
         return Node.ELEMENT_NODE
 
     @property
@@ -83,7 +82,6 @@ class DomHtmlMixin(object):
         return self.xpath('local-name(.)')
 
     def hasAttribute(self, name):
-        raise RuntimeError
         return name in self.attrib
 
     def getAttribute(self, name):
@@ -94,7 +92,6 @@ class DomHtmlMixin(object):
 
     @property
     def attributes(self):
-        raise RuntimeError
         attrs = {}
         for name, value in self.attrib.items():
             a = Attr(name)
@@ -124,7 +121,6 @@ class DomHtmlMixin(object):
 
     @property
     def childNodes(self):
-        raise RuntimeError
         if self.text:
             yield DomTextNode(self.text)
         for n in self.iterchildren():
@@ -133,16 +129,13 @@ class DomHtmlMixin(object):
                 yield DomTextNode(n.tail)
 
     def getElementsByTagName(self, name):
-        #print("getElementsByTagName(%r)" % (name,))
         return self.iterdescendants(name)
 
     def getElementById(self, i):
-        #print("getElementById(%r)" % (i, self.get_element_by_id(i)))
         return self.get_element_by_id(i)
 
     @property
     def data(self):
-        print("data(%r)" % self)
         if isinstance(self, (_ElementStringResult, _ElementUnicodeResult)):
             return self
         else:
@@ -175,7 +168,8 @@ class XmlDomHTMLParser(HTMLParser):
 
 class RDFaExtractor(object):
 
-    def extract(self, htmlstring, url='http://www.example.com/', encoding="UTF-8"):
+    def extract(self, htmlstring, url='http://www.example.com/', encoding="UTF-8",
+            expanded=True):
 
         domparser = XmlDomHTMLParser()
         tree = fromstring(htmlstring.encode('utf-8'), parser=domparser)
@@ -190,8 +184,8 @@ class RDFaExtractor(object):
                           check_lite=False)
 
         g = PyRdfa(options, base=url).graph_from_DOM(tree, graph=Graph(), pgraph=Graph())
-        jsonld_string = g.serialize(format='json-ld', auto_compact=True).decode('utf-8')
-        return {"items": json.loads(jsonld_string)}
+        jsonld_string = g.serialize(format='json-ld', auto_compact=not expanded).decode('utf-8')
+        return json.loads(jsonld_string)
 
 
 register('rdfa-lxml', Parser, 'extruct.rdfa', 'LxmlRDFaParser')

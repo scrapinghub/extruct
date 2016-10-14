@@ -1,0 +1,31 @@
+[
+  {
+    "@id": "http://www.example.com/index.html",
+    "http://www.w3.org/ns/rdfa#usesVocabulary": [
+      {
+        "@id": "http://xmlns.com/foaf/0.1/"
+      }
+    ]
+  },
+  {
+    "@id": "_:000001",
+    "@type": [
+      "http://xmlns.com/foaf/0.1/Person"
+    ],
+    "http://xmlns.com/foaf/0.1/mbox": [
+      {
+        "@id": "mailto:alice@example.com"
+      }
+    ],
+    "http://xmlns.com/foaf/0.1/name": [
+      {
+        "@value": "Alice Birpemswick"
+      }
+    ],
+    "http://xmlns.com/foaf/0.1/phone": [
+      {
+        "@id": "tel:+1-617-555-7332"
+      }
+    ]
+  }
+]

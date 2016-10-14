@@ -1,0 +1,49 @@
+[
+  {
+    "@id": "http://www.example.com/alice/posts/trouble_with_bob",
+    "http://purl.org/dc/terms/title": [
+      {
+        "@value": "The trouble with Bob"
+      }
+    ]
+  },
+  {
+    "@id": "http://www.example.com/alice/posts/jos_barbecue",
+    "http://purl.org/dc/terms/created": [
+      {
+        "@value": "2011-09-14"
+      }
+    ],
+    "http://purl.org/dc/terms/creator": [
+      {
+        "@value": "Eve"
+      }
+    ],
+    "http://purl.org/dc/terms/title": [
+      {
+        "@value": "Jo's Barbecue"
+      }
+    ]
+  },
+  {
+    "@id": "http://example.com/bob/photos/sunset.jpg",
+    "http://purl.org/dc/terms/creator": [
+      {
+        "@value": "Bob"
+      }
+    ],
+    "http://purl.org/dc/terms/title": [
+      {
+        "@value": "Beautiful Sunset"
+      }
+    ]
+  },
+  {
+    "@id": "http://www.example.com/index.html",
+    "http://www.w3.org/ns/rdfa#usesVocabulary": [
+      {
+        "@id": "http://purl.org/dc/terms/"
+      }
+    ]
+  }
+]

@@ -44,7 +44,6 @@ class TestRDFa(unittest.TestCase):
     def test_w3c_rdfalite(self):
         for i in [3, 4, 5]:
             fileprefix = 'w3c.rdfalite.example{:03d}'.format(i)
-            #print(fileprefix)
             body = get_testdata('w3crdfa', fileprefix + '.html').decode('UTF-8')
             expected = json.loads(
                     get_testdata('w3crdfa', fileprefix + '.expanded.json'
@@ -52,10 +51,6 @@ class TestRDFa(unittest.TestCase):
 
             rdfae = RDFaExtractor()
             data = rdfae.extract(body, url='http://www.example.com/index.html')
-            #print("extracted:\n%s" % pformat(tupleize(data)))
-            #print("expected:\n%s" % pformat(tupleize(expected)))
-            #print("extracted:\n%s" % self.prettify(data))
-            #print("expected:\n%s" % self.prettify(expected))
             self.assertJsonLDEqual(data, expected)
 
     def test_w3c_rdf11primer(self):
@@ -71,7 +66,7 @@ class TestRDFa(unittest.TestCase):
             self.assertJsonLDEqual(data, expected)
 
     def test_w3c_rdfaprimer(self):
-        for i in [5, 6, 7]:
+        for i in [5, 6, 7, 8, 9, 10, 11, 15]:
             fileprefix = 'w3c.rdfaprimer.example{:03d}'.format(i)
             print(fileprefix)
             body = get_testdata('w3crdfa', fileprefix + '.html').decode('UTF-8')

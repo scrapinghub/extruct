@@ -1,0 +1,36 @@
+[
+  {
+    "@id": "http://www.example.com/index.html#manu",
+    "@type": [
+      "http://schema.org/Person"
+    ],
+    "http://open.vocab.org/terms/preferredAnimal": [
+      {
+        "@value": "Liger"
+      }
+    ],
+    "http://schema.org/image": [
+      {
+        "@id": "http://manu.sporny.org/images/manu.png"
+      }
+    ],
+    "http://schema.org/name": [
+      {
+        "@value": "Manu Sporny"
+      }
+    ],
+    "http://schema.org/telephone": [
+      {
+        "@value": "1-800-555-0199"
+      }
+    ]
+  },
+  {
+    "@id": "http://www.example.com/index.html",
+    "http://www.w3.org/ns/rdfa#usesVocabulary": [
+      {
+        "@id": "http://schema.org/"
+      }
+    ]
+  }
+]

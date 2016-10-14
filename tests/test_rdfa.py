@@ -45,7 +45,7 @@ class TestRDFa(unittest.TestCase):
         for i in [3, 4, 5]:
             fileprefix = 'w3c.rdfalite.example{:03d}'.format(i)
             #print(fileprefix)
-            body = get_testdata('w3crdfa', fileprefix + '.html')
+            body = get_testdata('w3crdfa', fileprefix + '.html').decode('UTF-8')
             expected = json.loads(
                     get_testdata('w3crdfa', fileprefix + '.expanded.json'
                 ).decode('UTF-8'))
@@ -74,7 +74,7 @@ class TestRDFa(unittest.TestCase):
         for i in [5, 6, 7]:
             fileprefix = 'w3c.rdfaprimer.example{:03d}'.format(i)
             print(fileprefix)
-            body = get_testdata('w3crdfa', fileprefix + '.html')
+            body = get_testdata('w3crdfa', fileprefix + '.html').decode('UTF-8')
             expected = json.loads(
                     get_testdata('w3crdfa', fileprefix + '.expanded.json'
                 ).decode('UTF-8'))

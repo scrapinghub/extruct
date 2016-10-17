@@ -29,7 +29,7 @@ class TestRDFa(unittest.TestCase):
     def normalize_bnode_ids(self, jsld):
         import re
 
-        bnode_ids = re.findall(r'"_:(\w+)"', jsld)
+        bnode_ids = set(re.findall(r'"_:(\w+)"', jsld))
         for i, bnid in enumerate(bnode_ids, start=1):
             jsld = jsld.replace(bnid, "%06d" % i)
         return jsld
@@ -81,3 +81,15 @@ class TestRDFa(unittest.TestCase):
             print("extracted:\n%s" % self.prettify(data))
             print("expected:\n%s" % self.prettify(expected))
             self.assertJsonLDEqual(data, expected)
+
+    def test_wikipedia_xhtml_rdfa(self):
+        fileprefix = 'xhtml+rdfa'
+        body = get_testdata('wikipedia', fileprefix + '.html').decode('UTF-8')
+        expected = json.loads(
+                get_testdata('wikipedia', fileprefix + '.expanded.json'
+            ).decode('UTF-8'))
+
+        rdfae = RDFaExtractor()
+        data = rdfae.extract(body, url='http://www.exaple.com/index.html')
+
+        self.assertJsonLDEqual(data, expected)

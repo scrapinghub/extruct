@@ -1,0 +1,28 @@
+[
+  {
+    "@id": "http://www.example.com/index.html",
+    "http://creativecommons.org/ns#license": [
+      {
+        "@id": "http://creativecommons.org/licenses/by/3.0/"
+      }
+    ],
+    "http://purl.org/dc/terms/created": [
+      {
+        "@value": "2011-09-10"
+      }
+    ],
+    "http://purl.org/dc/terms/title": [
+      {
+        "@value": "The Trouble with Bob"
+      }
+    ],
+    "http://www.w3.org/ns/rdfa#usesVocabulary": [
+      {
+        "@id": "http://purl.org/dc/terms/"
+      },
+      {
+        "@id": "http://creativecommons.org/ns#"
+      }
+    ]
+  }
+]

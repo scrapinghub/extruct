@@ -1,0 +1,45 @@
+[
+  {
+    "@id": "http://data.europeana.eu/item/04802/243FA8618938F4117025F17A8B813C5F9AA4D619",
+    "http://purl.org/dc/terms/subject": [
+      {
+        "@id": "http://www.wikidata.org/entity/Q12418"
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/bob#me",
+    "@type": [
+      "http://xmlns.com/foaf/0.1/Person"
+    ],
+    "http://schema.org/birthDate": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#date",
+        "@value": "1990-07-04"
+      }
+    ],
+    "http://xmlns.com/foaf/0.1/knows": [
+      {
+        "@id": "http://example.org/alice#me"
+      }
+    ],
+    "http://xmlns.com/foaf/0.1/topic_interest": [
+      {
+        "@id": "http://www.wikidata.org/entity/Q12418"
+      }
+    ]
+  },
+  {
+    "@id": "http://www.wikidata.org/entity/Q12418",
+    "http://purl.org/dc/terms/creator": [
+      {
+        "@id": "http://dbpedia.org/resource/Leonardo_da_Vinci"
+      }
+    ],
+    "http://purl.org/dc/terms/title": [
+      {
+        "@value": "Mona Lisa"
+      }
+    ]
+  }
+]

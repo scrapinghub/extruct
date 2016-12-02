@@ -1,0 +1,45 @@
+[
+  {
+    "@id": "http://www.exaple.com/index.html",
+    "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
+      {
+        "@id": "http://www.exaple.com/about.htm"
+      }
+    ],
+    "http://www.w3.org/2000/10/swap/pim/contact#address": [
+      {
+        "@id": "_:000001"
+      }
+    ],
+    "http://xmlns.com/foaf/0.1/name": [
+      {
+        "@language": "en",
+        "@value": "Jerry Smith"
+      }
+    ],
+    "http://xmlns.com/foaf/0.1/phone": [
+      {
+        "@id": "tel:+6112345678"
+      }
+    ],
+    "http://xmlns.com/foaf/0.1/primaryTopic": [
+      {
+        "@id": "http://www.example.com/metadata/foaf.rdf"
+      }
+    ]
+  },
+  {
+    "@id": "_:000001",
+    "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
+      {
+        "@id": "http://dbpedia.org/resource/Adelaide"
+      }
+    ],
+    "http://www.w3.org/2000/10/swap/pim/contact#city": [
+      {
+        "@language": "en",
+        "@value": "Adelaide"
+      }
+    ]
+  }
+]

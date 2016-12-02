@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.1//EN"
+        "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-2.dtd">
+<html version="XHTML+RDFa 1.1" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:contact="http://www.w3.org/2000/10/swap/pim/contact#"
+      xmlns:foaf="http://xmlns.com/foaf/0.1/"
+      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+      xml:lang="en"
+      lang="en">
+<head>
+    <title>XHTML+RDFa example</title>
+    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="content-language" content="en" />
+    <meta name="robots" content="index, follow" />
+    <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
+    <link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" />
+    <link rel="alternate" type="application/rss+xml" title="Feed channel of XHTML+RDFa example page" href="http://www.example.com/rss.xml" />
+    <meta name="DC.title" content="XHTML+RDFa example" />
+    <meta name="DC.subject" content="XHTML+RDFa, semantic web" />
+    <meta name="DC.description" content="Example for Extensible Hypertext Markup Language + Resource Description Framework – in – attributes." />
+    <meta name="DC.format" content="application/xhtml+xml" />
+    <meta name="DC.language" content="en" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link  rel="stylesheet" type="text/css" href="main.css" title="main styles" />
+    <link rel="foaf:primaryTopic" type="application/rdf+xml" title="FOAF" href="http://www.example.com/metadata/foaf.rdf" />
+    <script type="text/javascript" src="js/click.js"></script>
+</head>
+<body>
+<div class="content">
+    <p>
+        <span property="foaf:name">Jerry Smith</span><br />
+        <i>Senior developer, QA</i><br />
+        <a title="More about me" rel="rdfs:seeAlso" href="about.htm">More...</a>
+    </p>
+    <p rel="contact:address">
+        93 Rose Ave <br />
+        <a property="contact:city" rel="rdfs:seeAlso" title="Adelaide on Wikipedia" resource="http://dbpedia.org/resource/Adelaide"
+           href="http://en.wikipedia.org/wiki/Adelaide">Adelaide</a>
+    </p>
+    <p>
+        <span rel="foaf:phone" resource="tel:+6112345678">+61 12/345-678</span>
+    </p>
+</div>
+</body>
+</html>

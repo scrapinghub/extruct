@@ -4,3 +4,5 @@ lxml
 bottle
 gevent
 requests
+rdflib
+rdflib_jsonld

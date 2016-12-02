@@ -1,0 +1,15 @@
+[
+  {
+    "@id": "http://www.example.com/index.html",
+    "http://purl.org/dc/terms/created": [
+      {
+        "@value": "2011-09-10"
+      }
+    ],
+    "http://purl.org/dc/terms/title": [
+      {
+        "@value": "The Trouble with Bob"
+      }
+    ]
+  }
+]

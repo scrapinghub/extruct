@@ -2,6 +2,10 @@
 History
 =======
 
+v0.3.0a0 (2016-XX-XX)
+---------------------
+
+* (Very) Experimental support for RDFa extraction using rdflib+lxml
 
 v0.2.0 (2016-09-26)
 -------------------

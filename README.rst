@@ -141,6 +141,60 @@ JSON-LD extraction
                 u'url': u'http://www.example.com'}]}
 
 
+
+RDFa extraction (experimental)
+++++++++++++++++++++++++++++++
+
+First, install the extra dependencies for RDFa support
+(``extruct`` depends on ``rdflib`` and ``rdflib-jsonld`` for this)::
+
+    pip install extruct[rdfa]
+
+Then feed some HTML to a ``extruct.rdfa.RDFaExtractor`` instance using
+``.extract()``::
+
+    >>> from pprint import pprint
+    >>> from extruct.rdfa import RDFaExtractor  # you can ignore the warning about html5lib not being available
+    INFO:rdflib:RDFLib Version: 4.2.1
+    /home/paul/.virtualenvs/extruct.wheel.test/lib/python3.5/site-packages/rdflib/plugins/parsers/structureddata.py:30: UserWarning: html5lib not found! RDFa and Microdata parsers will not be available.
+      'parsers will not be available.')
+    >>>
+    >>> html = """<html>
+    ...  <head>
+    ...    ...
+    ...  </head>
+    ...  <body prefix="dc: http://purl.org/dc/terms/ schema: http://schema.org/">
+    ...    <div resource="/alice/posts/trouble_with_bob" typeof="schema:BlogPosting">
+    ...       <h2 property="dc:title">The trouble with Bob</h2>
+    ...       ...
+    ...       <h3 property="dc:creator schema:creator" resource="#me">Alice</h3>
+    ...       <div property="schema:articleBody">
+    ...         <p>The trouble with Bob is that he takes much better photos than I do:</p>
+    ...       </div>
+    ...      ...
+    ...    </div>
+    ...  </body>
+    ... </html>
+    ... """
+    >>>
+    >>> rdfae = RDFaExtractor()
+    >>> pprint(
+    ...     rdfae.extract(html, url='http://www.exaple.com/index.html')
+    ... )
+    [{'@id': 'http://www.exaple.com/alice/posts/trouble_with_bob',
+      '@type': ['http://schema.org/BlogPosting'],
+      'http://purl.org/dc/terms/creator': [{'@id': 'http://www.exaple.com/index.html#me'}],
+      'http://purl.org/dc/terms/title': [{'@value': 'The trouble with Bob'}],
+      'http://schema.org/articleBody': [{'@value': '\n'
+                                                   '        The trouble with Bob '
+                                                   'is that he takes much better '
+                                                   'photos than I do:\n'
+                                                   '      '}],
+      'http://schema.org/creator': [{'@id': 'http://www.exaple.com/index.html#me'}]}]
+
+You'll get a list of expanded JSON-LD nodes.
+
+
 REST API service
 ----------------
 

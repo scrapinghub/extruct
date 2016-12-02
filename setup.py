@@ -21,7 +21,7 @@ setup(
     maintainer='Scrapinghub',
     maintainer_email='info@scrapinghub.com',
     url='https://github.com/scrapinghub/extruct',
-    packages=find_packages(include=['extruct']),
+    packages=find_packages(exclude=['tests',]),
     package_data={'extruct': ['VERSION']},
     install_requires=['lxml'],
     extras_require={
@@ -29,6 +29,10 @@ setup(
             'bottle',
             'gevent',
             'requests',
+        ],
+        'rdfa': [
+            'rdflib',
+            'rdflib-jsonld',
         ]
     },
     keywords='extruct',

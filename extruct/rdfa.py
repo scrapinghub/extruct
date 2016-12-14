@@ -10,15 +10,9 @@ from xml.dom.minidom import Attr, NamedNodeMap
 
 from lxml.etree import ElementBase, _ElementStringResult, _ElementUnicodeResult, XPath
 from lxml.html import fromstring, HTMLParser, HtmlElementClassLookup
-
 from rdflib import Graph
-from rdflib.plugins.parsers.structureddata import RDFaParser
-from rdflib.plugin import register, Parser
 
 from extruct.rdflibxml import PyRdfa, Options
-
-# load the JSON-LD serializer
-register('json-ld', Parser, 'rdflib_jsonld.parser', 'JsonLDParser')
 
 
 class DomElementUnicodeResult(object):
@@ -186,6 +180,3 @@ class RDFaExtractor(object):
         g = PyRdfa(options, base=url).graph_from_DOM(tree, graph=Graph(), pgraph=Graph())
         jsonld_string = g.serialize(format='json-ld', auto_compact=not expanded).decode('utf-8')
         return json.loads(jsonld_string)
-
-
-register('rdfa-lxml', Parser, 'extruct.rdfa', 'LxmlRDFaParser')

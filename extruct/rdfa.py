@@ -13,12 +13,8 @@ from lxml.html import fromstring, HTMLParser, HtmlElementClassLookup
 
 from rdflib import Graph
 from rdflib.plugins.parsers.structureddata import RDFaParser
-from rdflib.plugin import register, Parser
 
 from extruct.rdflibxml import PyRdfa, Options
-
-# load the JSON-LD serializer
-register('json-ld', Parser, 'rdflib_jsonld.parser', 'JsonLDParser')
 
 
 class DomElementUnicodeResult(object):

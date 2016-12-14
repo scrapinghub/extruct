@@ -6,3 +6,4 @@ gevent
 requests
 rdflib
 rdflib_jsonld
+-r dependency-links.txt

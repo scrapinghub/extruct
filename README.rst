@@ -179,18 +179,18 @@ Then feed some HTML to a ``extruct.rdfa.RDFaExtractor`` instance using
     >>>
     >>> rdfae = RDFaExtractor()
     >>> pprint(
-    ...     rdfae.extract(html, url='http://www.exaple.com/index.html')
+    ...     rdfae.extract(html, url='http://www.example.com/index.html')
     ... )
-    [{'@id': 'http://www.exaple.com/alice/posts/trouble_with_bob',
+    [{'@id': 'http://www.example.com/alice/posts/trouble_with_bob',
       '@type': ['http://schema.org/BlogPosting'],
-      'http://purl.org/dc/terms/creator': [{'@id': 'http://www.exaple.com/index.html#me'}],
+      'http://purl.org/dc/terms/creator': [{'@id': 'http://www.example.com/index.html#me'}],
       'http://purl.org/dc/terms/title': [{'@value': 'The trouble with Bob'}],
       'http://schema.org/articleBody': [{'@value': '\n'
                                                    '        The trouble with Bob '
                                                    'is that he takes much better '
                                                    'photos than I do:\n'
                                                    '      '}],
-      'http://schema.org/creator': [{'@id': 'http://www.exaple.com/index.html#me'}]}]
+      'http://schema.org/creator': [{'@id': 'http://www.example.com/index.html#me'}]}]
 
 You'll get a list of expanded JSON-LD nodes.
 

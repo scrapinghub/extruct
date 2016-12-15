@@ -5,14 +5,19 @@ RDFa extractor
 Based on pyrdfa3 and rdflib
 """
 import json
+import logging
 from xml.dom import Node
 from xml.dom.minidom import Attr, NamedNodeMap
 
 from lxml.etree import ElementBase, _ElementStringResult, _ElementUnicodeResult, XPath
 from lxml.html import fromstring, HTMLParser, HtmlElementClassLookup
-from rdflib import Graph
+from rdflib import Graph, logger as rdflib_logger
+from rdflib.plugins.parsers.pyRdfa import pyRdfa as PyRdfa, Options, logger as pyrdfa_logger
 
-from rdflib.plugins.parsers.pyRdfa import pyRdfa as PyRdfa, Options
+
+# silence rdflib/PyRdfa INFO logs
+rdflib_logger.setLevel(logging.ERROR)
+pyrdfa_logger.setLevel(logging.ERROR)
 
 
 class DomElementUnicodeResult(object):

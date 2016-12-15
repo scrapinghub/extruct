@@ -13,11 +13,16 @@ from lxml.etree import ElementBase, _ElementStringResult, _ElementUnicodeResult,
 from lxml.html import fromstring, HTMLParser, HtmlElementClassLookup
 from rdflib import Graph, logger as rdflib_logger
 from rdflib.plugins.parsers.pyRdfa import pyRdfa as PyRdfa, Options, logger as pyrdfa_logger
-
+from rdflib.plugins.parsers.pyRdfa.initialcontext import initial_context
 
 # silence rdflib/PyRdfa INFO logs
 rdflib_logger.setLevel(logging.ERROR)
 pyrdfa_logger.setLevel(logging.ERROR)
+
+initial_context["http://www.w3.org/2011/rdfa-context/rdfa-1.1"].ns.update({
+    "twitter": "https://dev.twitter.com/cards#",
+    "fb": "http://ogp.me/ns/fb#"
+})
 
 
 class DomElementUnicodeResult(object):

@@ -12,17 +12,17 @@ from lxml.etree import ElementBase, _ElementStringResult, _ElementUnicodeResult,
 from lxml.html import fromstring, HTMLParser, HtmlElementClassLookup
 from rdflib import Graph
 
-from extruct.rdflibxml import PyRdfa, Options
+from rdflib.plugins.parsers.pyRdfa import pyRdfa as PyRdfa, Options
 
 
 class DomElementUnicodeResult(object):
+    CDATA_SECTION_NODE = Node.CDATA_SECTION_NODE
+    ELEMENT_NODE = Node.ELEMENT_NODE
+    TEXT_NODE = Node.TEXT_NODE
+
     def __init__(self, text):
         self.text = text
         self.nodeType = Node.TEXT_NODE
-
-    #@property
-    #def nodeType(self):
-        #return Node.TEXT_NODE
 
     @property
     def data(self):
@@ -33,6 +33,10 @@ class DomElementUnicodeResult(object):
 
 
 class DomTextNode(object):
+    CDATA_SECTION_NODE = Node.CDATA_SECTION_NODE
+    ELEMENT_NODE = Node.ELEMENT_NODE
+    TEXT_NODE = Node.TEXT_NODE
+
     def __init__(self, text):
         self.data = text
         self.nodeType = Node.TEXT_NODE
@@ -52,6 +56,9 @@ def lxmlDomNodeType(node):
 
 
 class DomHtmlMixin(object):
+    CDATA_SECTION_NODE = Node.CDATA_SECTION_NODE
+    ELEMENT_NODE = Node.ELEMENT_NODE
+    TEXT_NODE = Node.TEXT_NODE
 
     _xp_childrennodes = XPath('child::node()')
     @property

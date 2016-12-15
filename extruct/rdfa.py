@@ -12,7 +12,7 @@ from lxml.etree import ElementBase, _ElementStringResult, _ElementUnicodeResult,
 from lxml.html import fromstring, HTMLParser, HtmlElementClassLookup
 from rdflib import Graph
 
-from pyRdfa import pyRdfa as PyRdfa, Options
+from rdflib.plugins.parsers.pyRdfa import pyRdfa as PyRdfa, Options
 
 
 class DomElementUnicodeResult(object):

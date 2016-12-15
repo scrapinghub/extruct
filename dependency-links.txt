@@ -1,1 +1,0 @@
-git+https://github.com/redapple/pyrdfa3.git@py3#egg=pyrdfa3

@@ -2,10 +2,17 @@
 History
 =======
 
-v0.3.0a0 (2016-XX-XX)
+v0.3.0a1 (2016-12-15)
+---------------------
+
+* Use rdflib's pyRdfa directly instead of pyRdfa3 code copy.
+
+
+v0.3.0a0 (2016-12-02)
 ---------------------
 
 * (Very) Experimental support for RDFa extraction using rdflib+lxml
+
 
 v0.2.0 (2016-09-26)
 -------------------

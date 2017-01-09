@@ -42,7 +42,7 @@ install:
           rm -rf "$PYENV_ROOT" && git clone --depth 1 https://github.com/yyuu/pyenv.git "$PYENV_ROOT"
         fi
         # get latest PyPy3 from pyenv directly (thanks to natural version sort option -V)
-        export PYPY3_VERSION=`"$PYENV_ROOT/bin/pyenv" install --list |grep -o -E 'pypy3-[0-9][\.0-9]*$' |sort -V |tail -1`
+        export PYPY3_VERSION=`"$PYENV_ROOT/bin/pyenv" install --list |grep -o -E 'pypy3[\.0-9]*-[0-9][\.0-9]*(-alpha[0-9]*)?$' |sort -V |tail -1`
         "$PYENV_ROOT/bin/pyenv" install --skip-existing "$PYPY3_VERSION"
         virtualenv --python="$PYENV_ROOT/versions/$PYPY3_VERSION/bin/python" "$HOME/virtualenvs/$PYPY3_VERSION"
         source "$HOME/virtualenvs/$PYPY3_VERSION/bin/activate"

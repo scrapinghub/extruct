@@ -14,7 +14,7 @@ matrix:
       env: TOXENV=py35
     - python: 3.6
       env: TOXENV=py36
-    - python: pypy3
+    - python: 3.5
       env: TOXENV=pypy3
 
 # command to install dependencies

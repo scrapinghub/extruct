@@ -1,5 +1,5 @@
 {
-    "items": [[
+    "items": [
       {
         "@context": "http://schema.org",
         "@type": "MusicEvent",
@@ -32,5 +32,5 @@
           }
         ]
       }
-    ]]
+    ]
 }

@@ -19,9 +19,14 @@ class JsonLdExtractor(object):
 
     def extract_items(self, document):
         return {"items" : [item
-                           for item in map(self.extract_item,
-                                           self._xp_jsonld(document))
+                           for items in map(self._extract_items,
+                                            self._xp_jsonld(document))
+                           for item in items
                            if item]}
 
-    def extract_item(self, node):
-        return json.loads(node.xpath('string()'))
+    def _extract_items(self, node):
+        data = json.loads(node.xpath('string()'))
+        if isinstance(data, list):
+            return data
+        elif isinstance(data, dict):
+            return [data]

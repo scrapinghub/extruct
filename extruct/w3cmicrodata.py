@@ -47,10 +47,10 @@ class LxmlMicrodataExtractor(object):
     def extract_items(self, document, url):
         self.url = url
         self.items_seen = set()
-        return {"items" : [item
-                           for item in map(self.extract_item,
-                                           self._xp_item(document))
-                           if item]}
+        return [item
+                for item in map(self.extract_item,
+                                self._xp_item(document))
+                if item]
 
     def extract_item(self, node):
         itemid = self.get_docid(node)

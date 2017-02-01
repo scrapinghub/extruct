@@ -2,6 +2,14 @@
 History
 =======
 
+v0.3.0a2 (2017-02-01)
+---------------------
+
+Warning: backward-incompatible change:
+
+* ``.extract()`` methods now return a list of Python dicts (the items)
+  instead of a dict with an "items" key having this list as value.
+
 v0.3.0a1 (2016-12-15)
 ---------------------
 

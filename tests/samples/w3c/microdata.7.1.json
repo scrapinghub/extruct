@@ -1,5 +1,4 @@
-{
-  "items": [
+[
     {
       "type": [ "http://schema.org/BlogPosting" ],
       "properties": {
@@ -40,5 +39,4 @@
         ]
       }
     }
-  ]
-}
+]

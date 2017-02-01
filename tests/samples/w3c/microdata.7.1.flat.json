@@ -1,5 +1,4 @@
-{
-  "items": [
+[
     {
       "iid": 1,
       "type": [ "http://schema.org/BlogPosting" ],
@@ -41,5 +40,4 @@
         "name": [ "Charlotte" ]
       }
     }
-  ]
-}
+]

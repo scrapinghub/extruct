@@ -1,5 +1,8 @@
-{"items": [{"properties": {"aggregateRating": [{"properties": {"ratingValue": ["3.5"],
-                                                               "reviewCount": ["11"]},
-                                                "type": ["http://schema.org/AggregateRating"]}],
-                           "name": ["Panasonic White 60L Refrigerator"]},
-            "type": ["http://schema.org/Product"]}]}
+[
+    {"properties": {"aggregateRating": [{"properties": {"ratingValue": ["3.5"],
+                                                                   "reviewCount": ["11"]},
+                                                    "type": ["http://schema.org/AggregateRating"]}],
+                    "name": ["Panasonic White 60L Refrigerator"]},
+                    "type": ["http://schema.org/Product"]
+    }
+]

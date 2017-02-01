@@ -16,7 +16,7 @@ class TestJsonLD(unittest.TestCase):
 
             jsonlde = JsonLdExtractor()
             data = jsonlde.extract(body)
-            self.assertDictEqual(data, expected)
+            self.assertEqual(data, expected)
 
     def test_songkick(self):
         for page in [
@@ -29,4 +29,4 @@ class TestJsonLD(unittest.TestCase):
 
             jsonlde = JsonLdExtractor()
             data = jsonlde.extract(body)
-            self.assertDictEqual(data, expected)
+            self.assertEqual(data, expected)

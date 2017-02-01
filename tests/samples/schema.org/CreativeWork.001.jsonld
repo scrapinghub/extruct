@@ -1,5 +1,5 @@
-{
-    "items": [{
+[
+    {
       "@context": "http://schema.org",
       "@type": "WebPage",
       "breadcrumb": "Books > Literature & Fiction > Classics",
@@ -47,5 +47,5 @@
                 }
               ]
             }
-    }]
-}
+    }
+]

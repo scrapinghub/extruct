@@ -1,5 +1,7 @@
-{"items": [{"properties": {"a": ["1", "2"], "b": ["test"]}},
-           {"properties": {"a": ["1", "2"], "b": ["test"]}},
-           {"properties": {"a": ["1", "2"], "b": ["test"]}},
-           {"properties": {"a": ["1", "2"], "b": ["test"]}}]}
+[
+ {"properties": {"a": ["1", "2"], "b": ["test"]}},
+ {"properties": {"a": ["1", "2"], "b": ["test"]}},
+ {"properties": {"a": ["1", "2"], "b": ["test"]}},
+ {"properties": {"a": ["1", "2"], "b": ["test"]}}
+]
 

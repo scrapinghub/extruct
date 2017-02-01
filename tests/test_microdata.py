@@ -16,7 +16,7 @@ class TestMicrodata(unittest.TestCase):
 
             mde = MicrodataExtractor()
             data = mde.extract(body)
-            self.assertDictEqual(data, expected)
+            self.assertEqual(data, expected)
 
     def test_schemaorg_LocalBusiness(self):
         for i in [2, 3]:
@@ -25,7 +25,7 @@ class TestMicrodata(unittest.TestCase):
 
             mde = MicrodataExtractor()
             data = mde.extract(body)
-            self.assertDictEqual(data, expected)
+            self.assertEqual(data, expected)
 
     def test_schemaorg_MusicRecording(self):
         for i in [1]:
@@ -34,7 +34,7 @@ class TestMicrodata(unittest.TestCase):
 
             mde = MicrodataExtractor()
             data = mde.extract(body)
-            self.assertDictEqual(data, expected)
+            self.assertEqual(data, expected)
 
     def test_schemaorg_Event(self):
         for i in  [1, 2, 3, 4, 8]:
@@ -43,7 +43,7 @@ class TestMicrodata(unittest.TestCase):
 
             mde = MicrodataExtractor()
             data = mde.extract(body)
-            self.assertDictEqual(data, expected)
+            self.assertEqual(data, expected)
 
     def test_w3c_textContent_values(self):
         body = get_testdata('w3c', 'microdata.4.2.strings.html')
@@ -51,7 +51,7 @@ class TestMicrodata(unittest.TestCase):
 
         mde = MicrodataExtractor(strict=True)
         data = mde.extract(body)
-        self.assertDictEqual(data, expected)
+        self.assertEqual(data, expected)
 
     def test_w3c_textContent_values_unclean(self):
         body = get_testdata('w3c', 'microdata.4.2.strings.unclean.html')
@@ -59,7 +59,7 @@ class TestMicrodata(unittest.TestCase):
 
         mde = MicrodataExtractor(strict=True)
         data = mde.extract(body)
-        self.assertDictEqual(data, expected)
+        self.assertEqual(data, expected)
 
     def test_w3c_5_2(self):
         body = get_testdata('w3c', 'microdata.5.2.html')
@@ -67,7 +67,7 @@ class TestMicrodata(unittest.TestCase):
 
         mde = MicrodataExtractor(strict=True)
         data = mde.extract(body)
-        self.assertDictEqual(data, expected)
+        self.assertEqual(data, expected)
 
     def test_w3c_5_3(self):
         body = get_testdata('w3c', 'microdata.5.3.html')
@@ -75,7 +75,7 @@ class TestMicrodata(unittest.TestCase):
 
         mde = MicrodataExtractor(strict=True)
         data = mde.extract(body)
-        self.assertDictEqual(data, expected)
+        self.assertEqual(data, expected)
 
     def test_w3c_5_5(self):
         body = get_testdata('w3c', 'microdata.5.5.html')
@@ -83,7 +83,7 @@ class TestMicrodata(unittest.TestCase):
 
         mde = MicrodataExtractor(strict=True)
         data = mde.extract(body)
-        self.assertDictEqual(data, expected)
+        self.assertEqual(data, expected)
 
     def test_w3c_7_1(self):
         body = get_testdata('w3c', 'microdata.7.1.html')
@@ -91,7 +91,7 @@ class TestMicrodata(unittest.TestCase):
 
         mde = MicrodataExtractor(strict=True)
         data = mde.extract(body, 'http://blog.example.com/progress-report')
-        self.assertDictEqual(data, expected)
+        self.assertEqual(data, expected)
 
     def test_w3c_meter_element(self):
         body = get_testdata('w3c', 'microdata.4.2.meter.html')
@@ -99,7 +99,7 @@ class TestMicrodata(unittest.TestCase):
 
         mde = MicrodataExtractor(strict=True)
         data = mde.extract(body)
-        self.assertDictEqual(data, expected)
+        self.assertEqual(data, expected)
 
     def test_w3c_data_element(self):
         body = get_testdata('w3c', 'microdata.4.2.data.html')
@@ -107,7 +107,7 @@ class TestMicrodata(unittest.TestCase):
 
         mde = MicrodataExtractor(strict=True)
         data = mde.extract(body)
-        self.assertDictEqual(data, expected)
+        self.assertEqual(data, expected)
 
     def test_w3c_object_element(self):
         body = get_testdata('w3c', 'microdata.object.html')
@@ -115,7 +115,7 @@ class TestMicrodata(unittest.TestCase):
 
         mde = MicrodataExtractor(strict=True)
         data = mde.extract(body, 'http://www.example.com/microdata/test')
-        self.assertDictEqual(data, expected)
+        self.assertEqual(data, expected)
 
 
 class TestMicrodataFlat(unittest.TestCase):
@@ -128,7 +128,7 @@ class TestMicrodataFlat(unittest.TestCase):
 
         mde = MicrodataExtractor(nested=False, strict=True)
         data = mde.extract(body)
-        self.assertDictEqual(data, expected)
+        self.assertEqual(data, expected)
 
     def test_w3c_7_1(self):
         body = get_testdata('w3c', 'microdata.7.1.html')
@@ -136,7 +136,7 @@ class TestMicrodataFlat(unittest.TestCase):
 
         mde = MicrodataExtractor(nested=False, strict=True)
         data = mde.extract(body, 'http://blog.example.com/progress-report')
-        self.assertDictEqual(data, expected)
+        self.assertEqual(data, expected)
 
 
 class TestMicrodataWithText(unittest.TestCase):
@@ -149,4 +149,4 @@ class TestMicrodataWithText(unittest.TestCase):
 
         mde = MicrodataExtractor(add_text_content=True)
         data = mde.extract(body)
-        self.assertDictEqual(data, expected)
+        self.assertEqual(data, expected)

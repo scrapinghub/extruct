@@ -79,14 +79,15 @@ Microdata extraction
     >>> mde = MicrodataExtractor()
     >>> data = mde.extract(html)
     >>> pprint(data)
-    {'items': [{'properties': {'license': 'http://www.opensource.org/licenses/mit-license.php',
-                               'title': u'The house I found.',
-                               'work': 'http://www.example.com/images/house.jpeg'},
-                'type': 'http://n.whatwg.org/work'},
-               {'properties': {'license': 'http://www.opensource.org/licenses/mit-license.php',
-                               'title': u'The mailbox.',
-                               'work': 'http://www.example.com/images/mailbox.jpeg'},
-                'type': 'http://n.whatwg.org/work'}]}
+    [{'properties': {'license': 'http://www.opensource.org/licenses/mit-license.php',
+                     'title': 'The house I found.',
+                     'work': 'http://www.example.com/images/house.jpeg'},
+      'type': 'http://n.whatwg.org/work'},
+     {'properties': {'license': 'http://www.opensource.org/licenses/mit-license.php',
+                     'title': 'The mailbox.',
+                     'work': 'http://www.example.com/images/mailbox.jpeg'},
+      'type': 'http://n.whatwg.org/work'}]
+
 
 JSON-LD extraction
 ++++++++++++++++++
@@ -128,18 +129,17 @@ JSON-LD extraction
     >>>
     >>> data = jslde.extract(html)
     >>> pprint(data)
-    {'items': [{u'@context': u'http://schema.org',
-                u'@type': u'Person',
-                u'additionalName': u'Johnny',
-                u'address': {u'@type': u'PostalAddress',
-                             u'addressLocality': u'Wonderland',
-                             u'addressRegion': u'Georgia',
-                             u'streetAddress': u'1234 Peach Drive'},
-                u'affiliation': u'University of Dreams',
-                u'jobTitle': u'Graduate research assistant',
-                u'name': u'John Doe',
-                u'url': u'http://www.example.com'}]}
-
+    [{'@context': 'http://schema.org',
+      '@type': 'Person',
+      'additionalName': 'Johnny',
+      'address': {'@type': 'PostalAddress',
+                  'addressLocality': 'Wonderland',
+                  'addressRegion': 'Georgia',
+                  'streetAddress': '1234 Peach Drive'},
+      'affiliation': 'University of Dreams',
+      'jobTitle': 'Graduate research assistant',
+      'name': 'John Doe',
+      'url': 'http://www.example.com'}]
 
 
 RDFa extraction (experimental)

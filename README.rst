@@ -244,8 +244,7 @@ will output something like this:
     {
        "url":"http://www.sarenza.com/i-love-shoes-susket-s767163-p0000119412",
        "status":"ok",
-       "microdata":{
-          "items":[
+       "microdata":[
              {
                 "type":"http://schema.org/Product",
                 "properties":{
@@ -293,8 +292,7 @@ will output something like this:
                    "description":""
                 }
              }
-          ]
-       }
+       ]
     }
 
 

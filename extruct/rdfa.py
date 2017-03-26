@@ -9,11 +9,13 @@ import logging
 from xml.dom import Node
 from xml.dom.minidom import Attr, NamedNodeMap
 
-from lxml.etree import ElementBase, _ElementStringResult, _ElementUnicodeResult, XPath
+from lxml.etree import ElementBase, _ElementStringResult, _ElementUnicodeResult, XPath, tostring
 from lxml.html import fromstring, HTMLParser, HtmlElementClassLookup
 from rdflib import Graph, logger as rdflib_logger
 from rdflib.plugins.parsers.pyRdfa import pyRdfa as PyRdfa, Options, logger as pyrdfa_logger
 from rdflib.plugins.parsers.pyRdfa.initialcontext import initial_context
+
+from copy import deepcopy, copy
 
 # silence rdflib/PyRdfa INFO logs
 rdflib_logger.setLevel(logging.ERROR)
@@ -71,6 +73,7 @@ class DomHtmlMixin(object):
     TEXT_NODE = Node.TEXT_NODE
 
     _xp_childrennodes = XPath('child::node()')
+
     @property
     def documentElement(self):
         return self.getroottree().getroot()
@@ -100,6 +103,9 @@ class DomHtmlMixin(object):
 
     def setAttribute(self, name, value):
         self.set(name, value)
+
+    def cloneNode(self, deep):
+        return deepcopy(self) if deep else copy(self)
 
     @property
     def attributes(self):
@@ -151,6 +157,10 @@ class DomHtmlMixin(object):
             return self
         else:
             raise RuntimeError
+
+    def toxml(self, encoding=None):
+        return tostring(self, encoding=encoding)
+
 
 
 class DomHtmlElementClassLookup(HtmlElementClassLookup):

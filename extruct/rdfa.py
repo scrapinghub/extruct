@@ -30,11 +30,11 @@ class RDFaExtractor(object):
     def extract(self, htmlstring, url='http://www.example.com/', encoding="UTF-8",
             expanded=True):
 
-        domparser = XmlDomHTMLParser()
-        tree = fromstring(htmlstring.encode('utf-8'), parser=domparser)
+        domparser = XmlDomHTMLParser(encoding=encoding)
+        tree = fromstring(htmlstring, parser=domparser)
         return self.extract_items(tree, url, expanded=expanded)
 
-    def extract_items(self, document, url, expanded=True):
+    def extract_items(self, document, url, expanded=True, *args, **kwargs):
         options = Options(output_processor_graph=True,
                           embedded_rdf=False,
                           space_preserve=True,

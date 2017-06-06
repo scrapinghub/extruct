@@ -17,7 +17,7 @@ class JsonLdExtractor(object):
         lxmldoc = lxml.html.fromstring(htmlstring, parser=parser)
         return self.extract_items(lxmldoc)
 
-    def extract_items(self, document):
+    def extract_items(self, document, *args, **kwargs):
         return [item for items in map(self._extract_items,
                                       self._xp_jsonld(document))
                      for item in items

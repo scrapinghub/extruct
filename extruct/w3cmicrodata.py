@@ -44,7 +44,7 @@ class LxmlMicrodataExtractor(object):
         lxmldoc = lxml.html.fromstring(htmlstring, parser=parser)
         return self.extract_items(lxmldoc, url)
 
-    def extract_items(self, document, url):
+    def extract_items(self, document, url, *args, **kwargs):
         self.url = url
         self.items_seen = set()
         return [item

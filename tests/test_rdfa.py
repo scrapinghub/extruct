@@ -62,7 +62,7 @@ class TestRDFa(unittest.TestCase):
                 ).decode('UTF-8'))
 
             rdfae = RDFaExtractor()
-            data = rdfae.extract(body, url='http://www.exaple.com/index.html')
+            data = rdfae.extract(body, url='http://www.example.com/index.html')
             self.assertJsonLDEqual(data, expected)
 
     def test_w3c_rdfaprimer(self):
@@ -90,6 +90,17 @@ class TestRDFa(unittest.TestCase):
             ).decode('UTF-8'))
 
         rdfae = RDFaExtractor()
-        data = rdfae.extract(body, url='http://www.exaple.com/index.html')
+        data = rdfae.extract(body, url='http://www.example.com/index.html')
+
+        self.assertJsonLDEqual(data, expected)
+
+    def test_wikipedia_xhtml_rdfa(self):
+        body = get_testdata('misc', 'Portfolio_Niels_Lubberman.html').decode('UTF-8')
+        expected = json.loads(
+                get_testdata('misc', 'Portfolio_Niels_Lubberman.json'
+            ).decode('UTF-8'))
+
+        rdfae = RDFaExtractor()
+        data = rdfae.extract(body, url='http://nielslubberman.nl/drupal/')
 
         self.assertJsonLDEqual(data, expected)

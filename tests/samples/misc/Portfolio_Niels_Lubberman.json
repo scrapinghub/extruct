@@ -1,0 +1,106 @@
+[
+  {
+    "@type": ["http://xmlns.com/foaf/0.1/Image"],
+    "@id": "http://nielslubberman.nl/drupal/sites/default/files/styles/smallcrop/public/projects/pictures/pro_poster_jobs.png?itok=QUE2ZKFT&sc=259cbe26e2b9c2489443d05fdcd3f824"
+  },
+  {
+    "@type": ["http://xmlns.com/foaf/0.1/Image"],
+    "@id": "http://nielslubberman.nl/drupal/sites/default/files/styles/smallcrop/public/projects/pictures/pro_kanaal.jpg?itok=cV8u1cxa&sc=b496d2d94d76a056d4e6efde1cfb2abe"
+  },
+  {
+    "@type": ["http://xmlns.com/foaf/0.1/Image"],
+    "@id": "http://nielslubberman.nl/drupal/sites/default/files/styles/smallcrop/public/projects/pictures/pro_asppolgs_final.png?itok=apZpSYdS&sc=7ade4b4c9baeea7a86bad48589f9649d"
+  },
+  {
+    "@type": ["http://xmlns.com/foaf/0.1/Image"],
+    "@id": "http://nielslubberman.nl/drupal/sites/default/files/styles/smallcrop/public/projects/pictures/pro_poster_tim_berners_lee.png?itok=DghJBlqt&sc=259cbe26e2b9c2489443d05fdcd3f824"
+  },
+  {
+    "@type": ["http://xmlns.com/foaf/0.1/Image"],
+    "@id": "http://nielslubberman.nl/drupal/sites/default/files/styles/smallcrop/public/projects/pictures/pro_poster_roemenie.png?itok=pScuIyeN&sc=363eea0a2ddd62c554241fc1fed1f3bc"
+  },
+  {
+    "http://www.w3.org/1999/xhtml/vocab#icon": [
+      {
+        "@id": "http://nielslubberman.nl/drupal/misc/favicon.ico"
+      }
+    ],
+    "http://purl.org/rss/1.0/modules/content/encoded": [
+      {
+        "@value": "<p xml:lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:content=\"http://purl.org/rss/1.0/modules/content/\" xmlns:dc=\"http://purl.org/dc/terms/\" xmlns:foaf=\"http://xmlns.com/foaf/0.1/\" xmlns:og=\"http://ogp.me/ns#\" xmlns:rdfs=\"http://www.w3.org/2000/01/rdf-schema#\" xmlns:sioc=\"http://rdfs.org/sioc/ns#\" xmlns:sioct=\"http://rdfs.org/sioc/types#\" xmlns:skos=\"http://www.w3.org/2004/02/skos/core#\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema#\">Op deze vernieuwde website kunt u enkele van mijn projecten vinden, tevens kunt u lessen downloaden die ik heb gemaakt.</p>\n\n",
+        "@type": "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"
+      },
+      {
+        "@value": "<p xml:lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:content=\"http://purl.org/rss/1.0/modules/content/\" xmlns:dc=\"http://purl.org/dc/terms/\" xmlns:foaf=\"http://xmlns.com/foaf/0.1/\" xmlns:og=\"http://ogp.me/ns#\" xmlns:rdfs=\"http://www.w3.org/2000/01/rdf-schema#\" xmlns:sioc=\"http://rdfs.org/sioc/ns#\" xmlns:sioct=\"http://rdfs.org/sioc/types#\" xmlns:skos=\"http://www.w3.org/2004/02/skos/core#\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema#\">Voeg mij nu toe aan uw professionele netwerk op LinkedIn.</p>\n\n",
+        "@type": "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"
+      },
+      {
+        "@value": "<p xml:lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:content=\"http://purl.org/rss/1.0/modules/content/\" xmlns:dc=\"http://purl.org/dc/terms/\" xmlns:foaf=\"http://xmlns.com/foaf/0.1/\" xmlns:og=\"http://ogp.me/ns#\" xmlns:rdfs=\"http://www.w3.org/2000/01/rdf-schema#\" xmlns:sioc=\"http://rdfs.org/sioc/ns#\" xmlns:sioct=\"http://rdfs.org/sioc/types#\" xmlns:skos=\"http://www.w3.org/2004/02/skos/core#\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema#\">Met behulp van de pijl hieronder kunt u mijn CV downloaden.</p>\n\n",
+        "@type": "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"
+      }
+    ],
+    "http://www.w3.org/1999/xhtml/vocab#alternate": [
+      {
+        "@id": "http://nielslubberman.nl/drupal/?q=rss.xml"
+      }
+    ],
+    "@id": "http://nielslubberman.nl/drupal/"
+  },
+  {
+    "@type": ["http://xmlns.com/foaf/0.1/Image"],
+    "@id": "http://nielslubberman.nl/drupal/sites/default/files/images/headlines/headline_linkedin.png"
+  },
+  {
+    "@type": ["http://xmlns.com/foaf/0.1/Image"],
+    "@id": "http://nielslubberman.nl/drupal/sites/default/files/images/headlines/headline_download.png"
+  },
+  {
+    "@type": ["http://xmlns.com/foaf/0.1/Image"],
+    "@id": "http://nielslubberman.nl/drupal/sites/default/files/styles/smallcrop/public/projects/pictures/pro_poster_turing.png?itok=anlTc5N6&sc=259cbe26e2b9c2489443d05fdcd3f824"
+  },
+  {
+    "@type": ["http://xmlns.com/foaf/0.1/Image"],
+    "@id": "http://nielslubberman.nl/drupal/sites/default/files/styles/smallcrop/public/projects/pictures/pro_ru_secure.png?itok=2-xDWirb&sc=67c0f518676aaf034a9215a0ec7e9e1e"
+  },
+  {
+    "@type": ["http://xmlns.com/foaf/0.1/Image"],
+    "@id": "http://nielslubberman.nl/drupal/sites/default/files/styles/smallcrop/public/projects/pictures/1979%20Nicolae%20si%20Nicu%20Ceausescu%20la%20Canal.JPG?itok=CYcBbx1w&sc=3e5afd5e3e8746f6db8fb6f52a325372"
+  },
+  {
+    "@type": ["http://xmlns.com/foaf/0.1/Image"],
+    "@id": "http://nielslubberman.nl/drupal/sites/default/files/images/projects/grey_img_1.png"
+  },
+  {
+    "@type": ["http://xmlns.com/foaf/0.1/Image"],
+    "@id": "http://nielslubberman.nl/drupal/sites/default/files/styles/smallcrop/public/projects/pictures/pro_poster_gates.png?itok=sIwGJEG3&sc=259cbe26e2b9c2489443d05fdcd3f824"
+  },
+  {
+    "@type": ["http://xmlns.com/foaf/0.1/Image"],
+    "@id": "http://nielslubberman.nl/drupal/sites/default/files/images/projects/grey_img_3.png"
+  },
+  {
+    "@type": ["http://xmlns.com/foaf/0.1/Image"],
+    "@id": "http://nielslubberman.nl/drupal/sites/default/files/images/projects/grey_img_2.png"
+  },
+  {
+    "http://www.w3.org/2004/02/skos/core#prefLabel": [
+      {
+        "@language": "en",
+        "@value": "Geschiedenis"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@language": "en",
+        "@value": "Geschiedenis"
+      }
+    ],
+    "@type": ["http://www.w3.org/2004/02/skos/core#Concept"],
+    "@id": "http://nielslubberman.nl/drupal/?q=taxonomy/term/1"
+  },
+  {
+    "@type": ["http://xmlns.com/foaf/0.1/Image"],
+    "@id": "http://nielslubberman.nl/drupal/sites/default/files/images/projects/grey_img_4.png"
+  }
+]
+

@@ -13,11 +13,16 @@ extruct
 
 It also has a built-in HTTP server to test its output as JSON.
 
-Currently, *extruct* only supports `W3C's HTML Microdata`_
-and `embedded JSON-LD`_.
+Currently, *extruct* supports:
+
+- `W3C's HTML Microdata`_
+- `embedded JSON-LD`_
+- (experimental) `RDFa`_ via `rdflib`_
 
 .. _W3C's HTML Microdata: http://www.w3.org/TR/microdata/
 .. _embedded JSON-LD: http://www.w3.org/TR/json-ld/#embedding-json-ld-in-html-documents
+.. _RDFa: https://www.w3.org/TR/html-rdfa/
+.. _rdflib: https://pypi.python.org/pypi/rdflib/
 
 The microdata algorithm is a revisit of `this Scrapinghub blog post`_ showing how to use EXSLT extensions.
 
@@ -26,10 +31,10 @@ The microdata algorithm is a revisit of `this Scrapinghub blog post`_ showing ho
 Roadmap
 -------
 
-- support for `RDFa Lite`_ (e.g. Facebook `Open Graph protocol metadata`_)
+- support for `Complex Object Properties`_ within `Open Graph protocol <ogp>`_)
 
-.. _RDFa Lite: http://www.w3.org/TR/rdfa-lite/
-.. _Open Graph protocol metadata: http://ogp.me/#metadata
+.. _Complex Object Properties: https://developers.facebook.com/docs/sharing/opengraph/object-properties#complex
+.. _ogp: http://ogp.me/#metadata
 
 
 Installation
@@ -42,6 +47,159 @@ Installation
 
 Usage
 -----
+
+All-in-one extraction
++++++++++++++++++++++
+
+The simplest example how to use extruct is to call ``extruct.extract(htmlstring, url)``
+with some HTML string and a URL.
+
+Let's try this on a page on eBay which uses microdata and RDFa (with `ogp`_).
+
+First fetch the HTML using python-requests and then feed the response body to ``extruct``::
+
+    >>> import requests
+    >>> from pprint import pprint
+
+    >>> r = requests.get('http://www.ebay.com/itm/HERBERT-TERRY-2-STEP-ANGLEPOISE-LAMP-MODEL1227-/282478964487')
+
+    >>> import extruct
+    >>> data = extruct.extract(r.text, r.url)
+
+    >>> pprint(data)
+    {'json-ld': [],
+     'microdata': [{'properties': {'image': ['http://i.ebayimg.com/images/g/0M4AAOSwT-FZBeOQ/s-l300.jpg',
+                                             'http://i.ebayimg.com/images/g/0M4AAOSwT-FZBeOQ/s-l300.jpg'],
+                                   'name': 'Details about  \xa0HERBERT TERRY 2 '
+                                           'STEP ANGLEPOISE LAMP MODEL1227',
+                                   'offers': {'properties': {'areaServed': 'United '
+                                                                           'Kingdom '
+                                                                           'and '
+                                                                           'many '
+                                                                           'other '
+                                                                           'countries \n'
+                                                                           '\t\t\t\t\t\t'
+                                                                           '|  See '
+                                                                           'details',
+                                                             'availability': 'http://schema.org/InStock',
+                                                             'availableAtOrFrom': 'Stockport, '
+                                                                                  'United '
+                                                                                  'Kingdom',
+                                                             'itemCondition': '--not '
+                                                                              'specified',
+                                                             'price': '150.0',
+                                                             'priceCurrency': 'GBP'},
+                                              'type': 'http://schema.org/Offer'}},
+                    'type': 'http://schema.org/Product'},
+                   {'properties': {'itemListElement': [{'properties': {'item': 'http://www.ebay.com/sch/Antiques-/20081/i.html',
+                                                                       'name': 'Antiques',
+                                                                       'position': '1'},
+                                                        'type': 'http://schema.org/ListItem'},
+                                                       (...)
+                                                       {'properties': {'item': 'http://www.ebay.com/sch/20th-Century-/66861/i.html',
+                                                                       'name': '20th '
+                                                                               'Century',
+                                                                       'position': '4'},
+                                                        'type': 'http://schema.org/ListItem'}]},
+                    'type': 'http://schema.org/BreadcrumbList'}],
+     'rdfa': [{'@id': 'http://www.ebay.com/itm/HERBERT-TERRY-2-STEP-ANGLEPOISE-LAMP-MODEL1227-/282478964487#w1-31-_topHelpTxt',
+               'http://www.w3.org/1999/xhtml/vocab#role': [{'@id': 'http://www.w3.org/1999/xhtml/vocab#button'}]},
+              (...)
+              {'@id': 'http://www.ebay.com/itm/HERBERT-TERRY-2-STEP-ANGLEPOISE-LAMP-MODEL1227-/282478964487',
+               'http://opengraphprotocol.org/schema/description': [{'@value': 'On '
+                                                                              'one '
+                                                                              'side '
+                                                                              'of '
+                                                                              'the '
+                                                                              'base '
+                                                                              'is '
+                                                                              'a '
+                                                                              'metal '
+                                                                              'label '
+                                                                              'from '
+                                                                              'UMIST, '
+                                                                              'where '
+                                                                              'it '
+                                                                              'was '
+                                                                              'in '
+                                                                              'use. '
+                                                                              '| '
+                                                                              'eBay!'}],
+               'http://opengraphprotocol.org/schema/image': [{'@value': 'http://i.ebayimg.com/images/i/282478964487-0-1/s-l1000.jpg'}],
+               'http://opengraphprotocol.org/schema/site_name': [{'@value': 'eBay'}],
+               'http://opengraphprotocol.org/schema/title': [{'@value': 'HERBERT '
+                                                                        'TERRY 2 '
+                                                                        'STEP '
+                                                                        'ANGLEPOISE '
+                                                                        'LAMP '
+                                                                        'MODEL1227  '
+                                                                        '| eBay'}],
+               'http://opengraphprotocol.org/schema/type': [{'@value': 'ebay-objects:item'}],
+               'http://opengraphprotocol.org/schema/url': [{'@value': 'http://www.ebay.com/itm/HERBERT-TERRY-2-STEP-ANGLEPOISE-LAMP-MODEL1227-/282478964487'}],
+               'http://www.facebook.com/2008/fbmlapp_id': [{'@value': '102628213125203'}]},
+              {'@id': '_:Na28391785e4e48bb92849fccbe758c6b',
+               'http://www.w3.org/1999/xhtml/vocab#role': [{'@id': 'http://www.w3.org/1999/xhtml/vocab#button'}]},
+              (...)
+              {'@id': 'http://www.ebay.com/itm/HERBERT-TERRY-2-STEP-ANGLEPOISE-LAMP-MODEL1227-/282478964487#glbfooter',
+               'http://www.w3.org/1999/xhtml/vocab#role': [{'@id': 'http://www.w3.org/1999/xhtml/vocab#contentinfo'}]}]}
+
+
+Another example with a page from SongKick containing RDFa and JSON-LD metadata::
+
+    >>> r = requests.get('http://www.songkick.com/artists/236156-elysian-fields')
+
+    >>> data = extruct.extract(r.text, r.url)
+
+    >>> pprint(data)
+    {'json-ld': [{'@context': 'http://schema.org',
+                  '@type': 'MusicEvent',
+                  'location': {'@type': 'Place',
+                               'address': {'@type': 'PostalAddress',
+                                           'addressCountry': 'US',
+                                           'addressLocality': 'Brooklyn',
+                                           'addressRegion': 'NY',
+                                           'postalCode': '11225',
+                                           'streetAddress': '497 Rogers Ave'},
+                               'geo': {'@type': 'GeoCoordinates',
+                                       'latitude': 40.660109,
+                                       'longitude': -73.953193},
+                               'name': 'The Owl Music Parlor',
+                               'sameAs': 'http://www.theowl.nyc'},
+                  'name': 'Elysian Fields',
+                  'performer': [{'@type': 'MusicGroup',
+                                 'name': 'Elysian Fields',
+                                 'sameAs': 'http://www.songkick.com/artists/236156-elysian-fields?utm_medium=organic&utm_source=microformat'}],
+                  'startDate': '2017-06-10T19:30:00-0400',
+                  'url': 'http://www.songkick.com/concerts/30173984-elysian-fields-at-owl-music-parlor?utm_medium=organic&utm_source=microformat'},
+                 (...)
+                 {'@context': 'http://schema.org',
+                  '@type': 'MusicGroup',
+                  'image': 'https://images.sk-static.com/images/media/profile_images/artists/236156/card_avatar',
+                  'interactionCount': '5557 UserLikes',
+                  'logo': 'https://images.sk-static.com/images/media/profile_images/artists/236156/card_avatar',
+                  'name': 'Elysian Fields',
+                  'url': 'http://www.songkick.com/artists/236156-elysian-fields?utm_medium=organic&utm_source=microformat'}],
+     'microdata': [],
+     'rdfa': [{'@id': 'http://www.songkick.com/artists/236156-elysian-fields',
+               'al:ios:app_name': [{'@value': 'Songkick Concerts'}],
+               'al:ios:app_store_id': [{'@value': '438690886'}],
+               'al:ios:url': [{'@value': 'songkick://artists/236156-elysian-fields'}],
+               'http://ogp.me/ns#description': [{'@value': 'Buy tickets for an '
+                                                           'upcoming Elysian '
+                                                           'Fields concert near '
+                                                           'you. List of all '
+                                                           'Elysian Fields tickets '
+                                                           'and tour dates for '
+                                                           '2017.'}],
+               'http://ogp.me/ns#image': [{'@value': 'http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg'}],
+               'http://ogp.me/ns#site_name': [{'@value': 'Songkick'}],
+               'http://ogp.me/ns#title': [{'@value': 'Elysian Fields'}],
+               'http://ogp.me/ns#type': [{'@value': 'songkick-concerts:artist'}],
+               'http://ogp.me/ns#url': [{'@value': 'http://www.songkick.com/artists/236156-elysian-fields'}],
+               'http://www.facebook.com/2008/fbmlapp_id': [{'@value': '308540029359'}]}]}
+
+
+You can also use each extractor individually. See below.
 
 Microdata extraction
 ++++++++++++++++++++
@@ -145,13 +303,7 @@ JSON-LD extraction
 RDFa extraction (experimental)
 ++++++++++++++++++++++++++++++
 
-First, install the extra dependencies for RDFa support
-(``extruct`` depends on ``rdflib`` and ``rdflib-jsonld`` for this)::
-
-    pip install extruct[rdfa]
-
-Then feed some HTML to a ``extruct.rdfa.RDFaExtractor`` instance using
-``.extract()``::
+::
 
     >>> from pprint import pprint
     >>> from extruct.rdfa import RDFaExtractor  # you can ignore the warning about html5lib not being available

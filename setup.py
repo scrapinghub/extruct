@@ -23,16 +23,12 @@ setup(
     url='https://github.com/scrapinghub/extruct',
     packages=find_packages(exclude=['tests',]),
     package_data={'extruct': ['VERSION']},
-    install_requires=['lxml'],
+    install_requires=['lxml', 'rdflib', 'rdflib-jsonld'],
     extras_require={
         'service': [
             'bottle',
             'gevent',
             'requests',
-        ],
-        'rdfa': [
-            'rdflib',
-            'rdflib-jsonld',
         ]
     },
     keywords='extruct',

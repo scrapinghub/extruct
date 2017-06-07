@@ -2,12 +2,18 @@
 History
 =======
 
+v0.3.1 (2017-06-07)
+-------------------
+
+* Fix dependencies and support RDFa by default (hence depend on rdflib by default).
+* Update README with all-in-one extractor examples.
+
 v0.3.0 (2017-06-07)
 -------------------
 
-* all extractors have an ``.extract_items()`` method, taking an lxml-parsed
+* All extractors have an ``.extract_items()`` method, taking an lxml-parsed
   document as input, if you want to reuse one you already have.
-* add generic extraction: use ``extruct.extract()`` to call all extractors
+* Add generic extraction: use ``extruct.extract()`` to call all extractors
   at once.
 
 v0.3.0a2 (2017-02-01)

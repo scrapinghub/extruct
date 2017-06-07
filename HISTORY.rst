@@ -2,6 +2,14 @@
 History
 =======
 
+v0.3.0 (2017-06-07)
+-------------------
+
+* all extractors have an ``.extract_items()`` method, taking an lxml-parsed
+  document as input, if you want to reuse one you already have.
+* add generic extraction: use ``extruct.extract()`` to call all extractors
+  at once.
+
 v0.3.0a2 (2017-02-01)
 ---------------------
 

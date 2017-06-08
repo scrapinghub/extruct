@@ -1,10 +1,12 @@
 import argparse
 import json
 
+import lxml
 import requests
 from extruct.jsonld import JsonLdExtractor
 from extruct.rdfa import RDFaExtractor
 from extruct.w3cmicrodata import MicrodataExtractor
+from extruct.xmldom import XmlDomHTMLParser
 
 
 def metadata_from_url(url, microdata=True, jsonld=True, rdfa=True):
@@ -15,17 +17,20 @@ def metadata_from_url(url, microdata=True, jsonld=True, rdfa=True):
     except requests.exceptions.HTTPError:
         return result
 
+    parser = XmlDomHTMLParser(encoding=resp.encoding)
+    tree = lxml.html.fromstring(resp.content, parser=parser)
+
     if microdata:
         mde = MicrodataExtractor(nested=True)
-        result['microdata'] = mde.extract(resp.content, resp.url, resp.encoding)
+        result['microdata'] = mde.extract_items(tree, resp.url)
 
     if jsonld:
         jsonlde = JsonLdExtractor()
-        result['json-ld'] = jsonlde.extract(resp.content, resp.url, resp.encoding)
+        result['json-ld'] = jsonlde.extract_items(tree, resp.url)
 
     if rdfa:
         rdfae = RDFaExtractor()
-        result['rdfa'] = rdfae.extract(resp.content, resp.url, resp.encoding)
+        result['rdfa'] = rdfae.extract_items(tree, resp.url)
 
     return result
 

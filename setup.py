@@ -21,6 +21,11 @@ setup(
     maintainer='Scrapinghub',
     maintainer_email='info@scrapinghub.com',
     url='https://github.com/scrapinghub/extruct',
+    entry_points={
+        'console_scripts': {
+            'extruct = extruct.tool:main',
+        }
+    },
     packages=find_packages(exclude=['tests',]),
     package_data={'extruct': ['VERSION']},
     install_requires=['lxml', 'rdflib', 'rdflib-jsonld'],

@@ -1,0 +1,137 @@
+{
+  "json-ld": [
+    {
+      "@context": "http://schema.org",
+      "@type": "MusicEvent",
+      "location": {
+        "@type": "Place",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "UK",
+          "addressLocality": "London",
+          "postalCode": "N1 6NU",
+          "streetAddress": "2-4 Hoxton Square"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 51.527476,
+          "longitude": -0.081657
+        },
+        "name": "Hoxton Square Bar & Kitchen",
+        "sameAs": "http://www.hoxtonsquarebar.com"
+      },
+      "name": "Tove Styrke",
+      "performer": [
+        {
+          "@type": "MusicGroup",
+          "name": "Tove Styrke",
+          "sameAs": "http://www.songkick.com/artists/3407026-tove-styrke?utm_medium=organic&utm_source=microformat"
+        },
+        {
+          "@type": "MusicGroup",
+          "name": "Geowulf",
+          "sameAs": "http://www.songkick.com/artists/8882079-geowulf?utm_medium=organic&utm_source=microformat"
+        }
+      ],
+      "startDate": "2017-06-12T20:00:00+0100",
+      "url": "http://www.songkick.com/concerts/30166884-tove-styrke-at-hoxton-square-bar-and-kitchen?utm_medium=organic&utm_source=microformat"
+    }
+  ],
+  "microdata": [
+    {
+      "properties": {
+        "author": "will-durrant",
+        "itemReviewed": "Tove Styrke",
+        "reviewBody": "Awesome energy and music, and even one or two of the songs from her debut album, Tove Styrke crushed it! Her music and stage presence are perfect for a venue like the Troubadour, where you can watch Tove pour her heart …\n\n    \n      Read more\n    \n  Report as inappropriate"
+      },
+      "type": "http://schema.org/Review"
+    }
+  ],
+  "rdfa": [
+    {
+      "@id": "https://www.songkick.com/concerts/30166884-tove-styrke-at-hoxton-square-bar-and-kitchen",
+      "al:ios:app_name": [
+        {
+          "@value": "Songkick Concerts"
+        }
+      ],
+      "al:ios:app_store_id": [
+        {
+          "@value": "438690886"
+        }
+      ],
+      "al:ios:url": [
+        {
+          "@value": "songkick://events/30166884-tove-styrke-at-hoxton-square-bar-and-kitchen"
+        }
+      ],
+      "http://ogp.me/ns#country-name": [
+        {
+          "@value": "UK"
+        }
+      ],
+      "http://ogp.me/ns#description": [
+        {
+          "@value": "Buy tickets for Tove Styrke’s upcoming concert with Geowulf at Hoxton Square Bar & Kitchen in London on 12 Jun 2017."
+        }
+      ],
+      "http://ogp.me/ns#image": [
+        {
+          "@value": "http://images.sk-static.com/images/media/img/col6/20170515-103345-171924.jpg"
+        }
+      ],
+      "http://ogp.me/ns#latitude": [
+        {
+          "@value": "51.527476"
+        }
+      ],
+      "http://ogp.me/ns#locality": [
+        {
+          "@value": "London"
+        }
+      ],
+      "http://ogp.me/ns#longitude": [
+        {
+          "@value": "-0.081657"
+        }
+      ],
+      "http://ogp.me/ns#postal-code": [
+        {
+          "@value": "N1 6NU"
+        }
+      ],
+      "http://ogp.me/ns#site_name": [
+        {
+          "@value": "Songkick"
+        }
+      ],
+      "http://ogp.me/ns#street-address": [
+        {
+          "@value": "2-4 Hoxton Square"
+        }
+      ],
+      "http://ogp.me/ns#title": [
+        {
+          "@value": "Tove Styrke at Hoxton Square Bar & Kitchen (12 Jun 17) with Geowulf"
+        }
+      ],
+      "http://ogp.me/ns#type": [
+        {
+          "@value": "songkick-concerts:concert"
+        }
+      ],
+      "http://ogp.me/ns#url": [
+        {
+          "@value": "https://www.songkick.com/concerts/30166884-tove-styrke-at-hoxton-square-bar-and-kitchen"
+        }
+      ],
+      "http://www.facebook.com/2008/fbmlapp_id": [
+        {
+          "@value": "308540029359"
+        }
+      ]
+    }
+  ],
+  "status": "200 OK",
+  "url": "https://www.songkick.com/concerts/30166884-tove-styrke-at-hoxton-square-bar-and-kitchen"
+}

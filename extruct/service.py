@@ -1,20 +1,16 @@
-import requests
 import json
+
+from bottle import request, response, route, run
+from extruct.tool import metadata_from_url
 
 try:
     from cStringIO import StringIO as BytesIO
 except ImportError:
     from io import BytesIO
-from gevent import monkey
 
+from gevent import monkey
 # gevent monkey patching
 monkey.patch_all()
-
-from bottle import route, run, request, response
-
-import lxml.html
-from extruct.w3cmicrodata import MicrodataExtractor
-from extruct.jsonld import JsonLdExtractor
 
 
 def JSON(func):
@@ -24,23 +20,9 @@ def JSON(func):
     return _decorated
 
 
-def async_extruct(url, microdata=True, jsonld=True):
+def async_extruct(url, microdata=True, jsonld=True, rdfa=True):
     response.content_type = 'application/json'
-    resp = requests.get(url, timeout=30)
-
-    parser = lxml.html.HTMLParser(encoding=resp.encoding)
-    lxmldoc = lxml.html.fromstring(resp.content, parser=parser)
-
-    result = {'url': url, 'status': 'ok'}
-
-    if microdata:
-        mde = MicrodataExtractor(nested=True)
-        result['microdata'] = mde.extract_items(lxmldoc, url)
-
-    if jsonld:
-        jsonlde = JsonLdExtractor()
-        result['json-ld'] = jsonlde.extract_items(lxmldoc)
-
+    result = metadata_from_url(url, microdata, jsonld, rdfa)
     return result
 
 
@@ -70,6 +52,7 @@ def extruct_root():
     </html>
     """
 
+
 @route('/extruct/<url:re:.*?>')
 @JSON
 def extruct(url=None):
@@ -80,6 +63,7 @@ def extruct(url=None):
         yield async_extruct(url)
     except Exception as e:
         yield {'url': url, 'status': 'error', 'message': repr(e)}
+
 
 @route('/extruct/batch', method='POST')
 def extruct_batch():
@@ -98,5 +82,5 @@ def extruct_batch():
             yield "%s\n" % json.dumps(async_extruct(url))
 
 
-if __name__ ==  '__main__':
+if __name__ == '__main__':
     run(host='0.0.0.0', port=10005, server='gevent')

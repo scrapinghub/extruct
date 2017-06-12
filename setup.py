@@ -34,7 +34,10 @@ setup(
             'bottle',
             'gevent',
             'requests',
-        ]
+        ],
+        'cli': [
+            'requests',
+        ],
     },
     keywords='extruct',
     classifiers=[

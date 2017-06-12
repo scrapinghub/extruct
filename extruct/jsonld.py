@@ -4,10 +4,13 @@ JSON-LD extractor
 """
 
 import json
+import re
 
 import lxml.etree
 import lxml.html
 
+
+HTML_OR_JS_COMMENTLINE = re.compile('^(\s*//.*)|(\s*<!--.*-->\s*)')
 
 class JsonLdExtractor(object):
     _xp_jsonld = lxml.etree.XPath('descendant-or-self::script[@type="application/ld+json"]')
@@ -24,7 +27,12 @@ class JsonLdExtractor(object):
                          if item]
 
     def _extract_items(self, node):
-        data = json.loads(node.xpath('string()'))
+        script = node.xpath('string()')
+        try:
+            data = json.loads(script)
+        except ValueError:
+            # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
+            data = json.loads(HTML_OR_JS_COMMENTLINE.sub('', script))
         if isinstance(data, list):
             return data
         elif isinstance(data, dict):

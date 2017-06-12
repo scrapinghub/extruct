@@ -35,10 +35,9 @@ setup(
             'gevent',
             'requests',
         ],
-        'rdfa': [
-            'rdflib',
-            'rdflib-jsonld',
-        ]
+        'cli': [
+            'requests',
+        ],
     },
     keywords='extruct',
     classifiers=[

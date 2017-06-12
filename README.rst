@@ -296,6 +296,46 @@ will output something like this:
     }
 
 
+Command Line Tool
+-----------------
+
+*extruct* provides a command line tool that allows you to fetch a page and
+extract the metadata from it directly from the command line.
+
+Dependencies
+++++++++++++
+
+The command line tool depends on requests_, which is not installed by default
+when you install **extruct**. In order to use the command line tool, you can
+install **extruct** with the `cli` extra requirements::
+
+    pip install extruct[cli]
+
+
+Usage
++++++
+
+::
+
+    extruct "http://example.com"
+
+Downloads "http://example.com" and outputs the Microdata, JSON-LD and RDFa
+metadata to `stdout`.
+
+Supported Parameters
+++++++++++++++++++++
+
+By default, the command line tool will try to extract all the supported
+metadata formats from the page (currently Microdata, JSON-LD and RDFa). If you
+want to restrict the output to just one or a subset of those, you can use the
+individual switches.
+
+For example, this command extracts only Microdata and JSON-LD metadata from
+"http://example.com"::
+
+    extruct --microdata --jsonld "http://example.com"
+
+
 Development version
 -------------------
 

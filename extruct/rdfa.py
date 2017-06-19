@@ -6,6 +6,8 @@ Based on pyrdfa3 and rdflib
 """
 import json
 import logging
+rdflib_logger = logging.getLogger('rdflib')
+rdflib_logger.setLevel(logging.ERROR)
 
 from lxml.html import fromstring
 from rdflib import Graph, logger as rdflib_logger

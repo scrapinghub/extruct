@@ -36,7 +36,7 @@ def metadata_from_url(url, microdata=True, jsonld=True, rdfa=True):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(prog='extruct', description=__doc__)
     parser.add_argument('url', help='The target URL')
     parser.add_argument(
         '--microdata',

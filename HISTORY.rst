@@ -2,6 +2,15 @@
 History
 =======
 
+v0.4.0 (2017-06-20)
+-------------------
+
+* New ``extruct`` command line tool to fetch a page and extract its metadata.
+  Works either via ``extruct`` directly or ``python -m extruct``.
+* Accept leading HTML comment in JSON-LD payload.
+* rdflib log messages were silenced to avoid the noise when importing extruct.
+
+
 v0.3.1 (2017-06-07)
 -------------------
 

@@ -12,6 +12,7 @@ import lxml.html
 
 HTML_OR_JS_COMMENTLINE = re.compile('^(\s*//.*)|(\s*<!--.*-->\s*)')
 
+
 class JsonLdExtractor(object):
     _xp_jsonld = lxml.etree.XPath('descendant-or-self::script[@type="application/ld+json"]')
 
@@ -21,10 +22,12 @@ class JsonLdExtractor(object):
         return self.extract_items(lxmldoc)
 
     def extract_items(self, document, *args, **kwargs):
-        return [item for items in map(self._extract_items,
-                                      self._xp_jsonld(document))
-                     for item in items
-                         if item]
+        try:
+            return [item for items in map(self._extract_items,
+                                          self._xp_jsonld(document))
+                    for item in items if item]
+        except TypeError:
+            return []
 
     def _extract_items(self, node):
         script = node.xpath('string()')

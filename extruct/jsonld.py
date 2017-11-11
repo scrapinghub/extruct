@@ -22,12 +22,9 @@ class JsonLdExtractor(object):
         return self.extract_items(lxmldoc)
 
     def extract_items(self, document, *args, **kwargs):
-        try:
-            return [item for items in map(self._extract_items,
-                                          self._xp_jsonld(document))
-                    for item in items if item]
-        except TypeError:
-            return []
+        return [item for items in map(self._extract_items,
+                                      self._xp_jsonld(document))
+                for item in items if item]
 
     def _extract_items(self, node):
         script = node.xpath('string()')
@@ -36,6 +33,11 @@ class JsonLdExtractor(object):
         except ValueError:
             # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
             data = json.loads(HTML_OR_JS_COMMENTLINE.sub('', script))
+
+        if data is None:
+            # sometimes script might be None
+            return []
+
         if isinstance(data, list):
             return data
         elif isinstance(data, dict):

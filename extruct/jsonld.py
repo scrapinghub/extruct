@@ -16,10 +16,7 @@ class JsonLdExtractor(object):
     _xp_jsonld = lxml.etree.XPath('descendant-or-self::script[@type="application/ld+json"]')
 
     def __init__(self, allow_control_characters=True):
-        if allow_control_characters:
-            self.strict = False
-        else:
-            self.strict = True
+        self.strict = not allow_control_characters
 
     def extract(self, htmlstring, url='http://www.example.com/', encoding="UTF-8"):
         parser = lxml.html.HTMLParser(encoding=encoding)

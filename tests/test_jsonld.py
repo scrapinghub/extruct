@@ -50,3 +50,10 @@ class TestJsonLD(unittest.TestCase):
         jsonlde = JsonLdExtractor()
         data = jsonlde.extract(body)
         self.assertEqual(data, expected)
+
+    def test_allow_control_characters_exception(self):
+        prefix = 'ControlCharacters'
+        body = get_testdata('control.characters', '{}.html'.format(prefix))
+
+        jsonlde = JsonLdExtractor(allow_control_characters=False)
+        self.assertRaises(ValueError, jsonlde.extract, body)

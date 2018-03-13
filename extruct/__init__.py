@@ -15,5 +15,5 @@ def extract(htmlstring, url='http://www.example.com/', encoding="UTF-8"):
                 ('microdata', MicrodataExtractor()),
                 ('rdfa', RDFaExtractor()))}
     
-    reset_lookups()
+    # reset_lookups()
     return metadata

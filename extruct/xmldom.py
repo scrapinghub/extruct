@@ -144,7 +144,10 @@ class DomHtmlMixin(object):
 
 
 class DomHtmlElementClassLookup(HtmlElementClassLookup):
-    _lookups = {}
+    def __init__(self):
+        super(DomHtmlElementClassLookup, self).__init__()
+        self._lookups = {}
+
     def lookup(self, node_type, document, namespace, name):
         k = (node_type, document, namespace, name)
         t = self._lookups.get(k)

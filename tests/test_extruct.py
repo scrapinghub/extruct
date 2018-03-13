@@ -17,4 +17,3 @@ class TestGeneric(unittest.TestCase):
 
         data = extruct.extract(body, 'http://www.songkick.com/artists/236156-elysian-fields')
         self.assertEqual(data, expected)
-        self.assertEqual(DomHtmlElementClassLookup._lookups, {})

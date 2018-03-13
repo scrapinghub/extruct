@@ -144,7 +144,10 @@ class DomHtmlMixin(object):
 
 
 class DomHtmlElementClassLookup(HtmlElementClassLookup):
-    _lookups = {}
+    def __init__(self):
+        super(DomHtmlElementClassLookup, self).__init__()
+        self._lookups = {}
+
     def lookup(self, node_type, document, namespace, name):
         k = (node_type, document, namespace, name)
         t = self._lookups.get(k)
@@ -155,9 +158,6 @@ class DomHtmlElementClassLookup(HtmlElementClassLookup):
             return newtype
         else:
             return t
-
-def reset_lookups():
-    DomHtmlElementClassLookup._lookups = {}
 
 class XmlDomHTMLParser(HTMLParser):
     """An HTML parser that is configured to return XmlDomHtmlElement

@@ -156,6 +156,8 @@ class DomHtmlElementClassLookup(HtmlElementClassLookup):
         else:
             return t
 
+def reset_lookups():
+    DomHtmlElementClassLookup._lookups = {}
 
 class XmlDomHTMLParser(HTMLParser):
     """An HTML parser that is configured to return XmlDomHtmlElement

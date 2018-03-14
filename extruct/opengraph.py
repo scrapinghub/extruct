@@ -3,34 +3,12 @@ import re
 import lxml.html
 
 import functools
-from .pathfinder import find
 from .transform import clean_missing
 from .schemaorg import (
     schemaorg,
     schemaorg_nested,
     schemaorg_instock,
 )
-
-
-def opengraph_availability(avail):
-    """
-    translate opengraph availability into schema.org.
-    officially only "instock", "oos" and "pending" are supported,
-    but we are seeing other values in the wild ;(
-    """
-    prefix = 'http://schema.org/'
-    INSTOCK = prefix + 'InStock'
-    OUTOFSTOCK = prefix + 'OutOfStock'
-    lookup = {
-        'instock': INSTOCK,
-        'in stock': INSTOCK,
-        'oss': OUTOFSTOCK,
-        'out of stock': OUTOFSTOCK
-    }
-
-    return lookup.get(avail, None)
-
-
 
 def opengraph_transform(opengraph_entries):
     """
@@ -61,8 +39,7 @@ def opengraph_transform(opengraph_entries):
             gtin13=f('ean')
         ))
         offer = schemaorg_nested('AggregateOffer', dict(
-            availability=opengraph_availability(
-                f('availability')),
+            availability=f('availability'),
             price=f('price:amount'),
             currency=f('price:currency'),
             sku=f('retailer_part_no'),

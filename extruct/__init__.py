@@ -13,5 +13,4 @@ def extract(htmlstring, url='http://www.example.com/', encoding="UTF-8"):
             for name, extractor in (
                 ('json-ld', JsonLdExtractor()),
                 ('microdata', MicrodataExtractor()),
-                ('rdfa', RDFaExtractor()))}    
-
+                ('rdfa', RDFaExtractor()))}

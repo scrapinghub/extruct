@@ -159,6 +159,7 @@ class DomHtmlElementClassLookup(HtmlElementClassLookup):
         else:
             return t
 
+
 class XmlDomHTMLParser(HTMLParser):
     """An HTML parser that is configured to return XmlDomHtmlElement
     objects, compatible with xml.dom API

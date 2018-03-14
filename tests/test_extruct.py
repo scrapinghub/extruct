@@ -3,7 +3,6 @@ import json
 import unittest
 
 import extruct
-from extruct.xmldom import DomHtmlElementClassLookup
 from tests import get_testdata
 
 

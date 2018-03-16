@@ -6,10 +6,13 @@ import requests
 from extruct.jsonld import JsonLdExtractor
 from extruct.rdfa import RDFaExtractor
 from extruct.w3cmicrodata import MicrodataExtractor
+from extruct.opengraph import OpenGraphExtractor
+from extruct.microformat import MicroformatExtractor
 from extruct.xmldom import XmlDomHTMLParser
 
 
-def metadata_from_url(url, microdata=True, jsonld=True, rdfa=True):
+def metadata_from_url(url, microdata=True, jsonld=True, rdfa=True,
+                      microformat=True, opengraph=True):
     resp = requests.get(url, timeout=30)
     result = {'url': url, 'status': '{} {}'.format(resp.status_code, resp.reason)}
     try:
@@ -31,6 +34,14 @@ def metadata_from_url(url, microdata=True, jsonld=True, rdfa=True):
     if rdfa:
         rdfae = RDFaExtractor()
         result['rdfa'] = rdfae.extract_items(tree, resp.url)
+
+    if opengraph:
+        oge = OpenGraphExtractor()
+        result['json-ld'] = oge.extract_items(tree, resp.url)
+
+    if microformat:
+        mfmate = MicroformatExtractor()
+        result['json-ld'] = mfmate.extract_items(html=resp.content, url=resp.url)
 
     return result
 
@@ -56,10 +67,23 @@ def main():
         default=False,
         help='Extract RDFa metadata from the page.',
     )
+    parser.add_argument(
+        '--microformat',
+        action='store_true',
+        default=False,
+        help='Extract microformat metadata from the page.',
+    )
+    parser.add_argument(
+        '--opengraph',
+        action='store_true',
+        default=False,
+        help='Extract opengraph metadata from the page.',
+    )
     args = parser.parse_args()
 
-    if any((args.microdata, args.jsonld, args.rdfa)):
-        metadata = metadata_from_url(args.url, args.microdata, args.jsonld, args.rdfa)
+    if any((args.microdata, args.jsonld, args.rdfa, args.microformat, args.opengraph)):
+        metadata = metadata_from_url(args.url, args.microdata, args.jsonld,
+                                     args.rdfa, args.microformat, args.opengraph)
     else:
         metadata = metadata_from_url(args.url)
     return json.dumps(metadata, indent=2, sort_keys=True)

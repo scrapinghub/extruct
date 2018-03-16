@@ -33,7 +33,7 @@ def extract(htmlstring, url='http://www.example.com/', encoding="UTF-8",
     output = {}
     for label, extract in processors:
         try:
-            output[label] = [obj for obj in extract(document=tree, url=url, html=html)]
+            output[label] = [obj for obj in extract(document=tree, url=url, html=htmlstring)]
         except Exception:
             logger.exception("Failed to parse %s", url)
     return output

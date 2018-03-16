@@ -1,5 +1,4 @@
 import logging
-import functools
 from lxml.html import fromstring
 from extruct.jsonld import JsonLdExtractor
 from extruct.rdfa import RDFaExtractor
@@ -12,7 +11,7 @@ from extruct.xmldom import XmlDomHTMLParser
 logger = logging.getLogger(__name__)
 
 
-def extract(htmlstring, url='http://www.example.com/', encoding="UTF-8", 
+def extract(htmlstring, url='http://www.example.com/', encoding="UTF-8",
             syntaxes="all", schema_context='http://schema.org'):
     domparser = XmlDomHTMLParser(encoding=encoding)
     tree = fromstring(htmlstring, parser=domparser)
@@ -28,7 +27,7 @@ def extract(htmlstring, url='http://www.example.com/', encoding="UTF-8",
     if 'microformat' in syntaxes:
         processors.append(('microformat', MicroformatExtractor().extract_items))
     if 'rdfa' in syntaxes:
-        processors.append(('rdfa', RDFaExtractor().extract_items))           
+        processors.append(('rdfa', RDFaExtractor().extract_items))
 
     output = {}
     for label, extract in processors:

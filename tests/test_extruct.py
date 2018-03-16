@@ -15,4 +15,4 @@ class TestGeneric(unittest.TestCase):
         expected = json.loads(get_testdata('songkick', 'elysianfields.json').decode('UTF-8'))
 
         data = extruct.extract(body, 'http://www.songkick.com/artists/236156-elysian-fields')
-        self.assertEqual(data, expected)
+        self.assertEqual(json.loads(json.dumps(data)), expected)

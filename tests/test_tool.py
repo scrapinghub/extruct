@@ -6,53 +6,10 @@ try:
     import unittest.mock as mock
 except ImportError:
     import mock
-# from extruct.tool import metadata_from_url
+
+from extruct.tool import metadata_from_url
 from requests.exceptions import HTTPError
 from tests import get_testdata
-
-import lxml
-import requests
-from extruct.jsonld import JsonLdExtractor
-from extruct.rdfa import RDFaExtractor
-from extruct.w3cmicrodata import MicrodataExtractor
-from extruct.opengraph import OpenGraphExtractor
-from extruct.microformat import MicroformatExtractor
-from extruct.xmldom import XmlDomHTMLParser
-
-
-def metadata_from_url(url, microdata=True, jsonld=True, rdfa=True,
-                      microformat=True, opengraph=True):
-    resp = requests.get(url, timeout=30)
-    result = {'url': url, 'status': '{} {}'.format(resp.status_code, resp.reason)}
-    try:
-        resp.raise_for_status()
-    except requests.exceptions.HTTPError:
-        return result
-
-    parser = XmlDomHTMLParser(encoding=resp.encoding)
-    tree = lxml.html.fromstring(resp.content, parser=parser)
-
-    if microdata:
-        mde = MicrodataExtractor(nested=True)
-        result['microdata'] = mde.extract_items(tree, resp.url)
-
-    if jsonld:
-        jsonlde = JsonLdExtractor()
-        result['json-ld'] = jsonlde.extract_items(tree, resp.url)
-
-    if rdfa:
-        rdfae = RDFaExtractor()
-        result['rdfa'] = rdfae.extract_items(tree, resp.url)
-
-    if opengraph:
-        oge = OpenGraphExtractor()
-        result['opengraph'] = [obj for obj in oge.extract_items(tree, resp.url)]
-
-    if microformat:
-        mfmate = MicroformatExtractor()
-        result['microformat'] = [obj for obj in mfmate.extract_items(html=resp.content, url=resp.url)]
-
-    return result
 
 
 class TestTool(unittest.TestCase):
@@ -129,6 +86,40 @@ class TestTool(unittest.TestCase):
         self.assertEqual(jsonize_dict(data), expected)
 
     @mock.patch('extruct.tool.requests.get')
+    def test_metadata_from_url_opengraph_only(self, mock_get):
+        expected = {
+            'opengraph': self.expected['opengraph'],
+            'url': self.url,
+            'status': '200 OK',
+        }
+        mock_response = build_mock_response(
+            url=self.url,
+            content=get_testdata('songkick', 'tovestyrke.html'),
+        )
+        mock_get.return_value = mock_response
+
+        data = metadata_from_url(self.url, microdata=False, jsonld=False,
+                                 rdfa=False, microformat=False)
+        self.assertEqual(jsonize_dict(data), expected)
+
+    @mock.patch('extruct.tool.requests.get')
+    def test_metadata_from_url_microformat_only(self, mock_get):
+        expected = {
+            'microformat': self.expected['microformat'],
+            'url': self.url,
+            'status': '200 OK',
+        }
+        mock_response = build_mock_response(
+            url=self.url,
+            content=get_testdata('songkick', 'tovestyrke.html'),
+        )
+        mock_get.return_value = mock_response
+
+        data = metadata_from_url(self.url, microdata=False, jsonld=False,
+                                 opengraph=False, rdfa=False)
+        self.assertEqual(jsonize_dict(data), expected)
+
+    @mock.patch('extruct.tool.requests.get')
     def test_metadata_from_url_unauthorized_page(self, mock_get):
         url = 'http://example.com/unauthorized'
         expected = {
@@ -159,6 +150,3 @@ def build_mock_response(url, encoding='utf-8', content='', reason='OK', status=2
 
 def http_error():
     raise HTTPError()
-
-if __name__ == '__main__':
-    unittest.main()

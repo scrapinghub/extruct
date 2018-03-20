@@ -17,12 +17,17 @@ Currently, *extruct* supports:
 
 - `W3C's HTML Microdata`_
 - `embedded JSON-LD`_
+- `microformat`_ via `mf2py`_
+- `Facebook's opengraph`_
 - (experimental) `RDFa`_ via `rdflib`_
 
 .. _W3C's HTML Microdata: http://www.w3.org/TR/microdata/
 .. _embedded JSON-LD: http://www.w3.org/TR/json-ld/#embedding-json-ld-in-html-documents
 .. _RDFa: https://www.w3.org/TR/html-rdfa/
 .. _rdflib: https://pypi.python.org/pypi/rdflib/
+.. _microformat: http://microformats.org/wiki/Main_Page
+.. _mf2py: https://github.com/microformats/mf2py
+.. _Facebook's opengraph: http://ogp.me/
 
 The microdata algorithm is a revisit of `this Scrapinghub blog post`_ showing how to use EXSLT extensions.
 
@@ -54,197 +59,107 @@ All-in-one extraction
 The simplest example how to use extruct is to call ``extruct.extract(htmlstring, url)``
 with some HTML string and a URL.
 
-Let's try this on a page on eBay which uses microdata and RDFa (with `ogp`_).
+Let's try this on a webpage that uses all the syntaxes supported (RDFa with `ogp`_).
 
 First fetch the HTML using python-requests and then feed the response body to ``extruct``::
 
     >>> import requests
     >>> from pprint import pprint
 
-    >>> r = requests.get('http://www.ebay.com/itm/HERBERT-TERRY-2-STEP-ANGLEPOISE-LAMP-MODEL1227-/282478964487')
+    >>> r = requests.get('https://www.optimizesmart.com/how-to-use-open-graph-protocol/')
 
     >>> import extruct
     >>> data = extruct.extract(r.text, r.url)
 
     >>> pprint(data)
-    {'json-ld': [],
-     'microdata': [{'properties': {'image': ['http://i.ebayimg.com/images/g/0M4AAOSwT-FZBeOQ/s-l300.jpg',
-                                             'http://i.ebayimg.com/images/g/0M4AAOSwT-FZBeOQ/s-l300.jpg'],
-                                   'name': 'Details about  \xa0HERBERT TERRY 2 '
-                                           'STEP ANGLEPOISE LAMP MODEL1227',
-                                   'offers': {'properties': {'areaServed': 'United '
-                                                                           'Kingdom '
-                                                                           'and '
-                                                                           'many '
-                                                                           'other '
-                                                                           'countries \n'
-                                                                           '\t\t\t\t\t\t'
-                                                                           '|  See '
-                                                                           'details',
-                                                             'availability': 'http://schema.org/InStock',
-                                                             'availableAtOrFrom': 'Stockport, '
-                                                                                  'United '
-                                                                                  'Kingdom',
-                                                             'itemCondition': '--not '
-                                                                              'specified',
-                                                             'price': '150.0',
-                                                             'priceCurrency': 'GBP'},
-                                              'type': 'http://schema.org/Offer'}},
-                    'type': 'http://schema.org/Product'},
-                   {'properties': {'itemListElement': [{'properties': {'item': 'http://www.ebay.com/sch/Antiques-/20081/i.html',
-                                                                       'name': 'Antiques',
-                                                                       'position': '1'},
-                                                        'type': 'http://schema.org/ListItem'},
-                                                       (...)
-                                                       {'properties': {'item': 'http://www.ebay.com/sch/20th-Century-/66861/i.html',
-                                                                       'name': '20th '
-                                                                               'Century',
-                                                                       'position': '4'},
-                                                        'type': 'http://schema.org/ListItem'}]},
-                    'type': 'http://schema.org/BreadcrumbList'}],
-     'rdfa': [{'@id': 'http://www.ebay.com/itm/HERBERT-TERRY-2-STEP-ANGLEPOISE-LAMP-MODEL1227-/282478964487#w1-31-_topHelpTxt',
-               'http://www.w3.org/1999/xhtml/vocab#role': [{'@id': 'http://www.w3.org/1999/xhtml/vocab#button'}]},
-              (...)
-              {'@id': 'http://www.ebay.com/itm/HERBERT-TERRY-2-STEP-ANGLEPOISE-LAMP-MODEL1227-/282478964487',
-               'http://opengraphprotocol.org/schema/description': [{'@value': 'On '
-                                                                              'one '
-                                                                              'side '
-                                                                              'of '
-                                                                              'the '
-                                                                              'base '
-                                                                              'is '
-                                                                              'a '
-                                                                              'metal '
-                                                                              'label '
-                                                                              'from '
-                                                                              'UMIST, '
-                                                                              'where '
-                                                                              'it '
-                                                                              'was '
-                                                                              'in '
-                                                                              'use. '
-                                                                              '| '
-                                                                              'eBay!'}],
-               'http://opengraphprotocol.org/schema/image': [{'@value': 'http://i.ebayimg.com/images/i/282478964487-0-1/s-l1000.jpg'}],
-               'http://opengraphprotocol.org/schema/site_name': [{'@value': 'eBay'}],
-               'http://opengraphprotocol.org/schema/title': [{'@value': 'HERBERT '
-                                                                        'TERRY 2 '
-                                                                        'STEP '
-                                                                        'ANGLEPOISE '
-                                                                        'LAMP '
-                                                                        'MODEL1227  '
-                                                                        '| eBay'}],
-               'http://opengraphprotocol.org/schema/type': [{'@value': 'ebay-objects:item'}],
-               'http://opengraphprotocol.org/schema/url': [{'@value': 'http://www.ebay.com/itm/HERBERT-TERRY-2-STEP-ANGLEPOISE-LAMP-MODEL1227-/282478964487'}],
-               'http://www.facebook.com/2008/fbmlapp_id': [{'@value': '102628213125203'}]},
-              {'@id': '_:Na28391785e4e48bb92849fccbe758c6b',
-               'http://www.w3.org/1999/xhtml/vocab#role': [{'@id': 'http://www.w3.org/1999/xhtml/vocab#button'}]},
-              (...)
-              {'@id': 'http://www.ebay.com/itm/HERBERT-TERRY-2-STEP-ANGLEPOISE-LAMP-MODEL1227-/282478964487#glbfooter',
-               'http://www.w3.org/1999/xhtml/vocab#role': [{'@id': 'http://www.w3.org/1999/xhtml/vocab#contentinfo'}]}]}
-
-
-Another example with a page from SongKick containing RDFa and JSON-LD metadata::
-
-    >>> r = requests.get('http://www.songkick.com/artists/236156-elysian-fields')
-
-    >>> data = extruct.extract(r.text, r.url)
-
-    >>> pprint(data)
-    {'json-ld': [{'@context': 'http://schema.org',
-                  '@type': 'MusicEvent',
-                  'location': {'@type': 'Place',
-                               'address': {'@type': 'PostalAddress',
-                                           'addressCountry': 'US',
-                                           'addressLocality': 'Brooklyn',
-                                           'addressRegion': 'NY',
-                                           'postalCode': '11225',
-                                           'streetAddress': '497 Rogers Ave'},
-                               'geo': {'@type': 'GeoCoordinates',
-                                       'latitude': 40.660109,
-                                       'longitude': -73.953193},
-                               'name': 'The Owl Music Parlor',
-                               'sameAs': 'http://www.theowl.nyc'},
-                  'name': 'Elysian Fields',
-                  'performer': [{'@type': 'MusicGroup',
-                                 'name': 'Elysian Fields',
-                                 'sameAs': 'http://www.songkick.com/artists/236156-elysian-fields?utm_medium=organic&utm_source=microformat'}],
-                  'startDate': '2017-06-10T19:30:00-0400',
-                  'url': 'http://www.songkick.com/concerts/30173984-elysian-fields-at-owl-music-parlor?utm_medium=organic&utm_source=microformat'},
-                 (...)
-                 {'@context': 'http://schema.org',
-                  '@type': 'MusicGroup',
-                  'image': 'https://images.sk-static.com/images/media/profile_images/artists/236156/card_avatar',
-                  'interactionCount': '5557 UserLikes',
-                  'logo': 'https://images.sk-static.com/images/media/profile_images/artists/236156/card_avatar',
-                  'name': 'Elysian Fields',
-                  'url': 'http://www.songkick.com/artists/236156-elysian-fields?utm_medium=organic&utm_source=microformat'}],
-     'microdata': [],
-     'rdfa': [{'@id': 'http://www.songkick.com/artists/236156-elysian-fields',
-               'al:ios:app_name': [{'@value': 'Songkick Concerts'}],
-               'al:ios:app_store_id': [{'@value': '438690886'}],
-               'al:ios:url': [{'@value': 'songkick://artists/236156-elysian-fields'}],
-               'http://ogp.me/ns#description': [{'@value': 'Buy tickets for an '
-                                                           'upcoming Elysian '
-                                                           'Fields concert near '
-                                                           'you. List of all '
-                                                           'Elysian Fields tickets '
-                                                           'and tour dates for '
-                                                           '2017.'}],
-               'http://ogp.me/ns#image': [{'@value': 'http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg'}],
-               'http://ogp.me/ns#site_name': [{'@value': 'Songkick'}],
-               'http://ogp.me/ns#title': [{'@value': 'Elysian Fields'}],
-               'http://ogp.me/ns#type': [{'@value': 'songkick-concerts:artist'}],
-               'http://ogp.me/ns#url': [{'@value': 'http://www.songkick.com/artists/236156-elysian-fields'}],
-               'http://www.facebook.com/2008/fbmlapp_id': [{'@value': '308540029359'}]}]}
-
-
-You can also use each extractor individually. See below.
-
-Microdata extraction
-++++++++++++++++++++
-
-::
-
-    >>> from pprint import pprint
-    >>>
-    >>> from extruct.w3cmicrodata import MicrodataExtractor
-    >>>
-    >>> # example from http://www.w3.org/TR/microdata/#associating-names-with-items
-    >>> html = """<!DOCTYPE HTML>
-    ... <html>
-    ...  <head>
-    ...   <title>Photo gallery</title>
-    ...  </head>
-    ...  <body>
-    ...   <h1>My photos</h1>
-    ...   <figure itemscope itemtype="http://n.whatwg.org/work" itemref="licenses">
-    ...    <img itemprop="work" src="images/house.jpeg" alt="A white house, boarded up, sits in a forest.">
-    ...    <figcaption itemprop="title">The house I found.</figcaption>
-    ...   </figure>
-    ...   <figure itemscope itemtype="http://n.whatwg.org/work" itemref="licenses">
-    ...    <img itemprop="work" src="images/mailbox.jpeg" alt="Outside the house is a mailbox. It has a leaflet inside.">
-    ...    <figcaption itemprop="title">The mailbox.</figcaption>
-    ...   </figure>
-    ...   <footer>
-    ...    <p id="licenses">All images licensed under the <a itemprop="license"
-    ...    href="http://www.opensource.org/licenses/mit-license.php">MIT
-    ...    license</a>.</p>
-    ...   </footer>
-    ...  </body>
-    ... </html>"""
-    >>>
-    >>> mde = MicrodataExtractor()
-    >>> data = mde.extract(html)
-    >>> pprint(data)
-    [{'properties': {'license': 'http://www.opensource.org/licenses/mit-license.php',
-                     'title': 'The house I found.',
-                     'work': 'http://www.example.com/images/house.jpeg'},
-      'type': 'http://n.whatwg.org/work'},
-     {'properties': {'license': 'http://www.opensource.org/licenses/mit-license.php',
-                     'title': 'The mailbox.',
-                     'work': 'http://www.example.com/images/mailbox.jpeg'},
-      'type': 'http://n.whatwg.org/work'}]
+    {'jsonld': [{'@context': 'https://schema.org',
+             '@id': '#organization',
+             '@type': 'Organization',
+             'logo': 'https://www.optimizesmart.com/wp-content/uploads/2016/03/optimize-smart-Twitter-logo.jpg',
+             'name': 'Optimize Smart',
+             'sameAs': ['https://www.facebook.com/optimizesmart/',
+                        'https://uk.linkedin.com/in/analyticsnerd',
+                        'https://www.youtube.com/user/optimizesmart',
+                        'https://twitter.com/analyticsnerd'],
+             'url': 'https://www.optimizesmart.com/'}],
+ 'microdata': [{'properties': {'headline': ''},
+                'type': 'http://schema.org/WPHeader'}],
+ 'microformat': [{'children': [{'properties': {'category': ['specialized-tracking'],
+                                               'name': ['Open Graph Protocol '
+                                                        'for Facebook '
+                                                        'explained with '
+                                                        'examples\n'
+                                                        '\n'
+                                                        'Specialized Tracking\n'
+                                                        '\n'
+                                                        '\n'
+                                                        (...)
+                                                        (...)
+                                                        (...)
+                                                        '!function(d,s,id){var '
+                                                        "js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, "
+                                                        "'script', "
+                                                        "'twitter-wjs');"]},
+                                'type': ['h-entry']}],
+                  'properties': {'name': ['Open Graph Protocol for Facebook '
+                                          'explained with examples\n'
+                                          '\n'
+                                          'Specialized Tracking\n'
+                                          '\n'
+                                          '\n'
+                                          'What is Open Graph Protocol and why '
+                                          (...)
+                                          (...)
+                                          (...)
+                                          "js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, "
+                                          "'script', 'twitter-wjs');"]},
+                  'type': ['h-feed']}],
+ 'opengraph': [{'namespace': {'og': 'http://ogp.me/ns#'},
+                'properties': [('og:locale', 'en_US'),
+                               ('og:type', 'article'),
+                               ('og:title',
+                                'Open Graph Protocol for Facebook explained '
+                                'with examples'),
+                               ('og:description',
+                                'What is Open Graph Protocol and why you need '
+                                'it? Learn to implement Open Graph Protocol '
+                                'for Facebook on your website. Open Graph '
+                                'Protocol Meta Tags.'),
+                               ('og:url',
+                                'https://www.optimizesmart.com/how-to-use-open-graph-protocol/'),
+                               ('og:site_name', 'Optimize Smart'),
+                               ('og:updated_time', '2018-03-09T16:26:35+00:00'),
+                               ('og:image',
+                                'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'),
+                               ('og:image:secure_url',
+                                'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg')]}],
+ 'rdfa': [{'@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/',
+           'article:modified_time': [{'@value': '2018-03-09T16:26:35+00:00'}],
+           'article:published_time': [{'@value': '2010-07-02T18:57:23+00:00'}],
+           'article:publisher': [{'@value': 'https://www.facebook.com/optimizesmart/'}],
+           'article:section': [{'@value': 'Specialized Tracking'}],
+           'http://ogp.me/ns#description': [{'@value': 'What is Open Graph '
+                                                       'Protocol and why you '
+                                                       'need it? Learn to '
+                                                       'implement Open Graph '
+                                                       'Protocol for Facebook '
+                                                       'on your website. Open '
+                                                       'Graph Protocol Meta '
+                                                       'Tags.'}],
+           'http://ogp.me/ns#image': [{'@value': 'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'}],
+           'http://ogp.me/ns#image:secure_url': [{'@value': 'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'}],
+           'http://ogp.me/ns#locale': [{'@value': 'en_US'}],
+           'http://ogp.me/ns#site_name': [{'@value': 'Optimize Smart'}],
+           'http://ogp.me/ns#title': [{'@value': 'Open Graph Protocol for '
+                                                 'Facebook explained with '
+                                                 'examples'}],
+           'http://ogp.me/ns#type': [{'@value': 'article'}],
+           'http://ogp.me/ns#updated_time': [{'@value': '2018-03-09T16:26:35+00:00'}],
+           'http://ogp.me/ns#url': [{'@value': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/'}],
+           'http://ogp.me/ns/fb#app_id': [{'@value': '1047458588599837'}],
+           'https://api.w.org/': [{'@id': 'https://www.optimizesmart.com/wp-json/'}]},
+          {'@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/#header',
+           'http://www.w3.org/1999/xhtml/vocab#role': [{'@id': 'http://www.w3.org/1999/xhtml/vocab#banner'}]}]}
 
 
 JSON-LD extraction

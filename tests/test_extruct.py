@@ -4,7 +4,7 @@ import unittest
 
 import extruct
 from tests import get_testdata
-
+from utils import jsonize_dict
 
 class TestGeneric(unittest.TestCase):
 
@@ -15,4 +15,4 @@ class TestGeneric(unittest.TestCase):
         expected = json.loads(get_testdata('songkick', 'elysianfields.json').decode('UTF-8'))
 
         data = extruct.extract(body, 'http://www.songkick.com/artists/236156-elysian-fields')
-        self.assertEqual(json.loads(json.dumps(data)), expected)
+        self.assertEqual(jsonize_dict(data), expected)

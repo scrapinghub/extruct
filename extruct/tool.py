@@ -37,11 +37,11 @@ def metadata_from_url(url, microdata=True, jsonld=True, rdfa=True,
 
     if opengraph:
         oge = OpenGraphExtractor()
-        result['json-ld'] = oge.extract_items(tree, resp.url)
+        result['opengraph'] = [obj for obj in oge.extract_items(tree, resp.url)]
 
     if microformat:
         mfmate = MicroformatExtractor()
-        result['json-ld'] = mfmate.extract_items(html=resp.content, url=resp.url)
+        result['microformat'] = [obj for obj in mfmate.extract_items(html=resp.content, url=resp.url)]
 
     return result
 

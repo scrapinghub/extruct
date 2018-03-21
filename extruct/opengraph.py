@@ -1,55 +1,5 @@
 import re
-
 import lxml.html
-
-import functools
-from .transform import clean_missing
-from .schemaorg import (
-    schemaorg,
-    schemaorg_nested,
-    schemaorg_instock,
-)
-
-def opengraph_transform(opengraph_entries):
-    """
-    Transform opengraph product data into schema.org
-    See: https://developers.facebook.com/docs/reference/opengraph/object-type/product/
-
-    TODO:
-    - map original_price and sale_price
-    - map color, condition, weight
-    """
-    for entry in opengraph_entries:
-        def f(query):
-            return (entry.get('og:'+query, None) or
-                    entry.get('product:'+query, None))
-
-        if f('type') != 'product':
-            continue
-
-        out = schemaorg('Product', dict(
-            description=f('description'),
-            image=f('image'),
-            name=f('title'),
-            url=f('url'),
-
-            brand=f('brand'),
-            category=f('category'),
-            gtin12=f('upc'),
-            gtin13=f('ean')
-        ))
-        offer = schemaorg_nested('AggregateOffer', dict(
-            availability=f('availability'),
-            price=f('price:amount'),
-            currency=f('price:currency'),
-            sku=f('retailer_part_no'),
-            mpn=f('mfr_part_no'),
-            seller=f('retailer_title')
-        ))
-        out['offers'] = [offer]
-
-        yield [clean_missing(out, missing=None)]
-
 
 
 class OpenGraphExtractor(object):

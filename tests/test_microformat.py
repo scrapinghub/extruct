@@ -3,8 +3,7 @@ import json
 import unittest
 
 from extruct.microformat import MicroformatExtractor
-from tests import get_testdata
-from utils import jsonize_dict
+from tests import get_testdata, jsonize_dict
 
 
 class TestJsonLD(unittest.TestCase):
@@ -18,6 +17,3 @@ class TestJsonLD(unittest.TestCase):
         opengraphe = MicroformatExtractor()
         data = opengraphe.extract(body)
         self.assertEqual(jsonize_dict(data), expected)
-
-if __name__ == '__main__':
-    unittest.main()

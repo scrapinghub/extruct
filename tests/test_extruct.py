@@ -3,8 +3,7 @@ import json
 import unittest
 
 import extruct
-from tests import get_testdata
-from utils import jsonize_dict
+from tests import get_testdata, jsonize_dict
 
 class TestGeneric(unittest.TestCase):
 

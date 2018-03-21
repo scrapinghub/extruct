@@ -3,8 +3,7 @@ import json
 import unittest
 
 from extruct.opengraph import OpenGraphExtractor
-from tests import get_testdata
-from utils import jsonize_dict
+from tests import get_testdata, jsonize_dict
 
 
 class TestJsonLD(unittest.TestCase):

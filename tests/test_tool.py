@@ -1,6 +1,5 @@
 import json
 import unittest
-from utils import jsonize_dict
 
 try:
     import unittest.mock as mock
@@ -9,7 +8,7 @@ except ImportError:
 
 from extruct.tool import metadata_from_url
 from requests.exceptions import HTTPError
-from tests import get_testdata
+from tests import get_testdata, jsonize_dict
 
 
 class TestTool(unittest.TestCase):

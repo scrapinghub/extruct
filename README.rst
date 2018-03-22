@@ -616,6 +616,7 @@ E.g. http://localhost:10005/extruct/http://www.sarenza.com/i-love-shoes-susket-s
 
 will output something like this:
 
+>>>
 { 'jsonld': [ { '@context': 'http://schema.org',
                 '@id': 'FP',
                 '@type': 'Product',

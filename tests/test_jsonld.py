@@ -41,3 +41,12 @@ class TestJsonLD(unittest.TestCase):
             jsonlde = JsonLdExtractor()
             data = jsonlde.extract(body)
             self.assertEqual(data, expected)
+        for prefix in ['JoinAction.001',
+                       'AllocateAction.001',
+                ]:
+            body = get_testdata('custom.invalid', '{}.html'.format(prefix))
+            expected = json.loads(get_testdata('custom.invalid', '{}.jsonld'.format(prefix)).decode('UTF-8'))
+
+            jsonlde = JsonLdExtractor()
+            data = jsonlde.extract(body)
+            self.assertEqual(data, expected)

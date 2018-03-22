@@ -81,3 +81,29 @@ class TestRDFa(unittest.TestCase):
             print("extracted:\n%s" % self.prettify(data))
             print("expected:\n%s" % self.prettify(expected))
             self.assertJsonLDEqual(data, expected)
+
+    def test_wikipedia_xhtml_rdfa(self):
+            fileprefix = 'xhtml+rdfa'
+            body = get_testdata('wikipedia', fileprefix + '.html')
+            expected = json.loads(
+                    get_testdata('wikipedia', fileprefix + '.expanded.json'
+                ).decode('UTF-8'))
+
+            rdfae = RDFaExtractor()
+            data = rdfae.extract(body, url='http://www.example.com/index.html')
+
+            self.assertJsonLDEqual(data, expected)
+
+    def test_wikipedia_xhtml_rdfa(self):
+            body = get_testdata('misc', 'Portfolio_Niels_Lubberman.html')
+            expected = json.loads(
+                    get_testdata('misc', 'Portfolio_Niels_Lubberman.json'
+                ).decode('UTF-8'))
+
+            rdfae = RDFaExtractor()
+            data = rdfae.extract(body, url='http://nielslubberman.nl/drupal/')
+
+            self.assertJsonLDEqual(data, expected)
+
+if __name__ == '__main__':
+    unittest.main()

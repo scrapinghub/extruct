@@ -1,9 +1,9 @@
 [
   {
-    "@id": "http://www.exaple.com/index.html",
+    "@id": "http://www.example.com/index.html",
     "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
       {
-        "@id": "http://www.exaple.com/about.htm"
+        "@id": "http://www.example.com/about.htm"
       }
     ],
     "http://www.w3.org/2000/10/swap/pim/contact#address": [

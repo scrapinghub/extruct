@@ -4,7 +4,7 @@ from xml.dom import Node
 from xml.dom.minidom import Attr, NamedNodeMap
 
 from lxml.etree import ElementBase, _ElementStringResult, _ElementUnicodeResult, XPath, tostring
-from lxml.html import fromstring, HTMLParser, HtmlElementClassLookup
+from lxml.html import HTMLParser, HtmlElementClassLookup
 
 
 class DomElementUnicodeResult(object):

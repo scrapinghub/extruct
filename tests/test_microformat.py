@@ -6,11 +6,11 @@ from extruct.microformat import MicroformatExtractor
 from tests import get_testdata, jsonize_dict
 
 
-class TestJsonLD(unittest.TestCase):
+class TestMicroformat(unittest.TestCase):
 
     maxDiff = None
 
-    def test_schemaorg_CreativeWork(self):
+    def test_microformat(self):
         body = get_testdata('misc', 'microformat_test.html')
         expected = json.loads(get_testdata('misc', 'microformat_test.json').decode('UTF-8'))
 

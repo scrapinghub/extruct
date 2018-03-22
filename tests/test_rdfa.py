@@ -104,6 +104,3 @@ class TestRDFa(unittest.TestCase):
             data = rdfae.extract(body, url='http://nielslubberman.nl/drupal/')
 
             self.assertJsonLDEqual(data, expected)
-
-if __name__ == '__main__':
-    unittest.main()

@@ -2,7 +2,7 @@
     "url": "https://www.songkick.com/concerts/30166884-tove-styrke-at-hoxton-square-bar-and-kitchen",
     "status": "200 OK",
     "microdata": [],
-    "json-ld": [
+    "jsonld": [
         {
             "@context": "http://schema.org",
             "@type": "MusicEvent",

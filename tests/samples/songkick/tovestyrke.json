@@ -1,1 +1,192 @@
-{"url": "https://www.songkick.com/concerts/30166884-tove-styrke-at-hoxton-square-bar-and-kitchen", "status": "200 OK", "microdata": [], "json-ld": [{"@context": "http://schema.org", "@type": "MusicEvent", "name": "Tove Styrke", "url": "https://www.songkick.com/concerts/30166884-tove-styrke-at-hoxton-square-bar-and-kitchen?utm_medium=organic&utm_source=microformat", "location": {"@type": "Place", "address": {"@type": "PostalAddress", "addressLocality": "London", "addressCountry": "UK", "streetAddress": "2-4 Hoxton Square", "postalCode": "N1 6NU"}, "name": "Hoxton Square Bar & Kitchen", "sameAs": "http://www.hoxtonsquarebar.com", "geo": {"@type": "GeoCoordinates", "latitude": 51.527476, "longitude": -0.081657}}, "startDate": "2017-06-12T20:00:00+0100", "performer": [{"@type": "MusicGroup", "name": "Tove Styrke", "sameAs": "https://www.songkick.com/artists/3407026-tove-styrke?utm_medium=organic&utm_source=microformat"}, {"@type": "MusicGroup", "name": "Geowulf", "sameAs": "https://www.songkick.com/artists/8882079-geowulf?utm_medium=organic&utm_source=microformat"}]}], "rdfa": [{"@id": "https://www.songkick.com/concerts/30166884-tove-styrke-at-hoxton-square-bar-and-kitchen", "al:ios:app_name": [{"@value": "Songkick Concerts"}], "al:ios:app_store_id": [{"@value": "438690886"}], "al:ios:url": [{"@value": "songkick://events/30166884-tove-styrke-at-hoxton-square-bar-and-kitchen"}], "http://ogp.me/ns#country-name": [{"@value": "UK"}], "http://ogp.me/ns#description": [{"@value": "Past concert. Tove Styrke concert at Hoxton Square Bar & Kitchen in London on 12 Jun 2017."}], "http://ogp.me/ns#image": [{"@value": "http://images.sk-static.com/images/media/img/col6/20170515-103345-171924.jpg"}], "http://ogp.me/ns#latitude": [{"@value": "51.527476"}], "http://ogp.me/ns#locality": [{"@value": "London"}], "http://ogp.me/ns#longitude": [{"@value": "-0.081657"}], "http://ogp.me/ns#postal-code": [{"@value": "N1 6NU"}], "http://ogp.me/ns#site_name": [{"@value": "Songkick"}], "http://ogp.me/ns#street-address": [{"@value": "2-4 Hoxton Square"}], "http://ogp.me/ns#title": [{"@value": "Tove Styrke at Hoxton Square Bar & Kitchen (12 Jun 2017)"}], "http://ogp.me/ns#type": [{"@value": "songkick-concerts:concert"}], "http://ogp.me/ns#url": [{"@value": "https://www.songkick.com/concerts/30166884-tove-styrke-at-hoxton-square-bar-and-kitchen"}], "http://www.facebook.com/2008/fbmlapp_id": [{"@value": "308540029359"}]}], "opengraph": [{"namespace": {"og": "http://ogp.me/ns#", "fb": "http://www.facebook.com/2008/fbml", "concerts": "http://ogp.me/ns/fb/songkick-concerts#"}, "properties": [["fb:app_id", "308540029359"], ["og:site_name", "Songkick"], ["og:type", "songkick-concerts:concert"], ["og:title", "Tove Styrke at Hoxton Square Bar & Kitchen (12 Jun 2017)"], ["og:description", "Past concert. Tove Styrke concert at Hoxton Square Bar & Kitchen in London on 12 Jun 2017."], ["og:url", "https://www.songkick.com/concerts/30166884-tove-styrke-at-hoxton-square-bar-and-kitchen"], ["og:image", "http://images.sk-static.com/images/media/img/col6/20170515-103345-171924.jpg"], ["og:locality", "London"], ["og:country-name", "UK"], ["og:street-address", "2-4 Hoxton Square"], ["og:postal-code", "N1 6NU"], ["og:latitude", "51.527476"], ["og:longitude", "-0.081657"]]}], "microformat": []}
+{
+    "url": "https://www.songkick.com/concerts/30166884-tove-styrke-at-hoxton-square-bar-and-kitchen",
+    "status": "200 OK",
+    "microdata": [],
+    "json-ld": [
+        {
+            "@context": "http://schema.org",
+            "@type": "MusicEvent",
+            "name": "Tove Styrke",
+            "url": "https://www.songkick.com/concerts/30166884-tove-styrke-at-hoxton-square-bar-and-kitchen?utm_medium=organic&utm_source=microformat",
+            "location": {
+                "@type": "Place",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "London",
+                    "addressCountry": "UK",
+                    "streetAddress": "2-4 Hoxton Square",
+                    "postalCode": "N1 6NU"
+                },
+                "name": "Hoxton Square Bar & Kitchen",
+                "sameAs": "http://www.hoxtonsquarebar.com",
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 51.527476,
+                    "longitude": -0.081657
+                }
+            },
+            "startDate": "2017-06-12T20:00:00+0100",
+            "performer": [
+                {
+                    "@type": "MusicGroup",
+                    "name": "Tove Styrke",
+                    "sameAs": "https://www.songkick.com/artists/3407026-tove-styrke?utm_medium=organic&utm_source=microformat"
+                },
+                {
+                    "@type": "MusicGroup",
+                    "name": "Geowulf",
+                    "sameAs": "https://www.songkick.com/artists/8882079-geowulf?utm_medium=organic&utm_source=microformat"
+                }
+            ]
+        }
+    ],
+    "rdfa": [
+        {
+            "@id": "https://www.songkick.com/concerts/30166884-tove-styrke-at-hoxton-square-bar-and-kitchen",
+            "al:ios:app_name": [
+                {
+                    "@value": "Songkick Concerts"
+                }
+            ],
+            "al:ios:app_store_id": [
+                {
+                    "@value": "438690886"
+                }
+            ],
+            "al:ios:url": [
+                {
+                    "@value": "songkick://events/30166884-tove-styrke-at-hoxton-square-bar-and-kitchen"
+                }
+            ],
+            "http://ogp.me/ns#country-name": [
+                {
+                    "@value": "UK"
+                }
+            ],
+            "http://ogp.me/ns#description": [
+                {
+                    "@value": "Past concert. Tove Styrke concert at Hoxton Square Bar & Kitchen in London on 12 Jun 2017."
+                }
+            ],
+            "http://ogp.me/ns#image": [
+                {
+                    "@value": "http://images.sk-static.com/images/media/img/col6/20170515-103345-171924.jpg"
+                }
+            ],
+            "http://ogp.me/ns#latitude": [
+                {
+                    "@value": "51.527476"
+                }
+            ],
+            "http://ogp.me/ns#locality": [
+                {
+                    "@value": "London"
+                }
+            ],
+            "http://ogp.me/ns#longitude": [
+                {
+                    "@value": "-0.081657"
+                }
+            ],
+            "http://ogp.me/ns#postal-code": [
+                {
+                    "@value": "N1 6NU"
+                }
+            ],
+            "http://ogp.me/ns#site_name": [
+                {
+                    "@value": "Songkick"
+                }
+            ],
+            "http://ogp.me/ns#street-address": [
+                {
+                    "@value": "2-4 Hoxton Square"
+                }
+            ],
+            "http://ogp.me/ns#title": [
+                {
+                    "@value": "Tove Styrke at Hoxton Square Bar & Kitchen (12 Jun 2017)"
+                }
+            ],
+            "http://ogp.me/ns#type": [
+                {
+                    "@value": "songkick-concerts:concert"
+                }
+            ],
+            "http://ogp.me/ns#url": [
+                {
+                    "@value": "https://www.songkick.com/concerts/30166884-tove-styrke-at-hoxton-square-bar-and-kitchen"
+                }
+            ],
+            "http://www.facebook.com/2008/fbmlapp_id": [
+                {
+                    "@value": "308540029359"
+                }
+            ]
+        }
+    ],
+    "opengraph": [
+        {
+            "namespace": {
+                "og": "http://ogp.me/ns#",
+                "fb": "http://www.facebook.com/2008/fbml",
+                "concerts": "http://ogp.me/ns/fb/songkick-concerts#"
+            },
+            "properties": [
+                [
+                    "fb:app_id",
+                    "308540029359"
+                ],
+                [
+                    "og:site_name",
+                    "Songkick"
+                ],
+                [
+                    "og:type",
+                    "songkick-concerts:concert"
+                ],
+                [
+                    "og:title",
+                    "Tove Styrke at Hoxton Square Bar & Kitchen (12 Jun 2017)"
+                ],
+                [
+                    "og:description",
+                    "Past concert. Tove Styrke concert at Hoxton Square Bar & Kitchen in London on 12 Jun 2017."
+                ],
+                [
+                    "og:url",
+                    "https://www.songkick.com/concerts/30166884-tove-styrke-at-hoxton-square-bar-and-kitchen"
+                ],
+                [
+                    "og:image",
+                    "http://images.sk-static.com/images/media/img/col6/20170515-103345-171924.jpg"
+                ],
+                [
+                    "og:locality",
+                    "London"
+                ],
+                [
+                    "og:country-name",
+                    "UK"
+                ],
+                [
+                    "og:street-address",
+                    "2-4 Hoxton Square"
+                ],
+                [
+                    "og:postal-code",
+                    "N1 6NU"
+                ],
+                [
+                    "og:latitude",
+                    "51.527476"
+                ],
+                [
+                    "og:longitude",
+                    "-0.081657"
+                ]
+            ]
+        }
+    ],
+    "microformat": []
+}

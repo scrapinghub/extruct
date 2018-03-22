@@ -162,6 +162,123 @@ First fetch the HTML using python-requests and then feed the response body to ``
            'http://www.w3.org/1999/xhtml/vocab#role': [{'@id': 'http://www.w3.org/1999/xhtml/vocab#banner'}]}]}
 
 
+Another example with a page from SongKick containing RDFa, JSON-LD and Open Graph metadata::
+
+  >>> r = requests.get('http://www.songkick.com/artists/236156-elysian-fields')
+
+  >>> data = extruct.extract(r.text, r.url)
+
+  >>> pprint(data)
+  {'jsonld': [{'@context': 'http://schema.org',
+               '@type': 'MusicEvent',
+               'location': {'@type': 'Place',
+                            'address': {'@type': 'PostalAddress',
+                                        'addressCountry': 'US',
+                                        'addressLocality': 'Brooklyn',
+                                        'addressRegion': 'NY',
+                                        'postalCode': '11225',
+                                        'streetAddress': '497 Rogers Ave'},
+                            'geo': {'@type': 'GeoCoordinates',
+                                    'latitude': 40.660109,
+                                    'longitude': -73.953193},
+                            'name': 'The Owl Music Parlor',
+                            'sameAs': 'http://www.theowl.nyc'},
+               'name': 'Elysian Fields',
+               'performer': [{'@type': 'MusicGroup',
+                              'name': 'Elysian Fields',
+                              'sameAs': 'https://www.songkick.com/artists/236156-elysian-fields?utm_medium=organic&utm_source=microformat'}],
+               'startDate': '2017-06-10T19:30:00-0400',
+               'url': 'https://www.songkick.com/concerts/30173984-elysian-fields-at-owl-music-parlor?utm_medium=organic&utm_source=microformat'},
+              (...)
+              {'@context': 'http://schema.org',
+               '@type': 'MusicGroup',
+               'image': 'https://images.sk-static.com/images/media/profile_images/artists/236156/card_avatar',
+               'interactionCount': '6100 UserLikes',
+               'logo': 'https://images.sk-static.com/images/media/profile_images/artists/236156/card_avatar',
+               'name': 'Elysian Fields',
+               'url': 'https://www.songkick.com/artists/236156-elysian-fields?utm_medium=organic&utm_source=microformat'}],
+   'microdata': [],
+   'microformat': [],
+   'opengraph': [{'namespace': {'concerts': 'http://ogp.me/ns/fb/songkick-concerts#',
+                                'fb': 'http://www.facebook.com/2008/fbml',
+                                'og': 'http://ogp.me/ns#'},
+                  'properties': [('fb:app_id', '308540029359'),
+                                 ('og:site_name', 'Songkick'),
+                                 ('og:type', 'songkick-concerts:artist'),
+                                 ('og:title', 'Elysian Fields'),
+                                 ('og:description',
+                                  'Find out when Elysian Fields is next playing '
+                                  'live near you. List of all Elysian Fields '
+                                  'tour dates and concerts.'),
+                                 ('og:url',
+                                  'https://www.songkick.com/artists/236156-elysian-fields'),
+                                 ('og:image',
+                                  'http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg')]}],
+   'rdfa': [{'@id': 'https://www.songkick.com/artists/236156-elysian-fields',
+             'al:ios:app_name': [{'@value': 'Songkick Concerts'}],
+             'al:ios:app_store_id': [{'@value': '438690886'}],
+             'al:ios:url': [{'@value': 'songkick://artists/236156-elysian-fields'}],
+             'http://ogp.me/ns#description': [{'@value': 'Find out when Elysian '
+                                                         'Fields is next playing '
+                                                         'live near you. List of '
+                                                         'all Elysian Fields '
+                                                         'tour dates and '
+                                                         'concerts.'}],
+             'http://ogp.me/ns#image': [{'@value': 'http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg'}],
+             'http://ogp.me/ns#site_name': [{'@value': 'Songkick'}],
+             'http://ogp.me/ns#title': [{'@value': 'Elysian Fields'}],
+             'http://ogp.me/ns#type': [{'@value': 'songkick-concerts:artist'}],
+             'http://ogp.me/ns#url': [{'@value': 'https://www.songkick.com/artists/236156-elysian-fields'}],
+             'http://www.facebook.com/2008/fbmlapp_id': [{'@value': '308540029359'}]}]}
+
+
+You can also use each extractor individually. See below.
+
+Microdata extraction
+++++++++++++++++++++
+
+::
+
+    >>> from pprint import pprint
+    >>>
+    >>> from extruct.w3cmicrodata import MicrodataExtractor
+    >>>
+    >>> # example from http://www.w3.org/TR/microdata/#associating-names-with-items
+    >>> html = """<!DOCTYPE HTML>
+    ... <html>
+    ...  <head>
+    ...   <title>Photo gallery</title>
+    ...  </head>
+    ...  <body>
+    ...   <h1>My photos</h1>
+    ...   <figure itemscope itemtype="http://n.whatwg.org/work" itemref="licenses">
+    ...    <img itemprop="work" src="images/house.jpeg" alt="A white house, boarded up, sits in a forest.">
+    ...    <figcaption itemprop="title">The house I found.</figcaption>
+    ...   </figure>
+    ...   <figure itemscope itemtype="http://n.whatwg.org/work" itemref="licenses">
+    ...    <img itemprop="work" src="images/mailbox.jpeg" alt="Outside the house is a mailbox. It has a leaflet inside.">
+    ...    <figcaption itemprop="title">The mailbox.</figcaption>
+    ...   </figure>
+    ...   <footer>
+    ...    <p id="licenses">All images licensed under the <a itemprop="license"
+    ...    href="http://www.opensource.org/licenses/mit-license.php">MIT
+    ...    license</a>.</p>
+    ...   </footer>
+    ...  </body>
+    ... </html>"""
+    >>>
+    >>> mde = MicrodataExtractor()
+    >>> data = mde.extract(html)
+    >>> pprint(data)
+    [{'properties': {'license': 'http://www.opensource.org/licenses/mit-license.php',
+                     'title': 'The house I found.',
+                     'work': 'http://www.example.com/images/house.jpeg'},
+      'type': 'http://n.whatwg.org/work'},
+     {'properties': {'license': 'http://www.opensource.org/licenses/mit-license.php',
+                     'title': 'The mailbox.',
+                     'work': 'http://www.example.com/images/mailbox.jpeg'},
+      'type': 'http://n.whatwg.org/work'}]
+
 JSON-LD extraction
 ++++++++++++++++++
 
@@ -245,9 +362,7 @@ RDFa extraction (experimental)
     ... """
     >>>
     >>> rdfae = RDFaExtractor()
-    >>> pprint(
-    ...     rdfae.extract(html, url='http://www.example.com/index.html')
-    ... )
+    >>> pprint(rdfae.extract(html, url='http://www.example.com/index.html'))
     [{'@id': 'http://www.example.com/alice/posts/trouble_with_bob',
       '@type': ['http://schema.org/BlogPosting'],
       'http://purl.org/dc/terms/creator': [{'@id': 'http://www.example.com/index.html#me'}],
@@ -261,6 +376,142 @@ RDFa extraction (experimental)
 
 You'll get a list of expanded JSON-LD nodes.
 
+
+Open Graph extraction
+++++++++++++++++++++++++++++++
+
+>>> from pprint import pprint
+>>>
+>>> from extruct.opengraph import OpenGraphExtractor
+>>>
+>>> html = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+... <html xmlns="https://www.w3.org/1999/xhtml" xmlns:og="https://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml">
+...  <head>
+...   <title>Himanshu's Open Graph Protocol</title>
+...   <meta http-equiv="Content-Type" content="text/html;charset=WINDOWS-1252" />
+...   <meta http-equiv="Content-Language" content="en-us" />
+...   <link rel="stylesheet" type="text/css" href="event-education.css" />
+...   <meta name="verify-v1" content="so4y/3aLT7/7bUUB9f6iVXN0tv8upRwaccek7JKB1gs=" >
+...   <meta property="og:title" content="Himanshu's Open Graph Protocol"/>
+...   <meta property="og:type" content="article"/>
+...   <meta property="og:url" content="https://www.eventeducation.com/test.php"/>
+...   <meta property="og:image" content="https://www.eventeducation.com/images/982336_wedding_dayandouan_th.jpg"/>
+...   <meta property="fb:admins" content="himanshu160"/>
+...   <meta property="og:site_name" content="Event Education"/>
+...   <meta property="og:description" content="Event Education provides free courses on event planning and management to event professionals worldwide."/>
+...  </head>
+...  <body>
+...   <div id="fb-root"></div>
+...   <script>(function(d, s, id) {
+...               var js, fjs = d.getElementsByTagName(s)[0];
+...               if (d.getElementById(id)) return;
+...                  js = d.createElement(s); js.id = id;
+...                  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=501839739845103";
+...                  fjs.parentNode.insertBefore(js, fjs);
+...                  }(document, 'script', 'facebook-jssdk'));</script>
+...  </body>
+... </html>"""
+>>>
+>>> opengraphe = OpenGraphExtractor()
+>>> pprint(opengraphe.extract(html, url='http://www.example.com/index.html'))
+[{"namespace": {
+      "og": "http://ogp.me/ns#"
+  },
+  "properties": [
+      [
+          "og:title",
+          "Himanshu's Open Graph Protocol"
+      ],
+      [
+          "og:type",
+          "article"
+      ],
+      [
+          "og:url",
+          "https://www.eventeducation.com/test.php"
+      ],
+      [
+          "og:image",
+          "https://www.eventeducation.com/images/982336_wedding_dayandouan_th.jpg"
+      ],
+      [
+          "og:site_name",
+          "Event Education"
+      ],
+      [
+          "og:description",
+          "Event Education provides free courses on event planning and management to event professionals worldwide."
+      ]
+    ]
+ }]
+
+
+Microformat extraction
+++++++++++++++++++++++++++++++
+
+>>> from pprint import pprint
+>>>
+>>> from extruct.microformat import MicroformatExtractor
+>>>
+>>> html = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+... <html xmlns="https://www.w3.org/1999/xhtml" xmlns:og="https://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml">
+...  <head>
+...   <title>Himanshu's Open Graph Protocol</title>
+...   <meta http-equiv="Content-Type" content="text/html;charset=WINDOWS-1252" />
+...   <meta http-equiv="Content-Language" content="en-us" />
+...   <link rel="stylesheet" type="text/css" href="event-education.css" />
+...   <meta name="verify-v1" content="so4y/3aLT7/7bUUB9f6iVXN0tv8upRwaccek7JKB1gs=" >
+...   <meta property="og:title" content="Himanshu's Open Graph Protocol"/>
+...   <article class="h-entry">
+...    <h1 class="p-name">Microformats are amazing</h1>
+...    <p>Published by <a class="p-author h-card" href="http://example.com">W. Developer</a>
+...       on <time class="dt-published" datetime="2013-06-13 12:00:00">13<sup>th</sup> June 2013</time></p>
+...    <p class="p-summary">In which I extoll the virtues of using microformats.</p>
+...    <div class="e-content">
+...     <p>Blah blah blah</p>
+...    </div>
+...   </article>
+...  </head>
+...  <body></body>
+... </html>"""
+>>>
+[{"type": [
+      "h-entry"
+  ],
+  "properties": {
+      "name": [
+          "Microformats are amazing"
+      ],
+      "author": [
+          {
+              "type": [
+                  "h-card"
+              ],
+              "properties": {
+                  "name": [
+                      "W. Developer"
+                  ],
+                  "url": [
+                      "http://example.com"
+                  ]
+              },
+              "value": "W. Developer"
+          }
+      ],
+      "published": [
+          "2013-06-13 12:00:00"
+      ],
+      "summary": [
+          "In which I extoll the virtues of using microformats."
+      ],
+      "content": [
+          {
+              "html": "\n<p>Blah blah blah</p>\n",
+              "value": "\nBlah blah blah\n"
+          }
+      ]
+    }
+ }]
 
 REST API service
 ----------------
@@ -308,59 +559,58 @@ will output something like this:
 
 ::
 
-    {
-       "url":"http://www.sarenza.com/i-love-shoes-susket-s767163-p0000119412",
-       "status":"ok",
-       "microdata":[
-             {
-                "type":"http://schema.org/Product",
-                "properties":{
-                   "name":"Susket",
-                   "color":[
-                      "http://www.sarenza.com/i-love-shoes-susket-s767163-p0000119412",
-                      "http://www.sarenza.com/i-love-shoes-susket-s767163-p0000119412"
-                   ],
-                   "brand":"http://www.sarenza.com/i-love-shoes",
-                   "aggregateRating":{
-                      "type":"http://schema.org/AggregateRating",
-                      "properties":{
-                         "description":"Soyez le premier \u00e0 donner votre avis"
-                      }
-                   },
-                   "offers":{
-                      "type":"http://schema.org/AggregateOffer",
-                      "properties":{
-                         "lowPrice":"59,00 \u20ac",
-                         "price":"A partir de\r\n                  59,00 \u20ac",
-                         "priceCurrency":"EUR",
-                         "highPrice":"59,00 \u20ac",
-                         "availability":"http://schema.org/InStock"
-                      }
-                   },
-                   "size":[
-                      "36 - Epuis\u00e9 - \u00catre alert\u00e9",
-                      "37 - Epuis\u00e9 - \u00catre alert\u00e9",
-                      "38 - Epuis\u00e9 - \u00catre alert\u00e9",
-                      "39 - Derni\u00e8re paire !",
-                      "40",
-                      "41",
-                      "42 - Derni\u00e8re paire !"
-                   ],
-                   "image":[
-                      "http://cdn2.sarenza.net/static/_img/productsV4/0000119412/MD_0000119412_223992_09.jpg?201509221045",
-                      "http://cdn1.sarenza.net/static/_img/productsV4/0000119412/MD_0000119412_223992_03.jpg?201509221045",
-                      "http://cdn3.sarenza.net/static/_img/productsV4/0000119412/MD_0000119412_223992_04.jpg?201509221045",
-                      "http://cdn2.sarenza.net/static/_img/productsV4/0000119412/MD_0000119412_223992_05.jpg?201509221045",
-                      "http://cdn1.sarenza.net/static/_img/productsV4/0000119412/MD_0000119412_223992_06.jpg?201509221045",
-                      "http://cdn1.sarenza.net/static/_img/productsV4/0000119412/MD_0000119412_223992_07.jpg?201509221045",
-                      "http://cdn1.sarenza.net/static/_img/productsV4/0000119412/MD_0000119412_223992_08.jpg?201509221045",
-                      "http://cdn2.sarenza.net/static/_img/productsV4/0000119412/MD_0000119412_223992_02.jpg?201509291747"
-                   ],
-                   "description":""
-                }
-             }
-       ]
-    }
+{ 'jsonld': [ { '@context': 'http://schema.org',
+                '@id': 'FP',
+                '@type': 'Product',
+                'brand': { '@type': 'Brand',
+                           'url': 'https://www.sarenza.com/i-love-shoes'},
+                'color': ['Lava', 'Black', 'Lt grey'],
+                'image': [ 'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_09.jpg?201509221045&v=20180313113923',
+                           'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_02.jpg?201509291747&v=20180313113923',
+                           'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_03.jpg?201509221045&v=20180313113923',
+                           'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_04.jpg?201509221045&v=20180313113923',
+                           'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_05.jpg?201509221045&v=20180313113923',
+                           'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_06.jpg?201509221045&v=20180313113923',
+                           'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_07.jpg?201509221045&v=20180313113923',
+                           'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_08.jpg?201509221045&v=20180313113923'],
+                'name': 'Susket',
+                'offers': { '@type': 'AggregateOffer',
+                            'availability': 'InStock',
+                            'highPrice': '49.00',
+                            'lowPrice': '0.00',
+                            'price': '0.00',
+                            'priceCurrency': 'EUR'}}],
+  'microdata': [ { 'properties': { 'average': '4.7',
+                                   'best': '5',
+                                   'itemreviewed': 'Sarenza',
+                                   'rating': '4.7 / 5\n\t\t  (4 066 avis)',
+                                   'votes': '4 066'},
+                   'type': 'http://data-vocabulary.org/Review-aggregate'}],
+  'microformat': [],
+  'opengraph': [ { 'namespace': {'og': 'http://ogp.me/ns#'},
+                   'properties': [ ( 'og:title',
+                                     'I Love Shoes Susket @sarenza.com'),
+                                   ( 'og:image',
+                                     'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_09.jpg?201509221045&v=20180313113923'),
+                                   ('og:site_name', 'sarenza.com'),
+                                   ('og:type', 'product'),
+                                   ('og:description', '...'),
+                                   ( 'og:url',
+                                     'https://www.sarenza.com/i-love-shoes-susket-s767163-p0000119412'),
+                                   ('og:country-name', 'FRA')]}],
+  'rdfa': [ { '@id': 'https://www.sarenza.com/i-love-shoes-susket-s767163-p0000119412',
+              'http://ogp.me/ns#country-name': [{'@value': 'FRA'}],
+              'http://ogp.me/ns#description': [{'@value': '...'}],
+              'http://ogp.me/ns#image': [ { '@value': 'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_09.jpg?201509221045&v=20180313113923'}],
+              'http://ogp.me/ns#site_name': [{'@value': 'sarenza.com'}],
+              'http://ogp.me/ns#title': [ { '@value': 'I Love Shoes Susket '
+                                                      '@sarenza.com'}],
+              'http://ogp.me/ns#type': [{'@value': 'product'}],
+              'http://ogp.me/ns#url': [ { '@value': 'https://www.sarenza.com/i-love-shoes-susket-s767163-p0000119412'}],
+              'http://ogp.me/ns/fb#admins': [{'@value': '100001934697625'}],
+              'http://ogp.me/ns/fb#app_id': [{'@value': '148128758532914'}]},
+            { '@id': '_:Ncf1962068aa142b29000813372db7841',
+              'http://www.w3.org/1999/xhtml/vocab#role': [ { '@id': 'http://www.w3.org/1999/xhtml/vocab#navigation'}]}]}
 
 
 Command Line Tool
@@ -393,9 +643,9 @@ Supported Parameters
 ++++++++++++++++++++
 
 By default, the command line tool will try to extract all the supported
-metadata formats from the page (currently Microdata, JSON-LD and RDFa). If you
-want to restrict the output to just one or a subset of those, you can use the
-individual switches.
+metadata formats from the page (currently Microdata, JSON-LD, RDFa, Open Graph
+and Microformat). If you want to restrict the output to just one or a subset of
+those, you can use the individual switches.
 
 For example, this command extracts only Microdata and JSON-LD metadata from
 "http://example.com"::

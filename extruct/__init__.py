@@ -1,4 +1,5 @@
 import logging
+import argparse
 from lxml.html import fromstring
 from extruct.jsonld import JsonLdExtractor
 from extruct.rdfa import RDFaExtractor
@@ -11,11 +12,23 @@ from extruct.xmldom import XmlDomHTMLParser
 logger = logging.getLogger(__name__)
 
 
-def extract(htmlstring, url='http://www.example.com/', encoding="UTF-8",
-            syntaxes="all", schema_context='http://schema.org'):
-    domparser = XmlDomHTMLParser(encoding=encoding)
-    tree = fromstring(htmlstring, parser=domparser)
-    if syntaxes == 'all':
+def extract(args=None):
+    parser = argparse.ArgumentParser()
+    arg = parser.add_argument
+    arg('htmlstring', help='string with valid html document')
+    arg('--url', default ='http://www.example.com/',
+        help='url to the html document')
+    arg('--encoding', default='UTF-8', help='encoding of the html document')
+    arg('--syntaxes', default='all', help='Either list of microdata syntaxes to\
+          use or "all" (syntaxes available [microdata, microformat, rdfa, \
+          opengraph, jsonld])')
+    arg('--errors', default='strict', choices=['log', 'ignore', 'strict'],
+        help='possible values: log, save exceptions to extruct.log, ignore, \
+              ignore exceptions or strict (default), raise exceptions')
+    args = parser.parse_args(args)
+    domparser = XmlDomHTMLParser(encoding=args.encoding)
+    tree = fromstring(args.htmlstring, parser=domparser)
+    if args.syntaxes == 'all':
         syntaxes = ['microdata', 'jsonld', 'opengraph', 'microformat', 'rdfa']
     processors = []
     if 'microdata' in syntaxes:
@@ -32,7 +45,12 @@ def extract(htmlstring, url='http://www.example.com/', encoding="UTF-8",
     output = {}
     for label, extract in processors:
         try:
-            output[label] = [obj for obj in extract(document=tree, url=url, html=htmlstring)]
+            output[label] = [obj for obj in extract(document=tree,
+                                                    url=args.url,
+                                                    html=args.htmlstring)]
         except Exception:
-            logger.exception("Failed to parse %s", url)
+            if args.errors == 'log':
+                logger.exception("Failed to parse %s", args.url)
+            if args.errors == 'ignore':
+                pass
     return output

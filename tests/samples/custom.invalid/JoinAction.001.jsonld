@@ -1,0 +1,9 @@
+[
+    {
+        "@type": "JoinAction",
+        "@context": "http://schema.org",
+        "agent": {"name": "John", "@type": "Person"},
+        "event": {"name": "Woodstock", "@type": "Festival"},
+        "rendered_html": "<!-- John joined the festival. --><b>some text</b>"
+    }
+]

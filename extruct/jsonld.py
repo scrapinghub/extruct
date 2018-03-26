@@ -10,7 +10,7 @@ import lxml.etree
 import lxml.html
 
 
-HTML_OR_JS_COMMENTLINE = re.compile('^(\s*//.*)|(\s*<!--.*-->\s*)')
+HTML_OR_JS_COMMENTLINE = re.compile('^\s*(//.*|<!--.*-->)')
 
 class JsonLdExtractor(object):
     _xp_jsonld = lxml.etree.XPath('descendant-or-self::script[@type="application/ld+json"]')

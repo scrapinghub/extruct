@@ -6,7 +6,7 @@ try:
 except ImportError:
     import mock
 
-from extruct.tool import metadata_from_url
+from extruct.tool import metadata_from_url, main
 from requests.exceptions import HTTPError
 from tests import get_testdata, jsonize_dict
 
@@ -16,7 +16,6 @@ class TestTool(unittest.TestCase):
     def setUp(self):
         self.expected = json.loads(get_testdata('songkick', 'tovestyrke.json').decode('UTF-8'))
         self.url = 'https://www.songkick.com/concerts/30166884-tove-styrke-at-hoxton-square-bar-and-kitchen'
-        self.maxDiff=None
 
     @mock.patch('extruct.tool.requests.get')
     def test_metadata_from_url_all_types(self, mock_get):
@@ -133,6 +132,57 @@ class TestTool(unittest.TestCase):
         self.assertEqual(data, expected)
 
 
+    @mock.patch('extruct.tool.requests.get')
+    def test_main_all(self, mock_get):
+        expected = self.expected
+        expected['url'] = self.url
+        expected['status'] = '200 OK'
+        expected = json.dumps(expected, indent=2, sort_keys=True)
+        mock_response = build_mock_response(
+            url=self.url,
+            content=get_testdata('songkick', 'tovestyrke.html'),
+        )
+        mock_get.return_value = mock_response
+
+        data = main([self.url])
+        self.assertEqual(data, expected)
+
+    @mock.patch('extruct.tool.requests.get')
+    def test_main_single_syntax(self, mock_get):
+        expected = {
+            'opengraph': self.expected['opengraph'],
+            'url': self.url,
+            'status': '200 OK',
+        }
+        expected = json.dumps(expected, indent=2, sort_keys=True)
+        mock_response = build_mock_response(
+            url=self.url,
+            content=get_testdata('songkick', 'tovestyrke.html'),
+        )
+        mock_get.return_value = mock_response
+
+        data = main([self.url, '--syntax', 'opengraph'])
+        self.assertEqual(data, expected)
+
+    @mock.patch('extruct.tool.requests.get')
+    def test_main_multiple_syntaxes(self, mock_get):
+        expected = {
+            'opengraph': self.expected['opengraph'],
+            'microdata': self.expected['microdata'],
+            'url': self.url,
+            'status': '200 OK',
+        }
+        expected = json.dumps(expected, indent=2, sort_keys=True)
+        mock_response = build_mock_response(
+            url=self.url,
+            content=get_testdata('songkick', 'tovestyrke.html'),
+        )
+        mock_get.return_value = mock_response
+
+        data = main([self.url, '--syntax', 'opengraph', 'microdata'])
+        self.assertEqual(data, expected)
+
+
 def build_mock_response(url, encoding='utf-8', content='', reason='OK', status=200):
     mock_response = mock.Mock()
     mock_response.url = url
@@ -145,3 +195,6 @@ def build_mock_response(url, encoding='utf-8', content='', reason='OK', status=2
 
 def http_error():
     raise HTTPError()
+
+if __name__ == '__main__':
+    unittest.main()

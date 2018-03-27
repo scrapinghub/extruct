@@ -12,6 +12,5 @@ class TestGeneric(unittest.TestCase):
     def test_all(self):
         body = get_testdata('songkick', 'elysianfields.html')
         expected = json.loads(get_testdata('songkick', 'elysianfields.json').decode('UTF-8'))
-
         data = extruct.extract(body, 'http://www.songkick.com/artists/236156-elysian-fields')
         self.assertEqual(jsonize_dict(data), expected)

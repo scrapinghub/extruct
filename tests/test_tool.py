@@ -79,7 +79,7 @@ class TestTool(unittest.TestCase):
         )
         mock_get.return_value = mock_response
 
-        data = metadata_from_url(self.url, syntaxes='rdfa')
+        data = metadata_from_url(self.url, syntaxes=['rdfa'])
         self.assertEqual(jsonize_dict(data), expected)
 
     @mock.patch('extruct.tool.requests.get')

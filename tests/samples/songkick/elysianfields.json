@@ -1,6 +1,6 @@
 {
     "microdata": [],
-    "jsonld": [
+    "json-ld": [
         {
             "@context": "http://schema.org",
             "@type": "MusicEvent",

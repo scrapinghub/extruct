@@ -63,26 +63,23 @@ Let's try this on a webpage that uses all the syntaxes supported (RDFa with `ogp
 
 First fetch the HTML using python-requests and then feed the response body to ``extruct``::
 
+>>> import extruct
 >>> import requests
 >>> import pprint
 >>> pp = pprint.PrettyPrinter(indent=2)
-
 >>> r = requests.get('https://www.optimizesmart.com/how-to-use-open-graph-protocol/')
-
->>> import extruct
 >>> data = extruct.extract(r.text, r.url)
-
 >>> pp.pprint(data)
-{ 'jsonld': [ { '@context': 'https://schema.org',
-                '@id': '#organization',
-                '@type': 'Organization',
-                'logo': 'https://www.optimizesmart.com/wp-content/uploads/2016/03/optimize-smart-Twitter-logo.jpg',
-                'name': 'Optimize Smart',
-                'sameAs': [ 'https://www.facebook.com/optimizesmart/',
-                            'https://uk.linkedin.com/in/analyticsnerd',
-                            'https://www.youtube.com/user/optimizesmart',
-                            'https://twitter.com/analyticsnerd'],
-                'url': 'https://www.optimizesmart.com/'}],
+{ 'json-ld': [ { '@context': 'https://schema.org',
+                 '@id': '#organization',
+                 '@type': 'Organization',
+                 'logo': 'https://www.optimizesmart.com/wp-content/uploads/2016/03/optimize-smart-Twitter-logo.jpg',
+                 'name': 'Optimize Smart',
+                 'sameAs': [ 'https://www.facebook.com/optimizesmart/',
+                             'https://uk.linkedin.com/in/analyticsnerd',
+                             'https://www.youtube.com/user/optimizesmart',
+                             'https://twitter.com/analyticsnerd'],
+                 'url': 'https://www.optimizesmart.com/'}],
   'microdata': [ { 'properties': {'headline': ''},
                    'type': 'http://schema.org/WPHeader'}],
   'microformat': [ { 'children': [ { 'properties': { 'category': [ 'specialized-tracking'],
@@ -167,86 +164,84 @@ First fetch the HTML using python-requests and then feed the response body to ``
 Another example with a page from SongKick containing RDFa, JSON-LD and Open Graph metadata::
 
   >>> r = requests.get('http://www.songkick.com/artists/236156-elysian-fields')
-
   >>> data = extruct.extract(r.text, r.url)
-
   >>> pp.pprint(data)
-  { 'jsonld': [ { '@context': 'http://schema.org',
-                  '@type': 'MusicEvent',
-                  'location': { '@type': 'Place',
-                                'address': { '@type': 'PostalAddress',
-                                             'addressCountry': 'US',
-                                             'addressLocality': 'Brooklyn',
-                                             'addressRegion': 'NY',
-                                             'postalCode': '11225',
-                                             'streetAddress': '497 Rogers Ave'},
-                                'geo': { '@type': 'GeoCoordinates',
-                                         'latitude': 40.660109,
-                                         'longitude': -73.953193},
-                                'name': 'The Owl Music Parlor',
-                                'sameAs': 'http://www.theowl.nyc'},
-                  'name': 'Elysian Fields',
-                  'performer': [ { '@type': 'MusicGroup',
-                                   'name': 'Elysian Fields',
-                                   'sameAs': 'https://www.songkick.com/artists/236156-elysian-fields?utm_medium=organic&utm_source=microformat'}],
-                  'startDate': '2017-06-10T19:30:00-0400',
-                  'url': 'https://www.songkick.com/concerts/30173984-elysian-fields-at-owl-music-parlor?utm_medium=organic&utm_source=microformat'},
-                { '@context': 'http://schema.org',
-                  '@type': 'MusicEvent',
-                  'location': { '@type': 'Place',
-                                'address': { '@type': 'PostalAddress',
-                                             'addressCountry': 'US',
-                                             'addressLocality': 'San Francisco',
-                                             'addressRegion': 'CA',
-                                             'postalCode': '94107',
-                                             'streetAddress': '500 Fourth '
-                                                              'Street'},
-                                'geo': { '@type': 'GeoCoordinates',
-                                         'latitude': 37.7795638,
-                                         'longitude': -122.398023},
-                                'name': 'Hotel Utah Saloon',
-                                'sameAs': 'http://www.hotelutah.com/'},
-                  'name': 'Elysian Fields',
-                  'performer': [ { '@type': 'MusicGroup',
-                                   'name': 'Elysian Fields',
-                                   'sameAs': 'https://www.songkick.com/artists/236156-elysian-fields?utm_medium=organic&utm_source=microformat'},
-                                 { '@type': 'MusicGroup',
-                                   'name': 'Chocolate Genius Inc.',
-                                   'sameAs': 'https://www.songkick.com/artists/1009602-chocolate-genius-inc?utm_medium=organic&utm_source=microformat'}],
-                  'startDate': '2017-04-26T20:00:00-0700',
-                  'url': 'https://www.songkick.com/concerts/29673614-elysian-fields-at-hotel-utah-saloon?utm_medium=organic&utm_source=microformat'},
-                { '@context': 'http://schema.org',
-                  '@type': 'MusicEvent',
-                  'location': { '@type': 'Place',
-                                'address': { '@type': 'PostalAddress',
-                                             'addressCountry': 'France',
-                                             'addressLocality': 'Saint-Nazaire',
-                                             'postalCode': '44600',
-                                             'streetAddress': 'Alvéole 14 de la '
-                                                              'base sous-Marine '
-                                                              'Bd de la Légion '
-                                                              'd’Honneur'},
-                                'geo': { '@type': 'GeoCoordinates',
-                                         'latitude': 47.2755434,
-                                         'longitude': -2.2022817},
-                                'name': 'VIP',
-                                'sameAs': 'http://www.levip-saintnazaire.com/'},
-                  'name': 'Elysian Fields',
-                  'performer': [ { '@type': 'MusicGroup',
-                                   'name': 'Elysian Fields',
-                                   'sameAs': 'https://www.songkick.com/artists/236156-elysian-fields?utm_medium=organic&utm_source=microformat'},
-                                 { '@type': 'MusicGroup',
-                                   'name': 'Troy Von Balthazar',
-                                   'sameAs': 'https://www.songkick.com/artists/355304-troy-von-balthazar?utm_medium=organic&utm_source=microformat'}],
-                  'startDate': '2016-10-29T21:00:00+0200',
-                  'url': 'https://www.songkick.com/concerts/27626524-elysian-fields-at-vip?utm_medium=organic&utm_source=microformat'},
-                { '@context': 'http://schema.org',
-                  '@type': 'MusicGroup',
-                  'image': 'https://images.sk-static.com/images/media/profile_images/artists/236156/card_avatar',
-                  'interactionCount': '6100 UserLikes',
-                  'logo': 'https://images.sk-static.com/images/media/profile_images/artists/236156/card_avatar',
-                  'name': 'Elysian Fields',
-                  'url': 'https://www.songkick.com/artists/236156-elysian-fields?utm_medium=organic&utm_source=microformat'}],
+  { 'json-ld': [ { '@context': 'http://schema.org',
+                   '@type': 'MusicEvent',
+                   'location': { '@type': 'Place',
+                                 'address': { '@type': 'PostalAddress',
+                                              'addressCountry': 'US',
+                                              'addressLocality': 'Brooklyn',
+                                              'addressRegion': 'NY',
+                                              'postalCode': '11225',
+                                              'streetAddress': '497 Rogers Ave'},
+                                 'geo': { '@type': 'GeoCoordinates',
+                                          'latitude': 40.660109,
+                                          'longitude': -73.953193},
+                                 'name': 'The Owl Music Parlor',
+                                 'sameAs': 'http://www.theowl.nyc'},
+                   'name': 'Elysian Fields',
+                   'performer': [ { '@type': 'MusicGroup',
+                                    'name': 'Elysian Fields',
+                                    'sameAs': 'https://www.songkick.com/artists/236156-elysian-fields?utm_medium=organic&utm_source=microformat'}],
+                   'startDate': '2017-06-10T19:30:00-0400',
+                   'url': 'https://www.songkick.com/concerts/30173984-elysian-fields-at-owl-music-parlor?utm_medium=organic&utm_source=microformat'},
+                 { '@context': 'http://schema.org',
+                   '@type': 'MusicEvent',
+                   'location': { '@type': 'Place',
+                                 'address': { '@type': 'PostalAddress',
+                                              'addressCountry': 'US',
+                                              'addressLocality': 'San Francisco',
+                                              'addressRegion': 'CA',
+                                              'postalCode': '94107',
+                                              'streetAddress': '500 Fourth '
+                                                               'Street'},
+                                 'geo': { '@type': 'GeoCoordinates',
+                                          'latitude': 37.7795638,
+                                          'longitude': -122.398023},
+                                 'name': 'Hotel Utah Saloon',
+                                 'sameAs': 'http://www.hotelutah.com/'},
+                   'name': 'Elysian Fields',
+                   'performer': [ { '@type': 'MusicGroup',
+                                    'name': 'Elysian Fields',
+                                    'sameAs': 'https://www.songkick.com/artists/236156-elysian-fields?utm_medium=organic&utm_source=microformat'},
+                                  { '@type': 'MusicGroup',
+                                    'name': 'Chocolate Genius Inc.',
+                                    'sameAs': 'https://www.songkick.com/artists/1009602-chocolate-genius-inc?utm_medium=organic&utm_source=microformat'}],
+                   'startDate': '2017-04-26T20:00:00-0700',
+                   'url': 'https://www.songkick.com/concerts/29673614-elysian-fields-at-hotel-utah-saloon?utm_medium=organic&utm_source=microformat'},
+                 { '@context': 'http://schema.org',
+                   '@type': 'MusicEvent',
+                   'location': { '@type': 'Place',
+                                 'address': { '@type': 'PostalAddress',
+                                              'addressCountry': 'France',
+                                              'addressLocality': 'Saint-Nazaire',
+                                              'postalCode': '44600',
+                                              'streetAddress': 'Alvéole 14 de la '
+                                                               'base sous-Marine '
+                                                               'Bd de la Légion '
+                                                               'd’Honneur'},
+                                 'geo': { '@type': 'GeoCoordinates',
+                                          'latitude': 47.2755434,
+                                          'longitude': -2.2022817},
+                                 'name': 'VIP',
+                                 'sameAs': 'http://www.levip-saintnazaire.com/'},
+                   'name': 'Elysian Fields',
+                   'performer': [ { '@type': 'MusicGroup',
+                                    'name': 'Elysian Fields',
+                                    'sameAs': 'https://www.songkick.com/artists/236156-elysian-fields?utm_medium=organic&utm_source=microformat'},
+                                  { '@type': 'MusicGroup',
+                                    'name': 'Troy Von Balthazar',
+                                    'sameAs': 'https://www.songkick.com/artists/355304-troy-von-balthazar?utm_medium=organic&utm_source=microformat'}],
+                   'startDate': '2016-10-29T21:00:00+0200',
+                   'url': 'https://www.songkick.com/concerts/27626524-elysian-fields-at-vip?utm_medium=organic&utm_source=microformat'},
+                 { '@context': 'http://schema.org',
+                   '@type': 'MusicGroup',
+                   'image': 'https://images.sk-static.com/images/media/profile_images/artists/236156/card_avatar',
+                   'interactionCount': '6100 UserLikes',
+                   'logo': 'https://images.sk-static.com/images/media/profile_images/artists/236156/card_avatar',
+                   'name': 'Elysian Fields',
+                   'url': 'https://www.songkick.com/artists/236156-elysian-fields?utm_medium=organic&utm_source=microformat'}],
     'microdata': [],
     'microformat': [],
     'opengraph': [ { 'namespace': { 'concerts': 'http://ogp.me/ns/fb/songkick-concerts#',
@@ -288,145 +283,139 @@ You can also use each extractor individually. See below.
 Microdata extraction
 ++++++++++++++++++++
 
-::
-
-    >>> import pprint
-    >>> pp = pprint.PrettyPrinter(indent=2)
-    >>>
-    >>> from extruct.w3cmicrodata import MicrodataExtractor
-    >>>
-    >>> # example from http://www.w3.org/TR/microdata/#associating-names-with-items
-    >>> html = """<!DOCTYPE HTML>
-    ... <html>
-    ...  <head>
-    ...   <title>Photo gallery</title>
-    ...  </head>
-    ...  <body>
-    ...   <h1>My photos</h1>
-    ...   <figure itemscope itemtype="http://n.whatwg.org/work" itemref="licenses">
-    ...    <img itemprop="work" src="images/house.jpeg" alt="A white house, boarded up, sits in a forest.">
-    ...    <figcaption itemprop="title">The house I found.</figcaption>
-    ...   </figure>
-    ...   <figure itemscope itemtype="http://n.whatwg.org/work" itemref="licenses">
-    ...    <img itemprop="work" src="images/mailbox.jpeg" alt="Outside the house is a mailbox. It has a leaflet inside.">
-    ...    <figcaption itemprop="title">The mailbox.</figcaption>
-    ...   </figure>
-    ...   <footer>
-    ...    <p id="licenses">All images licensed under the <a itemprop="license"
-    ...    href="http://www.opensource.org/licenses/mit-license.php">MIT
-    ...    license</a>.</p>
-    ...   </footer>
-    ...  </body>
-    ... </html>"""
-    >>>
-    >>> mde = MicrodataExtractor()
-    >>> data = mde.extract(html)
-    >>> pp.pprint(data)
-    [{'properties': {'license': 'http://www.opensource.org/licenses/mit-license.php',
-                     'title': 'The house I found.',
-                     'work': 'http://www.example.com/images/house.jpeg'},
-      'type': 'http://n.whatwg.org/work'},
-     {'properties': {'license': 'http://www.opensource.org/licenses/mit-license.php',
-                     'title': 'The mailbox.',
-                     'work': 'http://www.example.com/images/mailbox.jpeg'},
-      'type': 'http://n.whatwg.org/work'}]
+>>> import pprint
+>>> pp = pprint.PrettyPrinter(indent=2)
+>>>
+>>> from extruct.w3cmicrodata import MicrodataExtractor
+>>>
+>>> # example from http://www.w3.org/TR/microdata/#associating-names-with-items
+>>> html = """<!DOCTYPE HTML>
+... <html>
+...  <head>
+...   <title>Photo gallery</title>
+...  </head>
+...  <body>
+...   <h1>My photos</h1>
+...   <figure itemscope itemtype="http://n.whatwg.org/work" itemref="licenses">
+...    <img itemprop="work" src="images/house.jpeg" alt="A white house, boarded up, sits in a forest.">
+...    <figcaption itemprop="title">The house I found.</figcaption>
+...   </figure>
+...   <figure itemscope itemtype="http://n.whatwg.org/work" itemref="licenses">
+...    <img itemprop="work" src="images/mailbox.jpeg" alt="Outside the house is a mailbox. It has a leaflet inside.">
+...    <figcaption itemprop="title">The mailbox.</figcaption>
+...   </figure>
+...   <footer>
+...    <p id="licenses">All images licensed under the <a itemprop="license"
+...    href="http://www.opensource.org/licenses/mit-license.php">MIT
+...    license</a>.</p>
+...   </footer>
+...  </body>
+... </html>"""
+>>>
+>>> mde = MicrodataExtractor()
+>>> data = mde.extract(html)
+>>> pp.pprint(data)
+[{'properties': {'license': 'http://www.opensource.org/licenses/mit-license.php',
+                 'title': 'The house I found.',
+                 'work': 'http://www.example.com/images/house.jpeg'},
+  'type': 'http://n.whatwg.org/work'},
+ {'properties': {'license': 'http://www.opensource.org/licenses/mit-license.php',
+                 'title': 'The mailbox.',
+                 'work': 'http://www.example.com/images/mailbox.jpeg'},
+  'type': 'http://n.whatwg.org/work'}]
 
 JSON-LD extraction
 ++++++++++++++++++
 
-::
-
-    >>> import pprint
-    >>> pp = pprint.PrettyPrinter(indent=2)
-    >>>
-    >>> from extruct.jsonld import JsonLdExtractor
-    >>>
-    >>> html = """<!DOCTYPE HTML>
-    ... <html>
-    ...  <head>
-    ...   <title>Some Person Page</title>
-    ...  </head>
-    ...  <body>
-    ...   <h1>This guys</h1>
-    ...     <script type="application/ld+json">
-    ...     {
-    ...       "@context": "http://schema.org",
-    ...       "@type": "Person",
-    ...       "name": "John Doe",
-    ...       "jobTitle": "Graduate research assistant",
-    ...       "affiliation": "University of Dreams",
-    ...       "additionalName": "Johnny",
-    ...       "url": "http://www.example.com",
-    ...       "address": {
-    ...         "@type": "PostalAddress",
-    ...         "streetAddress": "1234 Peach Drive",
-    ...         "addressLocality": "Wonderland",
-    ...         "addressRegion": "Georgia"
-    ...       }
-    ...     }
-    ...     </script>
-    ...  </body>
-    ... </html>"""
-    >>>
-    >>> jslde = JsonLdExtractor()
-    >>>
-    >>> data = jslde.extract(html)
-    >>> pp.pprint(data)
-    [{'@context': 'http://schema.org',
-      '@type': 'Person',
-      'additionalName': 'Johnny',
-      'address': {'@type': 'PostalAddress',
-                  'addressLocality': 'Wonderland',
-                  'addressRegion': 'Georgia',
-                  'streetAddress': '1234 Peach Drive'},
-      'affiliation': 'University of Dreams',
-      'jobTitle': 'Graduate research assistant',
-      'name': 'John Doe',
-      'url': 'http://www.example.com'}]
+>>> import pprint
+>>> pp = pprint.PrettyPrinter(indent=2)
+>>>
+>>> from extruct.jsonld import JsonLdExtractor
+>>>
+>>> html = """<!DOCTYPE HTML>
+... <html>
+...  <head>
+...   <title>Some Person Page</title>
+...  </head>
+...  <body>
+...   <h1>This guys</h1>
+...     <script type="application/ld+json">
+...     {
+...       "@context": "http://schema.org",
+...       "@type": "Person",
+...       "name": "John Doe",
+...       "jobTitle": "Graduate research assistant",
+...       "affiliation": "University of Dreams",
+...       "additionalName": "Johnny",
+...       "url": "http://www.example.com",
+...       "address": {
+...         "@type": "PostalAddress",
+...         "streetAddress": "1234 Peach Drive",
+...         "addressLocality": "Wonderland",
+...         "addressRegion": "Georgia"
+...       }
+...     }
+...     </script>
+...  </body>
+... </html>"""
+>>>
+>>> jslde = JsonLdExtractor()
+>>>
+>>> data = jslde.extract(html)
+>>> pp.pprint(data)
+[{'@context': 'http://schema.org',
+  '@type': 'Person',
+  'additionalName': 'Johnny',
+  'address': {'@type': 'PostalAddress',
+              'addressLocality': 'Wonderland',
+              'addressRegion': 'Georgia',
+              'streetAddress': '1234 Peach Drive'},
+  'affiliation': 'University of Dreams',
+  'jobTitle': 'Graduate research assistant',
+  'name': 'John Doe',
+  'url': 'http://www.example.com'}]
 
 
 RDFa extraction (experimental)
 ++++++++++++++++++++++++++++++
 
-::
-
-    >>> import pprint
-    >>> pp = pprint.PrettyPrinter(indent=2)
-    >>> from extruct.rdfa import RDFaExtractor  # you can ignore the warning about html5lib not being available
-    INFO:rdflib:RDFLib Version: 4.2.1
-    /home/paul/.virtualenvs/extruct.wheel.test/lib/python3.5/site-packages/rdflib/plugins/parsers/structureddata.py:30: UserWarning: html5lib not found! RDFa and Microdata parsers will not be available.
-      'parsers will not be available.')
-    >>>
-    >>> html = """<html>
-    ...  <head>
-    ...    ...
-    ...  </head>
-    ...  <body prefix="dc: http://purl.org/dc/terms/ schema: http://schema.org/">
-    ...    <div resource="/alice/posts/trouble_with_bob" typeof="schema:BlogPosting">
-    ...       <h2 property="dc:title">The trouble with Bob</h2>
-    ...       ...
-    ...       <h3 property="dc:creator schema:creator" resource="#me">Alice</h3>
-    ...       <div property="schema:articleBody">
-    ...         <p>The trouble with Bob is that he takes much better photos than I do:</p>
-    ...       </div>
-    ...      ...
-    ...    </div>
-    ...  </body>
-    ... </html>
-    ... """
-    >>>
-    >>> rdfae = RDFaExtractor()
-    >>> pp.pprint(rdfae.extract(html, url='http://www.example.com/index.html'))
-    [{'@id': 'http://www.example.com/alice/posts/trouble_with_bob',
-      '@type': ['http://schema.org/BlogPosting'],
-      'http://purl.org/dc/terms/creator': [{'@id': 'http://www.example.com/index.html#me'}],
-      'http://purl.org/dc/terms/title': [{'@value': 'The trouble with Bob'}],
-      'http://schema.org/articleBody': [{'@value': '\n'
-                                                   '        The trouble with Bob '
-                                                   'is that he takes much better '
-                                                   'photos than I do:\n'
-                                                   '      '}],
-      'http://schema.org/creator': [{'@id': 'http://www.example.com/index.html#me'}]}]
+>>> import pprint
+>>> pp = pprint.PrettyPrinter(indent=2)
+>>> from extruct.rdfa import RDFaExtractor  # you can ignore the warning about html5lib not being available
+INFO:rdflib:RDFLib Version: 4.2.1
+/home/paul/.virtualenvs/extruct.wheel.test/lib/python3.5/site-packages/rdflib/plugins/parsers/structureddata.py:30: UserWarning: html5lib not found! RDFa and Microdata parsers will not be available.
+  'parsers will not be available.')
+>>>
+>>> html = """<html>
+...  <head>
+...    ...
+...  </head>
+...  <body prefix="dc: http://purl.org/dc/terms/ schema: http://schema.org/">
+...    <div resource="/alice/posts/trouble_with_bob" typeof="schema:BlogPosting">
+...       <h2 property="dc:title">The trouble with Bob</h2>
+...       ...
+...       <h3 property="dc:creator schema:creator" resource="#me">Alice</h3>
+...       <div property="schema:articleBody">
+...         <p>The trouble with Bob is that he takes much better photos than I do:</p>
+...       </div>
+...      ...
+...    </div>
+...  </body>
+... </html>
+... """
+>>>
+>>> rdfae = RDFaExtractor()
+>>> pp.pprint(rdfae.extract(html, url='http://www.example.com/index.html'))
+[{'@id': 'http://www.example.com/alice/posts/trouble_with_bob',
+  '@type': ['http://schema.org/BlogPosting'],
+  'http://purl.org/dc/terms/creator': [{'@id': 'http://www.example.com/index.html#me'}],
+  'http://purl.org/dc/terms/title': [{'@value': 'The trouble with Bob'}],
+  'http://schema.org/articleBody': [{'@value': '\n'
+                                               '        The trouble with Bob '
+                                               'is that he takes much better '
+                                               'photos than I do:\n'
+                                               '      '}],
+  'http://schema.org/creator': [{'@id': 'http://www.example.com/index.html#me'}]}]
 
 You'll get a list of expanded JSON-LD nodes.
 
@@ -617,27 +606,27 @@ E.g. http://localhost:10005/extruct/http://www.sarenza.com/i-love-shoes-susket-s
 will output something like this:
 
 >>>
-{ 'jsonld': [ { '@context': 'http://schema.org',
-                '@id': 'FP',
-                '@type': 'Product',
-                'brand': { '@type': 'Brand',
-                           'url': 'https://www.sarenza.com/i-love-shoes'},
-                'color': ['Lava', 'Black', 'Lt grey'],
-                'image': [ 'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_09.jpg?201509221045&v=20180313113923',
-                           'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_02.jpg?201509291747&v=20180313113923',
-                           'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_03.jpg?201509221045&v=20180313113923',
-                           'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_04.jpg?201509221045&v=20180313113923',
-                           'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_05.jpg?201509221045&v=20180313113923',
-                           'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_06.jpg?201509221045&v=20180313113923',
-                           'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_07.jpg?201509221045&v=20180313113923',
-                           'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_08.jpg?201509221045&v=20180313113923'],
-                'name': 'Susket',
-                'offers': { '@type': 'AggregateOffer',
-                            'availability': 'InStock',
-                            'highPrice': '49.00',
-                            'lowPrice': '0.00',
-                            'price': '0.00',
-                            'priceCurrency': 'EUR'}}],
+{ 'json-ld': [ { '@context': 'http://schema.org',
+                 '@id': 'FP',
+                 '@type': 'Product',
+                 'brand': { '@type': 'Brand',
+                            'url': 'https://www.sarenza.com/i-love-shoes'},
+                 'color': ['Lava', 'Black', 'Lt grey'],
+                 'image': [ 'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_09.jpg?201509221045&v=20180313113923',
+                            'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_02.jpg?201509291747&v=20180313113923',
+                            'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_03.jpg?201509221045&v=20180313113923',
+                            'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_04.jpg?201509221045&v=20180313113923',
+                            'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_05.jpg?201509221045&v=20180313113923',
+                            'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_06.jpg?201509221045&v=20180313113923',
+                            'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_07.jpg?201509221045&v=20180313113923',
+                            'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_08.jpg?201509221045&v=20180313113923'],
+                 'name': 'Susket',
+                 'offers': { '@type': 'AggregateOffer',
+                             'availability': 'InStock',
+                             'highPrice': '49.00',
+                             'lowPrice': '0.00',
+                             'price': '0.00',
+                             'priceCurrency': 'EUR'}}],
   'microdata': [ { 'properties': { 'average': '4.7',
                                    'best': '5',
                                    'itemreviewed': 'Sarenza',
@@ -694,8 +683,8 @@ Usage
 
     extruct "http://example.com"
 
-Downloads "http://example.com" and outputs the Microdata, JSON-LD and RDFa
-metadata to `stdout`.
+Downloads "http://example.com" and outputs the Microdata, JSON-LD and RDFa, Open Graph
+and Microformat metadata to `stdout`.
 
 Supported Parameters
 ++++++++++++++++++++
@@ -703,13 +692,14 @@ Supported Parameters
 By default, the command line tool will try to extract all the supported
 metadata formats from the page (currently Microdata, JSON-LD, RDFa, Open Graph
 and Microformat). If you want to restrict the output to just one or a subset of
-those, you can use the individual switches.
+those, you can pass their individual names through 'syntaxes' argument.
 
 For example, this command extracts only Microdata and JSON-LD metadata from
 "http://example.com"::
 
-    extruct --microdata --jsonld "http://example.com"
+    extruct "http://example.com" --syntaxes microdata json-ld 
 
+NB syntaxes names passed must correspond to these: microdata, json-ld, rdfa, opengraph, microformat
 
 Development version
 -------------------

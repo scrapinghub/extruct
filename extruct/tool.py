@@ -20,11 +20,11 @@ def main(args=None):
     arg = parser.add_argument
     arg('url', help='The target URL')
     arg('--syntaxes', nargs='+',
-        choices=['microdata', 'opengraph', 'jsonld', 'microformat', 'rdfa'],
-        default=['microdata', 'opengraph', 'jsonld', 'microformat', 'rdfa'],
+        choices=['microdata', 'opengraph', 'json-ld', 'microformat', 'rdfa'],
+        default=['microdata', 'opengraph', 'json-ld', 'microformat', 'rdfa'],
         help='List of syntaxes to extract. Valid values any or all (default): \
-        microdata, opengraph, microformat jsonld, rdfa. \
-        Example: --syntaxes microdata opengraph jsonld')
+        microdata, opengraph, microformat json-ld, rdfa. \
+        Example: --syntaxes microdata opengraph json-ld')
     args = parser.parse_args(args)
     metadata = metadata_from_url(args.url, args.syntaxes)
     return json.dumps(metadata, indent=2, sort_keys=True)

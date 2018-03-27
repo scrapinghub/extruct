@@ -35,7 +35,7 @@ class TestTool(unittest.TestCase):
     @mock.patch('extruct.tool.requests.get')
     def test_metadata_from_url_jsonld_only(self, mock_get):
         expected = {
-            'jsonld': self.expected['jsonld'],
+            'json-ld': self.expected['json-ld'],
             'url': self.url,
             'status': '200 OK',
         }
@@ -45,7 +45,7 @@ class TestTool(unittest.TestCase):
         )
         mock_get.return_value = mock_response
 
-        data = metadata_from_url(self.url, syntaxes=['jsonld'])
+        data = metadata_from_url(self.url, syntaxes=['json-ld'])
         self.assertEqual(jsonize_dict(data), expected)
 
 

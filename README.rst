@@ -66,10 +66,11 @@ First fetch the HTML using python-requests and then feed the response body to ``
 >>> import extruct
 >>> import requests
 >>> import pprint
+>>>
 >>> pp = pprint.PrettyPrinter(indent=2)
 >>> r = requests.get('https://www.optimizesmart.com/how-to-use-open-graph-protocol/')
 >>> data = extruct.extract(r.text, r.url)
-
+>>>
 >>> pp.pprint(data)
 { 'json-ld': [ { '@context': 'https://schema.org',
                  '@id': '#organization',

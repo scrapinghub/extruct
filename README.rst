@@ -286,6 +286,7 @@ You can also use each extractor individually. See below.
 Microdata extraction
 ++++++++++++++++++++
 ::
+
   >>> import pprint
   >>> pp = pprint.PrettyPrinter(indent=2)
   >>>
@@ -329,8 +330,8 @@ Microdata extraction
 
 JSON-LD extraction
 ++++++++++++++++++
-
 ::
+
   >>> import pprint
   >>> pp = pprint.PrettyPrinter(indent=2)
   >>>
@@ -382,7 +383,9 @@ JSON-LD extraction
 
 RDFa extraction (experimental)
 ++++++++++++++++++++++++++++++
+
 ::
+
   >>> import pprint
   >>> pp = pprint.PrettyPrinter(indent=2)
   >>> from extruct.rdfa import RDFaExtractor  # you can ignore the warning about html5lib not being available

@@ -195,6 +195,3 @@ def build_mock_response(url, encoding='utf-8', content='', reason='OK', status=2
 
 def http_error():
     raise HTTPError()
-
-if __name__ == '__main__':
-    unittest.main()

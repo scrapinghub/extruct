@@ -63,104 +63,104 @@ Let's try this on a webpage that uses all the syntaxes supported (RDFa with `ogp
 
 First fetch the HTML using python-requests and then feed the response body to ``extruct``::
 
->>> import extruct
->>> import requests
->>> import pprint
->>>
->>> pp = pprint.PrettyPrinter(indent=2)
->>> r = requests.get('https://www.optimizesmart.com/how-to-use-open-graph-protocol/')
->>> data = extruct.extract(r.text, r.url)
->>>
->>> pp.pprint(data)
-{ 'json-ld': [ { '@context': 'https://schema.org',
-                 '@id': '#organization',
-                 '@type': 'Organization',
-                 'logo': 'https://www.optimizesmart.com/wp-content/uploads/2016/03/optimize-smart-Twitter-logo.jpg',
-                 'name': 'Optimize Smart',
-                 'sameAs': [ 'https://www.facebook.com/optimizesmart/',
-                             'https://uk.linkedin.com/in/analyticsnerd',
-                             'https://www.youtube.com/user/optimizesmart',
-                             'https://twitter.com/analyticsnerd'],
-                 'url': 'https://www.optimizesmart.com/'}],
-  'microdata': [ { 'properties': {'headline': ''},
-                   'type': 'http://schema.org/WPHeader'}],
-  'microformat': [ { 'children': [ { 'properties': { 'category': [ 'specialized-tracking'],
-                                                     'name': [ 'Open Graph '
-                                                               'Protocol for '
-                                                               'Facebook '
-                                                               'explained with '
-                                                               'examples\n'
-                                                               '\n'
-                                                               'Specialized '
-                                                               'Tracking\n'
-                                                               '\n'
-                                                               '\n'
-                                                               (...)
-                                                               'Follow '
-                                                               '@analyticsnerd\n'
-                                                               '!function(d,s,id){var '
-                                                               "js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, "
-                                                               "'script', "
-                                                               "'twitter-wjs');"]},
-                                     'type': ['h-entry']}],
-                     'properties': { 'name': [ 'Open Graph Protocol for '
-                                               'Facebook explained with '
-                                               'examples\n'
-                                               (...)
-                                               'Follow @analyticsnerd\n'
-                                               '!function(d,s,id){var '
-                                               "js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, "
-                                               "'script', 'twitter-wjs');"]},
-                     'type': ['h-feed']}],
-  'opengraph': [ { 'namespace': {'og': 'http://ogp.me/ns#'},
-                   'properties': [ ('og:locale', 'en_US'),
-                                   ('og:type', 'article'),
-                                   ( 'og:title',
-                                     'Open Graph Protocol for Facebook '
-                                     'explained with examples'),
-                                   ( 'og:description',
-                                     'What is Open Graph Protocol and why you '
-                                     'need it? Learn to implement Open Graph '
-                                     'Protocol for Facebook on your website. '
-                                     'Open Graph Protocol Meta Tags.'),
-                                   ( 'og:url',
-                                     'https://www.optimizesmart.com/how-to-use-open-graph-protocol/'),
-                                   ('og:site_name', 'Optimize Smart'),
-                                   ( 'og:updated_time',
-                                     '2018-03-09T16:26:35+00:00'),
-                                   ( 'og:image',
-                                     'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'),
-                                   ( 'og:image:secure_url',
-                                     'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg')]}],
-  'rdfa': [ { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/#header',
-              'http://www.w3.org/1999/xhtml/vocab#role': [ { '@id': 'http://www.w3.org/1999/xhtml/vocab#banner'}]},
-            { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/',
-              'article:modified_time': [ { '@value': '2018-03-09T16:26:35+00:00'}],
-              'article:published_time': [ { '@value': '2010-07-02T18:57:23+00:00'}],
-              'article:publisher': [ { '@value': 'https://www.facebook.com/optimizesmart/'}],
-              'article:section': [{'@value': 'Specialized Tracking'}],
-              'http://ogp.me/ns#description': [ { '@value': 'What is Open '
-                                                            'Graph Protocol '
-                                                            'and why you need '
-                                                            'it? Learn to '
-                                                            'implement Open '
-                                                            'Graph Protocol '
-                                                            'for Facebook on '
-                                                            'your website. '
-                                                            'Open Graph '
-                                                            'Protocol Meta '
-                                                            'Tags.'}],
-              'http://ogp.me/ns#image': [ { '@value': 'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'}],
-              'http://ogp.me/ns#image:secure_url': [ { '@value': 'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'}],
-              'http://ogp.me/ns#locale': [{'@value': 'en_US'}],
-              'http://ogp.me/ns#site_name': [{'@value': 'Optimize Smart'}],
-              'http://ogp.me/ns#title': [ { '@value': 'Open Graph Protocol for '
-                                                      'Facebook explained with '
-                                                      'examples'}],
-              'http://ogp.me/ns#type': [{'@value': 'article'}],
-              'http://ogp.me/ns#updated_time': [ { '@value': '2018-03-09T16:26:35+00:00'}],
-              'http://ogp.me/ns#url': [ { '@value': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/'}],
-              'https://api.w.org/': [ { '@id': 'https://www.optimizesmart.com/wp-json/'}]}]}
+  >>> import extruct
+  >>> import requests
+  >>> import pprint
+  >>>
+  >>> pp = pprint.PrettyPrinter(indent=2)
+  >>> r = requests.get('https://www.optimizesmart.com/how-to-use-open-graph-protocol/')
+  >>> data = extruct.extract(r.text, r.url)
+  >>>
+  >>> pp.pprint(data)
+  { 'json-ld': [ { '@context': 'https://schema.org',
+                   '@id': '#organization',
+                   '@type': 'Organization',
+                   'logo': 'https://www.optimizesmart.com/wp-content/uploads/2016/03/optimize-smart-Twitter-logo.jpg',
+                   'name': 'Optimize Smart',
+                   'sameAs': [ 'https://www.facebook.com/optimizesmart/',
+                               'https://uk.linkedin.com/in/analyticsnerd',
+                               'https://www.youtube.com/user/optimizesmart',
+                               'https://twitter.com/analyticsnerd'],
+                   'url': 'https://www.optimizesmart.com/'}],
+    'microdata': [ { 'properties': {'headline': ''},
+                     'type': 'http://schema.org/WPHeader'}],
+    'microformat': [ { 'children': [ { 'properties': { 'category': [ 'specialized-tracking'],
+                                                       'name': [ 'Open Graph '
+                                                                 'Protocol for '
+                                                                 'Facebook '
+                                                                 'explained with '
+                                                                 'examples\n'
+                                                                 '\n'
+                                                                 'Specialized '
+                                                                 'Tracking\n'
+                                                                 '\n'
+                                                                 '\n'
+                                                                 (...)
+                                                                 'Follow '
+                                                                 '@analyticsnerd\n'
+                                                                 '!function(d,s,id){var '
+                                                                 "js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, "
+                                                                 "'script', "
+                                                                 "'twitter-wjs');"]},
+                                       'type': ['h-entry']}],
+                       'properties': { 'name': [ 'Open Graph Protocol for '
+                                                 'Facebook explained with '
+                                                 'examples\n'
+                                                 (...)
+                                                 'Follow @analyticsnerd\n'
+                                                 '!function(d,s,id){var '
+                                                 "js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, "
+                                                 "'script', 'twitter-wjs');"]},
+                       'type': ['h-feed']}],
+    'opengraph': [ { 'namespace': {'og': 'http://ogp.me/ns#'},
+                     'properties': [ ('og:locale', 'en_US'),
+                                     ('og:type', 'article'),
+                                     ( 'og:title',
+                                       'Open Graph Protocol for Facebook '
+                                       'explained with examples'),
+                                     ( 'og:description',
+                                       'What is Open Graph Protocol and why you '
+                                       'need it? Learn to implement Open Graph '
+                                       'Protocol for Facebook on your website. '
+                                       'Open Graph Protocol Meta Tags.'),
+                                     ( 'og:url',
+                                       'https://www.optimizesmart.com/how-to-use-open-graph-protocol/'),
+                                     ('og:site_name', 'Optimize Smart'),
+                                     ( 'og:updated_time',
+                                       '2018-03-09T16:26:35+00:00'),
+                                     ( 'og:image',
+                                       'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'),
+                                     ( 'og:image:secure_url',
+                                       'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg')]}],
+    'rdfa': [ { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/#header',
+                'http://www.w3.org/1999/xhtml/vocab#role': [ { '@id': 'http://www.w3.org/1999/xhtml/vocab#banner'}]},
+              { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/',
+                'article:modified_time': [ { '@value': '2018-03-09T16:26:35+00:00'}],
+                'article:published_time': [ { '@value': '2010-07-02T18:57:23+00:00'}],
+                'article:publisher': [ { '@value': 'https://www.facebook.com/optimizesmart/'}],
+                'article:section': [{'@value': 'Specialized Tracking'}],
+                'http://ogp.me/ns#description': [ { '@value': 'What is Open '
+                                                              'Graph Protocol '
+                                                              'and why you need '
+                                                              'it? Learn to '
+                                                              'implement Open '
+                                                              'Graph Protocol '
+                                                              'for Facebook on '
+                                                              'your website. '
+                                                              'Open Graph '
+                                                              'Protocol Meta '
+                                                              'Tags.'}],
+                'http://ogp.me/ns#image': [ { '@value': 'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'}],
+                'http://ogp.me/ns#image:secure_url': [ { '@value': 'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'}],
+                'http://ogp.me/ns#locale': [{'@value': 'en_US'}],
+                'http://ogp.me/ns#site_name': [{'@value': 'Optimize Smart'}],
+                'http://ogp.me/ns#title': [ { '@value': 'Open Graph Protocol for '
+                                                        'Facebook explained with '
+                                                        'examples'}],
+                'http://ogp.me/ns#type': [{'@value': 'article'}],
+                'http://ogp.me/ns#updated_time': [ { '@value': '2018-03-09T16:26:35+00:00'}],
+                'http://ogp.me/ns#url': [ { '@value': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/'}],
+                'https://api.w.org/': [ { '@id': 'https://www.optimizesmart.com/wp-json/'}]}]}
 
 
 Another example with a page from SongKick containing RDFa, JSON-LD and Open Graph metadata::
@@ -285,140 +285,141 @@ You can also use each extractor individually. See below.
 
 Microdata extraction
 ++++++++++++++++++++
-
->>> import pprint
->>> pp = pprint.PrettyPrinter(indent=2)
->>>
->>> from extruct.w3cmicrodata import MicrodataExtractor
->>>
->>> # example from http://www.w3.org/TR/microdata/#associating-names-with-items
->>> html = """<!DOCTYPE HTML>
-... <html>
-...  <head>
-...   <title>Photo gallery</title>
-...  </head>
-...  <body>
-...   <h1>My photos</h1>
-...   <figure itemscope itemtype="http://n.whatwg.org/work" itemref="licenses">
-...    <img itemprop="work" src="images/house.jpeg" alt="A white house, boarded up, sits in a forest.">
-...    <figcaption itemprop="title">The house I found.</figcaption>
-...   </figure>
-...   <figure itemscope itemtype="http://n.whatwg.org/work" itemref="licenses">
-...    <img itemprop="work" src="images/mailbox.jpeg" alt="Outside the house is a mailbox. It has a leaflet inside.">
-...    <figcaption itemprop="title">The mailbox.</figcaption>
-...   </figure>
-...   <footer>
-...    <p id="licenses">All images licensed under the <a itemprop="license"
-...    href="http://www.opensource.org/licenses/mit-license.php">MIT
-...    license</a>.</p>
-...   </footer>
-...  </body>
-... </html>"""
->>>
->>> mde = MicrodataExtractor()
->>> data = mde.extract(html)
->>> pp.pprint(data)
-[{'properties': {'license': 'http://www.opensource.org/licenses/mit-license.php',
-                 'title': 'The house I found.',
-                 'work': 'http://www.example.com/images/house.jpeg'},
-  'type': 'http://n.whatwg.org/work'},
- {'properties': {'license': 'http://www.opensource.org/licenses/mit-license.php',
-                 'title': 'The mailbox.',
-                 'work': 'http://www.example.com/images/mailbox.jpeg'},
-  'type': 'http://n.whatwg.org/work'}]
+::
+  >>> import pprint
+  >>> pp = pprint.PrettyPrinter(indent=2)
+  >>>
+  >>> from extruct.w3cmicrodata import MicrodataExtractor
+  >>>
+  >>> # example from http://www.w3.org/TR/microdata/#associating-names-with-items
+  >>> html = """<!DOCTYPE HTML>
+  ... <html>
+  ...  <head>
+  ...   <title>Photo gallery</title>
+  ...  </head>
+  ...  <body>
+  ...   <h1>My photos</h1>
+  ...   <figure itemscope itemtype="http://n.whatwg.org/work" itemref="licenses">
+  ...    <img itemprop="work" src="images/house.jpeg" alt="A white house, boarded up, sits in a forest.">
+  ...    <figcaption itemprop="title">The house I found.</figcaption>
+  ...   </figure>
+  ...   <figure itemscope itemtype="http://n.whatwg.org/work" itemref="licenses">
+  ...    <img itemprop="work" src="images/mailbox.jpeg" alt="Outside the house is a mailbox. It has a leaflet inside.">
+  ...    <figcaption itemprop="title">The mailbox.</figcaption>
+  ...   </figure>
+  ...   <footer>
+  ...    <p id="licenses">All images licensed under the <a itemprop="license"
+  ...    href="http://www.opensource.org/licenses/mit-license.php">MIT
+  ...    license</a>.</p>
+  ...   </footer>
+  ...  </body>
+  ... </html>"""
+  >>>
+  >>> mde = MicrodataExtractor()
+  >>> data = mde.extract(html)
+  >>> pp.pprint(data)
+  [{'properties': {'license': 'http://www.opensource.org/licenses/mit-license.php',
+                   'title': 'The house I found.',
+                   'work': 'http://www.example.com/images/house.jpeg'},
+    'type': 'http://n.whatwg.org/work'},
+   {'properties': {'license': 'http://www.opensource.org/licenses/mit-license.php',
+                   'title': 'The mailbox.',
+                   'work': 'http://www.example.com/images/mailbox.jpeg'},
+    'type': 'http://n.whatwg.org/work'}]
 
 JSON-LD extraction
 ++++++++++++++++++
 
->>> import pprint
->>> pp = pprint.PrettyPrinter(indent=2)
->>>
->>> from extruct.jsonld import JsonLdExtractor
->>>
->>> html = """<!DOCTYPE HTML>
-... <html>
-...  <head>
-...   <title>Some Person Page</title>
-...  </head>
-...  <body>
-...   <h1>This guys</h1>
-...     <script type="application/ld+json">
-...     {
-...       "@context": "http://schema.org",
-...       "@type": "Person",
-...       "name": "John Doe",
-...       "jobTitle": "Graduate research assistant",
-...       "affiliation": "University of Dreams",
-...       "additionalName": "Johnny",
-...       "url": "http://www.example.com",
-...       "address": {
-...         "@type": "PostalAddress",
-...         "streetAddress": "1234 Peach Drive",
-...         "addressLocality": "Wonderland",
-...         "addressRegion": "Georgia"
-...       }
-...     }
-...     </script>
-...  </body>
-... </html>"""
->>>
->>> jslde = JsonLdExtractor()
->>>
->>> data = jslde.extract(html)
->>> pp.pprint(data)
-[{'@context': 'http://schema.org',
-  '@type': 'Person',
-  'additionalName': 'Johnny',
-  'address': {'@type': 'PostalAddress',
-              'addressLocality': 'Wonderland',
-              'addressRegion': 'Georgia',
-              'streetAddress': '1234 Peach Drive'},
-  'affiliation': 'University of Dreams',
-  'jobTitle': 'Graduate research assistant',
-  'name': 'John Doe',
-  'url': 'http://www.example.com'}]
+::
+  >>> import pprint
+  >>> pp = pprint.PrettyPrinter(indent=2)
+  >>>
+  >>> from extruct.jsonld import JsonLdExtractor
+  >>>
+  >>> html = """<!DOCTYPE HTML>
+  ... <html>
+  ...  <head>
+  ...   <title>Some Person Page</title>
+  ...  </head>
+  ...  <body>
+  ...   <h1>This guys</h1>
+  ...     <script type="application/ld+json">
+  ...     {
+  ...       "@context": "http://schema.org",
+  ...       "@type": "Person",
+  ...       "name": "John Doe",
+  ...       "jobTitle": "Graduate research assistant",
+  ...       "affiliation": "University of Dreams",
+  ...       "additionalName": "Johnny",
+  ...       "url": "http://www.example.com",
+  ...       "address": {
+  ...         "@type": "PostalAddress",
+  ...         "streetAddress": "1234 Peach Drive",
+  ...         "addressLocality": "Wonderland",
+  ...         "addressRegion": "Georgia"
+  ...       }
+  ...     }
+  ...     </script>
+  ...  </body>
+  ... </html>"""
+  >>>
+  >>> jslde = JsonLdExtractor()
+  >>>
+  >>> data = jslde.extract(html)
+  >>> pp.pprint(data)
+  [{'@context': 'http://schema.org',
+    '@type': 'Person',
+    'additionalName': 'Johnny',
+    'address': {'@type': 'PostalAddress',
+                'addressLocality': 'Wonderland',
+                'addressRegion': 'Georgia',
+                'streetAddress': '1234 Peach Drive'},
+    'affiliation': 'University of Dreams',
+    'jobTitle': 'Graduate research assistant',
+    'name': 'John Doe',
+    'url': 'http://www.example.com'}]
 
 
 RDFa extraction (experimental)
 ++++++++++++++++++++++++++++++
-
->>> import pprint
->>> pp = pprint.PrettyPrinter(indent=2)
->>> from extruct.rdfa import RDFaExtractor  # you can ignore the warning about html5lib not being available
-INFO:rdflib:RDFLib Version: 4.2.1
-/home/paul/.virtualenvs/extruct.wheel.test/lib/python3.5/site-packages/rdflib/plugins/parsers/structureddata.py:30: UserWarning: html5lib not found! RDFa and Microdata parsers will not be available.
-  'parsers will not be available.')
->>>
->>> html = """<html>
-...  <head>
-...    ...
-...  </head>
-...  <body prefix="dc: http://purl.org/dc/terms/ schema: http://schema.org/">
-...    <div resource="/alice/posts/trouble_with_bob" typeof="schema:BlogPosting">
-...       <h2 property="dc:title">The trouble with Bob</h2>
-...       ...
-...       <h3 property="dc:creator schema:creator" resource="#me">Alice</h3>
-...       <div property="schema:articleBody">
-...         <p>The trouble with Bob is that he takes much better photos than I do:</p>
-...       </div>
-...      ...
-...    </div>
-...  </body>
-... </html>
-... """
->>>
->>> rdfae = RDFaExtractor()
->>> pp.pprint(rdfae.extract(html, url='http://www.example.com/index.html'))
-[{'@id': 'http://www.example.com/alice/posts/trouble_with_bob',
-  '@type': ['http://schema.org/BlogPosting'],
-  'http://purl.org/dc/terms/creator': [{'@id': 'http://www.example.com/index.html#me'}],
-  'http://purl.org/dc/terms/title': [{'@value': 'The trouble with Bob'}],
-  'http://schema.org/articleBody': [{'@value': '\n'
-                                               '        The trouble with Bob '
-                                               'is that he takes much better '
-                                               'photos than I do:\n'
-                                               '      '}],
-  'http://schema.org/creator': [{'@id': 'http://www.example.com/index.html#me'}]}]
+::
+  >>> import pprint
+  >>> pp = pprint.PrettyPrinter(indent=2)
+  >>> from extruct.rdfa import RDFaExtractor  # you can ignore the warning about html5lib not being available
+  INFO:rdflib:RDFLib Version: 4.2.1
+  /home/paul/.virtualenvs/extruct.wheel.test/lib/python3.5/site-packages/rdflib/plugins/parsers/structureddata.py:30: UserWarning: html5lib not found! RDFa and Microdata parsers will not be available.
+    'parsers will not be available.')
+  >>>
+  >>> html = """<html>
+  ...  <head>
+  ...    ...
+  ...  </head>
+  ...  <body prefix="dc: http://purl.org/dc/terms/ schema: http://schema.org/">
+  ...    <div resource="/alice/posts/trouble_with_bob" typeof="schema:BlogPosting">
+  ...       <h2 property="dc:title">The trouble with Bob</h2>
+  ...       ...
+  ...       <h3 property="dc:creator schema:creator" resource="#me">Alice</h3>
+  ...       <div property="schema:articleBody">
+  ...         <p>The trouble with Bob is that he takes much better photos than I do:</p>
+  ...       </div>
+  ...      ...
+  ...    </div>
+  ...  </body>
+  ... </html>
+  ... """
+  >>>
+  >>> rdfae = RDFaExtractor()
+  >>> pp.pprint(rdfae.extract(html, url='http://www.example.com/index.html'))
+  [{'@id': 'http://www.example.com/alice/posts/trouble_with_bob',
+    '@type': ['http://schema.org/BlogPosting'],
+    'http://purl.org/dc/terms/creator': [{'@id': 'http://www.example.com/index.html#me'}],
+    'http://purl.org/dc/terms/title': [{'@value': 'The trouble with Bob'}],
+    'http://schema.org/articleBody': [{'@value': '\n'
+                                                 '        The trouble with Bob '
+                                                 'is that he takes much better '
+                                                 'photos than I do:\n'
+                                                 '      '}],
+    'http://schema.org/creator': [{'@id': 'http://www.example.com/index.html#me'}]}]
 
 You'll get a list of expanded JSON-LD nodes.
 
@@ -426,143 +427,145 @@ You'll get a list of expanded JSON-LD nodes.
 Open Graph extraction
 ++++++++++++++++++++++++++++++
 
->>> import pprint
->>> pp = pprint.PrettyPrinter(indent=2)
->>>
->>> from extruct.opengraph import OpenGraphExtractor
->>>
->>> html = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-... <html xmlns="https://www.w3.org/1999/xhtml" xmlns:og="https://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml">
-...  <head>
-...   <title>Himanshu's Open Graph Protocol</title>
-...   <meta http-equiv="Content-Type" content="text/html;charset=WINDOWS-1252" />
-...   <meta http-equiv="Content-Language" content="en-us" />
-...   <link rel="stylesheet" type="text/css" href="event-education.css" />
-...   <meta name="verify-v1" content="so4y/3aLT7/7bUUB9f6iVXN0tv8upRwaccek7JKB1gs=" >
-...   <meta property="og:title" content="Himanshu's Open Graph Protocol"/>
-...   <meta property="og:type" content="article"/>
-...   <meta property="og:url" content="https://www.eventeducation.com/test.php"/>
-...   <meta property="og:image" content="https://www.eventeducation.com/images/982336_wedding_dayandouan_th.jpg"/>
-...   <meta property="fb:admins" content="himanshu160"/>
-...   <meta property="og:site_name" content="Event Education"/>
-...   <meta property="og:description" content="Event Education provides free courses on event planning and management to event professionals worldwide."/>
-...  </head>
-...  <body>
-...   <div id="fb-root"></div>
-...   <script>(function(d, s, id) {
-...               var js, fjs = d.getElementsByTagName(s)[0];
-...               if (d.getElementById(id)) return;
-...                  js = d.createElement(s); js.id = id;
-...                  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=501839739845103";
-...                  fjs.parentNode.insertBefore(js, fjs);
-...                  }(document, 'script', 'facebook-jssdk'));</script>
-...  </body>
-... </html>"""
->>>
->>> opengraphe = OpenGraphExtractor()
->>> pp.pprint(opengraphe.extract(html, url='http://www.example.com/index.html'))
-[{"namespace": {
-      "og": "http://ogp.me/ns#"
-  },
-  "properties": [
-      [
-          "og:title",
-          "Himanshu's Open Graph Protocol"
-      ],
-      [
-          "og:type",
-          "article"
-      ],
-      [
-          "og:url",
-          "https://www.eventeducation.com/test.php"
-      ],
-      [
-          "og:image",
-          "https://www.eventeducation.com/images/982336_wedding_dayandouan_th.jpg"
-      ],
-      [
-          "og:site_name",
-          "Event Education"
-      ],
-      [
-          "og:description",
-          "Event Education provides free courses on event planning and management to event professionals worldwide."
+::
+  >>> import pprint
+  >>> pp = pprint.PrettyPrinter(indent=2)
+  >>>
+  >>> from extruct.opengraph import OpenGraphExtractor
+  >>>
+  >>> html = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  ... <html xmlns="https://www.w3.org/1999/xhtml" xmlns:og="https://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml">
+  ...  <head>
+  ...   <title>Himanshu's Open Graph Protocol</title>
+  ...   <meta http-equiv="Content-Type" content="text/html;charset=WINDOWS-1252" />
+  ...   <meta http-equiv="Content-Language" content="en-us" />
+  ...   <link rel="stylesheet" type="text/css" href="event-education.css" />
+  ...   <meta name="verify-v1" content="so4y/3aLT7/7bUUB9f6iVXN0tv8upRwaccek7JKB1gs=" >
+  ...   <meta property="og:title" content="Himanshu's Open Graph Protocol"/>
+  ...   <meta property="og:type" content="article"/>
+  ...   <meta property="og:url" content="https://www.eventeducation.com/test.php"/>
+  ...   <meta property="og:image" content="https://www.eventeducation.com/images/982336_wedding_dayandouan_th.jpg"/>
+  ...   <meta property="fb:admins" content="himanshu160"/>
+  ...   <meta property="og:site_name" content="Event Education"/>
+  ...   <meta property="og:description" content="Event Education provides free courses on event planning and management to event professionals worldwide."/>
+  ...  </head>
+  ...  <body>
+  ...   <div id="fb-root"></div>
+  ...   <script>(function(d, s, id) {
+  ...               var js, fjs = d.getElementsByTagName(s)[0];
+  ...               if (d.getElementById(id)) return;
+  ...                  js = d.createElement(s); js.id = id;
+  ...                  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=501839739845103";
+  ...                  fjs.parentNode.insertBefore(js, fjs);
+  ...                  }(document, 'script', 'facebook-jssdk'));</script>
+  ...  </body>
+  ... </html>"""
+  >>>
+  >>> opengraphe = OpenGraphExtractor()
+  >>> pp.pprint(opengraphe.extract(html, url='http://www.example.com/index.html'))
+  [{"namespace": {
+        "og": "http://ogp.me/ns#"
+    },
+    "properties": [
+        [
+            "og:title",
+            "Himanshu's Open Graph Protocol"
+        ],
+        [
+            "og:type",
+            "article"
+        ],
+        [
+            "og:url",
+            "https://www.eventeducation.com/test.php"
+        ],
+        [
+            "og:image",
+            "https://www.eventeducation.com/images/982336_wedding_dayandouan_th.jpg"
+        ],
+        [
+            "og:site_name",
+            "Event Education"
+        ],
+        [
+            "og:description",
+            "Event Education provides free courses on event planning and management to event professionals worldwide."
+        ]
       ]
-    ]
- }]
+   }]
 
 
 Microformat extraction
 ++++++++++++++++++++++++++++++
 
->>> import pprint
->>> pp = pprint.PrettyPrinter(indent=2)
->>>
->>> from extruct.microformat import MicroformatExtractor
->>>
->>> html = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-... <html xmlns="https://www.w3.org/1999/xhtml" xmlns:og="https://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml">
-...  <head>
-...   <title>Himanshu's Open Graph Protocol</title>
-...   <meta http-equiv="Content-Type" content="text/html;charset=WINDOWS-1252" />
-...   <meta http-equiv="Content-Language" content="en-us" />
-...   <link rel="stylesheet" type="text/css" href="event-education.css" />
-...   <meta name="verify-v1" content="so4y/3aLT7/7bUUB9f6iVXN0tv8upRwaccek7JKB1gs=" >
-...   <meta property="og:title" content="Himanshu's Open Graph Protocol"/>
-...   <article class="h-entry">
-...    <h1 class="p-name">Microformats are amazing</h1>
-...    <p>Published by <a class="p-author h-card" href="http://example.com">W. Developer</a>
-...       on <time class="dt-published" datetime="2013-06-13 12:00:00">13<sup>th</sup> June 2013</time></p>
-...    <p class="p-summary">In which I extoll the virtues of using microformats.</p>
-...    <div class="e-content">
-...     <p>Blah blah blah</p>
-...    </div>
-...   </article>
-...  </head>
-...  <body></body>
-... </html>"""
->>>
->>> microformate = MicroformatExtractor()
->>> data = microformate.extract(html)
->>> pp.pprint(data)
-[{"type": [
-      "h-entry"
-  ],
-  "properties": {
-      "name": [
-          "Microformats are amazing"
-      ],
-      "author": [
-          {
-              "type": [
-                  "h-card"
-              ],
-              "properties": {
-                  "name": [
-                      "W. Developer"
-                  ],
-                  "url": [
-                      "http://example.com"
-                  ]
-              },
-              "value": "W. Developer"
-          }
-      ],
-      "published": [
-          "2013-06-13 12:00:00"
-      ],
-      "summary": [
-          "In which I extoll the virtues of using microformats."
-      ],
-      "content": [
-          {
-              "html": "\n<p>Blah blah blah</p>\n",
-              "value": "\nBlah blah blah\n"
-          }
-      ]
-    }
- }]
+::
+  >>> import pprint
+  >>> pp = pprint.PrettyPrinter(indent=2)
+  >>>
+  >>> from extruct.microformat import MicroformatExtractor
+  >>>
+  >>> html = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  ... <html xmlns="https://www.w3.org/1999/xhtml" xmlns:og="https://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml">
+  ...  <head>
+  ...   <title>Himanshu's Open Graph Protocol</title>
+  ...   <meta http-equiv="Content-Type" content="text/html;charset=WINDOWS-1252" />
+  ...   <meta http-equiv="Content-Language" content="en-us" />
+  ...   <link rel="stylesheet" type="text/css" href="event-education.css" />
+  ...   <meta name="verify-v1" content="so4y/3aLT7/7bUUB9f6iVXN0tv8upRwaccek7JKB1gs=" >
+  ...   <meta property="og:title" content="Himanshu's Open Graph Protocol"/>
+  ...   <article class="h-entry">
+  ...    <h1 class="p-name">Microformats are amazing</h1>
+  ...    <p>Published by <a class="p-author h-card" href="http://example.com">W. Developer</a>
+  ...       on <time class="dt-published" datetime="2013-06-13 12:00:00">13<sup>th</sup> June 2013</time></p>
+  ...    <p class="p-summary">In which I extoll the virtues of using microformats.</p>
+  ...    <div class="e-content">
+  ...     <p>Blah blah blah</p>
+  ...    </div>
+  ...   </article>
+  ...  </head>
+  ...  <body></body>
+  ... </html>"""
+  >>>
+  >>> microformate = MicroformatExtractor()
+  >>> data = microformate.extract(html)
+  >>> pp.pprint(data)
+  [{"type": [
+        "h-entry"
+    ],
+    "properties": {
+        "name": [
+            "Microformats are amazing"
+        ],
+        "author": [
+            {
+                "type": [
+                    "h-card"
+                ],
+                "properties": {
+                    "name": [
+                        "W. Developer"
+                    ],
+                    "url": [
+                        "http://example.com"
+                    ]
+                },
+                "value": "W. Developer"
+            }
+        ],
+        "published": [
+            "2013-06-13 12:00:00"
+        ],
+        "summary": [
+            "In which I extoll the virtues of using microformats."
+        ],
+        "content": [
+            {
+                "html": "\n<p>Blah blah blah</p>\n",
+                "value": "\nBlah blah blah\n"
+            }
+        ]
+      }
+   }]
 
 REST API service
 ----------------

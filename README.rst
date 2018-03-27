@@ -431,6 +431,7 @@ Open Graph extraction
 ++++++++++++++++++++++++++++++
 
 ::
+
   >>> import pprint
   >>> pp = pprint.PrettyPrinter(indent=2)
   >>>
@@ -502,6 +503,7 @@ Microformat extraction
 ++++++++++++++++++++++++++++++
 
 ::
+
   >>> import pprint
   >>> pp = pprint.PrettyPrinter(indent=2)
   >>>

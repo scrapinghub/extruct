@@ -69,6 +69,7 @@ First fetch the HTML using python-requests and then feed the response body to ``
 >>> pp = pprint.PrettyPrinter(indent=2)
 >>> r = requests.get('https://www.optimizesmart.com/how-to-use-open-graph-protocol/')
 >>> data = extruct.extract(r.text, r.url)
+
 >>> pp.pprint(data)
 { 'json-ld': [ { '@context': 'https://schema.org',
                  '@id': '#organization',
@@ -165,6 +166,7 @@ Another example with a page from SongKick containing RDFa, JSON-LD and Open Grap
 
   >>> r = requests.get('http://www.songkick.com/artists/236156-elysian-fields')
   >>> data = extruct.extract(r.text, r.url)
+  >>>
   >>> pp.pprint(data)
   { 'json-ld': [ { '@context': 'http://schema.org',
                    '@type': 'MusicEvent',

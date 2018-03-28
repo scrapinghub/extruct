@@ -1,65 +1,30 @@
 import argparse
 import json
-
-import lxml
 import requests
-from extruct.jsonld import JsonLdExtractor
-from extruct.rdfa import RDFaExtractor
-from extruct.w3cmicrodata import MicrodataExtractor
-from extruct.xmldom import XmlDomHTMLParser
+import extruct
+from extruct import SYNTAXES
 
-
-def metadata_from_url(url, microdata=True, jsonld=True, rdfa=True):
+def metadata_from_url(url, syntaxes=SYNTAXES):
     resp = requests.get(url, timeout=30)
     result = {'url': url, 'status': '{} {}'.format(resp.status_code, resp.reason)}
     try:
         resp.raise_for_status()
     except requests.exceptions.HTTPError:
         return result
-
-    parser = XmlDomHTMLParser(encoding=resp.encoding)
-    tree = lxml.html.fromstring(resp.content, parser=parser)
-
-    if microdata:
-        mde = MicrodataExtractor(nested=True)
-        result['microdata'] = mde.extract_items(tree, resp.url)
-
-    if jsonld:
-        jsonlde = JsonLdExtractor()
-        result['json-ld'] = jsonlde.extract_items(tree, resp.url)
-
-    if rdfa:
-        rdfae = RDFaExtractor()
-        result['rdfa'] = rdfae.extract_items(tree, resp.url)
-
+    result.update(extruct.extract(resp.content, url=url, syntaxes=syntaxes))
     return result
 
 
-def main():
+def main(args=None):
     parser = argparse.ArgumentParser(prog='extruct', description=__doc__)
-    parser.add_argument('url', help='The target URL')
-    parser.add_argument(
-        '--microdata',
-        action='store_true',
-        default=False,
-        help='Extract W3C Microdata from the page.',
-    )
-    parser.add_argument(
-        '--jsonld',
-        action='store_true',
-        default=False,
-        help='Extract JSON-LD metadata from the page.',
-    )
-    parser.add_argument(
-        '--rdfa',
-        action='store_true',
-        default=False,
-        help='Extract RDFa metadata from the page.',
-    )
-    args = parser.parse_args()
-
-    if any((args.microdata, args.jsonld, args.rdfa)):
-        metadata = metadata_from_url(args.url, args.microdata, args.jsonld, args.rdfa)
-    else:
-        metadata = metadata_from_url(args.url)
+    arg = parser.add_argument
+    arg('url', help='The target URL')
+    arg('--syntaxes', nargs='+',
+        choices=SYNTAXES,
+        default=SYNTAXES,
+        help='List of syntaxes to extract. Valid values any or all (default):'
+             'microdata, opengraph, microformat json-ld, rdfa.'
+             'Example: --syntaxes microdata opengraph json-ld')
+    args = parser.parse_args(args)
+    metadata = metadata_from_url(args.url, args.syntaxes)
     return json.dumps(metadata, indent=2, sort_keys=True)

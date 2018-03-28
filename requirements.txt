@@ -6,3 +6,4 @@ gevent
 requests
 rdflib
 rdflib-jsonld
+mf2py

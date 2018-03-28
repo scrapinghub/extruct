@@ -20,9 +20,9 @@ def JSON(func):
     return _decorated
 
 
-def async_extruct(url, microdata=True, jsonld=True, rdfa=True):
+def async_extruct(url, **kwargs):
     response.content_type = 'application/json'
-    result = metadata_from_url(url, microdata, jsonld, rdfa)
+    result = metadata_from_url(url, **kwargs)
     return result
 
 

@@ -46,9 +46,10 @@ def extract(htmlstring, url='http://www.example.com/', encoding="UTF-8",
                                                     html=htmlstring)]
         except Exception:
             if errors == 'log':
-                logger.exception("Failed to parse %s", url)
+                logger.exception("Failed to extract {} from {}".format(label, url))
             if errors == 'ignore':
                 pass
             if errors == 'strict':
+                print("Failed to extract {} from {}".format(label, url))
                 raise
     return output

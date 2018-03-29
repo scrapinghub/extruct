@@ -50,6 +50,5 @@ def extract(htmlstring, url='http://www.example.com/', encoding="UTF-8",
             if errors == 'ignore':
                 pass
             if errors == 'strict':
-                print("Failed to extract {} from {}".format(label, url))
                 raise
     return output

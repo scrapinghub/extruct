@@ -15,6 +15,9 @@ HTML_OR_JS_COMMENTLINE = re.compile('^\s*(//.*|<!--.*-->)')
 class JsonLdExtractor(object):
     _xp_jsonld = lxml.etree.XPath('descendant-or-self::script[@type="application/ld+json"]')
 
+    def __init__(self, allow_control_characters=True):
+        self.strict = not allow_control_characters
+
     def extract(self, htmlstring, url='http://www.example.com/', encoding="UTF-8"):
         parser = lxml.html.HTMLParser(encoding=encoding)
         lxmldoc = lxml.html.fromstring(htmlstring, parser=parser)
@@ -32,7 +35,8 @@ class JsonLdExtractor(object):
             data = json.loads(script)
         except ValueError:
             # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
-            data = json.loads(HTML_OR_JS_COMMENTLINE.sub('', script))
+            data = json.loads(HTML_OR_JS_COMMENTLINE.sub('', script),
+                              strict=self.strict)
         if isinstance(data, list):
             return data
         elif isinstance(data, dict):

@@ -1,0 +1,46 @@
+[
+    {
+        "servesCuisine": "gelato", 
+        "name": "Costa 39 gelateria", 
+        "sameAs": "https://www.cosaordino.it/locale/838/bologna/costa-39-gelateria", 
+        "geo": {
+            "latitude": 44.4946207, 
+            "@type": "GeoCoordinates", 
+            "longitude": 11.3144884
+        }, 
+        "image": "https://www.cosaordino.it//pictures/locale/wxthumb/1bd054d76743e70f6fc4ddd5c9d30013_thumb.jpg", 
+        "telephone": "CosaordinoDelivery: 02-40031053\t", 
+        "aggregateRating": {
+            "worstRating": "0", 
+            "bestRating": "0", 
+            "ratingCount": "0", 
+            "@type": "AggregateRating", 
+            "ratingValue": "0"
+        }, 
+        "potentialAction": {
+            "deliveryMethod": [
+                "http://purl.org/goodrelations/v1#DeliveryModeOwnFleet"
+            ], 
+            "@type": "OrderAction", 
+            "target": {
+                "url": "https://www.cosaordino.it/info/838/bologna/costa-39-gelateria", 
+                "inLanguage": "it-IT", 
+                "actionPlatform": [
+                    "http://schema.org/DesktopWebPlatform", 
+                    "http://schema.org/MobileWebPlatform"
+                ]
+            }
+        }, 
+        "address": {
+            "addressCountry": "IT", 
+            "addressLocality": "Bologna", 
+            "addressRegion": "Bologna", 
+            "streetAddress": "via Andrea Costa, 39", 
+            "postalCode": "40134", 
+            "@type": "PostalAddress"
+        }, 
+        "@context": "http://schema.org", 
+        "@id": "https://www.cosaordino.it/locale/838/bologna/costa-39-gelateria", 
+        "@type": "Restaurant"
+    }
+]

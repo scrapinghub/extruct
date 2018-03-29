@@ -44,11 +44,11 @@ def extract(htmlstring, url='http://www.example.com/', encoding="UTF-8",
             output[label] = [obj for obj in extract(document=tree,
                                                     url=url,
                                                     html=htmlstring)]
-        except Exception as e:
+        except Exception:
             if errors == 'log':
-                logger.exception("Failed to parse %s", url)
+                logger.exception("Failed to extract {} from {}".format(label, url))
             if errors == 'ignore':
                 pass
             if errors == 'strict':
-                raise e
+                raise
     return output

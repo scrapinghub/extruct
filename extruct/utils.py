@@ -1,6 +1,11 @@
 import json
 import sys
 
+
+# Python 2 is a vengeful fossil
+native_json_exc = getattr(json, 'JSONDecodeError', ValueError)
+
+
 _json_decoder = json.loads
 _json_decoder_raises = tuple()  # Better not to catch built-in errors at all!
 def set_json_decoder(loader_func=_json_decoder,
@@ -38,19 +43,15 @@ def json_loads(json_string):
         data = _json_decoder(json_string)
     except _json_decoder_raises as E:
         # TODO: Deprecate with Python 2. Reason: Prefer exception chaining with `raise from`
+        if isinstance(E, native_json_exc):
+            raise
         _, _, traceback = sys.exc_info()
         if sys.version_info < (3,):
-            if isinstance(E, ValueError):
-                raise
-            else:
-                raise ValueError("Error decoding document: {}".format(traceback))
+            raise ValueError("Error decoding document: {}".format(traceback))
         else:
-            if isinstance(E, json.JSONDecodeError):
-                raise
-            else:
-                raise json.JSONDecodeError(
-                    msg="Error decoding document (error index unknown, see preceding traceback)",
-                    doc=json_string,
-                    pos=0,
-                    ).with_traceback(traceback)
+            raise json.JSONDecodeError(
+                msg="Error decoding document (error index unknown, see preceding traceback)",
+                doc=json_string,
+                pos=0,
+                ).with_traceback(traceback)
     return data

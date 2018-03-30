@@ -5,10 +5,6 @@ import json
 from extruct import utils
 
 
-# Python 2 is a vengeful fossil
-native_json_exc = getattr(json, 'JSONDecodeError', ValueError)
-
-
 class NotAJSONDecodeError(ValueError):
     pass
 
@@ -22,7 +18,7 @@ class _json_shimmer:
             raise ValueError("Yes sir")
         try:
             return json.loads(json_string)
-        except native_json_exc:
+        except utils.native_json_exc:
             raise NotAJSONDecodeError("This operation totally failed")
         finally:
             self.invoked = True
@@ -35,7 +31,7 @@ class TestJson(unittest.TestCase):
         self.assertEqual(utils._json_decoder, json.loads)
         self.assertEqual(utils._json_decoder_raises, tuple())
         self.assertEqual(utils.json_loads('{}'), {})
-        with self.assertRaises(native_json_exc):  # ugh, Python 2
+        with self.assertRaises(utils.native_json_exc):  # ugh, Python 2
             utils.json_loads('{')
         # Set decoder, try again
         shimmer = _json_shimmer()
@@ -46,7 +42,7 @@ class TestJson(unittest.TestCase):
         # ensure utils.json_loads didn't call a stale reference to json.loads
         self.assertTrue(shimmer.invoked)
         # Specified exceptions should be converted to JSONDecodeErrors.
-        with self.assertRaises(native_json_exc):
+        with self.assertRaises(utils.native_json_exc):
             utils.json_loads('{')
         # Others should not.
         with self.assertRaises(ValueError):

@@ -40,7 +40,10 @@ def json_loads(json_string):
         # TODO: Deprecate with Python 2. Reason: Prefer exception chaining with `raise from`
         _, _, traceback = sys.exc_info()
         if sys.version_info < (3,):
-            raise ValueError("Error decoding document: {}".format(traceback))
+            if isinstance(E, ValueError):
+                raise
+            else:
+                raise ValueError("Error decoding document: {}".format(traceback))
         else:
             if isinstance(E, json.JSONDecodeError):
                 raise

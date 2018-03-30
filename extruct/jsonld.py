@@ -3,7 +3,7 @@
 JSON-LD extractor
 """
 
-import json
+from extruct import utils
 import re
 
 import lxml.etree
@@ -29,10 +29,10 @@ class JsonLdExtractor(object):
     def _extract_items(self, node):
         script = node.xpath('string()')
         try:
-            data = json.loads(script)
-        except ValueError:
+            data = utils.json_loads(script)
+        except utils.native_json_exc:
             # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
-            data = json.loads(HTML_OR_JS_COMMENTLINE.sub('', script))
+            data = utils.json_loads(HTML_OR_JS_COMMENTLINE.sub('', script))
         if isinstance(data, list):
             return data
         elif isinstance(data, dict):

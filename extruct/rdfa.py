@@ -4,7 +4,7 @@ RDFa extractor
 
 Based on pyrdfa3 and rdflib
 """
-import json
+from extruct import utils
 import logging
 rdflib_logger = logging.getLogger('rdflib')
 rdflib_logger.setLevel(logging.ERROR)
@@ -48,4 +48,4 @@ class RDFaExtractor(object):
 
         g = PyRdfa(options, base=url).graph_from_DOM(document, graph=Graph(), pgraph=Graph())
         jsonld_string = g.serialize(format='json-ld', auto_compact=not expanded).decode('utf-8')
-        return json.loads(jsonld_string)
+        return utils.json_loads(jsonld_string)

@@ -2,6 +2,7 @@
 import unittest
 import json
 
+import ujson
 from extruct import utils
 
 
@@ -47,3 +48,9 @@ class TestJson(unittest.TestCase):
         # Others should not.
         with self.assertRaises(ValueError):
             utils.json_loads('FAIL WITH VALUEERROR')
+
+    def test_ujson(self):
+        utils.set_json_decoder(ujson.loads, (ValueError,))
+        self.assertEqual(utils._json_decoder, ujson.loads)
+        self.assertEqual(utils._json_decoder_raises, (ValueError,))
+        self.assertEqual(utils.json_loads('{"foo": "bar"}'), {'foo': 'bar'})

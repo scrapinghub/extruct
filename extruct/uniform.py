@@ -1,4 +1,4 @@
-from urllib.parse import urlparse, urljoin
+from six.moves.urllib.parse import urlparse, urljoin
 
 def _uopengraph(extracted):
     out = []
@@ -52,6 +52,10 @@ def _flatten_dict(d, schema_context, add_context):
             ]
         out[field] = value
     return out
+
+
+def _rdfa(extracted):
+
 
 
 def _infer_context(c, default='http://schema.org'):

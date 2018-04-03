@@ -5,7 +5,7 @@ import lxml.html
 class OpenGraphExtractor(object):
     """OpenGraph extractor following extruct API."""
 
-    def extract(self, htmlstring, url='http://www.example.com/', encoding='UTF-8'):
+    def extract(self, htmlstring, url=None, encoding='UTF-8'):
         parser = lxml.html.HTMLParser(encoding=encoding)
         doc = lxml.html.fromstring(htmlstring, parser=parser)
         return list(self.extract_items(doc))

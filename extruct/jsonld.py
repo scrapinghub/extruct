@@ -15,7 +15,7 @@ HTML_OR_JS_COMMENTLINE = re.compile('^\s*(//.*|<!--.*-->)')
 class JsonLdExtractor(object):
     _xp_jsonld = lxml.etree.XPath('descendant-or-self::script[@type="application/ld+json"]')
 
-    def extract(self, htmlstring, url='http://www.example.com/', encoding="UTF-8"):
+    def extract(self, htmlstring, url=None, encoding="UTF-8"):
         parser = lxml.html.HTMLParser(encoding=encoding)
         lxmldoc = lxml.html.fromstring(htmlstring, parser=parser)
         return self.extract_items(lxmldoc)

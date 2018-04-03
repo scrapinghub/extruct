@@ -28,7 +28,7 @@ setup(
     },
     packages=find_packages(exclude=['tests',]),
     package_data={'extruct': ['VERSION']},
-    install_requires=['lxml', 'rdflib', 'rdflib-jsonld'],
+    install_requires=['lxml', 'rdflib', 'rdflib-jsonld', 'six', 'mf2py'],
     extras_require={
         'service': [
             'bottle',

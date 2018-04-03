@@ -54,10 +54,6 @@ def _flatten_dict(d, schema_context, add_context):
     return out
 
 
-def _rdfa(extracted):
-
-
-
 def _infer_context(c, default='http://schema.org'):
     parsed_context = urlparse(c)
     context, typ = default, c # default if cannot be inferred

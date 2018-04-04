@@ -10,7 +10,7 @@ from extruct.xmldom import XmlDomHTMLParser
 logger = logging.getLogger(__name__)
 SYNTAXES = ['microdata', 'opengraph', 'json-ld', 'microformat', 'rdfa']
 
-def extract(htmlstring, url='http://www.example.com/', encoding="UTF-8",
+def extract(htmlstring, url=None, encoding="UTF-8",
             syntaxes=SYNTAXES,
             errors='strict'):
     """htmlstring: string with valid html document;

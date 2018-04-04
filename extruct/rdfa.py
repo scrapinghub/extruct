@@ -29,7 +29,7 @@ initial_context["http://www.w3.org/2011/rdfa-context/rdfa-1.1"].ns.update({
 
 class RDFaExtractor(object):
 
-    def extract(self, htmlstring, url='http://www.example.com/', encoding="UTF-8",
+    def extract(self, htmlstring, url=None, encoding="UTF-8",
             expanded=True):
 
         domparser = XmlDomHTMLParser(encoding=encoding)

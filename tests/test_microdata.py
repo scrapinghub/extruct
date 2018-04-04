@@ -150,3 +150,24 @@ class TestMicrodataWithText(unittest.TestCase):
         mde = MicrodataExtractor(add_text_content=True)
         data = mde.extract(body)
         self.assertEqual(data, expected)
+
+
+class TestUrlJoin(unittest.TestCase):
+
+    maxDiff = None
+
+    def test_join_none(self):
+        body = get_testdata('schema.org', 'product.html')
+        expected = json.loads(get_testdata('schema.org', 'product.json').decode('UTF-8'))
+
+        mde = MicrodataExtractor()
+        data = mde.extract(body)
+        self.assertEqual(data, expected)
+
+    def test_join_custom_url(self):
+        body = get_testdata('schema.org', 'product.html')
+        expected = json.loads(get_testdata('schema.org', 'product_custom_url.json').decode('UTF-8'))
+
+        mde = MicrodataExtractor()
+        data = mde.extract(body, url='http://example.com')
+        self.assertEqual(data, expected)

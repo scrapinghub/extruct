@@ -7,3 +7,4 @@ requests
 rdflib
 rdflib-jsonld
 mf2py
+w3lib

@@ -2,7 +2,7 @@ import mf2py
 
 class MicroformatExtractor(object):
 
-    def extract(self, htmlstring, url='http://www.example.com/', encoding='UTF-8'):
+    def extract(self, htmlstring, url=None, encoding='UTF-8'):
         return list(self.extract_items(htmlstring, url=url))
 
     def extract_items(self, html, url, document=None):

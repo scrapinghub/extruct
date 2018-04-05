@@ -1,6 +1,6 @@
 [
     {
-        "@type": "[h-entry]",
+        "@type": ["h-entry"],
         "@context": "http://microformats.org/wiki/",
         "name": [
             "Microformats are amazing"

@@ -13,18 +13,19 @@ def _uopengraph(extracted):
         out.append(flattened)
     return out
 
+
 def _umicrodata_microformat(extracted, schema_context):
     res = []
     if isinstance(extracted, list):
         for obj in extracted:
-            res.append(_flatten_dict(obj, schema_context, True))
+            res.append(flatten_dict(obj, schema_context, True))
     if isinstance(extracted, dict):
-        res.append(_flatten_dict(extracted, schema_context, False))
+        res.append(flatten_dict(extracted, schema_context, False))
 
     return res
 
 
-def _flatten_dict(d, schema_context, add_context):
+def flatten_dict(d, schema_context, add_context):
     typ = d.get('type', None)
     if not typ:
         return d
@@ -33,7 +34,7 @@ def _flatten_dict(d, schema_context, add_context):
         assert len(typ), "Multiple types not supported, storing the first one"
         typ = typ[0]
 
-    context, typ = _infer_context(typ, schema_context)
+    context, typ = infer_context(typ, schema_context)
 
     out = {k: v for (k, v) in d.items() if k not in ['type', 'properties']}
     out['@type'] = typ
@@ -43,10 +44,11 @@ def _flatten_dict(d, schema_context, add_context):
     props = d.get('properties') or {}
     for field, value in props.items():
         if isinstance(value, dict):
-            value = _flatten_dict(value, schema_context, False)
-        elif isinstance(value, list):
+            value = flatten_dict(value, schema_context, False)
+        elif isinstance(value,
+        list):
             value = [
-                _flatten_dict(o, schema_context, False)
+                flatten_dict(o, schema_context, False)
                 if isinstance(o, dict) else o
                 for o in value
             ]
@@ -54,7 +56,7 @@ def _flatten_dict(d, schema_context, add_context):
     return out
 
 
-def _infer_context(c, default='http://schema.org'):
+def infer_context(c, default='http://schema.org'):
     parsed_context = urlparse(c)
     context, typ = default, c # default if cannot be inferred
     if parsed_context.netloc:
@@ -66,4 +68,3 @@ def _infer_context(c, default='http://schema.org'):
             context = base
             typ = parsed_context.path.strip('/')
     return context, typ
-    

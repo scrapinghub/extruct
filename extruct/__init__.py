@@ -23,10 +23,8 @@ def extract(htmlstring, url=None, encoding="UTF-8",
        errors: set to 'log' to save exceptions to file, 'ignore' to ignore them
                or 'strict'(default) to raise them
        uniform: if True uniform output format of all syntaxes to a list of dicts.
-                NB: Uniform can cause the loss of some information if structure
-                it's no supported.
                 Returned dicts structure:
-                {'@context': 'http://example.com, 
+                {'@context': 'http://example.com', 
                  '@type': 'example_type',
                  /* All other the properties in keys here */
                  }

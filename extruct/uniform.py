@@ -1,5 +1,6 @@
 from six.moves.urllib.parse import urlparse, urljoin
 
+
 def _uopengraph(extracted):
     out = []
     for obj in extracted:
@@ -19,29 +20,29 @@ def _umicrodata_microformat(extracted, schema_context):
     if isinstance(extracted, list):
         for obj in extracted:
             res.append(flatten_dict(obj, schema_context, True))
-    if isinstance(extracted, dict):
+    elif isinstance(extracted, dict):
         res.append(flatten_dict(extracted, schema_context, False))
 
     return res
 
 
 def flatten_dict(d, schema_context, add_context):
-    typ = d.get('type', None)
+    out = dict(d)
+    typ = out.pop('type', None)
     if not typ:
         return d
 
     if isinstance(typ, list):
-        assert len(typ), "Multiple types not supported, storing the first one"
-        typ = typ[0]
-
-    context, typ = infer_context(typ, schema_context)
-
-    out = {k: v for (k, v) in d.items() if k not in ['type', 'properties']}
-    out['@type'] = typ
+        out['@type'] = typ
+        context = schema_context
+    else:
+        context, typ = infer_context(typ, schema_context)
+        out['@type'] = typ
+    
     if add_context:
         out['@context'] = context
 
-    props = d.get('properties') or {}
+    props = out.pop('properties', {})
     for field, value in props.items():
         if isinstance(value, dict):
             value = flatten_dict(value, schema_context, False)
@@ -56,9 +57,8 @@ def flatten_dict(d, schema_context, add_context):
     return out
 
 
-def infer_context(c, default='http://schema.org'):
-    parsed_context = urlparse(c)
-    context, typ = default, c # default if cannot be inferred
+def infer_context(typ, context='http://schema.org'):
+    parsed_context = urlparse(typ)
     if parsed_context.netloc:
         base = ''.join([parsed_context.scheme, '://', parsed_context.netloc])
         if parsed_context.path and parsed_context.fragment:

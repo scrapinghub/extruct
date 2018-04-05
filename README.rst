@@ -207,11 +207,11 @@ It is possible to select which syntaxes to extract by passing a list with the de
 
 Uniform
 +++++++
-Another option is to uniform the output of microformat, opengraph, microdata and json-ld syntaxes to the following structure: ::
- {'@context': 'http://example.com', 
+Another option is to uniform the output of microformat, opengraph, microdata and json-ld syntaxes to the following structure: 
+```{'@context': 'http://example.com', 
               '@type': 'example_type',
               /* All other the properties in keys here */
-              }
+              }```
 
 To do so set `uniform=True` when calling `extract`, it's false by default for backward compatibility. Here the same example as before: ::
   >>> r = requests.get('http://www.songkick.com/artists/236156-elysian-fields')

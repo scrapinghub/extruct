@@ -162,91 +162,14 @@ First fetch the HTML using python-requests and then feed the response body to ``
                 'http://ogp.me/ns#url': [ { '@value': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/'}],
                 'https://api.w.org/': [ { '@id': 'https://www.optimizesmart.com/wp-json/'}]}]}
 
-
-Another example with a page from SongKick containing RDFa, JSON-LD and Open Graph metadata::
+**Select syntaxes**
+It is possible to select which syntaxes to extract by passing a list with the desired ones to extract. Valid values: 'microdata', 'json-ld', 'opengraph', 'microformat', 'rdfa'. If no list is passed all syntaxes will be extracted and returned::
 
   >>> r = requests.get('http://www.songkick.com/artists/236156-elysian-fields')
-  >>> data = extruct.extract(r.text, r.url)
+  >>> data = extruct.extract(r.text, r.url, syntaxes=['microdata', 'opengraph', 'rdfa'])
   >>>
   >>> pp.pprint(data)
-  { 'json-ld': [ { '@context': 'http://schema.org',
-                   '@type': 'MusicEvent',
-                   'location': { '@type': 'Place',
-                                 'address': { '@type': 'PostalAddress',
-                                              'addressCountry': 'US',
-                                              'addressLocality': 'Brooklyn',
-                                              'addressRegion': 'NY',
-                                              'postalCode': '11225',
-                                              'streetAddress': '497 Rogers Ave'},
-                                 'geo': { '@type': 'GeoCoordinates',
-                                          'latitude': 40.660109,
-                                          'longitude': -73.953193},
-                                 'name': 'The Owl Music Parlor',
-                                 'sameAs': 'http://www.theowl.nyc'},
-                   'name': 'Elysian Fields',
-                   'performer': [ { '@type': 'MusicGroup',
-                                    'name': 'Elysian Fields',
-                                    'sameAs': 'https://www.songkick.com/artists/236156-elysian-fields?utm_medium=organic&utm_source=microformat'}],
-                   'startDate': '2017-06-10T19:30:00-0400',
-                   'url': 'https://www.songkick.com/concerts/30173984-elysian-fields-at-owl-music-parlor?utm_medium=organic&utm_source=microformat'},
-                 { '@context': 'http://schema.org',
-                   '@type': 'MusicEvent',
-                   'location': { '@type': 'Place',
-                                 'address': { '@type': 'PostalAddress',
-                                              'addressCountry': 'US',
-                                              'addressLocality': 'San Francisco',
-                                              'addressRegion': 'CA',
-                                              'postalCode': '94107',
-                                              'streetAddress': '500 Fourth '
-                                                               'Street'},
-                                 'geo': { '@type': 'GeoCoordinates',
-                                          'latitude': 37.7795638,
-                                          'longitude': -122.398023},
-                                 'name': 'Hotel Utah Saloon',
-                                 'sameAs': 'http://www.hotelutah.com/'},
-                   'name': 'Elysian Fields',
-                   'performer': [ { '@type': 'MusicGroup',
-                                    'name': 'Elysian Fields',
-                                    'sameAs': 'https://www.songkick.com/artists/236156-elysian-fields?utm_medium=organic&utm_source=microformat'},
-                                  { '@type': 'MusicGroup',
-                                    'name': 'Chocolate Genius Inc.',
-                                    'sameAs': 'https://www.songkick.com/artists/1009602-chocolate-genius-inc?utm_medium=organic&utm_source=microformat'}],
-                   'startDate': '2017-04-26T20:00:00-0700',
-                   'url': 'https://www.songkick.com/concerts/29673614-elysian-fields-at-hotel-utah-saloon?utm_medium=organic&utm_source=microformat'},
-                 { '@context': 'http://schema.org',
-                   '@type': 'MusicEvent',
-                   'location': { '@type': 'Place',
-                                 'address': { '@type': 'PostalAddress',
-                                              'addressCountry': 'France',
-                                              'addressLocality': 'Saint-Nazaire',
-                                              'postalCode': '44600',
-                                              'streetAddress': 'Alvéole 14 de la '
-                                                               'base sous-Marine '
-                                                               'Bd de la Légion '
-                                                               'd’Honneur'},
-                                 'geo': { '@type': 'GeoCoordinates',
-                                          'latitude': 47.2755434,
-                                          'longitude': -2.2022817},
-                                 'name': 'VIP',
-                                 'sameAs': 'http://www.levip-saintnazaire.com/'},
-                   'name': 'Elysian Fields',
-                   'performer': [ { '@type': 'MusicGroup',
-                                    'name': 'Elysian Fields',
-                                    'sameAs': 'https://www.songkick.com/artists/236156-elysian-fields?utm_medium=organic&utm_source=microformat'},
-                                  { '@type': 'MusicGroup',
-                                    'name': 'Troy Von Balthazar',
-                                    'sameAs': 'https://www.songkick.com/artists/355304-troy-von-balthazar?utm_medium=organic&utm_source=microformat'}],
-                   'startDate': '2016-10-29T21:00:00+0200',
-                   'url': 'https://www.songkick.com/concerts/27626524-elysian-fields-at-vip?utm_medium=organic&utm_source=microformat'},
-                 { '@context': 'http://schema.org',
-                   '@type': 'MusicGroup',
-                   'image': 'https://images.sk-static.com/images/media/profile_images/artists/236156/card_avatar',
-                   'interactionCount': '6100 UserLikes',
-                   'logo': 'https://images.sk-static.com/images/media/profile_images/artists/236156/card_avatar',
-                   'name': 'Elysian Fields',
-                   'url': 'https://www.songkick.com/artists/236156-elysian-fields?utm_medium=organic&utm_source=microformat'}],
-    'microdata': [],
-    'microformat': [],
+  { 'microdata': [],
     'opengraph': [ { 'namespace': { 'concerts': 'http://ogp.me/ns/fb/songkick-concerts#',
                                     'fb': 'http://www.facebook.com/2008/fbml',
                                     'og': 'http://ogp.me/ns#'},
@@ -280,6 +203,55 @@ Another example with a page from SongKick containing RDFa, JSON-LD and Open Grap
                 'http://ogp.me/ns#url': [ { '@value': 'https://www.songkick.com/artists/236156-elysian-fields'}],
                 'http://www.facebook.com/2008/fbmlapp_id': [ { '@value': '308540029359'}]}]}
 
+
+Uniform
+-------
+Another option is to uniform the output of microformat, opengraph, microdata and json-ld syntaxes to the following structure: ::
+ {'@context': 'http://example.com', 
+              '@type': 'example_type',
+              /* All other the properties in keys here */
+              }
+
+To do so set `uniform=True` when calling `extract`, it's false by default for backward compatibility. Here the same example as before: ::
+  >>> r = requests.get('http://www.songkick.com/artists/236156-elysian-fields')
+  >>> data = extruct.extract(r.text, r.url, syntaxes=['microdata', 'opengraph', 'rdfa'], uniform=True)
+  >>>
+  >>> pp.pprint(data)
+  { 'microdata': [],
+    'opengraph': [ { '@context': { 'concerts': 'http://ogp.me/ns/fb/songkick-concerts#',
+                                 'fb': 'http://www.facebook.com/2008/fbml',
+                                 'og': 'http://ogp.me/ns#'},
+                   '@type': 'songkick-concerts:artist',
+                   'fb:app_id': '308540029359',
+                   'og:description': 'Find out when Elysian Fields is next '
+                                     'playing live near you. List of all '
+                                     'Elysian Fields tour dates and concerts.',
+                   'og:image': 'http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg',
+                   'og:site_name': 'Songkick',
+                   'og:title': 'Elysian Fields',
+                   'og:url': 'https://www.songkick.com/artists/236156-elysian-fields'}],
+    'rdfa': [ { '@id': 'https://www.songkick.com/artists/236156-elysian-fields',
+                'al:ios:app_name': [{'@value': 'Songkick Concerts'}],
+                'al:ios:app_store_id': [{'@value': '438690886'}],
+                'al:ios:url': [ { '@value': 'songkick://artists/236156-elysian-fields'}],
+                'http://ogp.me/ns#description': [ { '@value': 'Find out when '
+                                                              'Elysian Fields is '
+                                                              'next playing live '
+                                                              'near you. List of '
+                                                              'all Elysian '
+                                                              'Fields tour dates '
+                                                              'and concerts.'}],
+                'http://ogp.me/ns#image': [ { '@value': 'http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg'}],
+                'http://ogp.me/ns#site_name': [{'@value': 'Songkick'}],
+                'http://ogp.me/ns#title': [{'@value': 'Elysian Fields'}],
+                'http://ogp.me/ns#type': [{'@value': 'songkick-concerts:artist'}],
+                'http://ogp.me/ns#url': [ { '@value': 'https://www.songkick.com/artists/236156-elysian-fields'}],
+                'http://www.facebook.com/2008/fbmlapp_id': [ { '@value': '308540029359'}]}]}
+
+NB rdfa structure is not uniformed yet
+
+Single extractors
+-----------------
 
 You can also use each extractor individually. See below.
 
@@ -703,7 +675,7 @@ Supported Parameters
 By default, the command line tool will try to extract all the supported
 metadata formats from the page (currently Microdata, JSON-LD, RDFa, Open Graph
 and Microformat). If you want to restrict the output to just one or a subset of
-those, you can pass their individual names through 'syntaxes' argument.
+those, you can pass their individual names collected in a list through 'syntaxes' argument.
 
 For example, this command extracts only Microdata and JSON-LD metadata from
 "http://example.com"::

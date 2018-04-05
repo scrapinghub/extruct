@@ -1,13 +1,13 @@
 [
     {
-        "@type": "h-entry",
+        "@type": "[h-entry]",
         "@context": "http://microformats.org/wiki/",
         "name": [
             "Microformats are amazing"
         ],
         "author": [
             {
-                "@type": "h-card",
+                "@type": ["h-card"],
                 "name": [
                     "W. Developer"
                 ],

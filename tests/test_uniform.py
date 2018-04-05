@@ -27,9 +27,9 @@ class TestUniform(unittest.TestCase):
 
     def test_umicroformat(self):
         expected = [{        "@context": "http://microformats.org/wiki/",
-                     "@type": "h-entry",
+                     "@type": ["h-entry"],
                      "name": ["Microformats are amazing"],
-                     "author": [{"@type": "h-card",
+                     "author": [{"@type": ["h-card"],
                                  "name": ["W. Developer"],
                                  "url": ["http://example.com"],
                                  "value": "W. Developer"}],

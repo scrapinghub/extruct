@@ -8,3 +8,4 @@ rdflib
 rdflib-jsonld
 mf2py
 six
+w3lib

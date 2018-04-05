@@ -17,7 +17,7 @@ except ImportError:
 
 import lxml.etree
 import lxml.html
-
+from w3lib.html import strip_html5_whitespace
 
 class LxmlMicrodataExtractor(object):
     _xp_item = lxml.etree.XPath('descendant-or-self::*[@itemscope]')
@@ -39,7 +39,7 @@ class LxmlMicrodataExtractor(object):
     def get_docid(self, node):
         return int(self._xp_item_docid(node))
 
-    def extract(self, htmlstring, url='http://www.example.com/', encoding="UTF-8"):
+    def extract(self, htmlstring, url=None, encoding="UTF-8"):
         parser = lxml.html.HTMLParser(encoding=encoding)
         lxmldoc = lxml.html.fromstring(htmlstring, parser=parser)
         return self.extract_items(lxmldoc, url)
@@ -132,13 +132,13 @@ class LxmlMicrodataExtractor(object):
             return node.get("content", "")
 
         elif node.tag in ("audio", "embed", "iframe", "img", "source", "track", "video"):
-            return urljoin(self.url, node.get("src", ""))
+            return urljoin(self.url, strip_html5_whitespace(node.get("src", "")))
 
         elif node.tag in ("a", "area", "link"):
-            return urljoin(self.url, node.get("href", ""))
+            return urljoin(self.url, strip_html5_whitespace(node.get("href", "")))
 
         elif node.tag in ("object",):
-            return urljoin(self.url, node.get("data", ""))
+            return urljoin(self.url, strip_html5_whitespace(node.get("data", "")))
 
         elif node.tag in ("data", "meter"):
             return node.get("value", "")

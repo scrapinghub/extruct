@@ -4,8 +4,6 @@ from six.moves.urllib.parse import urlparse, urljoin
 def _uopengraph(extracted):
     out = []
     for obj in extracted:
-        # FIXME: Handle objects in order.
-        # FIXME: Handle arrays (repeated properties).
         flattened = dict(obj['properties'])
         t = flattened.pop('og:type', None)
         if t:
@@ -46,8 +44,7 @@ def flatten_dict(d, schema_context, add_context):
     for field, value in props.items():
         if isinstance(value, dict):
             value = flatten_dict(value, schema_context, False)
-        elif isinstance(value,
-        list):
+        elif isinstance(value, list):
             value = [
                 flatten_dict(o, schema_context, False)
                 if isinstance(o, dict) else o

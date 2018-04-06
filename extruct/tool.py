@@ -39,5 +39,5 @@ def main(args=None):
     arg('--schema_context', default='http://schema.org', 
         help="schema's context for current page")
     args = parser.parse_args(args)
-    metadata = metadata_from_url(args.url, args.syntaxes)
+    metadata = metadata_from_url(args.url, args.syntaxes, args.uniform, args.schema_context)
     return json.dumps(metadata, indent=2, sort_keys=True)

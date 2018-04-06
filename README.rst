@@ -214,7 +214,7 @@ Another option is to uniform the output of microformat, opengraph, microdata and
                  /* All other the properties in keys here */
                  }
 
-To do so set `uniform=True` when calling `extract`, it's false by default for backward compatibility. Here the same example as before: ::
+To do so set ``uniform=True`` when calling ``extract``, it's false by default for backward compatibility. Here the same example as before but with uniform set to True: ::
 
   >>> r = requests.get('http://www.songkick.com/artists/236156-elysian-fields')
   >>> data = extruct.extract(r.text, r.url, syntaxes=['microdata', 'opengraph', 'rdfa'], uniform=True)

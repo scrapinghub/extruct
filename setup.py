@@ -32,7 +32,8 @@ setup(
                       'rdflib', 
                       'rdflib-jsonld', 
                       'mf2py', 
-                      'w3lib'],
+                      'w3lib',
+                      'six'],
     extras_require={
         'service': [
             'bottle',

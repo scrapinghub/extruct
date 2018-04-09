@@ -1,0 +1,100 @@
+{
+  "microdata": [
+    {
+      "@type": "Book",
+      "@context": "http://schema.org",
+      "id": "http://worldcat.org/entity/work/id/2292573321",
+      "name": "Rouge et le noir",
+      "inLanguage": "fr",
+      "workTranslation": {
+        "@type": "CreativeWork",
+        "id": "http://worldcat.org/entity/work/id/460647",
+        "value": "Red and Black : A New Translation, Backgrounds and Sources, Criticism"
+        }
+      },
+    {
+      "@type": "Person",
+      "@context": "http://schema.org",
+      "id": "http://viaf.org/viaf/17823",
+      "value": "Stendhal"
+    },
+    {
+      "@type": "Book",
+      "@context": "http://schema.org",
+      "id": "http://worldcat.org/entity/work/id/460647",
+      "name": "Red and Black : A New Translation, Backgrounds and Sources, Criticism",
+      "author": {
+        "@type": "Person",
+        "id": "http://viaf.org/viaf/17823",
+        "value": "Stendhal"
+      },
+      "inLanguage": "en",
+      "about": "Psychological fiction, French",
+      "translationOfWork": {
+        "@type": "CreativeWork",
+        "id": "http://worldcat.org/entity/work/id/2292573321",
+        "value": "Rouge et le noir"
+        }
+      },
+    {
+      "@type": "Person",
+      "@context": "http://schema.org",
+      "id": "http://viaf.org/viaf/8453420",
+      "value": "Robert Martin Adams"
+    }
+  ],
+  "json-ld": [
+    {
+      "@context": "http://schema.org",
+      "@type": "WebPage",
+      "breadcrumb": "Books > Literature & Fiction > Classics",
+      "mainEntity": {
+        "@type": "Book",
+        "author": "/author/jd_salinger.html",
+        "bookFormat": "http://schema.org/Paperback",
+        "datePublished": "1991-05-01",
+        "image": "catcher-in-the-rye-book-cover.jpg",
+        "inLanguage": "English",
+        "isbn": "0316769487",
+        "name": "The Catcher in the Rye",
+        "numberOfPages": "224",
+        "offers": {
+          "@type": "Offer",
+          "availability": "http://schema.org/InStock",
+          "price": "6.99",
+          "priceCurrency": "USD"
+        },
+        "publisher": "Little, Brown, and Company",
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4",
+          "reviewCount": "3077"
+        },
+        "review": [
+          {
+            "@type": "Review",
+            "author": "John Doe",
+            "datePublished": "2006-05-04",
+            "name": "A masterpiece of literature",
+            "reviewBody": "I really enjoyed this book. It captures the essential challenge people face as they try make sense of their lives and grow to adulthood.",
+            "reviewRating": {
+              "@type": "Rating",
+              "ratingValue": "5"
+            }
+          },
+          {
+            "@type": "Review",
+            "author": "Bob Smith",
+            "datePublished": "2006-06-15",
+            "name": "A good read.",
+            "reviewBody": "Catcher in the Rye is a fun book. It's a good book to read.",
+            "reviewRating": "4"
+          }
+        ]
+      }
+    }
+  ],
+  "opengraph": [],
+  "microformat": [],
+  "rdfa": []
+}

@@ -6,19 +6,29 @@ from extruct.w3cmicrodata import MicrodataExtractor
 from extruct.opengraph import OpenGraphExtractor
 from extruct.microformat import MicroformatExtractor
 from extruct.xmldom import XmlDomHTMLParser
+from extruct.uniform import _umicrodata_microformat, _uopengraph
 
 logger = logging.getLogger(__name__)
 SYNTAXES = ['microdata', 'opengraph', 'json-ld', 'microformat', 'rdfa']
 
 def extract(htmlstring, url=None, encoding="UTF-8",
             syntaxes=SYNTAXES,
-            errors='strict'):
+            errors='strict',
+            uniform=False,
+            schema_context='http://schema.org'):
     """htmlstring: string with valid html document;
        url: url of the html documents
        encoding: encoding of the html document
        syntaxes: list of syntaxes to extract, default SYNTAXES
        errors: set to 'log' to save exceptions to file, 'ignore' to ignore them
-               or 'strict'(default) to raise them"""
+               or 'strict'(default) to raise them
+       uniform: if True uniform output format of all syntaxes to a list of dicts.
+                Returned dicts structure:
+                {'@context': 'http://example.com', 
+                 '@type': 'example_type',
+                 /* All other the properties in keys here */
+                 }
+       schema_context: schema's context for current page"""
     if not (isinstance(syntaxes, list) and all(v in SYNTAXES for v in syntaxes)):
         raise ValueError("syntaxes must be a list with any or all (default) of"
                          "these values: {}".format(SYNTAXES))
@@ -51,4 +61,14 @@ def extract(htmlstring, url=None, encoding="UTF-8",
                 pass
             if errors == 'strict':
                 raise
+    
+    if uniform:
+        if 'microdata' in syntaxes:
+            output['microdata'] = _umicrodata_microformat(output['microdata'],
+                                                        schema_context=schema_context)
+        if 'microformat' in syntaxes:
+            output['microformat'] = _umicrodata_microformat(output['microformat'],
+                                                          schema_context='http://microformats.org/wiki/')
+        if 'opengraph' in syntaxes:
+            output['opengraph'] = _uopengraph(output['opengraph'])
     return output

@@ -4,7 +4,8 @@ import requests
 import extruct
 from extruct import SYNTAXES
 
-def metadata_from_url(url, syntaxes=SYNTAXES, uniform=False, schema_context='http://schema.org'):
+def metadata_from_url(url, syntaxes=SYNTAXES, uniform=False, 
+                      schema_context='http://schema.org', errors='strict'):
     resp = requests.get(url, timeout=30)
     result = {'url': url, 'status': '{} {}'.format(resp.status_code, resp.reason)}
     try:
@@ -15,7 +16,8 @@ def metadata_from_url(url, syntaxes=SYNTAXES, uniform=False, schema_context='htt
                                   url=url, 
                                   syntaxes=syntaxes, 
                                   uniform=uniform,
-                                  schema_context=schema_context))
+                                  schema_context=schema_context,
+                                  errors=errors))
     return result
 
 
@@ -38,6 +40,12 @@ def main(args=None):
                  }''')
     arg('--schema_context', default='http://schema.org', 
         help="schema's context for current page")
+    arg('--errors',
+        default='log',
+        choices=['strict', 'log', 'ignore'], 
+        help="errors: set to 'log'(default) to log the exceptions, 'ignore' to ignore"
+             " them or 'strict' to raise them")
     args = parser.parse_args(args)
-    metadata = metadata_from_url(args.url, args.syntaxes, args.uniform, args.schema_context)
+    metadata = metadata_from_url(args.url, args.syntaxes, args.uniform, 
+                                 args.schema_context, args.errors)
     return json.dumps(metadata, indent=2, sort_keys=True)

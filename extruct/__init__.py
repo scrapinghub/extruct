@@ -20,7 +20,7 @@ def extract(htmlstring, url=None, encoding="UTF-8",
        url: url of the html documents
        encoding: encoding of the html document
        syntaxes: list of syntaxes to extract, default SYNTAXES
-       errors: set to 'log' to save exceptions to file, 'ignore' to ignore them
+       errors: set to 'log' to log the exceptions, 'ignore' to ignore them
                or 'strict'(default) to raise them
        uniform: if True uniform output format of all syntaxes to a list of dicts.
                 Returned dicts structure:

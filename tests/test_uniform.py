@@ -26,19 +26,32 @@ class TestUniform(unittest.TestCase):
         self.assertEqual(data['opengraph'], expected)
 
     def test_umicroformat(self):
-        expected = [{        "@context": "http://microformats.org/wiki/",
-                     "@type": ["h-entry"],
-                     "name": ["Microformats are amazing"],
-                     "author": [{"@type": ["h-card"],
-                                 "name": ["W. Developer"],
-                                 "url": ["http://example.com"],
-                                 "value": "W. Developer"}],
-                     "published": ["2013-06-13 12:00:00"],
-                     "summary": ["In which I extoll the virtues of using microformats."],
-                     "content": [{
-                                 "html": "\n<p>Blah blah blah</p>\n",
-                                 "value": "\nBlah blah blah\n"
-                                     }]}]
+        expected = [ { '@context': 'http://microformats.org/wiki/',
+                     '@type': ['h-hidden-tablet', 'h-hidden-phone'],
+                     'name': ['']},
+                   { '@context': 'http://microformats.org/wiki/',
+                     '@type': ['h-hidden-phone'],
+                     'children': [ { '@type': [ 'h-hidden-tablet',
+                                                'h-hidden-phone'],
+                                     'name': ['']},
+                                   { '@type': ['h-hidden-phone'],
+                                     'name': [ 'aJ Styles FastLane 2018 15 x '
+                                               '17 Framed Plaque w/ Ring '
+                                               'Canvas'],
+                                     'photo': [ '/on/demandware.static/-/Sites-main/default/dwa3227ee6/images/small/CN1148.jpg']}],
+                     'name': ['']},
+                   { '@context': 'http://microformats.org/wiki/',
+                     '@type': ['h-entry'],
+                     'author': [ { '@type': ['h-card'],
+                                   'name': ['W. Developer'],
+                                   'url': ['http://example.com'],
+                                   'value': 'W. Developer'}],
+                     'content': [ { 'html': '\n<p>Blah blah blah</p>\n',
+                                    'value': '\nBlah blah blah\n'}],
+                     'name': ['Microformats are amazing'],
+                     'published': ['2013-06-13 12:00:00'],
+                     'summary': [ 'In which I extoll the virtues of using '
+                                  'microformats.']}]
         body = get_testdata('misc', 'microformat_test.html')
         data = extruct.extract(body, syntaxes=['microformat'], uniform=True)
         self.assertEqual(data['microformat'], expected)

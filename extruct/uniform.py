@@ -51,6 +51,20 @@ def flatten_dict(d, schema_context, add_context):
                 for o in value
             ]
         out[field] = value
+
+    children = out.pop('children', [])
+    if children:
+        out['children'] = []
+    for child in children:
+        if isinstance(child, dict):
+            child = flatten_dict(child, schema_context, False)
+        elif isinstance(child, list):
+            child = [
+                flatten_dict(o, schema_context, False)
+                if isinstance(o, dict) else o
+                for o in child
+            ]
+        out['children'].append(child)
     return out
 
 

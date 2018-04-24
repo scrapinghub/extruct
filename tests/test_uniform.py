@@ -3,8 +3,9 @@ import extruct
 from tests import get_testdata, jsonize_dict
 from extruct.uniform import *
 
+
 class TestUniform(unittest.TestCase):
-    
+
     maxDiff = None
 
     def test_uopengraph(self):
@@ -73,7 +74,7 @@ class TestUniform(unittest.TestCase):
                           "priceCurrency": "USD",
                           "price": "119.99",
                           "priceValidUntil": "2020-11-05",
-                          "seller": {"@type": "Organization", 
+                          "seller": {"@type": "Organization",
                                      "name": "Executive Objects"},
                           "itemCondition": "http://schema.org/UsedCondition",
                           "availability": "http://schema.org/InStock"
@@ -104,3 +105,31 @@ class TestUniform(unittest.TestCase):
                     "extra_weapon": "fear",
                     "another_one": "ruthless efficiency"}
         self.assertEqual(flatten_dict(d, schema_context='http://schema.org', add_context=True), expected)
+
+
+    def test_flatten(self):
+        d = { 'children': [ { 'properties': {'name': ['']},
+                                             'type': [ 'h-hidden-tablet',
+                                                       'h-hidden-phone']},
+                            { 'properties': { 'name': [ 'aJ Styles '
+                                                        'FastLane 2018 '
+                                                        '15 x 17 Framed '
+                                                        'Plaque w/ Ring '
+                                                        'Canvas'],
+                                              'photo': [ 'path.jpg']},
+                              'type': ['h-hidden-phone']}],
+              'properties': {'name': ['']},
+              'type': ['h-hidden-phone']}
+        expected = { 'children': [ { 'name': [''],
+                                     '@type': [ 'h-hidden-tablet',
+                                                'h-hidden-phone']},
+                                   { 'name': [ 'aJ Styles '
+                                               'FastLane 2018 '
+                                               '15 x 17 Framed '
+                                               'Plaque w/ Ring '
+                                               'Canvas'],
+                                    'photo': [ 'path.jpg'],
+                                    '@type': ['h-hidden-phone']}],
+                    'name': [''],
+                    '@type': ['h-hidden-phone']}
+        self.assertEqual(flatten(d, schema_context='http://schema.org'), expected)

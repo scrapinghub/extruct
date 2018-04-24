@@ -20,8 +20,19 @@ def _umicrodata_microformat(extracted, schema_context):
             res.append(flatten_dict(obj, schema_context, True))
     elif isinstance(extracted, dict):
         res.append(flatten_dict(extracted, schema_context, False))
-
     return res
+
+
+def flatten(element, schema_context):
+    if isinstance(element, dict):
+        element = flatten_dict(element, schema_context, False)
+    elif isinstance(element, list):
+        element = [
+            flatten_dict(o, schema_context, False)
+            if isinstance(o, dict) else o
+            for o in element
+        ]
+    return element
 
 
 def flatten_dict(d, schema_context, add_context):
@@ -36,34 +47,20 @@ def flatten_dict(d, schema_context, add_context):
     else:
         context, typ = infer_context(typ, schema_context)
         out['@type'] = typ
-    
+
     if add_context:
         out['@context'] = context
 
     props = out.pop('properties', {})
     for field, value in props.items():
-        if isinstance(value, dict):
-            value = flatten_dict(value, schema_context, False)
-        elif isinstance(value, list):
-            value = [
-                flatten_dict(o, schema_context, False)
-                if isinstance(o, dict) else o
-                for o in value
-            ]
+        value = flatten(value, schema_context)
         out[field] = value
 
     children = out.pop('children', [])
     if children:
         out['children'] = []
     for child in children:
-        if isinstance(child, dict):
-            child = flatten_dict(child, schema_context, False)
-        elif isinstance(child, list):
-            child = [
-                flatten_dict(o, schema_context, False)
-                if isinstance(o, dict) else o
-                for o in child
-            ]
+        child = flatten(child, schema_context)
         out['children'].append(child)
     return out
 

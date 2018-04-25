@@ -1,10 +1,11 @@
 import unittest
 import extruct
 from tests import get_testdata, jsonize_dict
-from extruct.uniform import *
+from extruct.uniform import _flatten, infer_context, flatten_dict
+
 
 class TestUniform(unittest.TestCase):
-    
+
     maxDiff = None
 
     def test_uopengraph(self):
@@ -26,19 +27,32 @@ class TestUniform(unittest.TestCase):
         self.assertEqual(data['opengraph'], expected)
 
     def test_umicroformat(self):
-        expected = [{        "@context": "http://microformats.org/wiki/",
-                     "@type": ["h-entry"],
-                     "name": ["Microformats are amazing"],
-                     "author": [{"@type": ["h-card"],
-                                 "name": ["W. Developer"],
-                                 "url": ["http://example.com"],
-                                 "value": "W. Developer"}],
-                     "published": ["2013-06-13 12:00:00"],
-                     "summary": ["In which I extoll the virtues of using microformats."],
-                     "content": [{
-                                 "html": "\n<p>Blah blah blah</p>\n",
-                                 "value": "\nBlah blah blah\n"
-                                     }]}]
+        expected = [ { '@context': 'http://microformats.org/wiki/',
+                     '@type': ['h-hidden-tablet', 'h-hidden-phone'],
+                     'name': ['']},
+                   { '@context': 'http://microformats.org/wiki/',
+                     '@type': ['h-hidden-phone'],
+                     'children': [ { '@type': [ 'h-hidden-tablet',
+                                                'h-hidden-phone'],
+                                     'name': ['']},
+                                   { '@type': ['h-hidden-phone'],
+                                     'name': [ 'aJ Styles FastLane 2018 15 x '
+                                               '17 Framed Plaque w/ Ring '
+                                               'Canvas'],
+                                     'photo': [ '/on/demandware.static/-/Sites-main/default/dwa3227ee6/images/small/CN1148.jpg']}],
+                     'name': ['']},
+                   { '@context': 'http://microformats.org/wiki/',
+                     '@type': ['h-entry'],
+                     'author': [ { '@type': ['h-card'],
+                                   'name': ['W. Developer'],
+                                   'url': ['http://example.com'],
+                                   'value': 'W. Developer'}],
+                     'content': [ { 'html': '\n<p>Blah blah blah</p>\n',
+                                    'value': '\nBlah blah blah\n'}],
+                     'name': ['Microformats are amazing'],
+                     'published': ['2013-06-13 12:00:00'],
+                     'summary': [ 'In which I extoll the virtues of using '
+                                  'microformats.']}]
         body = get_testdata('misc', 'microformat_test.html')
         data = extruct.extract(body, syntaxes=['microformat'], uniform=True)
         self.assertEqual(data['microformat'], expected)
@@ -60,7 +74,7 @@ class TestUniform(unittest.TestCase):
                           "priceCurrency": "USD",
                           "price": "119.99",
                           "priceValidUntil": "2020-11-05",
-                          "seller": {"@type": "Organization", 
+                          "seller": {"@type": "Organization",
                                      "name": "Executive Objects"},
                           "itemCondition": "http://schema.org/UsedCondition",
                           "availability": "http://schema.org/InStock"
@@ -91,3 +105,31 @@ class TestUniform(unittest.TestCase):
                     "extra_weapon": "fear",
                     "another_one": "ruthless efficiency"}
         self.assertEqual(flatten_dict(d, schema_context='http://schema.org', add_context=True), expected)
+
+
+    def test_flatten(self):
+        d = { 'children': [ { 'properties': {'name': ['']},
+                                             'type': [ 'h-hidden-tablet',
+                                                       'h-hidden-phone']},
+                            { 'properties': { 'name': [ 'aJ Styles '
+                                                        'FastLane 2018 '
+                                                        '15 x 17 Framed '
+                                                        'Plaque w/ Ring '
+                                                        'Canvas'],
+                                              'photo': [ 'path.jpg']},
+                              'type': ['h-hidden-phone']}],
+              'properties': {'name': ['']},
+              'type': ['h-hidden-phone']}
+        expected = { 'children': [ { 'name': [''],
+                                     '@type': [ 'h-hidden-tablet',
+                                                'h-hidden-phone']},
+                                   { 'name': [ 'aJ Styles '
+                                               'FastLane 2018 '
+                                               '15 x 17 Framed '
+                                               'Plaque w/ Ring '
+                                               'Canvas'],
+                                    'photo': [ 'path.jpg'],
+                                    '@type': ['h-hidden-phone']}],
+                    'name': [''],
+                    '@type': ['h-hidden-phone']}
+        self.assertEqual(_flatten(d, schema_context='http://schema.org'), expected)

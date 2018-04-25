@@ -1,33 +1,78 @@
 [
-    {
-        "@type": ["h-entry"],
-        "@context": "http://microformats.org/wiki/",
+  {
+    "@type": [
+      "h-hidden-tablet",
+      "h-hidden-phone"
+    ],
+    "@context": "http://microformats.org/wiki/",
+    "name": [
+      ""
+    ]
+  },
+  {
+    "@type": [
+      "h-hidden-phone"
+    ],
+    "@context": "http://microformats.org/wiki/",
+    "name": [
+      ""
+    ],
+    "children": [
+      {
+        "@type": [
+          "h-hidden-tablet",
+          "h-hidden-phone"
+        ],
         "name": [
-            "Microformats are amazing"
+          ""
+        ]
+      },
+      {
+        "@type": [
+          "h-hidden-phone"
         ],
-        "author": [
-            {
-                "@type": ["h-card"],
-                "name": [
-                    "W. Developer"
-                ],
-                "url": [
-                    "http://example.com"
-                ],
-                "value": "W. Developer"
-            }
+        "name": [
+          "aJ Styles FastLane 2018 15 x 17 Framed Plaque w/ Ring Canvas"
         ],
-        "published": [
-            "2013-06-13 12:00:00"
+        "photo": [
+          "/on/demandware.static/-/Sites-main/default/dwa3227ee6/images/small/CN1148.jpg"
+        ]
+      }
+    ]
+  },
+  {
+    "@type": [
+      "h-entry"
+    ],
+    "@context": "http://microformats.org/wiki/",
+    "name": [
+      "Microformats are amazing"
+    ],
+    "author": [
+      {
+        "value": "W. Developer",
+        "@type": [
+          "h-card"
         ],
-        "summary": [
-            "In which I extoll the virtues of using microformats."
+        "name": [
+          "W. Developer"
         ],
-        "content": [
-            {
-                "html": "\n<p>Blah blah blah</p>\n",
-                "value": "\nBlah blah blah\n"
-            }
-            ]
-        }
+        "url": [
+          "http://example.com"
+        ]
+      }
+    ],
+    "published": [
+      "2013-06-13 12:00:00"
+    ],
+    "summary": [
+      "In which I extoll the virtues of using microformats."
+    ],
+    "content": [
+      {
+        "html": "\n<p>Blah blah blah</p>\n",
+        "value": "\nBlah blah blah\n"
+      }
+    ]
+  }
 ]

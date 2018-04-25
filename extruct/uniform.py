@@ -23,7 +23,7 @@ def _umicrodata_microformat(extracted, schema_context):
     return res
 
 
-def flatten(element, schema_context):
+def _flatten(element, schema_context):
     if isinstance(element, dict):
         element = flatten_dict(element, schema_context, False)
     elif isinstance(element, list):
@@ -53,14 +53,14 @@ def flatten_dict(d, schema_context, add_context):
 
     props = out.pop('properties', {})
     for field, value in props.items():
-        value = flatten(value, schema_context)
+        value = _flatten(value, schema_context)
         out[field] = value
 
     children = out.pop('children', [])
     if children:
         out['children'] = []
     for child in children:
-        child = flatten(child, schema_context)
+        child = _flatten(child, schema_context)
         out['children'].append(child)
     return out
 

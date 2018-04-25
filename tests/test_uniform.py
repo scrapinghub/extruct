@@ -1,7 +1,7 @@
 import unittest
 import extruct
-from tests import get_testdata, jsonize_dict
-from extruct.uniform import *
+# from tests import get_testdata, jsonize_dict
+from extruct.uniform import _flatten, infer_context, flatten_dict
 
 
 class TestUniform(unittest.TestCase):
@@ -132,4 +132,4 @@ class TestUniform(unittest.TestCase):
                                     '@type': ['h-hidden-phone']}],
                     'name': [''],
                     '@type': ['h-hidden-phone']}
-        self.assertEqual(flatten(d, schema_context='http://schema.org'), expected)
+        self.assertEqual(_flatten(d, schema_context='http://schema.org'), expected)

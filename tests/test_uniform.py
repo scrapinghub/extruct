@@ -1,6 +1,6 @@
 import unittest
 import extruct
-# from tests import get_testdata, jsonize_dict
+from tests import get_testdata, jsonize_dict
 from extruct.uniform import _flatten, infer_context, flatten_dict
 
 

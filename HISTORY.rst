@@ -2,6 +2,17 @@
 History
 =======
 
+v0.5.0 (2018-05-03)
+-------------------
+
+* Add OpenGraph and Microformat.
+* Add argument ``syntaxes``, it allows to select which syntaxes to extract.
+* Add argument ``uniform``, if True it maps the output of Microdata, OpenGraph,
+  Microformat and Json-ld to the same template.
+* Add argument ``errors``, it allows to define if errors should be raised,
+  logged or ignored.
+
+
 v0.4.0 (2017-06-20)
 -------------------
 

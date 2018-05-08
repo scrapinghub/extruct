@@ -2,16 +2,18 @@
 History
 =======
 
-v0.5.0 (2018-05-03)
+v0.5.0 (2018-05-09)
 -------------------
 
 * Add OpenGraph and Microformat.
-* Add argument ``syntaxes``, it allows to select which syntaxes to extract.
-* Add argument ``uniform``, if True it maps the output of Microdata, OpenGraph,
-  Microformat and Json-ld to the same template.
-* Add argument ``errors``, it allows to define if errors should be raised,
-  logged or ignored.
-
+* Add argument ``syntaxes`` to extract and command line function, it allows to
+  select which syntaxes to extract.
+* Add argument ``uniform`` to extract and command line function, if True it maps
+  the output of Microdata, OpenGraph, Microformat and Json-ld to the same template.
+* Add argument ``errors``  to extract and command line function, it allows to
+  define if errors should be raised, logged or ignored.
+* Fix RDFa memory leak, now RDfaExtractor resets a class variable after each
+  extraction.
 
 v0.4.0 (2017-06-20)
 -------------------

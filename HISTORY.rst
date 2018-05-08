@@ -14,6 +14,7 @@ v0.5.0 (2018-05-09)
   define if errors should be raised, logged or ignored.
 * Fix RDFa memory leak, now RDfaExtractor resets a class variable after each
   extraction.
+* Fixed regex pattern to avoid removing comments from within valid JSON.
 
 v0.4.0 (2017-06-20)
 -------------------

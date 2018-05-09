@@ -5,16 +5,20 @@ History
 v0.5.0 (2018-05-09)
 -------------------
 
-* Add OpenGraph and Microformat.
-* Add argument ``syntaxes`` to extract and command line function, it allows to
+* Add OpenGraph and Microformat extractors.
+* Add argument ``syntaxes`` to ``extract`` and command line function, it allows to
   select which syntaxes to extract.
-* Add argument ``uniform`` to extract and command line function, if True it maps
+* Add argument ``uniform`` to ``extract`` and command line function, if True it maps
   the output of Microdata, OpenGraph, Microformat and Json-ld to the same template.
-* Add argument ``errors``  to extract and command line function, it allows to
+* Add argument ``errors``  to ``extract`` and command line function, it allows to
   define if errors should be raised, logged or ignored.
-* Fix RDFa memory leak, now RDfaExtractor resets a class variable after each
+* Fix RDFa memory leak, now RDfaExtractor resets ``_lookups`` after each
   extraction.
-* Fixed regex pattern to avoid removing comments from within valid JSON.
+* Fixed regex pattern in ``JsonLdExtractor`` to avoid removing comments from
+  within valid JSON.
+* In ``extract`` default url is now ``None`` to avoid wrong results with
+  ``urljoin``
+
 
 v0.4.0 (2017-06-20)
 -------------------

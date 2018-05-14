@@ -1,4 +1,5 @@
 import logging
+import warnings
 
 from lxml.html import fromstring
 
@@ -15,13 +16,14 @@ logger = logging.getLogger(__name__)
 SYNTAXES = ['microdata', 'opengraph', 'json-ld', 'microformat', 'rdfa']
 
 
-def extract(htmlstring, url=None, encoding="UTF-8",
+def extract(htmlstring, base_url=None, encoding="UTF-8",
             syntaxes=SYNTAXES,
             errors='strict',
             uniform=False,
-            schema_context='http://schema.org'):
+            schema_context='http://schema.org',
+            **kwargs):
     """htmlstring: string with valid html document;
-       url: url of the html documents
+       base_url: base url of the html document
        encoding: encoding of the html document
        syntaxes: list of syntaxes to extract, default SYNTAXES
        errors: set to 'log' to log the exceptions, 'ignore' to ignore them
@@ -33,6 +35,12 @@ def extract(htmlstring, url=None, encoding="UTF-8",
                  /* All other the properties in keys here */
                  }
        schema_context: schema's context for current page"""
+    if base_url is None and 'url' in kwargs:
+        warnings.warn('"url" argument is deprecated, please use "base_url"',
+                      DeprecationWarning)
+        base_url = kwargs.pop('url')
+    if kwargs:
+        raise TypeError('Unexpected keyword arguments')
     if not (isinstance(syntaxes, list) and all(v in SYNTAXES for v in syntaxes)):
         raise ValueError("syntaxes must be a list with any or all (default) of"
                          "these values: {}".format(SYNTAXES))
@@ -43,24 +51,22 @@ def extract(htmlstring, url=None, encoding="UTF-8",
     tree = fromstring(htmlstring, parser=domparser)
     processors = []
     if 'microdata' in syntaxes:
-        processors.append(('microdata', MicrodataExtractor().extract_items))
+        processors.append(('microdata', MicrodataExtractor().extract_items, tree))
     if 'json-ld' in syntaxes:
-        processors.append(('json-ld', JsonLdExtractor().extract_items))
+        processors.append(('json-ld', JsonLdExtractor().extract_items, tree))
     if 'opengraph' in syntaxes:
-        processors.append(('opengraph', OpenGraphExtractor().extract_items))
+        processors.append(('opengraph', OpenGraphExtractor().extract_items, tree))
     if 'microformat' in syntaxes:
-        processors.append(('microformat', MicroformatExtractor().extract_items))
+        processors.append(('microformat', MicroformatExtractor().extract_items, htmlstring))
     if 'rdfa' in syntaxes:
-        processors.append(('rdfa', RDFaExtractor().extract_items))
+        processors.append(('rdfa', RDFaExtractor().extract_items, tree))
     output = {}
-    for label, extract in processors:
+    for label, extract, document in processors:
         try:
-            output[label] = [obj for obj in extract(document=tree,
-                                                    url=url,
-                                                    html=htmlstring)]
+            output[label] = list(extract(document, base_url=base_url))
         except Exception:
             if errors == 'log':
-                logger.exception("Failed to extract {} from {}".format(label, url))
+                logger.exception('Failed to extract {}'.format(label))
             if errors == 'ignore':
                 pass
             if errors == 'strict':

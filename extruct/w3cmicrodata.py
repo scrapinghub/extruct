@@ -19,6 +19,7 @@ import lxml.etree
 import lxml.html
 from w3lib.html import strip_html5_whitespace
 
+
 class LxmlMicrodataExtractor(object):
     _xp_item = lxml.etree.XPath('descendant-or-self::*[@itemscope]')
     _xp_prop = lxml.etree.XPath("""set:difference(.//*[@itemprop],
@@ -39,26 +40,26 @@ class LxmlMicrodataExtractor(object):
     def get_docid(self, node):
         return int(self._xp_item_docid(node))
 
-    def extract(self, htmlstring, url=None, encoding="UTF-8"):
+    def extract(self, htmlstring, base_url=None, encoding="UTF-8"):
         parser = lxml.html.HTMLParser(encoding=encoding)
         lxmldoc = lxml.html.fromstring(htmlstring, parser=parser)
-        return self.extract_items(lxmldoc, url)
+        return self.extract_items(lxmldoc, base_url)
 
-    def extract_items(self, document, url, *args, **kwargs):
-        self.url = url
-        self.items_seen = set()
-        return [item
-                for item in map(self.extract_item,
-                                self._xp_item(document))
-                if item]
+    def extract_items(self, document, base_url):
+        items_seen = set()
+        return [
+            item for item in (
+                self._extract_item(it, items_seen=items_seen, base_url=base_url)
+                for it in self._xp_item(document))
+            if item]
 
-    def extract_item(self, node):
+    def _extract_item(self, node, items_seen, base_url):
         itemid = self.get_docid(node)
 
         if self.nested:
-            if itemid in self.items_seen:
+            if itemid in items_seen:
                 return
-            self.items_seen.add(itemid)
+            items_seen.add(itemid)
 
         item = {}
         if not self.nested:
@@ -79,10 +80,12 @@ class LxmlMicrodataExtractor(object):
         refs = node.get('itemref', '').split()
         if refs:
             for refid in refs:
-                for name, value in self.extract_property_refs(node, refid):
+                for name, value in self._extract_property_refs(
+                        node, refid, items_seen=items_seen, base_url=base_url):
                     properties[name].append(value)
 
-        for name, value in self.extract_properties(node):
+        for name, value in self._extract_properties(
+                node, items_seen=items_seen, base_url=base_url):
             properties[name].append(value)
 
         props = []
@@ -95,36 +98,41 @@ class LxmlMicrodataExtractor(object):
             item["properties"] = dict(props)
         else:
             # item without properties; let's use the node itself
-            item["value"] = self.extract_property_value(node, force=True)
+            item["value"] = self._extract_property_value(
+                node, force=True, items_seen=items_seen, base_url=base_url)
 
         # not in the specs, but can be handy
         if self.add_text_content:
-            textContent = self.extract_textContent(node)
+            textContent = self._extract_textContent(node)
             if textContent:
                 item["textContent"] = textContent
 
         return item
 
-    def extract_properties(self, node):
+    def _extract_properties(self, node, items_seen, base_url):
         for prop in self._xp_prop(node):
-            for p, v in self.extract_property(prop):
+            for p, v in self._extract_property(
+                    prop, items_seen=items_seen, base_url=base_url):
                 yield p, v
 
-    def extract_property_refs(self, node, refid):
+    def _extract_property_refs(self, node, refid, items_seen, base_url):
         for prop in node.xpath("id($refid)/descendant-or-self::*[@itemprop]", refid=refid):
-            for p, v in self.extract_property(prop):
+            for p, v in self._extract_property(
+                    prop, items_seen=items_seen, base_url=base_url):
                 yield p, v
 
-    def extract_property(self, node):
+    def _extract_property(self, node, items_seen, base_url):
         props = node.get("itemprop").split()
-        value = self.extract_property_value(node)
+        value = self._extract_property_value(
+            node, items_seen=items_seen, base_url=base_url)
         return [(p, value) for p in props]
 
-    def extract_property_value(self, node, force=False):
+    def _extract_property_value(self, node, items_seen, base_url, force=False):
         #http://www.w3.org/TR/microdata/#values
         if not force and node.get("itemscope") is not None:
             if self.nested:
-                return self.extract_item(node)
+                return self._extract_item(
+                    node, items_seen=items_seen, base_url=base_url)
             else:
                 return {"iid_ref": self.get_docid(node)}
 
@@ -132,13 +140,13 @@ class LxmlMicrodataExtractor(object):
             return node.get("content", "")
 
         elif node.tag in ("audio", "embed", "iframe", "img", "source", "track", "video"):
-            return urljoin(self.url, strip_html5_whitespace(node.get("src", "")))
+            return urljoin(base_url, strip_html5_whitespace(node.get("src", "")))
 
         elif node.tag in ("a", "area", "link"):
-            return urljoin(self.url, strip_html5_whitespace(node.get("href", "")))
+            return urljoin(base_url, strip_html5_whitespace(node.get("href", "")))
 
         elif node.tag in ("object",):
-            return urljoin(self.url, strip_html5_whitespace(node.get("data", "")))
+            return urljoin(base_url, strip_html5_whitespace(node.get("data", "")))
 
         elif node.tag in ("data", "meter"):
             return node.get("value", "")
@@ -151,9 +159,9 @@ class LxmlMicrodataExtractor(object):
             return node.get("content")
 
         else:
-            return self.extract_textContent(node)
+            return self._extract_textContent(node)
 
-    def extract_textContent(self, node):
+    def _extract_textContent(self, node):
         return u"".join(self._xp_clean_text(node)).strip()
 
 

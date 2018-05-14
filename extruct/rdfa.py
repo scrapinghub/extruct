@@ -29,14 +29,14 @@ initial_context["http://www.w3.org/2011/rdfa-context/rdfa-1.1"].ns.update({
 
 class RDFaExtractor(object):
 
-    def extract(self, htmlstring, url=None, encoding="UTF-8",
-            expanded=True):
+    def extract(self, htmlstring, base_url=None, encoding="UTF-8",
+                expanded=True):
 
         domparser = XmlDomHTMLParser(encoding=encoding)
         tree = fromstring(htmlstring, parser=domparser)
-        return self.extract_items(tree, url, expanded=expanded)
+        return self.extract_items(tree, base_url=base_url, expanded=expanded)
 
-    def extract_items(self, document, url, expanded=True, *args, **kwargs):
+    def extract_items(self, document, base_url=None, expanded=True):
         options = Options(output_processor_graph=True,
                           embedded_rdf=False,
                           space_preserve=True,
@@ -46,6 +46,6 @@ class RDFaExtractor(object):
                           refresh_vocab_cache=False,
                           check_lite=False)
 
-        g = PyRdfa(options, base=url).graph_from_DOM(document, graph=Graph(), pgraph=Graph())
+        g = PyRdfa(options, base=base_url).graph_from_DOM(document, graph=Graph(), pgraph=Graph())
         jsonld_string = g.serialize(format='json-ld', auto_compact=not expanded).decode('utf-8')
         return json.loads(jsonld_string)

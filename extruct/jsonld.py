@@ -12,15 +12,16 @@ import lxml.html
 
 HTML_OR_JS_COMMENTLINE = re.compile('^\s*(//.*|<!--.*-->)')
 
+
 class JsonLdExtractor(object):
     _xp_jsonld = lxml.etree.XPath('descendant-or-self::script[@type="application/ld+json"]')
 
-    def extract(self, htmlstring, url=None, encoding="UTF-8"):
+    def extract(self, htmlstring, base_url=None, encoding="UTF-8"):
         parser = lxml.html.HTMLParser(encoding=encoding)
         lxmldoc = lxml.html.fromstring(htmlstring, parser=parser)
-        return self.extract_items(lxmldoc)
+        return self.extract_items(lxmldoc, base_url=base_url)
 
-    def extract_items(self, document, *args, **kwargs):
+    def extract_items(self, document, base_url=None):
         return [item for items in map(self._extract_items,
                                       self._xp_jsonld(document))
                      for item in items

@@ -56,8 +56,9 @@ Usage
 All-in-one extraction
 +++++++++++++++++++++
 
-The simplest example how to use extruct is to call ``extruct.extract(htmlstring, url)``
-with some HTML string and a URL.
+The simplest example how to use extruct is to call
+``extruct.extract(htmlstring, base_url=base_url)``
+with some HTML string and an optional base URL.
 
 Let's try this on a webpage that uses all the syntaxes supported (RDFa with `ogp`_).
 
@@ -66,10 +67,12 @@ First fetch the HTML using python-requests and then feed the response body to ``
   >>> import extruct
   >>> import requests
   >>> import pprint
+  >>> from w3lib.html import get_base_url
   >>>
   >>> pp = pprint.PrettyPrinter(indent=2)
   >>> r = requests.get('https://www.optimizesmart.com/how-to-use-open-graph-protocol/')
-  >>> data = extruct.extract(r.text, r.url)
+  >>> base_url = get_base_url(r.text, r.url)
+  >>> data = extruct.extract(r.text, base_url=base_url)
   >>>
   >>> pp.pprint(data)
   { 'json-ld': [ { '@context': 'https://schema.org',
@@ -167,7 +170,8 @@ Select syntaxes
 It is possible to select which syntaxes to extract by passing a list with the desired ones to extract. Valid values: 'microdata', 'json-ld', 'opengraph', 'microformat', 'rdfa'. If no list is passed all syntaxes will be extracted and returned::
 
   >>> r = requests.get('http://www.songkick.com/artists/236156-elysian-fields')
-  >>> data = extruct.extract(r.text, r.url, syntaxes=['microdata', 'opengraph', 'rdfa'])
+  >>> base_url = get_base_url(r.text, r.url)
+  >>> data = extruct.extract(r.text, base_url, syntaxes=['microdata', 'opengraph', 'rdfa'])
   >>>
   >>> pp.pprint(data)
   { 'microdata': [],
@@ -217,7 +221,8 @@ Another option is to uniform the output of microformat, opengraph, microdata and
 To do so set ``uniform=True`` when calling ``extract``, it's false by default for backward compatibility. Here the same example as before but with uniform set to True: ::
 
   >>> r = requests.get('http://www.songkick.com/artists/236156-elysian-fields')
-  >>> data = extruct.extract(r.text, r.url, syntaxes=['microdata', 'opengraph', 'rdfa'], uniform=True)
+  >>> base_url = get_base_url(r.text, r.url)
+  >>> data = extruct.extract(r.text, base_url, syntaxes=['microdata', 'opengraph', 'rdfa'], uniform=True)
   >>>
   >>> pp.pprint(data)
   { 'microdata': [],
@@ -387,7 +392,7 @@ RDFa extraction (experimental)
   ... """
   >>>
   >>> rdfae = RDFaExtractor()
-  >>> pp.pprint(rdfae.extract(html, url='http://www.example.com/index.html'))
+  >>> pp.pprint(rdfae.extract(html, base_url='http://www.example.com/index.html'))
   [{'@id': 'http://www.example.com/alice/posts/trouble_with_bob',
     '@type': ['http://schema.org/BlogPosting'],
     'http://purl.org/dc/terms/creator': [{'@id': 'http://www.example.com/index.html#me'}],
@@ -441,7 +446,7 @@ Open Graph extraction
   ... </html>"""
   >>>
   >>> opengraphe = OpenGraphExtractor()
-  >>> pp.pprint(opengraphe.extract(html, url='http://www.example.com/index.html'))
+  >>> pp.pprint(opengraphe.extract(html))
   [{"namespace": {
         "og": "http://ogp.me/ns#"
     },

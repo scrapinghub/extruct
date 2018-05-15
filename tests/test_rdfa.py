@@ -50,7 +50,7 @@ class TestRDFa(unittest.TestCase):
                 ).decode('UTF-8'))
 
             rdfae = RDFaExtractor()
-            data = rdfae.extract(body, url='http://www.example.com/index.html')
+            data = rdfae.extract(body, base_url='http://www.example.com/index.html')
             self.assertJsonLDEqual(data, expected)
 
     def test_w3c_rdf11primer(self):
@@ -62,7 +62,7 @@ class TestRDFa(unittest.TestCase):
                 ).decode('UTF-8'))
 
             rdfae = RDFaExtractor()
-            data = rdfae.extract(body, url='http://www.example.com/index.html')
+            data = rdfae.extract(body, base_url='http://www.example.com/index.html')
             self.assertJsonLDEqual(data, expected)
 
     def test_w3c_rdfaprimer(self):
@@ -75,7 +75,7 @@ class TestRDFa(unittest.TestCase):
                        ).decode('UTF-8'))
 
             rdfae = RDFaExtractor()
-            data = rdfae.extract(body, url='http://www.example.com/index.html')
+            data = rdfae.extract(body, base_url='http://www.example.com/index.html')
             self.assertJsonLDEqual(data, expected)
 
     def test_wikipedia_xhtml_rdfa(self):
@@ -86,7 +86,7 @@ class TestRDFa(unittest.TestCase):
                    ).decode('UTF-8'))
 
         rdfae = RDFaExtractor()
-        data = rdfae.extract(body, url='http://www.example.com/index.html')
+        data = rdfae.extract(body, base_url='http://www.example.com/index.html')
 
         self.assertJsonLDEqual(data, expected)
 
@@ -97,6 +97,6 @@ class TestRDFa(unittest.TestCase):
                    ).decode('UTF-8'))
 
         rdfae = RDFaExtractor()
-        data = rdfae.extract(body, url='http://nielslubberman.nl/drupal/')
+        data = rdfae.extract(body, base_url='http://nielslubberman.nl/drupal/')
 
         self.assertJsonLDEqual(data, expected)

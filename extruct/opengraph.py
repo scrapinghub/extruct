@@ -5,12 +5,12 @@ import lxml.html
 class OpenGraphExtractor(object):
     """OpenGraph extractor following extruct API."""
 
-    def extract(self, htmlstring, url=None, encoding='UTF-8'):
+    def extract(self, htmlstring, base_url=None, encoding='UTF-8'):
         parser = lxml.html.HTMLParser(encoding=encoding)
         doc = lxml.html.fromstring(htmlstring, parser=parser)
-        return list(self.extract_items(doc))
+        return list(self.extract_items(doc, base_url=base_url))
 
-    def extract_items(self, document, *args, **kwargs):
+    def extract_items(self, document, base_url=None):
         # OpenGraph defines a web page as a single rich object.
         # TODO: Handle known opengraph namespaces.
         for head in document.xpath('//head'):

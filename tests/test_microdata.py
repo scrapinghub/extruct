@@ -169,5 +169,5 @@ class TestUrlJoin(unittest.TestCase):
         expected = json.loads(get_testdata('schema.org', 'product_custom_url.json').decode('UTF-8'))
 
         mde = MicrodataExtractor()
-        data = mde.extract(body, url='http://example.com')
+        data = mde.extract(body, base_url='http://some-example.com')
         self.assertEqual(data, expected)

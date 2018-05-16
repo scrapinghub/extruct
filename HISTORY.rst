@@ -30,7 +30,7 @@ v0.5.0 (2018-05-09)
   and ``_extract_textContent``.
 * In ``w3microdata`` ``_extract_properties``, ``_extract_property_refs``, 
   ``_extract_property``, ``_extract_property_value`` and ``_extract_item``
-   now need ``items_seen`` and ``url`` to be passed as arguments.
+  now need ``items_seen`` and ``url`` to be passed as arguments.
 
 Warning: backward-incompatible change:
 

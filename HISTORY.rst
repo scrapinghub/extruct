@@ -2,6 +2,46 @@
 History
 =======
 
+v0.5.0 (TBD)
+-------------------
+
+* Add OpenGraph and Microformat extractors.
+* Add argument ``syntaxes`` to ``extract`` and command line function, it allows to
+  select which syntaxes to extract.
+* Add argument ``uniform`` to ``extract`` and command line function, if True it maps
+  the output of Microdata, OpenGraph, Microformat and Json-ld to the same template.
+* Add argument ``errors``  to ``extract`` and command line function, it allows to
+  define if errors should be raised, logged or ignored.
+* Fix RDFa memory leak, now RDfaExtractor resets ``_lookups`` after each
+  extraction.
+* Fixed regex pattern in ``JsonLdExtractor`` to avoid removing comments from
+  within valid JSON.
+* In ``w3microdata`` strip whitespaces, newlines, etc from urls extracted from
+  html nodes.
+* ``base_url`` substitutes ``url`` in ``MicroformatExtractor``, ``JsonLdExtractor``,
+  ``OpenGraphExtractor``, ``RDFaExtractor``  and ``MicrodataExtractor``
+* individual extractors accpet ``base_url`` instead of ``url``, unused keyword 
+  arguments are removed.
+* In ``w3microdata.extract_items`` ``items_seen`` and ``url`` are no longer 
+  class variables but are passed as arguments.
+* In ``w3microdata`` the following functions are now private:
+  ``extract_item``, ``extract_property_value``, ``extract_textContent``,
+  ``_extract_property``, ``_extract_properties``, ``_extract_property_refs``
+  and ``_extract_textContent``.
+* In ``w3microdata`` ``_extract_properties``, ``_extract_property_refs``, 
+  ``_extract_property``, ``_extract_property_value`` and ``_extract_item``
+  now need ``items_seen`` and ``url`` to be passed as arguments.
+
+Warning: backward-incompatible change:
+
+* ``base_url`` is used instead of ``url`` in ``extruct.extract``, ``url`` is 
+  still supported by deprecated.
+* In ``extruct.extract`` default ``base_url`` is now ``None`` to avoid wrong 
+  results with ``urljoin``.
+
+
+
+
 v0.4.0 (2017-06-20)
 -------------------
 

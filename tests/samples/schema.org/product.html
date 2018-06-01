@@ -5,7 +5,7 @@
  </head>
  <body>
 
-  <div itemscope itemtype="http://schema.org/Product">
+  <div id="product" itemscope itemtype="http://schema.org/Product">
     <span itemprop="brand">ACME</span>
     <span itemprop="name">Executive Anvil</span>
     <img itemprop="image" src=" anvil_executive.jpg
@@ -15,18 +15,18 @@
       looking for something to drop from a height.
     </span>
     Product #: <span itemprop="mpn">925872</span>
-    <span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+    <span id="aggregateRating" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
       <span itemprop="ratingValue">4.4</span> stars, based on <span itemprop="reviewCount">89
         </span> reviews
     </span>
 
-    <span itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+    <span id="offer" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
       Regular price: $179.99
       <meta itemprop="priceCurrency" content="USD" />
       $<span itemprop="price">119.99 </span>
       (Sale ends <time itemprop="priceValidUntil" datetime="2020-11-05">
         5 November!</time>)
-      Available from: <span itemprop="seller" itemscope itemtype="http://schema.org/Organization">
+      Available from: <span id="organization" itemprop="seller" itemscope itemtype="http://schema.org/Organization">
                         <span itemprop="name">Executive Objects</span>
                       </span>
       Condition: <link itemprop="itemCondition" href="http://schema.org/UsedCondition"/>Previously owned,

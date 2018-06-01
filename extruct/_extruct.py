@@ -20,6 +20,7 @@ def extract(htmlstring, base_url=None, encoding="UTF-8",
             syntaxes=SYNTAXES,
             errors='strict',
             uniform=False,
+            return_html_node=False,
             schema_context='http://schema.org',
             **kwargs):
     """htmlstring: string with valid html document;
@@ -34,6 +35,7 @@ def extract(htmlstring, base_url=None, encoding="UTF-8",
                  '@type': 'example_type',
                  /* All other the properties in keys here */
                  }
+       return_html_node: if True, it includes HTML node of respective embedded metadata into the result.
        schema_context: schema's context for current page"""
     if base_url is None and 'url' in kwargs:
         warnings.warn('"url" argument is deprecated, please use "base_url"',
@@ -51,7 +53,7 @@ def extract(htmlstring, base_url=None, encoding="UTF-8",
     tree = fromstring(htmlstring, parser=domparser)
     processors = []
     if 'microdata' in syntaxes:
-        processors.append(('microdata', MicrodataExtractor().extract_items, tree))
+        processors.append(('microdata', MicrodataExtractor(add_html_node=return_html_node).extract_items, tree))
     if 'json-ld' in syntaxes:
         processors.append(('json-ld', JsonLdExtractor().extract_items, tree))
     if 'opengraph' in syntaxes:

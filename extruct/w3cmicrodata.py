@@ -32,10 +32,11 @@ class LxmlMicrodataExtractor(object):
                                        + count(ancestor::*[@itemscope])
                                        + 1""")
 
-    def __init__(self, nested=True, strict=False, add_text_content=False):
+    def __init__(self, nested=True, strict=False, add_text_content=False, add_html_node=False):
         self.nested = nested
         self.strict = strict
         self.add_text_content = add_text_content
+        self.add_html_node = add_html_node
 
     def get_docid(self, node):
         return int(self._xp_item_docid(node))
@@ -101,11 +102,13 @@ class LxmlMicrodataExtractor(object):
             item["value"] = self._extract_property_value(
                 node, force=True, items_seen=items_seen, base_url=base_url)
 
-        # not in the specs, but can be handy
+        # below are not in the specs, but can be handy
         if self.add_text_content:
             textContent = self._extract_textContent(node)
             if textContent:
                 item["textContent"] = textContent
+        if self.add_html_node:
+            item["htmlNode"] = node
 
         return item
 

@@ -6,6 +6,6 @@ gevent
 requests
 rdflib
 rdflib-jsonld
-mf2py
+mf2py>=1.1.0
 six
 w3lib

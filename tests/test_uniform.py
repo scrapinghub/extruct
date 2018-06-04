@@ -56,11 +56,6 @@ class TestUniform(unittest.TestCase):
                                   'microformats.']}]
         body = get_testdata('misc', 'microformat_test.html')
         data = extruct.extract(body, syntaxes=['microformat'], uniform=True)
-
-        print(data['microformat'])
-        print(), print(), print(), print()
-        print(expected)
-
         self.assertEqual(data['microformat'], expected)
 
     def test_umicrodata(self):

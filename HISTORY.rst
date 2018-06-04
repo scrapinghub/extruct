@@ -31,7 +31,7 @@ v0.5.0 (TBD)
 * In ``w3microdata`` ``_extract_properties``, ``_extract_property_refs``, 
   ``_extract_property``, ``_extract_property_value`` and ``_extract_item``
   now need ``items_seen`` and ``url`` to be passed as arguments.
-* Add option in ``extruct.extract`` to return HTML node with the return of metadata extraction.
+* Add the option in ``extruct.extract`` to return HTML node with the result of metadata extraction.
 
 Warning: backward-incompatible change:
 

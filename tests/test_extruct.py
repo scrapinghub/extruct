@@ -59,8 +59,3 @@ class TestGeneric(unittest.TestCase):
                     del item[key]
                 else:
                     self._replace_node_ref_with_node_id(val)
-
-
-
-
-

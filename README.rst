@@ -267,7 +267,6 @@ As the result, an additional key `nodeHtml` will be included in the result for e
 item. The node is of `lxml.etree.Element` type.
 The feature is supported only by syntaxes that are based on HTML.
 
-::
   >>> r = requests.get('http://www.rugpadcorner.com/shop/no-muv/')
   >>> base_url = get_base_url(r.text, r.url)
   >>> data = extruct.extract(r.text, base_url, syntaxes=['microdata'], return_html_node=True)

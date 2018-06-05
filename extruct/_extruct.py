@@ -35,7 +35,9 @@ def extract(htmlstring, base_url=None, encoding="UTF-8",
                  '@type': 'example_type',
                  /* All other the properties in keys here */
                  }
-       return_html_node: if True, it includes HTML node of respective embedded metadata into the result.
+       return_html_node: if True, it includes into the result a HTML node of
+                         respective embedded metadata under 'htmlNode' key.
+                         The node is of `lxml.etree.Element` type.
        schema_context: schema's context for current page"""
     if base_url is None and 'url' in kwargs:
         warnings.warn('"url" argument is deprecated, please use "base_url"',

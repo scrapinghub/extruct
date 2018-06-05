@@ -1,7 +1,8 @@
 import unittest
+
 import extruct
-from tests import get_testdata, jsonize_dict
 from extruct.uniform import _flatten, infer_context, flatten_dict
+from tests import get_testdata
 
 
 class TestUniform(unittest.TestCase):
@@ -40,15 +41,15 @@ class TestUniform(unittest.TestCase):
                                                '17 Framed Plaque w/ Ring '
                                                'Canvas'],
                                      'photo': [ '/on/demandware.static/-/Sites-main/default/dwa3227ee6/images/small/CN1148.jpg']}],
-                     'name': ['']},
+                   },
                    { '@context': 'http://microformats.org/wiki/',
                      '@type': ['h-entry'],
                      'author': [ { '@type': ['h-card'],
                                    'name': ['W. Developer'],
                                    'url': ['http://example.com'],
                                    'value': 'W. Developer'}],
-                     'content': [ { 'html': '\n<p>Blah blah blah</p>\n',
-                                    'value': '\nBlah blah blah\n'}],
+                     'content': [ { 'html': '<p>Blah blah blah</p>',
+                                    'value': 'Blah blah blah'}],
                      'name': ['Microformats are amazing'],
                      'published': ['2013-06-13 12:00:00'],
                      'summary': [ 'In which I extoll the virtues of using '

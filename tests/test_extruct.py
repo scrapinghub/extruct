@@ -3,7 +3,7 @@ import json
 import unittest
 
 import extruct
-from tests import get_testdata, jsonize_dict
+from tests import get_testdata, jsonize_dict, replace_node_ref_with_node_id
 
 
 class TestGeneric(unittest.TestCase):
@@ -26,7 +26,7 @@ class TestGeneric(unittest.TestCase):
         body, expected = self._microdata_custom_url('product_custom_url_and_node_id.json')
         data = extruct.extract(body, base_url='http://some-example.com',
                                syntaxes=['microdata'], return_html_node=True)
-        self._replace_node_ref_with_node_id(data)
+        replace_node_ref_with_node_id(data)
         self.assertEqual(data, expected)
 
     def test_deprecated_url(self):
@@ -46,16 +46,3 @@ class TestGeneric(unittest.TestCase):
             get_testdata('schema.org', test_file)
             .decode('UTF-8'))}
         return body, expected
-
-    def _replace_node_ref_with_node_id(self, item):
-        if isinstance(item, list):
-            for i in item:
-                self._replace_node_ref_with_node_id(i)
-        if isinstance(item, dict):
-            for key in list(item):
-                val = item[key]
-                if key == "htmlNode":
-                    item["_nodeId_"] = val.get("id")
-                    del item[key]
-                else:
-                    self._replace_node_ref_with_node_id(val)

@@ -15,3 +15,17 @@ def get_testdata(*paths):
 
 def jsonize_dict(d):
     return json.loads(json.dumps(d))
+
+
+def replace_node_ref_with_node_id(item):
+    if isinstance(item, list):
+        for i in item:
+            replace_node_ref_with_node_id(i)
+    if isinstance(item, dict):
+        for key in list(item):
+            val = item[key]
+            if key == "htmlNode":
+                item["_nodeId_"] = val.get("id")
+                del item[key]
+            else:
+                replace_node_ref_with_node_id(val)

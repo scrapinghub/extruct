@@ -263,6 +263,7 @@ Returning HTML node
 
 It is also possible to get references to HTML node for every extracted metadata item.
 The feature is supported only by microdata syntax.
+
 To use that, just set the ``return_html_node`` option of ``extract`` method to ``True``.
 As the result, an additional key "nodeHtml" will be included in the result for every
 item. Each node is of ``lxml.etree.Element`` type: ::

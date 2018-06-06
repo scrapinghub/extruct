@@ -258,6 +258,42 @@ To do so set ``uniform=True`` when calling ``extract``, it's false by default fo
 
 NB rdfa structure is not uniformed yet
 
+Returning HTML node
++++++++++++++++++++
+
+It is also possible to get references to HTML node for every extracted metadata item.
+The feature is supported only by microdata syntax.
+
+To use that, just set the ``return_html_node`` option of ``extract`` method to ``True``.
+As the result, an additional key "nodeHtml" will be included in the result for every
+item. Each node is of ``lxml.etree.Element`` type: ::
+
+  >>> r = requests.get('http://www.rugpadcorner.com/shop/no-muv/')
+  >>> base_url = get_base_url(r.text, r.url)
+  >>> data = extruct.extract(r.text, base_url, syntaxes=['microdata'], return_html_node=True)
+  >>>
+  >>> pp.pprint(data)
+  { 'microdata': [ { 'htmlNode': <Element div at 0x7f10f8e6d3b8>,
+                     'properties': { 'description': 'KEEP RUGS FLAT ON CARPET!\n'
+                                                    'Not your thin sticky pad, '
+                                                    'No-Muv is truly the best!',
+                                     'image': ['', ''],
+                                     'name': ['No-Muv', 'No-Muv'],
+                                     'offers': [ { 'htmlNode': <Element div at 0x7f10f8e6d138>,
+                                                   'properties': { 'availability': 'http://schema.org/InStock',
+                                                                   'price': 'Price:  '
+                                                                            '$45'},
+                                                   'type': 'http://schema.org/Offer'},
+                                                 { 'htmlNode': <Element div at 0x7f10f8e60f48>,
+                                                   'properties': { 'availability': 'http://schema.org/InStock',
+                                                                   'price': '(Select '
+                                                                            'Size/Shape '
+                                                                            'for '
+                                                                            'Pricing)'},
+                                                   'type': 'http://schema.org/Offer'}],
+                                     'ratingValue': ['5.00', '5.00']},
+                     'type': 'http://schema.org/Product'}]}
+
 Single extractors
 -----------------
 

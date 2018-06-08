@@ -2,7 +2,7 @@
 History
 =======
 
-v0.5.0 (TBD)
+v0.5.0 (2018-06-08)
 -------------------
 
 * Add OpenGraph and Microformat extractors.

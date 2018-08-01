@@ -35,10 +35,7 @@ class JsonLdExtractor(object):
             # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
             try:
                 data = json.loads(HTML_OR_JS_COMMENTLINE.sub('', script))
-            except ValueError: # ValueError again because json.JSONDecodeError appears since Python 3.5
-                # some pages have JSON-LD data with control characters, json.loads should use strict=False
-                data = json.loads(script, strict=False)
-            except json.JSONDecodeError: # From Python 3.5 and on, this is the proper error
+            except ValueError: # ValueError again because json.JSONDecodeError(bases from ValueError) appears since Python 3.5
                 # some pages have JSON-LD data with control characters, json.loads should use strict=False
                 data = json.loads(script, strict=False)
         if isinstance(data, list):

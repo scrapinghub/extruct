@@ -36,7 +36,7 @@ class JsonLdExtractor(object):
             try:
                 data = json.loads(HTML_OR_JS_COMMENTLINE.sub('', script))
             except json.JSONDecodeError:
-                # some pages have JSON-LD data with control characters, json.loads shoul use strict=False
+                # some pages have JSON-LD data with control characters, json.loads should use strict=False
                 data = json.loads(script, strict=False)
         if isinstance(data, list):
             return data

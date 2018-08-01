@@ -29,12 +29,12 @@ class TestUniform(unittest.TestCase):
 
     def test_umicroformat(self):
         expected = [ { '@context': 'http://microformats.org/wiki/',
-                     '@type': ['h-hidden-tablet', 'h-hidden-phone'],
+                     '@type': ['h-hidden-phone', 'h-hidden-tablet'],
                      'name': ['']},
                    { '@context': 'http://microformats.org/wiki/',
                      '@type': ['h-hidden-phone'],
-                     'children': [ { '@type': [ 'h-hidden-tablet',
-                                                'h-hidden-phone'],
+                     'children': [ { '@type': [ 'h-hidden-phone',
+                                                'h-hidden-tablet'],
                                      'name': ['']},
                                    { '@type': ['h-hidden-phone'],
                                      'name': [ 'aJ Styles FastLane 2018 15 x '

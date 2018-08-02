@@ -29,15 +29,9 @@ class JsonLdExtractor(object):
 
     def _extract_items(self, node):
         script = node.xpath('string()')
-        try:
-            data = json.loads(script)
-        except ValueError:
-            # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
-            try:
-                data = json.loads(HTML_OR_JS_COMMENTLINE.sub('', script))
-            except ValueError: # ValueError again because json.JSONDecodeError(bases from ValueError) appears since Python 3.5
-                # some pages have JSON-LD data with control characters, json.loads should use strict=False
-                data = json.loads(script, strict=False)
+        # now do remove possible leading HTML/JavaScript comment first, allow control characters to be loaded
+        # TODO: `strict=False` can be configurable if needed
+        data = json.loads(HTML_OR_JS_COMMENTLINE.sub('', script), strict=False)
         if isinstance(data, list):
             return data
         elif isinstance(data, dict):

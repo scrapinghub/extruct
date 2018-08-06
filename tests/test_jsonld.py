@@ -43,8 +43,8 @@ class TestJsonLD(unittest.TestCase):
             data = jsonlde.extract(body)
             self.assertEqual(data, expected)
 
-    def test_jsonld_with_control_characters(self):
-        page = 'JSONLD_with_control_characters'
+    def test_jsonld_with_control_characters_comment(self):
+        page = 'JSONLD_with_control_characters_comment'
         body = get_testdata('custom.invalid', '{}.html'.format(page))
         expected = json.loads(get_testdata('custom.invalid', '{}.jsonld'.format(page)).decode('UTF-8'))
 

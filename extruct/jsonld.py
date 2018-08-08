@@ -30,10 +30,11 @@ class JsonLdExtractor(object):
     def _extract_items(self, node):
         script = node.xpath('string()')
         try:
-            data = json.loads(script)
+            # TODO: `strict=False` can be configurable if needed
+            data = json.loads(script, strict=False)
         except ValueError:
             # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
-            data = json.loads(HTML_OR_JS_COMMENTLINE.sub('', script))
+            data = json.loads(HTML_OR_JS_COMMENTLINE.sub('', script), strict=False)
         if isinstance(data, list):
             return data
         elif isinstance(data, dict):

@@ -1,8 +1,8 @@
 [
     {
         "@type": [
-            "h-hidden-tablet",
-            "h-hidden-phone"
+            "h-hidden-phone",
+            "h-hidden-tablet"
         ],
         "name": [
             ""
@@ -17,8 +17,8 @@
         "children": [
             {
                 "@type": [
-                    "h-hidden-tablet",
-                    "h-hidden-phone"
+                    "h-hidden-phone",
+                    "h-hidden-tablet"
                 ],
                 "name": [
                     ""

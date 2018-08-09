@@ -2,6 +2,11 @@
 History
 =======
 
+v0.6.0 (2018-08-09)
+-------------------
+
+* JSON-LD parsing is less strict now: control characters are allowed.
+
 v0.5.0 (2018-06-08)
 -------------------
 

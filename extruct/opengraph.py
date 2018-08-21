@@ -28,15 +28,16 @@ class OpenGraphExtractor(object):
     def extract_items(self, document, base_url=None):
         # OpenGraph defines a web page as a single rich object.
         for head in document.xpath('//head'):
-            head_namespaces = dict(
+            namespaces = dict(
                 _PREFIX_PATTERN.findall(head.attrib.get('prefix', ''))
             )
-            namespaces = _merge_dicts(_OG_NAMESPACES, head_namespaces)
             props = []
             for el in head.xpath('meta[@property and @content]'):
                 prop = el.attrib['property']
                 val = el.attrib['content']
                 ns = prop.partition(':')[0]
+                if ns in _OG_NAMESPACES:
+                    namespaces[ns] = _OG_NAMESPACES[ns]
                 if ns in namespaces:
                     props.append((prop, val))
             if props:

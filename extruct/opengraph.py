@@ -28,9 +28,10 @@ class OpenGraphExtractor(object):
     def extract_items(self, document, base_url=None):
         # OpenGraph defines a web page as a single rich object.
         for head in document.xpath('//head'):
-            namespaces = dict(
-                _PREFIX_PATTERN.findall(head.attrib.get('prefix', ''))
-            )
+            html_elems = document.head.xpath("parent::html")
+            html_nms = self.get_namespaces(html_elems[0]) if html_elems else {}
+            head_nms = self.get_namespaces(head)
+            namespaces = _merge_dicts(html_nms, head_nms)
             props = []
             for el in head.xpath('meta[@property and @content]'):
                 prop = el.attrib['property']
@@ -42,3 +43,8 @@ class OpenGraphExtractor(object):
                     props.append((prop, val))
             if props:
                 yield {'namespace': namespaces, 'properties': props}
+
+    def get_namespaces(self, element):
+        return dict(
+            _PREFIX_PATTERN.findall(element.attrib.get('prefix', ''))
+        )

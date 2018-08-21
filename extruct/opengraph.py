@@ -4,12 +4,12 @@ import lxml.html
 
 _PREFIX_PATTERN = re.compile(r'\s*(\w+): ([^\s]+)')
 _OG_NAMESPACES = {
-    ('og', 'http://ogp.me/ns#'),
-    ('music', 'http://ogp.me/ns/music#'),
-    ('video', 'http://ogp.me/ns/video#'),
-    ('article', 'http://ogp.me/ns/article#'),
-    ('book', 'http://ogp.me/ns/book#'),
-    ('profile', 'http://ogp.me/ns/profile#'),
+    'og': 'http://ogp.me/ns#',
+    'music': 'http://ogp.me/ns/music#',
+    'video': 'http://ogp.me/ns/video#',
+    'article': 'http://ogp.me/ns/article#',
+    'book': 'http://ogp.me/ns/book#',
+    'profile': 'http://ogp.me/ns/profile#',
 }
 
 

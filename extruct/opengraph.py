@@ -2,6 +2,9 @@ import re
 import lxml.html
 
 
+_PREFIX_PATTERN = re.compile(r'\s*(\w+): ([^\s]+)')
+
+
 class OpenGraphExtractor(object):
     """OpenGraph extractor following extruct API."""
 
@@ -14,7 +17,7 @@ class OpenGraphExtractor(object):
         # OpenGraph defines a web page as a single rich object.
         # TODO: Handle known opengraph namespaces.
         for head in document.xpath('//head'):
-            prefix = dict(re.findall(r'\s*(\w+): ([^\s]+)', head.attrib.get('prefix', '')))
+            prefix = dict(_PREFIX_PATTERN.findall(head.attrib.get('prefix', '')))
             prefix.setdefault('og', 'http://ogp.me/ns#')
             props = []
             for el in head.xpath('meta[@property and @content]'):

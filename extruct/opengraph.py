@@ -13,6 +13,10 @@ _OG_NAMESPACES = {
 }
 
 
+def _merge_dicts(dict1, dict2):
+    return {**dict1, **dict2}
+
+
 class OpenGraphExtractor(object):
     """OpenGraph extractor following extruct API."""
 
@@ -23,16 +27,17 @@ class OpenGraphExtractor(object):
 
     def extract_items(self, document, base_url=None):
         # OpenGraph defines a web page as a single rich object.
-        # TODO: Handle known opengraph namespaces.
         for head in document.xpath('//head'):
-            prefix = dict(_PREFIX_PATTERN.findall(head.attrib.get('prefix', '')))
-            prefix.setdefault('og', 'http://ogp.me/ns#')
+            head_namespaces = dict(
+                _PREFIX_PATTERN.findall(head.attrib.get('prefix', ''))
+            )
+            namespaces = _merge_dicts(_OG_NAMESPACES, head_namespaces)
             props = []
             for el in head.xpath('meta[@property and @content]'):
                 prop = el.attrib['property']
                 val = el.attrib['content']
                 ns = prop.partition(':')[0]
-                if ns in prefix:
+                if ns in namespaces:
                     props.append((prop, val))
             if props:
-                yield {'namespace': prefix, 'properties': props}
+                yield {'namespace': namespaces, 'properties': props}

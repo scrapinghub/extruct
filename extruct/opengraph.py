@@ -13,10 +13,6 @@ _OG_NAMESPACES = {
 }
 
 
-def _merge_dicts(dict1, dict2):
-    return {**dict1, **dict2}
-
-
 class OpenGraphExtractor(object):
     """OpenGraph extractor following extruct API."""
 
@@ -29,9 +25,9 @@ class OpenGraphExtractor(object):
         # OpenGraph defines a web page as a single rich object.
         for head in document.xpath('//head'):
             html_elems = document.head.xpath("parent::html")
-            html_nms = self.get_namespaces(html_elems[0]) if html_elems else {}
-            head_nms = self.get_namespaces(head)
-            namespaces = _merge_dicts(html_nms, head_nms)
+            namespaces = self.get_namespaces(
+                html_elems[0]) if html_elems else {}
+            namespaces.update(self.get_namespaces(head))
             props = []
             for el in head.xpath('meta[@property and @content]'):
                 prop = el.attrib['property']

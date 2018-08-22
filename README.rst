@@ -33,14 +33,6 @@ The microdata algorithm is a revisit of `this Scrapinghub blog post`_ showing ho
 
 .. _this Scrapinghub blog post: http://blog.scrapinghub.com/2014/06/18/extracting-schema-org-microdata-using-scrapy-selectors-and-xpath/
 
-Roadmap
--------
-
-- support for `Complex Object Properties`_ within `Open Graph protocol <ogp>`_)
-
-.. _Complex Object Properties: https://developers.facebook.com/docs/sharing/opengraph/object-properties#complex
-.. _ogp: http://ogp.me/#metadata
-
 
 Installation
 ------------

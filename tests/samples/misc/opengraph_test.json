@@ -1,7 +1,8 @@
 [
     {
         "namespace": {
-            "og": "http://ogp.me/ns#"
+            "og": "http://ogp.me/ns#",
+            "article": "http://ogp.me/ns/article#"
         },
         "properties": [
             [
@@ -27,6 +28,22 @@
             [
                 "og:description",
                 "Event Education provides free courses on event planning and management to event professionals worldwide."
+            ],
+            [
+                "article:publisher",
+                "http://www.facebook.com/PUBLISHER"
+            ],
+            [
+                "article:author",
+                "http://facebook.com/AUTHOR"
+            ],
+            [
+                "article:published_time",
+                "2012-04-04T19:50:00-07:00"
+            ],
+            [
+                "article:modified_time",
+                "2016-12-13T12:35:52-07:00"
             ]
         ]
     }

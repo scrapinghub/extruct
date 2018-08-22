@@ -2,7 +2,7 @@ import re
 import lxml.html
 
 
-_PREFIX_PATTERN = re.compile(r'\s*(\w+): ([^\s]+)')
+_PREFIX_PATTERN = re.compile(r'\s*(\w+):\s*([^\s]+)')
 _OG_NAMESPACES = {
     'og': 'http://ogp.me/ns#',
     'music': 'http://ogp.me/ns/music#',

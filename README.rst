@@ -4,9 +4,15 @@ extruct
 
 .. image:: https://img.shields.io/travis/scrapinghub/extruct/master.svg
     :target: https://travis-ci.org/scrapinghub/extruct
+    :alt: Build Status
 
 .. image:: https://img.shields.io/codecov/c/github/scrapinghub/extruct/master.svg?maxAge=2592000
     :target: https://codecov.io/gh/scrapinghub/extruct
+    :alt: Coverage report
+
+.. image:: https://img.shields.io/pypi/v/extruct.svg
+   :target: https://pypi.python.org/pypi/extruct
+   :alt: PyPI Version
 
 
 *extruct* is a library for extracting embedded metadata from HTML markup.

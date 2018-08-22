@@ -7,8 +7,8 @@ import json
 import re
 
 import lxml.etree
-import lxml.html
 
+from extruct.utils import parse_html
 
 HTML_OR_JS_COMMENTLINE = re.compile('^\s*(//.*|<!--.*-->)')
 
@@ -17,9 +17,8 @@ class JsonLdExtractor(object):
     _xp_jsonld = lxml.etree.XPath('descendant-or-self::script[@type="application/ld+json"]')
 
     def extract(self, htmlstring, base_url=None, encoding="UTF-8"):
-        parser = lxml.html.HTMLParser(encoding=encoding)
-        lxmldoc = lxml.html.fromstring(htmlstring, parser=parser)
-        return self.extract_items(lxmldoc, base_url=base_url)
+        tree = parse_html(htmlstring, encoding=encoding)
+        return self.extract_items(tree, base_url=base_url)
 
     def extract_items(self, document, base_url=None):
         return [item for items in map(self._extract_items,

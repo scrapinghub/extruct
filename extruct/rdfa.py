@@ -6,15 +6,15 @@ Based on pyrdfa3 and rdflib
 """
 import json
 import logging
+
 rdflib_logger = logging.getLogger('rdflib')
 rdflib_logger.setLevel(logging.ERROR)
 
-from lxml.html import fromstring
 from rdflib import Graph, logger as rdflib_logger
 from rdflib.plugins.parsers.pyRdfa import pyRdfa as PyRdfa, Options, logger as pyrdfa_logger
 from rdflib.plugins.parsers.pyRdfa.initialcontext import initial_context
 
-from extruct.xmldom import XmlDomHTMLParser
+from extruct.utils import parse_xmldom_html
 
 
 # silence rdflib/PyRdfa INFO logs
@@ -31,9 +31,7 @@ class RDFaExtractor(object):
 
     def extract(self, htmlstring, base_url=None, encoding="UTF-8",
                 expanded=True):
-
-        domparser = XmlDomHTMLParser(encoding=encoding)
-        tree = fromstring(htmlstring, parser=domparser)
+        tree = parse_xmldom_html(htmlstring, encoding=encoding)
         return self.extract_items(tree, base_url=base_url, expanded=expanded)
 
     def extract_items(self, document, base_url=None, expanded=True):

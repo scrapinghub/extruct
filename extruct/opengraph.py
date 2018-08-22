@@ -1,5 +1,6 @@
 import re
-import lxml.html
+
+from extruct.utils import parse_html
 
 
 _PREFIX_PATTERN = re.compile(r'\s*(\w+):\s*([^\s]+)')
@@ -17,9 +18,8 @@ class OpenGraphExtractor(object):
     """OpenGraph extractor following extruct API."""
 
     def extract(self, htmlstring, base_url=None, encoding='UTF-8'):
-        parser = lxml.html.HTMLParser(encoding=encoding)
-        doc = lxml.html.fromstring(htmlstring, parser=parser)
-        return list(self.extract_items(doc, base_url=base_url))
+        tree = parse_html(htmlstring, encoding=encoding)
+        return list(self.extract_items(tree, base_url=base_url))
 
     def extract_items(self, document, base_url=None):
         # OpenGraph defines a web page as a single rich object.

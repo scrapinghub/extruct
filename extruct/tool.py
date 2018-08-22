@@ -1,10 +1,12 @@
 import argparse
 import json
 import requests
+
 import extruct
 from extruct import SYNTAXES
 
-def metadata_from_url(url, syntaxes=SYNTAXES, uniform=False, 
+
+def metadata_from_url(url, syntaxes=SYNTAXES, uniform=False,
                       schema_context='http://schema.org', errors='strict'):
     resp = requests.get(url, timeout=30)
     result = {'url': url, 'status': '{} {}'.format(resp.status_code, resp.reason)}

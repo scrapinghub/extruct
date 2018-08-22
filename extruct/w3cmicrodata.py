@@ -16,8 +16,9 @@ except ImportError:
     from urllib.parse import urljoin
 
 import lxml.etree
-import lxml.html
 from w3lib.html import strip_html5_whitespace
+
+from extruct.utils import parse_html
 
 
 class LxmlMicrodataExtractor(object):
@@ -42,9 +43,8 @@ class LxmlMicrodataExtractor(object):
         return int(self._xp_item_docid(node))
 
     def extract(self, htmlstring, base_url=None, encoding="UTF-8"):
-        parser = lxml.html.HTMLParser(encoding=encoding)
-        lxmldoc = lxml.html.fromstring(htmlstring, parser=parser)
-        return self.extract_items(lxmldoc, base_url)
+        tree = parse_html(htmlstring, encoding=encoding)
+        return self.extract_items(tree, base_url)
 
     def extract_items(self, document, base_url):
         items_seen = set()

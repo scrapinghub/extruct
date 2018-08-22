@@ -1,16 +1,13 @@
 import logging
 import warnings
 
-from lxml.html import fromstring
-
 from extruct.jsonld import JsonLdExtractor
 from extruct.rdfa import RDFaExtractor
 from extruct.w3cmicrodata import MicrodataExtractor
 from extruct.opengraph import OpenGraphExtractor
 from extruct.microformat import MicroformatExtractor
-from extruct.xmldom import XmlDomHTMLParser
 from extruct.uniform import _umicrodata_microformat, _uopengraph
-
+from extruct.utils import parse_xmldom_html
 
 logger = logging.getLogger(__name__)
 SYNTAXES = ['microdata', 'opengraph', 'json-ld', 'microformat', 'rdfa']
@@ -52,8 +49,7 @@ def extract(htmlstring, base_url=None, encoding="UTF-8",
     if errors not in ['log', 'ignore', 'strict']:
         raise ValueError('Invalid error command, valid values are either "log"'
                          ', "ignore" or "strict"')
-    domparser = XmlDomHTMLParser(encoding=encoding)
-    tree = fromstring(htmlstring, parser=domparser)
+    tree = parse_xmldom_html(htmlstring, encoding=encoding)
     processors = []
     if 'microdata' in syntaxes:
         processors.append(('microdata', MicrodataExtractor(add_html_node=return_html_node).extract_items, tree))

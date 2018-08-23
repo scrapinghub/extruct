@@ -2,6 +2,22 @@
 History
 =======
 
+v0.7.0 (2018-08-23)
+-------------------
+
+In this release OpenGraph parsing is improved:
+
+* known OpenGraph namespaces (og, music, video,
+  article, book, profile) work without an explicitly defined prefix;
+* prefix is extracted both from ``<head>`` and ``<html>`` element attributes,
+  not only from ``<head>``;
+* prefix parsing is more permissive.
+
+Other changes:
+
+* pypi version badge is added to the README;
+* html parsing code is cleaned up.
+
 v0.6.0 (2018-08-09)
 -------------------
 

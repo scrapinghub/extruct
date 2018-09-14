@@ -6,15 +6,47 @@ matrix:
   include:
     - python: 2.7
       env: TOXENV=py27
-    - python: 3.4
-      env: TOXENV=py34
+    - python: pypy
+      env: TOXENV=pypy
+    #- python: 3.4
+      #env: TOXENV=py34
+    #- python: 3.5
+      #env: TOXENV=py35
+    #- python: 3.6
+      #env: TOXENV=py36
     - python: 3.5
-      env: TOXENV=py35
-    - python: 3.6
-      env: TOXENV=py36
+      env: TOXENV=pypy3
 
 # command to install dependencies
 install:
+  - |
+      if [ "$TOXENV" = "pypy" ]; then
+        export PYENV_ROOT="$HOME/.pyenv"
+        if [ -f "$PYENV_ROOT/bin/pyenv" ]; then
+          pushd "$PYENV_ROOT" && git pull && popd
+        else
+          rm -rf "$PYENV_ROOT" && git clone --depth 1 https://github.com/yyuu/pyenv.git "$PYENV_ROOT"
+        fi
+        # get latest PyPy from pyenv directly (thanks to natural version sort option -V)
+        export PYPY_VERSION=`"$PYENV_ROOT/bin/pyenv" install --list |grep -o -E 'pypy-[0-9][\.0-9]*$' |sort -V |tail -1`
+        "$PYENV_ROOT/bin/pyenv" install --skip-existing "$PYPY_VERSION"
+        virtualenv --python="$PYENV_ROOT/versions/$PYPY_VERSION/bin/python" "$HOME/virtualenvs/$PYPY_VERSION"
+        source "$HOME/virtualenvs/$PYPY_VERSION/bin/activate"
+      fi
+  - |
+      if [ "$TOXENV" = "pypy3" ]; then
+        export PYENV_ROOT="$HOME/.pyenv"
+        if [ -f "$PYENV_ROOT/bin/pyenv" ]; then
+          pushd "$PYENV_ROOT" && git pull && popd
+        else
+          rm -rf "$PYENV_ROOT" && git clone --depth 1 https://github.com/yyuu/pyenv.git "$PYENV_ROOT"
+        fi
+        # get latest PyPy3 from pyenv directly (thanks to natural version sort option -V)
+        export PYPY3_VERSION=`"$PYENV_ROOT/bin/pyenv" install --list |grep -o -E 'pypy3[\.0-9]*-[0-9][\.0-9]*(-alpha[0-9]*)?$' |sort -V |tail -1`
+        "$PYENV_ROOT/bin/pyenv" install --skip-existing "$PYPY3_VERSION"
+        virtualenv --python="$PYENV_ROOT/versions/$PYPY3_VERSION/bin/python" "$HOME/virtualenvs/$PYPY3_VERSION"
+        source "$HOME/virtualenvs/$PYPY3_VERSION/bin/activate"
+      fi
   - pip install -U tox codecov
 
 # command to run tests, e.g. python setup.py test

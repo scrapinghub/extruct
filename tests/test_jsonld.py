@@ -14,7 +14,15 @@ class TestJsonLD(unittest.TestCase):
     def test_songkick(self):
         self.assertJsonLdCorrect(
             folder='songkick',
-            page='Elysian Fields Brooklyn Tickets, The Owl Music Parlor, 31 Oct 2015')
+            page=
+            'Elysian Fields Brooklyn Tickets, The Owl Music Parlor, 31 Oct 2015'
+        )
+
+    def test_jsonld_empty_item(self):
+        self.assertJsonLdCorrect(
+            folder='songkick',
+            page='jsonld_empty_item_test'
+        )
 
     def test_jsonld_with_comments(self):
         for page in ['JoinAction.001', 'AllocateAction.001']:

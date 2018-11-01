@@ -21,10 +21,11 @@ class JsonLdExtractor(object):
         return self.extract_items(tree, base_url=base_url)
 
     def extract_items(self, document, base_url=None):
-        return [item for items in map(self._extract_items,
-                                      self._xp_jsonld(document))
-                     for item in items
-                         if item]
+        return [
+            item
+            for items in map(self._extract_items, self._xp_jsonld(document))
+            if items for item in items if item
+        ]
 
     def _extract_items(self, node):
         script = node.xpath('string()')
@@ -33,7 +34,8 @@ class JsonLdExtractor(object):
             data = json.loads(script, strict=False)
         except ValueError:
             # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
-            data = json.loads(HTML_OR_JS_COMMENTLINE.sub('', script), strict=False)
+            data = json.loads(
+                HTML_OR_JS_COMMENTLINE.sub('', script), strict=False)
         if isinstance(data, list):
             return data
         elif isinstance(data, dict):

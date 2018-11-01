@@ -14,8 +14,8 @@ def metadata_from_url(url, syntaxes=SYNTAXES, uniform=False,
         resp.raise_for_status()
     except requests.exceptions.HTTPError:
         return result
-    result.update(extruct.extract(resp.content, 
-                                  url=url, 
+    result.update(extruct.extract(resp.content,
+                                  base_url=url,  # FIXME: use base url
                                   syntaxes=syntaxes, 
                                   uniform=uniform,
                                   schema_context=schema_context,

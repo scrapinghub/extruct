@@ -39,7 +39,7 @@ def extract(htmlstring, base_url=None, encoding="UTF-8",
        schema_context: schema's context for current page"""
     if base_url is None and 'url' in kwargs:
         warnings.warn('"url" argument is deprecated, please use "base_url"',
-                      DeprecationWarning)
+                      DeprecationWarning, stacklevel=2)
         base_url = kwargs.pop('url')
     if kwargs:
         raise TypeError('Unexpected keyword arguments')

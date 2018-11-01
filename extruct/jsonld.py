@@ -10,7 +10,7 @@ import lxml.etree
 
 from extruct.utils import parse_html
 
-HTML_OR_JS_COMMENTLINE = re.compile('^\s*(//.*|<!--.*-->)')
+HTML_OR_JS_COMMENTLINE = re.compile(r'^\s*(//.*|<!--.*-->)')
 
 
 class JsonLdExtractor(object):

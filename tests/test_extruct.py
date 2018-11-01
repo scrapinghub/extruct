@@ -2,6 +2,8 @@
 import json
 import unittest
 
+import pytest
+
 import extruct
 from tests import get_testdata, jsonize_dict, replace_node_ref_with_node_id
 
@@ -31,8 +33,9 @@ class TestGeneric(unittest.TestCase):
 
     def test_deprecated_url(self):
         body, expected = self._microdata_custom_url('product_custom_url.json')
-        data = extruct.extract(body, url='http://some-example.com',
-                               syntaxes=['microdata'])
+        with pytest.warns(DeprecationWarning):
+            data = extruct.extract(body, url='http://some-example.com',
+                                   syntaxes=['microdata'])
         self.assertEqual(data, expected)
 
     def test_extra_kwargs(self):

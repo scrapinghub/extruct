@@ -2,6 +2,13 @@
 History
 =======
 
+v0.7.1 (2018-11-02)
+-------------------
+
+* json-ld parsing issue is fixed;
+* deprecation warning for ``url`` argument points to caller code;
+* better Python 3.7 support (fixed warnings, setup running 3.7 tests on CI).
+
 v0.7.0 (2018-08-23)
 -------------------
 

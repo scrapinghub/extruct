@@ -56,35 +56,44 @@ def extract(htmlstring,
                          ', "ignore" or "strict"')
     try:
         tree = parse_xmldom_html(htmlstring, encoding=encoding)
-        processors = []
-        if 'microdata' in syntaxes:
-            processors.append(
-                ('microdata', MicrodataExtractor(
-                    add_html_node=return_html_node).extract_items, tree))
-        if 'json-ld' in syntaxes:
-            processors.append(('json-ld', JsonLdExtractor().extract_items,
-                               tree))
-        if 'opengraph' in syntaxes:
-            processors.append(('opengraph', OpenGraphExtractor().extract_items,
-                               tree))
-        if 'microformat' in syntaxes:
-            processors.append(
-                ('microformat', MicroformatExtractor().extract_items,
-                 htmlstring))
-        if 'rdfa' in syntaxes:
-            processors.append(('rdfa', RDFaExtractor().extract_items, tree))
-        output = {}
-        for label, extract, document in processors:
-            try:
-                output[label] = list(extract(document, base_url=base_url))
-            except Exception:
-                if errors == 'log':
-                    logger.exception('Failed to extract {}'.format(label))
-                if errors == 'ignore':
-                    pass
-                if errors == 'strict':
-                    raise
-
+    except Exception as e:
+        if errors == 'ignore':
+            return {}
+        if errors == 'log':
+            logger.exception(
+                'Failed to parse html, exception raised {}'.format(e))
+            return {}
+        if errors == 'strict':
+            raise e
+    processors = []
+    if 'microdata' in syntaxes:
+        processors.append(
+            ('microdata', MicrodataExtractor(
+                add_html_node=return_html_node).extract_items, tree))
+    if 'json-ld' in syntaxes:
+        processors.append(('json-ld', JsonLdExtractor().extract_items,
+                           tree))
+    if 'opengraph' in syntaxes:
+        processors.append(('opengraph', OpenGraphExtractor().extract_items,
+                           tree))
+    if 'microformat' in syntaxes:
+        processors.append(
+            ('microformat', MicroformatExtractor().extract_items,
+             htmlstring))
+    if 'rdfa' in syntaxes:
+        processors.append(('rdfa', RDFaExtractor().extract_items, tree))
+    output = {}
+    for label, extract, document in processors:
+        try:
+            output[label] = list(extract(document, base_url=base_url))
+        except Exception:
+            if errors == 'log':
+                logger.exception('Failed to extract {}'.format(label))
+            if errors == 'ignore':
+                pass
+            if errors == 'strict':
+                raise
+    try:
         if uniform:
             if 'microdata' in syntaxes:
                 output['microdata'] = _umicrodata_microformat(
@@ -98,5 +107,11 @@ def extract(htmlstring,
     except Exception as e:
         if errors == 'ignore':
             return {}
-        raise e
+        if errors == 'log':
+            logger.exception(
+                'Failed to uniform extracted, exception raised {}'.format(e))
+            return {}
+        if errors == 'strict':
+            raise e
+
     return output

@@ -49,3 +49,19 @@ class TestGeneric(unittest.TestCase):
             get_testdata('schema.org', test_file)
             .decode('UTF-8'))}
         return body, expected
+
+    def test_errors(self):
+        body = ''
+
+        # raise exceptions
+        with pytest.raises(Exception):
+            data = extruct.extract(body)
+
+        # ignore exceptions
+        expected = {}
+        data = extruct.extract(body, errors='ignore')
+        assert data == expected
+
+        # ignore exceptions
+        data = extruct.extract(body, errors='log')
+        assert data == expected

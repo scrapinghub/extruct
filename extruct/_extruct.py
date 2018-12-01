@@ -68,23 +68,33 @@ def extract(htmlstring,
     processors = []
     if 'microdata' in syntaxes:
         processors.append(
-            ('microdata', MicrodataExtractor(
-                add_html_node=return_html_node).extract_items, tree))
+            ('microdata',
+             MicrodataExtractor(add_html_node=return_html_node).extract_items,
+             tree
+             ))
     if 'json-ld' in syntaxes:
-        processors.append(('json-ld', JsonLdExtractor().extract_items,
-                           tree))
+        processors.append(
+            ('json-ld',
+             JsonLdExtractor().extract_items,
+             tree,
+             ))
     if 'opengraph' in syntaxes:
-        processors.append(('opengraph', OpenGraphExtractor().extract_items,
-                           tree))
+        processors.append(
+            ('opengraph',
+             OpenGraphExtractor().extract_items,
+             tree
+             ))
     if 'microformat' in syntaxes:
         processors.append(
-            ('microformat', MicroformatExtractor().extract_items,
-             htmlstring))
+            ('microformat',
+             MicroformatExtractor().extract_items,
+             htmlstring
+             ))
     if 'rdfa' in syntaxes:
         processors.append(
             ('rdfa', RDFaExtractor().extract_items,
-            tree,
-            ))
+             tree,
+             ))
     output = {}
     for syntax, extract, document in processors:
         try:

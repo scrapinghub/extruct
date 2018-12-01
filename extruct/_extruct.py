@@ -81,37 +81,58 @@ def extract(htmlstring,
             ('microformat', MicroformatExtractor().extract_items,
              htmlstring))
     if 'rdfa' in syntaxes:
-        processors.append(('rdfa', RDFaExtractor().extract_items, tree))
+        processors.append(
+            ('rdfa', RDFaExtractor().extract_items,
+            tree,
+            ))
     output = {}
-    for label, extract, document in processors:
+    for syntax, extract, document in processors:
         try:
-            output[label] = list(extract(document, base_url=base_url))
+            output[syntax] = list(extract(document, base_url=base_url))
         except Exception:
             if errors == 'log':
-                logger.exception('Failed to extract {}'.format(label))
+                logger.exception('Failed to extract {}'.format(syntax))
             if errors == 'ignore':
                 pass
             if errors == 'strict':
                 raise
-    try:
-        if uniform:
-            if 'microdata' in syntaxes:
-                output['microdata'] = _umicrodata_microformat(
-                    output['microdata'], schema_context=schema_context)
-            if 'microformat' in syntaxes:
-                output['microformat'] = _umicrodata_microformat(
-                    output['microformat'],
-                    schema_context='http://microformats.org/wiki/')
-            if 'opengraph' in syntaxes:
-                output['opengraph'] = _uopengraph(output['opengraph'])
-    except Exception as e:
-        if errors == 'ignore':
-            return {}
-        if errors == 'log':
-            logger.exception(
-                'Failed to uniform extracted, exception raised {}'.format(e))
-            return {}
-        if errors == 'strict':
-            raise e
+    if uniform:
+        uniform_processors = []
+        if 'microdata' in syntaxes:
+            uniform_processors.append(
+                ('microdata',
+                 _umicrodata_microformat,
+                 output['microdata'],
+                 schema_context,
+                 ))
+        if 'microformat' in syntaxes:
+            uniform_processors.append(
+                ('microformat',
+                 _umicrodata_microformat,
+                 output['microformat'],
+                 'http://microformats.org/wiki/',
+                 ))
+        if 'opengraph' in syntaxes:
+            uniform_processors.append(
+                ('opengraph',
+                 _uopengraph,
+                 output['opengraph'],
+                 None,
+                 ))
+        for syntax, uniform, raw, schema_context in uniform_processors:
+            try:
+                if syntax == 'opengraph':
+                        output[syntax] = uniform(raw)
+                else:
+                    output[syntax] = uniform(raw, schema_context)
+            except Exception as e:
+                if errors == 'ignore':
+                    output[syntax] = []
+                if errors == 'log':
+                    output[syntax] = []
+                    logger.exception(
+                        f'Failed to uniform extracted, exception raised {e}')
+                if errors == 'strict':
+                    raise e
 
     return output

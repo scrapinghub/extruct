@@ -61,7 +61,7 @@ def extract(htmlstring,
             return {}
         if errors == 'log':
             logger.exception(
-                'Failed to parse html, exception raised {}'.format(e))
+                f'Failed to parse html, raises {e}')
             return {}
         if errors == 'strict':
             raise e
@@ -99,9 +99,9 @@ def extract(htmlstring,
     for syntax, extract, document in processors:
         try:
             output[syntax] = list(extract(document, base_url=base_url))
-        except Exception:
+        except Exception as e:
             if errors == 'log':
-                logger.exception('Failed to extract {}'.format(syntax))
+                logger.exception(f'Failed to extract {syntax}, raises {e}')
             if errors == 'ignore':
                 pass
             if errors == 'strict':
@@ -132,7 +132,7 @@ def extract(htmlstring,
         for syntax, uniform, raw, schema_context in uniform_processors:
             try:
                 if syntax == 'opengraph':
-                        output[syntax] = uniform(raw)
+                    output[syntax] = uniform(raw)
                 else:
                     output[syntax] = uniform(raw, schema_context)
             except Exception as e:
@@ -141,8 +141,8 @@ def extract(htmlstring,
                 if errors == 'log':
                     output[syntax] = []
                     logger.exception(
-                        f'Failed to uniform extracted, exception raised {e}')
+                        f'Failed to uniform extracted for {syntax}, raises {e}')
                 if errors == 'strict':
-                    raise e
+                    raise
 
     return output

@@ -61,7 +61,7 @@ def extract(htmlstring,
             return {}
         if errors == 'log':
             logger.exception(
-                f'Failed to parse html, raises {e}')
+                'Failed to parse html, raises {}'.format(e))
             return {}
         if errors == 'strict':
             raise e
@@ -101,7 +101,9 @@ def extract(htmlstring,
             output[syntax] = list(extract(document, base_url=base_url))
         except Exception as e:
             if errors == 'log':
-                logger.exception(f'Failed to extract {syntax}, raises {e}')
+                logger.exception('Failed to extract {}, raises {}'
+                                 .format(syntax, e)
+                                 )
             if errors == 'ignore':
                 pass
             if errors == 'strict':
@@ -141,7 +143,9 @@ def extract(htmlstring,
                 if errors == 'log':
                     output[syntax] = []
                     logger.exception(
-                        f'Failed to uniform extracted for {syntax}, raises {e}')
+                        'Failed to uniform extracted for {}, raises {}'
+                        .format(syntax, e)
+                        )
                 if errors == 'strict':
                     raise
 

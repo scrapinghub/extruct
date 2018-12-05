@@ -64,7 +64,7 @@ def extract(htmlstring,
                 'Failed to parse html, raises {}'.format(e))
             return {}
         if errors == 'strict':
-            raise e
+            raise
     processors = []
     if 'microdata' in syntaxes:
         processors.append(

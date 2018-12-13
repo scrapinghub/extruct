@@ -6,11 +6,12 @@ from extruct.rdfa import RDFaExtractor
 from extruct.w3cmicrodata import MicrodataExtractor
 from extruct.opengraph import OpenGraphExtractor
 from extruct.microformat import MicroformatExtractor
+from extruct.dublincore import DublinCoreExtractor
 from extruct.uniform import _umicrodata_microformat, _uopengraph
 from extruct.utils import parse_xmldom_html
 
 logger = logging.getLogger(__name__)
-SYNTAXES = ['microdata', 'opengraph', 'json-ld', 'microformat', 'rdfa']
+SYNTAXES = ['microdata', 'opengraph', 'json-ld', 'microformat', 'rdfa', 'dublincore']
 
 
 def extract(htmlstring,
@@ -93,6 +94,11 @@ def extract(htmlstring,
     if 'rdfa' in syntaxes:
         processors.append(
             ('rdfa', RDFaExtractor().extract_items,
+             tree,
+             ))
+    if 'dublincore' in syntaxes:
+        processors.append(
+            ('dublincore', DublinCoreExtractor().extract_items,
              tree,
              ))
     output = {}

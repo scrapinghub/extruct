@@ -114,7 +114,7 @@ class DublinCoreExtractor(object):
 
         def get_lower_attrib(name):
             # get attribute to compare against _DC_TERMS or _DC_ELEMENTS
-            return re.sub(".*\.", "", name).lower()
+            return re.sub(r".*\.", "", name).lower()
 
         def attrib_to_dict(attribs):
             # convert _attrib type to dict
@@ -143,7 +143,7 @@ class DublinCoreExtractor(object):
         namespaces = {}
         for i in namespaces_nodes:
             if i.attrib['href'] in _URL_NAMESPACES:
-                namespaces.update({re.sub("schema\.", "", i.attrib['rel']): i.attrib['href']})
+                namespaces.update({re.sub(r"schema\.", "", i.attrib['rel']): i.attrib['href']})
 
         list_meta_node = document.xpath('//meta')
         for meta_node in list_meta_node:

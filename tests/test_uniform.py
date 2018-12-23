@@ -84,6 +84,47 @@ class TestUniform(unittest.TestCase):
         data = extruct.extract(body, syntaxes=['microdata'], uniform=True)
         self.assertEqual(data['microdata'], expected)
 
+    def test_udublincore(self):
+        expected = [{'elements': [{'name': 'DC.title',
+                     'lang': 'en',
+                     'content': 'Expressing Dublin Core\nin HTML/XHTML meta and link elements',
+                     'URI': 'http://purl.org/dc/elements/1.1/title'},
+                    {'name': 'DC.creator',
+                     'content': 'Andy Powell, UKOLN, University of Bath',
+                     'URI': 'http://purl.org/dc/elements/1.1/creator'},
+                    {'name': 'DC.identifier',
+                     'scheme': 'DCTERMS.URI',
+                     'content': 'http://dublincore.org/documents/dcq-html/',
+                     'URI': 'http://purl.org/dc/elements/1.1/identifier'},
+                    {'name': 'DC.format',
+                     'scheme': 'DCTERMS.IMT',
+                     'content': 'text/html',
+                     'URI': 'http://purl.org/dc/elements/1.1/format'}],
+                   'terms': [{'name': 'DCTERMS.issued',
+                     'scheme': 'DCTERMS.W3CDTF',
+                     'content': '2003-11-01',
+                     'URI': 'http://purl.org/dc/terms/issued'},
+                    {'name': 'DCTERMS.abstract',
+                     'content': 'This document describes how\nqualified Dublin Core metadata can be encoded\nin HTML/XHTML <meta> elements',
+                     'URI': 'http://purl.org/dc/terms/abstract'},
+                    {'name': 'DC.Date.modified',
+                     'content': '2001-07-18',
+                     'URI': 'http://purl.org/dc/terms/modified'},
+                    {'name': 'DCTERMS.modified',
+                     'content': '2001-07-18',
+                     'URI': 'http://purl.org/dc/terms/modified'},
+                    {'rel': 'DCTERMS.replaces',
+                     'hreflang': 'en',
+                     'href': 'http://dublincore.org/documents/2000/08/15/dcq-html/',
+                     'URI': 'http://purl.org/dc/terms/replaces'}],
+                   '@context': {'DC': 'http://purl.org/dc/elements/1.1/',
+                    'DCTERMS': 'http://purl.org/dc/terms/'},
+                   '@type': 'Text'}]
+        body = get_testdata('misc', 'dublincore_test.html')
+        data = extruct.extract(body, syntaxes=['dublincore'], uniform=True)
+        self.assertEqual(data['dublincore'], expected)
+
+
 
     def test_infer_context(self):
         context = 'http://schema.org/UsedCondition'

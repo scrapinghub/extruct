@@ -101,6 +101,11 @@ _DC_TERMS = {  # Defined according: http://dublincore.org/documents/2008/01/14/d
 _URL_NAMESPACES = ['http://purl.org/dc/terms/', 'http://purl.org/dc/elements/1.1/']
 
 
+def get_lower_attrib(name):
+    # get attribute to compare against _DC_TERMS or _DC_ELEMENTS
+    return re.sub(r".*\.", "", name).lower()
+
+
 class DublinCoreExtractor(object):
     """DublinCore extractor following extruct API."""
 
@@ -111,10 +116,6 @@ class DublinCoreExtractor(object):
     def extract_items(self, document, base_url=None):
         elements = []
         terms = []
-
-        def get_lower_attrib(name):
-            # get attribute to compare against _DC_TERMS or _DC_ELEMENTS
-            return re.sub(r".*\.", "", name).lower()
 
         def attrib_to_dict(attribs):
             # convert _attrib type to dict

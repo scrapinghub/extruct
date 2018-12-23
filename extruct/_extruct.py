@@ -7,7 +7,7 @@ from extruct.w3cmicrodata import MicrodataExtractor
 from extruct.opengraph import OpenGraphExtractor
 from extruct.microformat import MicroformatExtractor
 from extruct.dublincore import DublinCoreExtractor
-from extruct.uniform import _umicrodata_microformat, _uopengraph
+from extruct.uniform import _umicrodata_microformat, _uopengraph, _udublincore
 from extruct.utils import parse_xmldom_html
 
 logger = logging.getLogger(__name__)
@@ -137,9 +137,17 @@ def extract(htmlstring,
                  output['opengraph'],
                  None,
                  ))
+        if 'dublincore' in syntaxes:
+            uniform_processors.append(
+                ('dublincore',
+                 _udublincore,
+                 output['dublincore'],
+                 None,
+                 ))
+
         for syntax, uniform, raw, schema_context in uniform_processors:
             try:
-                if syntax == 'opengraph':
+                if syntax in ['opengraph', 'dublincore']:
                     output[syntax] = uniform(raw)
                 else:
                     output[syntax] = uniform(raw, schema_context)

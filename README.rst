@@ -26,6 +26,7 @@ Currently, *extruct* supports:
 - `Microformat`_ via `mf2py`_
 - `Facebook's Open Graph`_
 - (experimental) `RDFa`_ via `rdflib`_
+- `Dublin Core Metadata`_
 
 .. _W3C's HTML Microdata: http://www.w3.org/TR/microdata/
 .. _embedded JSON-LD: http://www.w3.org/TR/json-ld/#embedding-json-ld-in-html-documents
@@ -34,6 +35,7 @@ Currently, *extruct* supports:
 .. _Microformat: http://microformats.org/wiki/Main_Page
 .. _mf2py: https://github.com/microformats/mf2py
 .. _Facebook's Open Graph: http://ogp.me/
+.. _Dublin Core Metadata: http://dublincore.org/documents/dcq-html/
 
 The microdata algorithm is a revisit of `this Scrapinghub blog post`_ showing how to use EXSLT extensions.
 
@@ -62,110 +64,132 @@ Let's try this on a webpage that uses all the syntaxes supported (RDFa with `ogp
 
 First fetch the HTML using python-requests and then feed the response body to ``extruct``::
 
-  >>> import extruct
-  >>> import requests
-  >>> import pprint
-  >>> from w3lib.html import get_base_url
-  >>>
-  >>> pp = pprint.PrettyPrinter(indent=2)
-  >>> r = requests.get('https://www.optimizesmart.com/how-to-use-open-graph-protocol/')
-  >>> base_url = get_base_url(r.text, r.url)
-  >>> data = extruct.extract(r.text, base_url=base_url)
-  >>>
-  >>> pp.pprint(data)
-  { 'json-ld': [ { '@context': 'https://schema.org',
-                   '@id': '#organization',
-                   '@type': 'Organization',
-                   'logo': 'https://www.optimizesmart.com/wp-content/uploads/2016/03/optimize-smart-Twitter-logo.jpg',
-                   'name': 'Optimize Smart',
-                   'sameAs': [ 'https://www.facebook.com/optimizesmart/',
-                               'https://uk.linkedin.com/in/analyticsnerd',
-                               'https://www.youtube.com/user/optimizesmart',
-                               'https://twitter.com/analyticsnerd'],
-                   'url': 'https://www.optimizesmart.com/'}],
-    'microdata': [ { 'properties': {'headline': ''},
-                     'type': 'http://schema.org/WPHeader'}],
-    'microformat': [ { 'children': [ { 'properties': { 'category': [ 'specialized-tracking'],
-                                                       'name': [ 'Open Graph '
-                                                                 'Protocol for '
-                                                                 'Facebook '
-                                                                 'explained with '
-                                                                 'examples\n'
-                                                                 '\n'
-                                                                 'Specialized '
-                                                                 'Tracking\n'
-                                                                 '\n'
-                                                                 '\n'
-                                                                 (...)
-                                                                 'Follow '
-                                                                 '@analyticsnerd\n'
-                                                                 '!function(d,s,id){var '
-                                                                 "js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, "
-                                                                 "'script', "
-                                                                 "'twitter-wjs');"]},
-                                       'type': ['h-entry']}],
-                       'properties': { 'name': [ 'Open Graph Protocol for '
-                                                 'Facebook explained with '
-                                                 'examples\n'
-                                                 (...)
-                                                 'Follow @analyticsnerd\n'
-                                                 '!function(d,s,id){var '
-                                                 "js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, "
-                                                 "'script', 'twitter-wjs');"]},
-                       'type': ['h-feed']}],
-    'opengraph': [ { 'namespace': {'og': 'http://ogp.me/ns#'},
-                     'properties': [ ('og:locale', 'en_US'),
-                                     ('og:type', 'article'),
-                                     ( 'og:title',
-                                       'Open Graph Protocol for Facebook '
-                                       'explained with examples'),
-                                     ( 'og:description',
-                                       'What is Open Graph Protocol and why you '
-                                       'need it? Learn to implement Open Graph '
-                                       'Protocol for Facebook on your website. '
-                                       'Open Graph Protocol Meta Tags.'),
-                                     ( 'og:url',
-                                       'https://www.optimizesmart.com/how-to-use-open-graph-protocol/'),
-                                     ('og:site_name', 'Optimize Smart'),
-                                     ( 'og:updated_time',
-                                       '2018-03-09T16:26:35+00:00'),
-                                     ( 'og:image',
-                                       'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'),
-                                     ( 'og:image:secure_url',
-                                       'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg')]}],
-    'rdfa': [ { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/#header',
-                'http://www.w3.org/1999/xhtml/vocab#role': [ { '@id': 'http://www.w3.org/1999/xhtml/vocab#banner'}]},
-              { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/',
-                'article:modified_time': [ { '@value': '2018-03-09T16:26:35+00:00'}],
-                'article:published_time': [ { '@value': '2010-07-02T18:57:23+00:00'}],
-                'article:publisher': [ { '@value': 'https://www.facebook.com/optimizesmart/'}],
-                'article:section': [{'@value': 'Specialized Tracking'}],
-                'http://ogp.me/ns#description': [ { '@value': 'What is Open '
-                                                              'Graph Protocol '
-                                                              'and why you need '
-                                                              'it? Learn to '
-                                                              'implement Open '
-                                                              'Graph Protocol '
-                                                              'for Facebook on '
-                                                              'your website. '
-                                                              'Open Graph '
-                                                              'Protocol Meta '
-                                                              'Tags.'}],
-                'http://ogp.me/ns#image': [ { '@value': 'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'}],
-                'http://ogp.me/ns#image:secure_url': [ { '@value': 'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'}],
-                'http://ogp.me/ns#locale': [{'@value': 'en_US'}],
-                'http://ogp.me/ns#site_name': [{'@value': 'Optimize Smart'}],
-                'http://ogp.me/ns#title': [ { '@value': 'Open Graph Protocol for '
-                                                        'Facebook explained with '
-                                                        'examples'}],
-                'http://ogp.me/ns#type': [{'@value': 'article'}],
-                'http://ogp.me/ns#updated_time': [ { '@value': '2018-03-09T16:26:35+00:00'}],
-                'http://ogp.me/ns#url': [ { '@value': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/'}],
-                'https://api.w.org/': [ { '@id': 'https://www.optimizesmart.com/wp-json/'}]}]}
+    >>> import extruct
+    >>> import requests
+    >>> import pprint
+    >>> from w3lib.html import get_base_url
+    >>> pp = pprint.PrettyPrinter(indent=2)
+    >>> r = requests.get('https://www.optimizesmart.com/how-to-use-open-graph-protocol/')
+    >>> base_url = get_base_url(r.text, r.url)
+    >>> data = extruct.extract(r.text, base_url=base_url)
+    >>> pp.pprint(data)
+    { 'dublincore': [ { 'elements': [ { 'URI': 'http://purl.org/dc/elements/1.1/description',
+                                        'content': 'What is Open Graph Protocol '
+                                                   'and why you need it? Learn to '
+                                                   'implement Open Graph Protocol '
+                                                   'for Facebook on your website. '
+                                                   'Open Graph Protocol Meta Tags.',
+                                        'name': 'description'}],
+                        'namespaces': {},
+                        'terms': []}],
+      'json-ld': [ { '@context': 'https://schema.org',
+                     '@id': 'https://www.optimizesmart.com/#organization',
+                     '@type': 'Organization',
+                     'logo': 'https://www.optimizesmart.com/wp-content/uploads/2016/03/optimize-smart-Twitter-logo.jpg',
+                     'name': 'Optimize Smart',
+                     'sameAs': [ 'https://www.facebook.com/optimizesmart/',
+                                 'https://uk.linkedin.com/in/analyticsnerd',
+                                 'https://www.youtube.com/user/optimizesmart',
+                                 'https://twitter.com/analyticsnerd'],
+                     'url': 'https://www.optimizesmart.com/'},
+                   { '@context': 'http://schema.org',
+                     '@id': '',
+                     '@type': 'ProfessionalService',
+                     'address': { '@type': 'PostalAddress',
+                                  'addressCountry': 'GB',
+                                  'addressLocality': 'Southampton',
+                                  'postalCode': '',
+                                  'streetAddress': ''},
+                     'image': 'https://www.optimizesmart.com/wp-content/themes/Sept17OptimizeSmartDEV/images/logo-small.png',
+                     'name': 'Optimize Smart',
+                     'openingHoursSpecification': { '@type': 'OpeningHoursSpecification',
+                                                    'closes': '23:59',
+                                                    'dayOfWeek': [ 'Monday',
+                                                                   'Tuesday',
+                                                                   'Wednesday',
+                                                                   'Thursday',
+                                                                   'Friday',
+                                                                   'Saturday',
+                                                                   'Sunday'],
+                                                    'opens': '00:00'},
+                     'sameAs': [ 'https://www.facebook.com/optimizesmart/',
+                                 'https://twitter.com/OptimizeSmart',
+                                 'https://www.youtube.com/user/optimizesmart',
+                                 'https://www.linkedin.com/in/analyticsnerd/'],
+                     'telephone': '',
+                     'url': 'https://www.optimizesmart.com'}],
+      'microdata': [ { 'properties': {'headline': ''},
+                       'type': 'http://schema.org/WPHeader'}],
+      'microformat': [ { 'children': [ { 'properties': { 'category': [ 'facebook-tracking',
+                                                                       'specialized-tracking']},
+                                         'type': ['h-entry']}],
+                         'properties': {},
+                         'type': ['h-feed']}],
+      'opengraph': [ { 'namespace': { 'article': 'http://ogp.me/ns/article#',
+                                      'og': 'http://ogp.me/ns#'},
+                       'properties': [ ('og:locale', 'en_US'),
+                                       ('og:type', 'article'),
+                                       ( 'og:title',
+                                         'Open Graph Protocol for Facebook '
+                                         'explained with examples'),
+                                       ( 'og:description',
+                                         'What is Open Graph Protocol and why you '
+                                         'need it? Learn to implement Open Graph '
+                                         'Protocol for Facebook on your website. '
+                                         'Open Graph Protocol Meta Tags.'),
+                                       ( 'og:url',
+                                         'https://www.optimizesmart.com/how-to-use-open-graph-protocol/'),
+                                       ('og:site_name', 'Optimize Smart'),
+                                       ( 'article:publisher',
+                                         'https://www.facebook.com/optimizesmart/'),
+                                       ('article:section', 'Facebook Tracking'),
+                                       ( 'article:published_time',
+                                         '2017-02-02T18:57:23+00:00'),
+                                       ( 'article:modified_time',
+                                         '2019-01-11T10:49:01+00:00'),
+                                       ( 'og:updated_time',
+                                         '2019-01-11T10:49:01+00:00'),
+                                       ( 'og:image',
+                                         'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'),
+                                       ( 'og:image:secure_url',
+                                         'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'),
+                                       ('og:image:width', '711'),
+                                       ('og:image:height', '309')]}],
+      'rdfa': [ { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/#header',
+                  'http://www.w3.org/1999/xhtml/vocab#role': [ { '@id': 'http://www.w3.org/1999/xhtml/vocab#banner'}]},
+                { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/',
+                  'article:modified_time': [ { '@value': '2019-01-11T10:49:01+00:00'}],
+                  'article:published_time': [ { '@value': '2017-02-02T18:57:23+00:00'}],
+                  'article:publisher': [ { '@value': 'https://www.facebook.com/optimizesmart/'}],
+                  'article:section': [{'@value': 'Facebook Tracking'}],
+                  'http://ogp.me/ns#description': [ { '@value': 'What is Open '
+                                                                'Graph Protocol '
+                                                                'and why you need '
+                                                                'it? Learn to '
+                                                                'implement Open '
+                                                                'Graph Protocol '
+                                                                'for Facebook on '
+                                                                'your website. '
+                                                                'Open Graph '
+                                                                'Protocol Meta '
+                                                                'Tags.'}],
+                  'http://ogp.me/ns#image': [ { '@value': 'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'}],
+                  'http://ogp.me/ns#image:height': [{'@value': '309'}],
+                  'http://ogp.me/ns#image:secure_url': [ { '@value': 'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'}],
+                  'http://ogp.me/ns#image:width': [{'@value': '711'}],
+                  'http://ogp.me/ns#locale': [{'@value': 'en_US'}],
+                  'http://ogp.me/ns#site_name': [{'@value': 'Optimize Smart'}],
+                  'http://ogp.me/ns#title': [ { '@value': 'Open Graph Protocol for '
+                                                          'Facebook explained with '
+                                                          'examples'}],
+                  'http://ogp.me/ns#type': [{'@value': 'article'}],
+                  'http://ogp.me/ns#updated_time': [ { '@value': '2019-01-11T10:49:01+00:00'}],
+                  'http://ogp.me/ns#url': [ { '@value': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/'}],
+                  'https://api.w.org/': [ { '@id': 'https://www.optimizesmart.com/wp-json/'}]}]}
 
 Select syntaxes
 +++++++++++++++
-It is possible to select which syntaxes to extract by passing a list with the desired ones to extract. Valid values: 'microdata', 'json-ld', 'opengraph', 'microformat', 'rdfa'. If no list is passed all syntaxes will be extracted and returned::
+It is possible to select which syntaxes to extract by passing a list with the desired ones to extract. Valid values: 'microdata', 'json-ld', 'opengraph', 'microformat', 'rdfa', 'dublincore'. If no list is passed all syntaxes will be extracted and returned::
 
   >>> r = requests.get('http://www.songkick.com/artists/236156-elysian-fields')
   >>> base_url = get_base_url(r.text, r.url)
@@ -209,7 +233,7 @@ It is possible to select which syntaxes to extract by passing a list with the de
 
 Uniform
 +++++++
-Another option is to uniform the output of microformat, opengraph, microdata and json-ld syntaxes to the following structure: ::
+Another option is to uniform the output of microformat, opengraph, microdata, dublincore and json-ld syntaxes to the following structure: ::
 
     {'@context': 'http://example.com', 
                  '@type': 'example_type',
@@ -585,6 +609,81 @@ Microformat extraction
         ]
       }
    }]
+   
+DublinCore extraction
+++++++++++++++++++++++++++++++
+::
+
+    >>> import pprint
+    >>> pp = pprint.PrettyPrinter(indent=2)
+    >>> from extruct.dublincore import DublinCoreExtractor
+    >>> html = '''<head profile="http://dublincore.org/documents/dcq-html/">
+    ... <title>Expressing Dublin Core in HTML/XHTML meta and link elements</title>
+    ... <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
+    ... <link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" />
+    ... 
+    ... 
+    ... <meta name="DC.title" lang="en" content="Expressing Dublin Core
+    ... in HTML/XHTML meta and link elements" />
+    ... <meta name="DC.creator" content="Andy Powell, UKOLN, University of Bath" />
+    ... <meta name="DCTERMS.issued" scheme="DCTERMS.W3CDTF" content="2003-11-01" />
+    ... <meta name="DC.identifier" scheme="DCTERMS.URI"
+    ... content="http://dublincore.org/documents/dcq-html/" />
+    ... <link rel="DCTERMS.replaces" hreflang="en"
+    ... href="http://dublincore.org/documents/2000/08/15/dcq-html/" />
+    ... <meta name="DCTERMS.abstract" content="This document describes how
+    ... qualified Dublin Core metadata can be encoded
+    ... in HTML/XHTML &lt;meta&gt; elements" />
+    ... <meta name="DC.format" scheme="DCTERMS.IMT" content="text/html" />
+    ... <meta name="DC.type" scheme="DCTERMS.DCMIType" content="Text" />
+    ... <meta name="DC.Date.modified" content="2001-07-18" />
+    ... <meta name="DCTERMS.modified" content="2001-07-18" />'''
+    >>> dublinlde = DublinCoreExtractor()
+    >>> data = dublinlde.extract(html)
+    >>> pp.pprint(data)
+    [ { 'elements': [ { 'URI': 'http://purl.org/dc/elements/1.1/title',
+                        'content': 'Expressing Dublin Core\n'
+                                   'in HTML/XHTML meta and link elements',
+                        'lang': 'en',
+                        'name': 'DC.title'},
+                      { 'URI': 'http://purl.org/dc/elements/1.1/creator',
+                        'content': 'Andy Powell, UKOLN, University of Bath',
+                        'name': 'DC.creator'},
+                      { 'URI': 'http://purl.org/dc/elements/1.1/identifier',
+                        'content': 'http://dublincore.org/documents/dcq-html/',
+                        'name': 'DC.identifier',
+                        'scheme': 'DCTERMS.URI'},
+                      { 'URI': 'http://purl.org/dc/elements/1.1/format',
+                        'content': 'text/html',
+                        'name': 'DC.format',
+                        'scheme': 'DCTERMS.IMT'},
+                      { 'URI': 'http://purl.org/dc/elements/1.1/type',
+                        'content': 'Text',
+                        'name': 'DC.type',
+                        'scheme': 'DCTERMS.DCMIType'}],
+        'namespaces': { 'DC': 'http://purl.org/dc/elements/1.1/',
+                        'DCTERMS': 'http://purl.org/dc/terms/'},
+        'terms': [ { 'URI': 'http://purl.org/dc/terms/issued',
+                     'content': '2003-11-01',
+                     'name': 'DCTERMS.issued',
+                     'scheme': 'DCTERMS.W3CDTF'},
+                   { 'URI': 'http://purl.org/dc/terms/abstract',
+                     'content': 'This document describes how\n'
+                                'qualified Dublin Core metadata can be encoded\n'
+                                'in HTML/XHTML <meta> elements',
+                     'name': 'DCTERMS.abstract'},
+                   { 'URI': 'http://purl.org/dc/terms/modified',
+                     'content': '2001-07-18',
+                     'name': 'DC.Date.modified'},
+                   { 'URI': 'http://purl.org/dc/terms/modified',
+                     'content': '2001-07-18',
+                     'name': 'DCTERMS.modified'},
+                   { 'URI': 'http://purl.org/dc/terms/replaces',
+                     'href': 'http://dublincore.org/documents/2000/08/15/dcq-html/',
+                     'hreflang': 'en',
+                     'rel': 'DCTERMS.replaces'}]}]
+
+
 
 REST API service
 ----------------

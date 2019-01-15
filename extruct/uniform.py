@@ -30,11 +30,11 @@ def _udublincore(extracted):
         context = obj.pop('namespaces', None)
         obj['@context'] = context
         elements = obj['elements']
-        for element in elements:
+        for element in list(elements):
             for key, value in element.items():
                 if get_lower_attrib(value) == 'type':
                     obj['@type'] = element['content']
-                    elements.remove(element)
+                    obj['elements'].remove(element)
                     break
         out.append(obj)
     return out

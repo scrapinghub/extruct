@@ -1,6 +1,7 @@
 import re
 
 from extruct.utils import parse_html
+from w3lib.html import strip_html5_whitespace
 
 _DC_ELEMENTS = {  # Defined according DCMES(DCM Version 1.1): http://dublincore.org/documents/dces/
     'contributor': 'http://purl.org/dc/elements/1.1/contributor',
@@ -119,10 +120,7 @@ class DublinCoreExtractor(object):
 
         def attrib_to_dict(attribs):
             # convert _attrib type to dict
-            node_dict = {}
-            for attrib, value in attribs.items():
-                node_dict.update({attrib: value})
-            return node_dict
+            return dict(attribs.items())
 
         def populate_results(node, main_attrib):
             # fill list with DC Elements or DC Terms
@@ -143,8 +141,8 @@ class DublinCoreExtractor(object):
         namespaces_nodes = document.xpath('//link[contains(@rel,"schema")]')
         namespaces = {}
         for i in namespaces_nodes:
-            if i.attrib['href'] in _URL_NAMESPACES:
-                namespaces.update({re.sub(r"schema\.", "", i.attrib['rel']): i.attrib['href']})
+            if strip_html5_whitespace(i.attrib['href']) in _URL_NAMESPACES:
+                namespaces.update({re.sub(r"schema\.", "", i.attrib['rel']): strip_html5_whitespace(i.attrib['href'])})
 
         list_meta_node = document.xpath('//meta')
         for meta_node in list_meta_node:

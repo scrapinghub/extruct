@@ -26,7 +26,7 @@ def _umicrodata_microformat(extracted, schema_context):
 
 def _udublincore(extracted):
     out = []
-    for obj in extracted:
+    for obj in list(extracted):
         context = obj.pop('namespaces', None)
         obj['@context'] = context
         elements = obj['elements']

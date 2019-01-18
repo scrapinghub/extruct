@@ -141,8 +141,9 @@ class DublinCoreExtractor(object):
         namespaces_nodes = document.xpath('//link[contains(@rel,"schema")]')
         namespaces = {}
         for i in namespaces_nodes:
-            if strip_html5_whitespace(i.attrib['href']) in _URL_NAMESPACES:
-                namespaces.update({re.sub(r"schema\.", "", i.attrib['rel']): strip_html5_whitespace(i.attrib['href'])})
+            url = strip_html5_whitespace(i.attrib['href'])
+            if url in _URL_NAMESPACES:
+                namespaces.update({re.sub(r"schema\.", "", i.attrib['rel']): url})
 
         list_meta_node = document.xpath('//meta')
         for meta_node in list_meta_node:

@@ -23,7 +23,7 @@ class JsonLdExtractor(object):
     def extract_items(self, document, base_url=None, as_json=False):
         return [
             item
-            for items in map(self._extract_items_raw if as_json else self.extract_items, self._xp_jsonld(document))
+            for items in map(self._extract_items_raw if as_json else self._extract_items, self._xp_jsonld(document))
             if items for item in items if item
         ]
 

@@ -29,12 +29,15 @@ class JsonLdExtractor(object):
         ]
 
     def _extract_items_raw(self, node):
-        return HTML_OR_JS_COMMENTLINE.sub('', node.xpath('string()'))
+        return node.xpath('string()')
 
     def _extract_items(self, node):
         script = self._extract_items_raw(node)
         # TODO: `strict=False` can be configurable if needed
-        data = json.loads(script, strict=False)
+        try:
+            data = json.loads(script, strict=False)
+        except ValueError:
+            data = json.loads(HTML_OR_JS_COMMENTLINE.sub('', script), strict=False)
         if isinstance(data, list):
             return data
         elif isinstance(data, dict):

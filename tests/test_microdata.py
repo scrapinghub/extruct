@@ -171,3 +171,16 @@ class TestUrlJoin(unittest.TestCase):
         mde = MicrodataExtractor()
         data = mde.extract(body, base_url='http://some-example.com')
         self.assertEqual(data, expected)
+
+
+class TestItemref(unittest.TestCase):
+
+    maxDiff = None
+
+    def test_join_none(self):
+        body = get_testdata('schema.org', 'product-ref.html')
+        expected = json.loads(get_testdata('schema.org', 'product-ref.json').decode('UTF-8'))
+
+        mde = MicrodataExtractor()
+        data = mde.extract(body)
+        self.assertEqual(data, expected)

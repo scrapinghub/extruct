@@ -119,10 +119,21 @@ class LxmlMicrodataExtractor(object):
                 yield p, v
 
     def _extract_property_refs(self, node, refid, items_seen, base_url):
-        for prop in node.xpath("id($refid)/descendant-or-self::*[@itemprop]", refid=refid):
+        ref_node = node.xpath("id($refid)[1]", refid=refid)
+        if not ref_node:
+            return
+        ref_node = ref_node[0]
+        base_parent_scope = ref_node.xpath("ancestor-or-self::*[@itemscope][1]")
+        if 'itemprop' in ref_node.keys():
             for p, v in self._extract_property(
-                    prop, items_seen=items_seen, base_url=base_url):
+                    ref_node, items_seen=items_seen, base_url=base_url):
                 yield p, v
+        for prop in ref_node.xpath("descendant::*[@itemprop]"):
+            parent_scope = prop.xpath("ancestor::*[@itemscope][1]")
+            if parent_scope == base_parent_scope:
+                for p, v in self._extract_property(
+                        prop, items_seen=items_seen, base_url=base_url):
+                    yield p, v
 
     def _extract_property(self, node, items_seen, base_url):
         props = node.get("itemprop").split()

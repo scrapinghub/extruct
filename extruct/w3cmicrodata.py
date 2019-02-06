@@ -10,6 +10,8 @@ follows http://www.w3.org/TR/microdata/#json
 """
 
 import collections
+from functools import partial
+
 try:
     from urlparse import urljoin
 except ImportError:
@@ -123,17 +125,19 @@ class LxmlMicrodataExtractor(object):
         if not ref_node:
             return
         ref_node = ref_node[0]
-        base_parent_scope = ref_node.xpath("ancestor-or-self::*[@itemscope][1]")
-        if 'itemprop' in ref_node.keys():
-            for p, v in self._extract_property(
-                    ref_node, items_seen=items_seen, base_url=base_url):
-                yield p, v
-        for prop in ref_node.xpath("descendant::*[@itemprop]"):
-            parent_scope = prop.xpath("ancestor::*[@itemscope][1]")
-            if parent_scope == base_parent_scope:
-                for p, v in self._extract_property(
-                        prop, items_seen=items_seen, base_url=base_url):
-                    yield p, v
+        extract_fn = partial(self._extract_property, items_seen=items_seen,
+                             base_url=base_url)
+        if 'itemprop' in ref_node.keys() and 'itemscope' in ref_node.keys():
+            # An full item will be extracted from the node, no need to look
+            # for individual properties in childs
+            yield from extract_fn(ref_node)
+        else:
+            base_parent_scope = ref_node.xpath("ancestor-or-self::*[@itemscope][1]")
+            for prop in ref_node.xpath("descendant-or-self::*[@itemprop]"):
+                parent_scope = prop.xpath("ancestor::*[@itemscope][1]")
+                # Skip properties defined in a different scope than the ref_node
+                if parent_scope == base_parent_scope:
+                    yield from extract_fn(prop)
 
     def _extract_property(self, node, items_seen, base_url):
         props = node.get("itemprop").split()

@@ -183,4 +183,5 @@ class TestItemref(unittest.TestCase):
 
         mde = MicrodataExtractor()
         data = mde.extract(body)
+        print(json.dumps(data, indent=4))
         self.assertEqual(data, expected)

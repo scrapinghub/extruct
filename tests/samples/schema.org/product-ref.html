@@ -5,7 +5,7 @@
  </head>
  <body>
 
-  <div id="product" itemscope itemtype="http://schema.org/Product" itemref="other-product-properties more-properties related_products">
+  <div id="product" itemscope itemtype="http://schema.org/Product" itemref="referenced-product more-properties related_products non-existing-ref">
     <span itemprop="brand">ACME</span>
     <span itemprop="name">Executive Anvil</span>
     <img itemprop="image" src=" anvil_executive.jpg" alt="Executive Anvil logo"/>
@@ -33,13 +33,13 @@
       <link itemprop="availability" href="  http://schema.org/InStock"/>In stock! Order now!
     </span>
   </div>
-  <div id="other-product-properties" itemscope itemtype="http://schema.org/Product" itemprop="referenced_product">
-    <span itemprop="prop2">PROP 2</span>
-    <img itemprop="image" src="img-2.jpg">
+  <div id="referenced-product" itemscope itemtype="http://schema.org/Product" itemprop="referenced_product">
+    <span itemprop="name">REFERENCED PRODUCT</span>
+    <img itemprop="image" src="img-ref.jpg">
   </div>
   <div id="more-properties" itemscope itemtype="http://schema.org/Product">
-    <span itemprop="prop3">PROP 3</span>
-    <img itemprop="image" src="img-3.jpg">
+    <span itemprop="prop3">REFERENCED TO INCLUDE PROPERTIES AND ALSO INDIVIDUAL PRODUCT</span>
+    <img itemprop="image" src="img-2.jpg">
   </div>
   <div id="related_products">
     <div itemscope itemtype="http://schema.org/Product" itemprop="related_products">

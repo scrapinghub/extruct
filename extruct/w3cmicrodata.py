@@ -79,17 +79,17 @@ class LxmlMicrodataExtractor(object):
                 item["id"] = itemid.strip()
 
         properties = collections.defaultdict(list)
-        # start with item references
+        for name, value in self._extract_properties(
+                node, items_seen=items_seen, base_url=base_url):
+            properties[name].append(value)
+
+        # process item references
         refs = node.get('itemref', '').split()
         if refs:
             for refid in refs:
                 for name, value in self._extract_property_refs(
                         node, refid, items_seen=items_seen, base_url=base_url):
                     properties[name].append(value)
-
-        for name, value in self._extract_properties(
-                node, items_seen=items_seen, base_url=base_url):
-            properties[name].append(value)
 
         props = []
         for (name, values) in properties.items():

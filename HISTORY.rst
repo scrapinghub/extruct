@@ -6,8 +6,8 @@ v0.7.2 (TBA)
 ------------
 
 * Cover all possible exception cases dealt by ``extruct()`` ``errors`` attribute for values ``strict``, ``log`` and ``ignore``
-* avoid including ``itemprop`` from child ``itemscope`` when using ``itemref``
-* proper processing order for ``itemref``
+* avoid including ``itemprop`` from child ``itemscope`` when using ``itemref`` for microdata
+* proper processing order for ``itemref`` for microdata
 
 v0.7.1 (2018-11-02)
 -------------------

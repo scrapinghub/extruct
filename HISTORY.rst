@@ -6,7 +6,7 @@ v0.7.2 (TBA)
 ------------
 
 * ignore any exception if errors='ignore'
-* avoid including ``itemprop`` from child ``itemscopes`` when using ``itemref``
+* avoid including ``itemprop`` from child ``itemscope`` when using ``itemref``
 * proper processing order for ``itemref``
 
 v0.7.1 (2018-11-02)

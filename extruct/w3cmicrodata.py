@@ -10,6 +10,8 @@ follows http://www.w3.org/TR/microdata/#json
 """
 
 import collections
+from functools import partial
+
 try:
     from urlparse import urljoin
 except ImportError:
@@ -77,17 +79,17 @@ class LxmlMicrodataExtractor(object):
                 item["id"] = itemid.strip()
 
         properties = collections.defaultdict(list)
-        # start with item references
+        for name, value in self._extract_properties(
+                node, items_seen=items_seen, base_url=base_url):
+            properties[name].append(value)
+
+        # process item references
         refs = node.get('itemref', '').split()
         if refs:
             for refid in refs:
                 for name, value in self._extract_property_refs(
                         node, refid, items_seen=items_seen, base_url=base_url):
                     properties[name].append(value)
-
-        for name, value in self._extract_properties(
-                node, items_seen=items_seen, base_url=base_url):
-            properties[name].append(value)
 
         props = []
         for (name, values) in properties.items():
@@ -119,10 +121,25 @@ class LxmlMicrodataExtractor(object):
                 yield p, v
 
     def _extract_property_refs(self, node, refid, items_seen, base_url):
-        for prop in node.xpath("id($refid)/descendant-or-self::*[@itemprop]", refid=refid):
-            for p, v in self._extract_property(
-                    prop, items_seen=items_seen, base_url=base_url):
+        ref_node = node.xpath("id($refid)[1]", refid=refid)
+        if not ref_node:
+            return
+        ref_node = ref_node[0]
+        extract_fn = partial(self._extract_property, items_seen=items_seen,
+                             base_url=base_url)
+        if 'itemprop' in ref_node.keys() and 'itemscope' in ref_node.keys():
+            # An full item will be extracted from the node, no need to look
+            # for individual properties in childs
+            for p, v in extract_fn(ref_node):
                 yield p, v
+        else:
+            base_parent_scope = ref_node.xpath("ancestor-or-self::*[@itemscope][1]")
+            for prop in ref_node.xpath("descendant-or-self::*[@itemprop]"):
+                parent_scope = prop.xpath("ancestor::*[@itemscope][1]")
+                # Skip properties defined in a different scope than the ref_node
+                if parent_scope == base_parent_scope:
+                    for p, v in extract_fn(prop):
+                        yield p, v
 
     def _extract_property(self, node, items_seen, base_url):
         props = node.get("itemprop").split()

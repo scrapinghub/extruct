@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <title>Photo gallery</title>
+ </head>
+ <body>
+
+  <div id="product" itemscope itemtype="http://schema.org/Product" itemref="referenced-product more-properties related_products non-existing-ref">
+    <span itemprop="brand">ACME</span>
+    <span itemprop="name">Executive Anvil</span>
+    <img itemprop="image" src=" anvil_executive.jpg" alt="Executive Anvil logo"/>
+    <span itemprop="description">Sleeker than ACME's Classic Anvil, the
+      Executive Anvil is perfect for the business traveler
+      looking for something to drop from a height.
+    </span>
+    Product #: <span itemprop="mpn">925872</span>
+    <span id="aggregateRating" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+      <span itemprop="ratingValue">4.4</span> stars, based on <span itemprop="reviewCount">89
+        </span> reviews
+    </span>
+
+    <span id="offer" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+      Regular price: $179.99
+      <meta itemprop="priceCurrency" content="USD" />
+      $<span itemprop="price">119.99 </span>
+      (Sale ends <time itemprop="priceValidUntil" datetime="2020-11-05">
+        5 November!</time>)
+      Available from: <span id="organization" itemprop="seller" itemscope itemtype="http://schema.org/Organization">
+                        <span itemprop="name">Executive Objects</span>
+                      </span>
+      Condition: <link itemprop="itemCondition" href="http://schema.org/UsedCondition"/>Previously owned,
+        in excellent condition
+      <link itemprop="availability" href="  http://schema.org/InStock"/>In stock! Order now!
+    </span>
+  </div>
+  <div id="referenced-product" itemscope itemtype="http://schema.org/Product" itemprop="referenced_product">
+    <span itemprop="name">REFERENCED PRODUCT</span>
+    <img itemprop="image" src="img-ref.jpg">
+  </div>
+  <div id="more-properties" itemscope itemtype="http://schema.org/Product">
+    <span itemprop="prop3">REFERENCED TO INCLUDE PROPERTIES AND ALSO INDIVIDUAL PRODUCT</span>
+    <img itemprop="image" src="img-2.jpg">
+  </div>
+  <div id="related_products">
+    <div itemscope itemtype="http://schema.org/Product" itemprop="related_products">
+      <span itemprop="name">REL PROD 1</span>
+      <img itemprop="image" src="rel-prod-1.jpg">
+    </div>
+    <div itemscope itemtype="http://schema.org/Product" itemprop="related_products">
+      <span itemprop="name">REL PROD 2</span>
+      <img itemprop="image" src="rel-prod-2.jpg">
+    </div>
+   </div>
+ </body>
+</html>

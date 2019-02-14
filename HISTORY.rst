@@ -5,7 +5,7 @@ History
 v0.7.2 (TBA)
 ------------
 
-* ignore any exception if errors='ignore'
+* Cover all possible exception cases dealt by ``extruct()`` ``errors`` attribute for values ``strict``, ``log`` and ``ignore``
 * avoid including ``itemprop`` from child ``itemscope`` when using ``itemref``
 * proper processing order for ``itemref``
 

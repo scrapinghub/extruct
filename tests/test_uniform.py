@@ -30,12 +30,12 @@ class TestUniform(unittest.TestCase):
     def test_uopengraph_duplicated_priorities(self):
         # Ensures that first seen property is kept when flattening
         data = _uopengraph([{'properties':
-                                 [(f'prop_{k}', f'value_{v}')
+                                 [('prop_{}'.format(k), 'value_{}'.format(v))
                                   for k in range(5)
                                   for v in range(5)],
                              'namespace': 'namespace'}])
         for k in range(5):
-            assert data[0][f'prop_{k}'] == 'value_0'
+            assert data[0]['prop_{}'.format(k)] == 'value_0'
 
     def test_umicroformat(self):
         expected = [ { '@context': 'http://microformats.org/wiki/',

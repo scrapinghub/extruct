@@ -4,7 +4,7 @@ from six.moves.urllib.parse import urlparse, urljoin
 def _uopengraph(extracted):
     out = []
     for obj in extracted:
-        flattened = dict(obj['properties'])
+        flattened = dict(reversed(obj['properties']))
         t = flattened.pop('og:type', None)
         if t:
             flattened['@type'] = t

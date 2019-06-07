@@ -202,6 +202,10 @@
                 [
                     "og:image",
                     "http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg"
+                ],
+                [
+                    "og:image",
+                    "http://images.sk-static.com/SECONDARY_IMAGE.jpg"
                 ]
             ]
         }
@@ -233,6 +237,9 @@
             "http://ogp.me/ns#image": [
                 {
                     "@value": "http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg"
+                },
+                {
+                    "@value": "http://images.sk-static.com/SECONDARY_IMAGE.jpg"
                 }
             ],
             "http://ogp.me/ns#site_name": [

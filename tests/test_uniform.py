@@ -1,7 +1,7 @@
 import unittest
 
 import extruct
-from extruct.uniform import _flatten, infer_context, flatten_dict
+from extruct.uniform import _flatten, infer_context, flatten_dict, _uopengraph
 from tests import get_testdata
 
 
@@ -26,6 +26,16 @@ class TestUniform(unittest.TestCase):
         body = get_testdata('songkick', 'elysianfields.html')
         data = extruct.extract(body, syntaxes=['opengraph'], uniform=True)
         self.assertEqual(data['opengraph'], expected)
+
+    def test_uopengraph_duplicated_priorities(self):
+        # Ensures that first seen property is kept when flattening
+        data = _uopengraph([{'properties':
+                                 [(f'prop_{k}', f'value_{v}')
+                                  for k in range(5)
+                                  for v in range(5)],
+                             'namespace': 'namespace'}])
+        for k in range(5):
+            assert data[0][f'prop_{k}'] == 'value_0'
 
     def test_umicroformat(self):
         expected = [ { '@context': 'http://microformats.org/wiki/',

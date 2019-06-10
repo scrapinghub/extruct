@@ -2,6 +2,13 @@
 History
 =======
 
+v0.7.3 (2019-06-10)
+-------------------
+
+* In case of duplicate OpenGraph definitions (e.g. multiple ``og:image``),
+  extruct now keeps the first one, not the last one,
+  to do the same as Facebook.
+
 v0.7.2 (2019-02-14)
 -------------------
 

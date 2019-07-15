@@ -38,12 +38,13 @@ class TestMicrodata(unittest.TestCase):
             self.assertEqual(data, expected)
 
     def test_schemaorg_Event(self):
-        for i in  [1, 2, 3, 4, 8]:
+        for i in [1, 2, 3, 4, 8]:
             body = get_testdata('schema.org', 'Event.{:03d}.html'.format(i))
             expected = json.loads(get_testdata('schema.org', 'Event.{:03d}.json'.format(i)).decode('UTF-8'))
 
             mde = MicrodataExtractor()
             data = mde.extract(body)
+
             self.assertEqual(data, expected)
 
     def test_w3c_textContent_values(self):

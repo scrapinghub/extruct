@@ -37,7 +37,7 @@
                                            "offers": "foo-fighters-everlong-buy.html",
                                            "url": "foo-fighters-everlong.html"},
                             "type": "http://schema.org/MusicRecording"}],
-                 "video": {"properties": {"description": "Catch this exclusive interview with\n    Dave Grohl and the Foo Fighters about their new album, Rope.",
+                 "video": {"properties": {"description": "Catch this exclusive interview with Dave Grohl and the Foo Fighters about their new album, Rope.",
                                           "duration": "T1M33S",
                                           "name": "Interview with the Foo Fighters",
                                           "thumbnail": "foo-fighters-interview-thumb.jpg"},

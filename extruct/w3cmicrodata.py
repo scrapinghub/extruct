@@ -71,12 +71,11 @@ class LxmlMicrodataExtractor(object):
         return self.extract_items(tree, base_url)
 
     def extract_items(self, document, base_url):
-        cleaned_document = cleaner.clean_html(document)
         items_seen = set()
         return [
             item for item in (
                 self._extract_item(it, items_seen=items_seen, base_url=base_url)
-                for it in self._xp_item(cleaned_document))
+                for it in self._xp_item(document))
             if item]
 
     def _extract_item(self, node, items_seen, base_url):
@@ -205,7 +204,8 @@ class LxmlMicrodataExtractor(object):
             return self._extract_textContent(node)
 
     def _extract_textContent(self, node):
-        return html_text.etree_to_text(node)
+        clean_node = cleaner.clean_html(node)
+        return html_text.etree_to_text(clean_node)
 
 
 MicrodataExtractor = LxmlMicrodataExtractor

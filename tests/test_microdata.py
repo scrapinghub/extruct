@@ -5,6 +5,7 @@ import unittest
 from extruct.w3cmicrodata import MicrodataExtractor
 from tests import get_testdata
 
+
 class TestMicrodata(unittest.TestCase):
 
     maxDiff = None

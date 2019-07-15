@@ -184,3 +184,17 @@ class TestItemref(unittest.TestCase):
         mde = MicrodataExtractor()
         data = mde.extract(body)
         self.assertEqual(data, expected)
+
+
+class TestMicrodataWithDescription(unittest.TestCase):
+    maxDiff = None
+
+    def test_if_punctuations_in_description_are_correctly_formatted(self):
+        body = get_testdata('websites', 'microdata-with-description.html')
+        expected = json.loads(get_testdata(
+            'websites', 'microdata-with-description.json').decode('UTF-8'))
+
+        mde = MicrodataExtractor()
+        data = mde.extract(body)
+
+        self.assertEqual(data, expected)

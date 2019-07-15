@@ -11,7 +11,6 @@ follows http://www.w3.org/TR/microdata/#json
 
 import collections
 from functools import partial
-from copy import deepcopy
 
 try:
     from urlparse import urljoin

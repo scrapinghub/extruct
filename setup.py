@@ -33,6 +33,7 @@ setup(
                       'rdflib-jsonld', 
                       'mf2py', 
                       'w3lib',
+                      'html-text>=0.5.1',
                       'six'],
     extras_require={
         'service': [

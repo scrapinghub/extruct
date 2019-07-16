@@ -32,6 +32,8 @@ class OpenGraphExtractor(object):
             for el in head.xpath('meta[@property and @content]'):
                 prop = el.attrib['property']
                 val = el.attrib['content']
+                if prop == '' or val == '':
+                    continue
                 ns = prop.partition(':')[0]
                 if ns in _OG_NAMESPACES:
                     namespaces[ns] = _OG_NAMESPACES[ns]

@@ -5,7 +5,6 @@ import unittest
 import pytest
 
 import extruct
-from extruct import SYNTAXES
 from tests import get_testdata, jsonize_dict, replace_node_ref_with_node_id
 
 

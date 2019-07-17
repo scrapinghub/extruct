@@ -7,6 +7,6 @@ requests
 rdflib
 rdflib-jsonld
 mf2py>=1.1.0
-six
+six>=1.11
 w3lib
 html-text

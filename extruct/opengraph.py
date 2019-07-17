@@ -30,8 +30,8 @@ class OpenGraphExtractor(object):
             namespaces.update(self.get_namespaces(head))
             props = []
             for el in head.xpath('meta[@property and @content]'):
-                prop = el.attrib['property']
-                val = el.attrib['content']
+                prop = el.attrib['property'].strip()
+                val = el.attrib['content'].strip()
                 if prop == '' or val == '':
                     continue
                 ns = prop.partition(':')[0]

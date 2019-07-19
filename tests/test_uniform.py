@@ -74,7 +74,7 @@ class TestUniform(unittest.TestCase):
                       "brand": "ACME",
                       "name": "Executive Anvil",
                       "image": "anvil_executive.jpg",
-                      "description": "Sleeker than ACME's Classic Anvil, the\n    Executive Anvil is perfect for the business traveler\n    looking for something to drop from a height.",
+                      "description": "Sleeker than ACME's Classic Anvil, the Executive Anvil is perfect for the business traveler looking for something to drop from a height.",
                       "mpn": "925872",
                       "aggregateRating": {
                           "@type": "AggregateRating",

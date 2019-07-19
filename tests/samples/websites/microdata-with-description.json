@@ -1,0 +1,44 @@
+[
+ {
+  "type": "http://schema.org/Product",
+  "properties": {
+   "name": "Johnsons 4 Fleas Cats & Kittens Tablets",
+   "brand": "Johnsons",
+   "offers": [
+    {
+     "type": "http://schema.org/AggregateOffer",
+     "properties": {
+      "offercount": "2",
+      "priceCurrency": "GBP",
+      "lowPrice": "5.29",
+      "highPrice": "9.56"
+     }
+    },
+    {
+     "type": "http://schema.org/Offer",
+     "properties": {
+      "name": "Johnsons 4 Fleas Cats & Kittens Tablets 6 Treatment Pack",
+      "sku": "CS20858_1",
+      "price": "9.56",
+      "priceCurrency": "GBP",
+      "availability": "http://schema.org/InStock",
+      "itemCondition": "http://schema.org/NewCondition"
+     }
+    },
+    {
+     "type": "http://schema.org/Offer",
+     "properties": {
+      "name": "Johnsons 4 Fleas Cats & Kittens Tablets 3 Treatment Pack",
+      "sku": "CS20858_2",
+      "price": "5.29",
+      "priceCurrency": "GBP",
+      "availability": "http://schema.org/InStock",
+      "itemCondition": "http://schema.org/NewCondition"
+     }
+    }
+   ],
+   "image": "https://res.cloudinary.com/monsterpetsupplies/image/upload/f_auto,c_pad,w_500,h_500,q_75/q_100/v1481710164/cat_kitten_flea_tabs_3_eaunpi.jpg",
+   "description": "Johnsons 4 Fleas Cats & Kittens - 3 Treatment Pack, 6 Treatment Pack\n\nFor use with Cats and Kittens over 4 weeks of age between 1 and 11kg.\nJohnson's 4fleas tablets are an easy to use oral treatment to kill adult fleas found on your pet.\nEffects on the fleas may be seen as soon as 15 minutes after administration.\nBetween 95 - 100% of fleas will be killed off in the first six hours, but ALL adult fleas will be gone after a day.\nThese tablets can be given directly to the mouth or may be mixed in a small portion f our pet's favourite food and given immediately. Administer a single tablet on an day when fleas are seen on your pet. Repeat on any subsequent day as necessary. Do not give more than one treatment per day.\nYou may notice your pet scratching more than usual for the first half hour after administration; this is completely normal and caused by the fleas reacting to Johnson's 4Fleas tablets.\nWhile highly effective by themselves, 4Fleas is great when used as part of a programme to eliminate fleas and their larvae from both pets and their surroundings."
+  }
+ }
+]

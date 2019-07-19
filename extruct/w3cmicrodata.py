@@ -18,9 +18,30 @@ except ImportError:
     from urllib.parse import urljoin
 
 import lxml.etree
+from lxml.html.clean import Cleaner
 from w3lib.html import strip_html5_whitespace
+import html_text
 
 from extruct.utils import parse_html
+
+
+# Cleaner which is similar to html_text cleaner, but is less aggressive
+cleaner = Cleaner(
+    scripts=True,
+    javascript=False,  # onclick attributes are fine
+    comments=True,
+    style=True,
+    links=True,
+    meta=True,
+    page_structure=False,  # <title> may be nice to have
+    processing_instructions=True,
+    embedded=False,  # keep embedded content
+    frames=False,  # keep frames
+    forms=False,  # keep forms
+    annoying_tags=False,
+    remove_unknown_tags=False,
+    safe_attrs_only=False,
+)
 
 
 class LxmlMicrodataExtractor(object):
@@ -182,7 +203,8 @@ class LxmlMicrodataExtractor(object):
             return self._extract_textContent(node)
 
     def _extract_textContent(self, node):
-        return u"".join(self._xp_clean_text(node)).strip()
+        clean_node = cleaner.clean_html(node)
+        return html_text.etree_to_text(clean_node)
 
 
 MicrodataExtractor = LxmlMicrodataExtractor

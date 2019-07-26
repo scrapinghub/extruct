@@ -4,7 +4,13 @@ from six.moves.urllib.parse import urlparse, urljoin
 def _uopengraph(extracted):
     out = []
     for obj in extracted:
-        flattened = dict(reversed(obj['properties']))
+        # In order of appearance in the page
+        properties = list(reversed(obj['properties']))
+        # Ensuring that never empty value is returned if there is a duplicated
+        # property with non empty value
+        non_empty_props = {k for k, v in properties if v and v.strip()}
+        flattened = {k: v for k, v in properties
+                     if k not in non_empty_props or (v and v.strip())}
         t = flattened.pop('og:type', None)
         if t:
             flattened['@type'] = t

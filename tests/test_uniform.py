@@ -37,6 +37,28 @@ class TestUniform(unittest.TestCase):
         for k in range(5):
             assert data[0]['prop_{}'.format(k)] == 'value_0'
 
+        # Ensures that empty is not returned if a property contains any
+        # non empty value
+        data = _uopengraph([{'properties':
+                                 [('prop_empty', ' '),
+
+                                  ('prop_non_empty', ' '),
+                                  ('prop_non_empty', 'value!'),
+
+                                  ('prop_non_empty2', 'value!'),
+                                  ('prop_non_empty2', ' '),
+
+                                  ('prop_non_empty3', ' '),
+                                  ('prop_non_empty3', 'value!'),
+                                  ('prop_non_empty3', 'other value'),
+                                  ],
+                             'namespace': 'namespace'}])
+        assert data[0]['prop_empty'] == ' '
+        assert data[0]['prop_non_empty'] == 'value!'
+        assert data[0]['prop_non_empty2'] == 'value!'
+        assert data[0]['prop_non_empty3'] == 'value!'
+
+
     def test_umicroformat(self):
         expected = [ { '@context': 'http://microformats.org/wiki/',
                      '@type': ['h-hidden-phone', 'h-hidden-tablet'],

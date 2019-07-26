@@ -9,8 +9,8 @@ def _uopengraph(extracted):
         # Ensuring that never empty value is returned if there is a duplicated
         # property with non empty value
         non_empty_props = {k for k, v in properties if v and v.strip()}
-        flattened = dict((k, v) for k, v in properties
-                          if k not in non_empty_props or (v and v.strip()))
+        flattened = {k: v for k, v in properties
+                     if k not in non_empty_props or (v and v.strip())}
         t = flattened.pop('og:type', None)
         if t:
             flattened['@type'] = t

@@ -49,7 +49,6 @@ class LxmlMicrodataExtractor(object):
     _xp_prop = lxml.etree.XPath("""set:difference(.//*[@itemprop],
                                                   .//*[@itemscope]//*[@itemprop])""",
                                 namespaces = {"set": "http://exslt.org/sets"})
-    _xp_clean_text = lxml.etree.XPath('descendant-or-self::*[not(self::script or self::style)]/text()')
     # ancestor and preceding axes contain all elements before the context node
     # so counting them gives the "document order" of the context node
     _xp_item_docid = lxml.etree.XPath("""count(preceding::*[@itemscope])

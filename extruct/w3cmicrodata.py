@@ -67,7 +67,7 @@ class LxmlMicrodataExtractor(object):
 
     def extract(self, htmlstring, base_url=None, encoding="UTF-8"):
         tree = parse_html(htmlstring, encoding=encoding)
-        return self.extract_items(tree, base_url)
+        return self.extract_items(cleaner.clean_html(tree), base_url)
 
     def extract_items(self, document, base_url):
         items_seen = set()
@@ -203,8 +203,7 @@ class LxmlMicrodataExtractor(object):
             return self._extract_textContent(node)
 
     def _extract_textContent(self, node):
-        clean_node = cleaner.clean_html(node)
-        return html_text.etree_to_text(clean_node)
+        return html_text.etree_to_text(node)
 
 
 MicrodataExtractor = LxmlMicrodataExtractor

@@ -66,14 +66,15 @@ class LxmlMicrodataExtractor(object):
 
     def extract(self, htmlstring, base_url=None, encoding="UTF-8"):
         tree = parse_html(htmlstring, encoding=encoding)
-        return self.extract_items(cleaner.clean_html(tree), base_url)
+        return self.extract_items(tree, base_url)
 
     def extract_items(self, document, base_url):
+        cleaned_document = cleaner.clean_html(document)
         items_seen = set()
         return [
             item for item in (
                 self._extract_item(it, items_seen=items_seen, base_url=base_url)
-                for it in self._xp_item(document))
+                for it in self._xp_item(cleaned_document))
             if item]
 
     def _extract_item(self, node, items_seen, base_url):

@@ -2,6 +2,15 @@
 History
 =======
 
+v0.8.0 (2019-10-07)
+-------------------
+* Python 3.4 support is dropped;
+* in case of duplicate OpenGraph definitions (e.g. multiple ``og:image``),
+  empty results are de-prioritized now, to do the same as Facebook;
+* text content of microdata attributes is now extracted using html-text
+  library, which fixes badly extracted text in some cases
+  (words glued together, etc.)
+
 v0.7.3 (2019-06-10)
 -------------------
 

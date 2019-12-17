@@ -8,48 +8,58 @@ from tests import get_testdata
 
 class TestJsonLD(unittest.TestCase):
 
-    maxDiff = None
-
     def test_schemaorg_CreativeWork(self):
-        for i in [1]:
-            body = get_testdata('schema.org', 'CreativeWork.{:03d}.html'.format(i))
-            expected = json.loads(get_testdata('schema.org', 'CreativeWork.{:03d}.jsonld'.format(i)).decode('UTF-8'))
-
-            jsonlde = JsonLdExtractor()
-            data = jsonlde.extract(body)
-            self.assertEqual(data, expected)
+        self.assertJsonLdCorrect(folder='schema.org', page='CreativeWork.001')
 
     def test_songkick(self):
-        for page in [
-                "Elysian Fields Brooklyn Tickets, The Owl Music Parlor, 31 Oct 2015",
-                # "Maxïmo Park Gigography, Tour History & Past Concerts",
-                # "Years & Years Tickets, Tour Dates 2015 & Concerts",
-        ]:
-            body = get_testdata('songkick', '{}.html'.format(page))
-            expected = json.loads(get_testdata('songkick', '{}.jsonld'.format(page)).decode('UTF-8'))
+        self.assertJsonLdCorrect(
+            folder='songkick',
+            page=
+            'Elysian Fields Brooklyn Tickets, The Owl Music Parlor, 31 Oct 2015'
+        )
 
-            jsonlde = JsonLdExtractor()
-            data = jsonlde.extract(body)
-            self.assertEqual(data, expected)
+    def test_jsonld_empty_item(self):
+        self.assertJsonLdCorrect(
+            folder='songkick',
+            page='jsonld_empty_item_test'
+        )
 
     def test_jsonld_with_comments(self):
-        for prefix in ['JoinAction.001',
-                       'AllocateAction.001',
-                       ]:
-            body = get_testdata('schema.org.invalid', '{}.html'.format(prefix))
-            expected = json.loads(get_testdata('schema.org.invalid', '{}.jsonld'.format(prefix)).decode('UTF-8'))
+        for page in ['JoinAction.001', 'AllocateAction.001']:
+            self.assertJsonLdCorrect(folder='schema.org.invalid', page=page)
 
-            jsonlde = JsonLdExtractor()
-            data = jsonlde.extract(body)
-            self.assertEqual(data, expected)
+        for page in ['JoinAction.001', 'AllocateAction.001']:
+            self.assertJsonLdCorrect(folder='custom.invalid', page=page)
+
+    def test_jsonld_with_control_characters(self):
+        self.assertJsonLdCorrect(
+            folder='custom.invalid',
+            page='JSONLD_with_control_characters')
+
+    def test_jsonld_with_control_characters_comment(self):
+        self.assertJsonLdCorrect(
+            folder='custom.invalid',
+            page='JSONLD_with_control_characters_comment')
+
+    def assertJsonLdCorrect(self, folder, page):
+        body, expected = self._get_body_expected(folder, page)
+        self._check_jsonld(body, expected)
+
+    def _get_body_expected(self, folder, page):
+        body = get_testdata(folder, '{}.html'.format(page))
+        expected = get_testdata(folder, '{}.jsonld'.format(page))
+        return body, json.loads(expected.decode('utf8'))
+
+    def _check_jsonld(self, body, expected):
+        jsonlde = JsonLdExtractor()
+        data = jsonlde.extract(body)
+        self.assertEqual(data, expected)
 
     def test_null(self):
-        for page in [
-                "null_ld_mock",
-        ]:
-            body = get_testdata('misc', '{}.html'.format(page))
-            expected = json.loads(get_testdata('misc', '{}.jsonld'.format(page)).decode('UTF-8'))
+        page = "null_ld_mock"
+        body = get_testdata('misc', '{}.html'.format(page))
+        expected = json.loads(get_testdata('misc', '{}.jsonld'.format(page)).decode('UTF-8'))
 
-            jsonlde = JsonLdExtractor()
-            data = jsonlde.extract(body)
-            self.assertEqual(data, expected)
+        jsonlde = JsonLdExtractor()
+        data = jsonlde.extract(body)
+        self.assertEqual(data, expected)

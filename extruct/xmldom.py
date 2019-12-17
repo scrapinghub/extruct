@@ -3,8 +3,9 @@ from copy import deepcopy, copy
 from xml.dom import Node
 from xml.dom.minidom import Attr, NamedNodeMap
 
-from lxml.etree import ElementBase, _ElementStringResult, _ElementUnicodeResult, XPath, tostring
-from lxml.html import fromstring, HTMLParser, HtmlElementClassLookup
+from lxml.etree import (ElementBase, _ElementStringResult,
+                        _ElementUnicodeResult, XPath, tostring)
+from lxml.html import HTMLParser, HtmlElementClassLookup
 
 
 class DomElementUnicodeResult(object):
@@ -144,7 +145,10 @@ class DomHtmlMixin(object):
 
 
 class DomHtmlElementClassLookup(HtmlElementClassLookup):
-    _lookups = {}
+    def __init__(self):
+        super(DomHtmlElementClassLookup, self).__init__()
+        self._lookups = {}
+
     def lookup(self, node_type, document, namespace, name):
         k = (node_type, document, namespace, name)
         t = self._lookups.get(k)

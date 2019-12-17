@@ -13,5 +13,5 @@
 
 .cache/
 .tox/
-
+.pytest_cache/
 .coverage

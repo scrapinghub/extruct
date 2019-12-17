@@ -5,6 +5,7 @@ import unittest
 from extruct.w3cmicrodata import MicrodataExtractor
 from tests import get_testdata
 
+
 class TestMicrodata(unittest.TestCase):
 
     maxDiff = None
@@ -37,12 +38,13 @@ class TestMicrodata(unittest.TestCase):
             self.assertEqual(data, expected)
 
     def test_schemaorg_Event(self):
-        for i in  [1, 2, 3, 4, 8]:
+        for i in [1, 2, 3, 4, 8]:
             body = get_testdata('schema.org', 'Event.{:03d}.html'.format(i))
             expected = json.loads(get_testdata('schema.org', 'Event.{:03d}.json'.format(i)).decode('UTF-8'))
 
             mde = MicrodataExtractor()
             data = mde.extract(body)
+
             self.assertEqual(data, expected)
 
     def test_w3c_textContent_values(self):
@@ -149,4 +151,52 @@ class TestMicrodataWithText(unittest.TestCase):
 
         mde = MicrodataExtractor(add_text_content=True)
         data = mde.extract(body)
+        self.assertEqual(data, expected)
+
+
+class TestUrlJoin(unittest.TestCase):
+
+    maxDiff = None
+
+    def test_join_none(self):
+        body = get_testdata('schema.org', 'product.html')
+        expected = json.loads(get_testdata('schema.org', 'product.json').decode('UTF-8'))
+
+        mde = MicrodataExtractor()
+        data = mde.extract(body)
+        self.assertEqual(data, expected)
+
+    def test_join_custom_url(self):
+        body = get_testdata('schema.org', 'product.html')
+        expected = json.loads(get_testdata('schema.org', 'product_custom_url.json').decode('UTF-8'))
+
+        mde = MicrodataExtractor()
+        data = mde.extract(body, base_url='http://some-example.com')
+        self.assertEqual(data, expected)
+
+
+class TestItemref(unittest.TestCase):
+
+    maxDiff = None
+
+    def test_join_none(self):
+        body = get_testdata('schema.org', 'product-ref.html')
+        expected = json.loads(get_testdata('schema.org', 'product-ref.json').decode('UTF-8'))
+
+        mde = MicrodataExtractor()
+        data = mde.extract(body)
+        self.assertEqual(data, expected)
+
+
+class TestMicrodataWithDescription(unittest.TestCase):
+    maxDiff = None
+
+    def test_if_punctuations_in_description_are_correctly_formatted(self):
+        body = get_testdata('websites', 'microdata-with-description.html')
+        expected = json.loads(get_testdata(
+            'websites', 'microdata-with-description.json').decode('UTF-8'))
+
+        mde = MicrodataExtractor()
+        data = mde.extract(body)
+
         self.assertEqual(data, expected)

@@ -1,0 +1,83 @@
+[
+    {
+        "properties": {
+            "name": [
+                ""
+            ]
+        },
+        "type": [
+            "h-hidden-phone",
+            "h-hidden-tablet"
+        ]
+    },
+    {
+        "properties": {},
+        "children": [
+            {
+                "properties": {
+                    "name": [
+                        ""
+                    ]
+                },
+                "type": [
+                    "h-hidden-phone",
+                    "h-hidden-tablet"
+                ]
+            },
+            {
+                "properties": {
+                    "photo": [
+                        "/on/demandware.static/-/Sites-main/default/dwa3227ee6/images/small/CN1148.jpg"
+                    ],
+                    "name": [
+                        "aJ Styles FastLane 2018 15 x 17 Framed Plaque w/ Ring Canvas"
+                    ]
+                },
+                "type": [
+                    "h-hidden-phone"
+                ]
+            }
+        ],
+        "type": [
+            "h-hidden-phone"
+        ]
+    },
+    {
+        "properties": {
+            "author": [
+                {
+                    "properties": {
+                        "url": [
+                            "http://example.com"
+                        ],
+                        "name": [
+                            "W. Developer"
+                        ]
+                    },
+                    "value": "W. Developer",
+                    "type": [
+                        "h-card"
+                    ]
+                }
+            ],
+            "name": [
+                "Microformats are amazing"
+            ],
+            "content": [
+                {
+                    "value": "Blah blah blah",
+                    "html": "<p>Blah blah blah</p>"
+                }
+            ],
+            "published": [
+                "2013-06-13 12:00:00"
+            ],
+            "summary": [
+                "In which I extoll the virtues of using microformats."
+            ]
+        },
+        "type": [
+            "h-entry"
+        ]
+    }
+]

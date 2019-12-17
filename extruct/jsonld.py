@@ -7,38 +7,39 @@ import json
 import re
 
 import lxml.etree
-import lxml.html
 
+from extruct.utils import parse_html
 
-HTML_OR_JS_COMMENTLINE = re.compile('^(\s*//.*)|(\s*<!--.*-->\s*)')
+HTML_OR_JS_COMMENTLINE = re.compile(r'^\s*(//.*|<!--.*-->)')
+
 
 
 class JsonLdExtractor(object):
     _xp_jsonld = lxml.etree.XPath('descendant-or-self::script[@type="application/ld+json"]')
 
-    def extract(self, htmlstring, url='http://www.example.com/', encoding="UTF-8"):
-        parser = lxml.html.HTMLParser(encoding=encoding)
-        lxmldoc = lxml.html.fromstring(htmlstring, parser=parser)
-        return self.extract_items(lxmldoc)
+    def extract(self, htmlstring, base_url=None, encoding="UTF-8"):
+        tree = parse_html(htmlstring, encoding=encoding)
+        return self.extract_items(tree, base_url=base_url)
 
-    def extract_items(self, document, *args, **kwargs):
-        return [item for items in map(self._extract_items,
-                                      self._xp_jsonld(document))
-                for item in items if item]
+    def extract_items(self, document, base_url=None):
+        return [
+            item
+            for items in map(self._extract_items, self._xp_jsonld(document))
+            if items for item in items if item
+        ]
 
     def _extract_items(self, node):
         script = node.xpath('string()')
         try:
-            data = json.loads(script)
+            # TODO: `strict=False` can be configurable if needed
+            data = json.loads(script, strict=False)
         except ValueError:
             # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
-            data = json.loads(HTML_OR_JS_COMMENTLINE.sub('', script))
-
+            data = json.loads(
+                HTML_OR_JS_COMMENTLINE.sub('', script), strict=False)
         if data is None:
-            # sometimes script might be None
             return []
-
         if isinstance(data, list):
             return data
-        elif isinstance(data, dict):
+        if isinstance(data, dict):
             return [data]

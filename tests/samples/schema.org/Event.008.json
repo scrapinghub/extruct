@@ -3,7 +3,7 @@
                                              "sameAs": "http://www.shakespearesglobe.com/"},
                               "type": "http://schema.org/PerformingArtsTheater"},
                  "name": "Julius Caesar at Shakespeare's Globe",
-                 "offers": {"properties": {"url": "http://www.example.com/examples/ticket/0012301230123"},
+                 "offers": {"properties": {"url": "/examples/ticket/0012301230123"},
                             "type": "http://schema.org/Offer"},
                  "startDate": "2014-10-01T19:30",
                  "workPerformed": {"properties": {"creator": {"properties": {"name": "William Shakespeare",

@@ -28,7 +28,13 @@ setup(
     },
     packages=find_packages(exclude=['tests',]),
     package_data={'extruct': ['VERSION']},
-    install_requires=['lxml', 'rdflib', 'rdflib-jsonld'],
+    install_requires=['lxml', 
+                      'rdflib', 
+                      'rdflib-jsonld', 
+                      'mf2py', 
+                      'w3lib',
+                      'html-text>=0.5.1',
+                      'six'],
     extras_require={
         'service': [
             'bottle',
@@ -41,7 +47,7 @@ setup(
     },
     keywords='extruct',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
@@ -49,8 +55,8 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
 )

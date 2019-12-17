@@ -1,0 +1,23 @@
+[{"type": "http://schema.org/Product",
+  "_nodeId_": "product",
+  "properties": {"brand": "ACME",
+                 "name": "Executive Anvil",
+                 "image": "http://some-example.com/anvil_executive.jpg",
+                 "description": "Sleeker than ACME's Classic Anvil, the Executive Anvil is perfect for the business traveler looking for something to drop from a height.",
+                 "mpn": "925872",
+                 "aggregateRating": {"type": "http://schema.org/AggregateRating",
+                                     "_nodeId_": "aggregateRating",
+                                     "properties": {"ratingValue": "4.4",
+                                     "reviewCount": "89"}},
+                 "offers": {"type": "http://schema.org/Offer",
+                            "_nodeId_": "offer",
+                            "properties": {"priceCurrency": "USD",
+                                           "price": "119.99",
+                                           "priceValidUntil": "2020-11-05",
+                                           "seller": {"type": "http://schema.org/Organization",
+                                                      "_nodeId_": "organization",
+                                                      "properties":{"name": "Executive Objects"}},
+                            "itemCondition": "http://schema.org/UsedCondition",
+                            "availability": "http://schema.org/InStock"}}
+                  }
+  }]

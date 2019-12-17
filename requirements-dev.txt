@@ -6,6 +6,5 @@
 pytest
 tox
 flake8
-mock
 
 bumpversion

@@ -37,9 +37,9 @@ class JsonLdExtractor(object):
             # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
             data = json.loads(
                 HTML_OR_JS_COMMENTLINE.sub('', script), strict=False)
-        if data is None:
-            return []
+        
         if isinstance(data, list):
-            return data
-        if isinstance(data, dict):
-            return [data]
+            for item in data:
+                yield item
+        elif isinstance(data, dict):
+            yield data

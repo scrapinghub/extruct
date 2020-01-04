@@ -21,10 +21,11 @@ class JsonLdExtractor(object):
         return self.extract_items(tree, base_url=base_url, parse_json=parse_json)
 
     def extract_items(self, document, base_url=None, parse_json=True):
+        if not parse_json:
+            return [self._extract_items_raw(item) for item in self._xp_jsonld(document)]
         return [
             item
-            for items in map(self._extract_items_raw if not parse_json
-                             else self._extract_items, self._xp_jsonld(document))
+            for items in map(self._extract_items, self._xp_jsonld(document))
             if items for item in items if item
         ]
 

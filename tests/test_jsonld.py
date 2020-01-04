@@ -41,6 +41,13 @@ class TestJsonLD(unittest.TestCase):
             folder='custom.invalid',
             page='JSONLD_with_control_characters_comment')
 
+    def test_jsonld_raw_json(self):
+        folder = 'songkick'
+        page = 'Elysian Fields Brooklyn Tickets, The Owl Music Parlor, 31 Oct 2015'
+        body = get_testdata(folder, '{}.html'.format(page))
+        expected = get_testdata(folder, '{}.raw.jsonld'.format(page)).decode('utf8')
+        self._check_jsonld(body, [expected], parse_json=False)
+
     def assertJsonLdCorrect(self, folder, page):
         body, expected = self._get_body_expected(folder, page)
         self._check_jsonld(body, expected)
@@ -50,7 +57,7 @@ class TestJsonLD(unittest.TestCase):
         expected = get_testdata(folder, '{}.jsonld'.format(page))
         return body, json.loads(expected.decode('utf8'))
 
-    def _check_jsonld(self, body, expected):
+    def _check_jsonld(self, body, expected, **extract_kwargs):
         jsonlde = JsonLdExtractor()
-        data = jsonlde.extract(body)
+        data = jsonlde.extract(body, **extract_kwargs)
         self.assertEqual(data, expected)

@@ -36,11 +36,6 @@ setup(
                       'html-text>=0.5.1',
                       'six'],
     extras_require={
-        'service': [
-            'bottle',
-            'gevent',
-            'requests',
-        ],
         'cli': [
             'requests',
         ],

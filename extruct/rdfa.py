@@ -14,7 +14,7 @@ from rdflib import Graph, logger as rdflib_logger
 from rdflib.plugins.parsers.pyRdfa import pyRdfa as PyRdfa, Options, logger as pyrdfa_logger
 from rdflib.plugins.parsers.pyRdfa.initialcontext import initial_context
 
-from extruct.utils import parse_xmldom_html
+from extruct.utils import parse_json, parse_xmldom_html
 
 
 # silence rdflib/PyRdfa INFO logs
@@ -46,4 +46,4 @@ class RDFaExtractor(object):
 
         g = PyRdfa(options, base=base_url).graph_from_DOM(document, graph=Graph(), pgraph=Graph())
         jsonld_string = g.serialize(format='json-ld', auto_compact=not expanded).decode('utf-8')
-        return json.loads(jsonld_string)
+        return parse_json(jsonld_string)

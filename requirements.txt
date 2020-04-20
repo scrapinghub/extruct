@@ -2,7 +2,7 @@
 # pip install -r requirements.txt
 lxml
 requests
-rdflib
+rdflib<5.0.0
 rdflib-jsonld
 mf2py>=1.1.0
 six>=1.11

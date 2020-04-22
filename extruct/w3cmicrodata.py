@@ -31,8 +31,8 @@ cleaner = Cleaner(
     javascript=False,  # onclick attributes are fine
     comments=True,
     style=True,
-    links=True,
-    meta=True,
+    links=False,  # e.g. availability is included in <link> tags
+    meta=False,  # some sites use <meta> tags in body to provide property
     page_structure=False,  # <title> may be nice to have
     processing_instructions=True,
     embedded=False,  # keep embedded content
@@ -49,7 +49,6 @@ class LxmlMicrodataExtractor(object):
     _xp_prop = lxml.etree.XPath("""set:difference(.//*[@itemprop],
                                                   .//*[@itemscope]//*[@itemprop])""",
                                 namespaces = {"set": "http://exslt.org/sets"})
-    _xp_clean_text = lxml.etree.XPath('descendant-or-self::*[not(self::script or self::style)]/text()')
     # ancestor and preceding axes contain all elements before the context node
     # so counting them gives the "document order" of the context node
     _xp_item_docid = lxml.etree.XPath("""count(preceding::*[@itemscope])
@@ -70,11 +69,12 @@ class LxmlMicrodataExtractor(object):
         return self.extract_items(tree, base_url)
 
     def extract_items(self, document, base_url):
+        cleaned_document = cleaner.clean_html(document)
         items_seen = set()
         return [
             item for item in (
                 self._extract_item(it, items_seen=items_seen, base_url=base_url)
-                for it in self._xp_item(document))
+                for it in self._xp_item(cleaned_document))
             if item]
 
     def _extract_item(self, node, items_seen, base_url):
@@ -203,8 +203,7 @@ class LxmlMicrodataExtractor(object):
             return self._extract_textContent(node)
 
     def _extract_textContent(self, node):
-        clean_node = cleaner.clean_html(node)
-        return html_text.etree_to_text(clean_node)
+        return html_text.etree_to_text(node)
 
 
 MicrodataExtractor = LxmlMicrodataExtractor

@@ -232,6 +232,9 @@
             "http://ogp.me/ns#description": [
                 {
                     "@value": "Buy tickets for an upcoming Elysian Fields concert near you. List of all Elysian Fields tickets and tour dates for 2017."
+                },
+                {
+                    "@value": ""
                 }
             ],
             "http://ogp.me/ns#image": [
@@ -250,6 +253,9 @@
             "http://ogp.me/ns#title": [
                 {
                     "@value": "Elysian Fields"
+                },
+                {
+                    "@value": "  "
                 }
             ],
             "http://ogp.me/ns#type": [

@@ -54,6 +54,7 @@ def extract(htmlstring,
     if errors not in ['log', 'ignore', 'strict']:
         raise ValueError('Invalid error command, valid values are either "log"'
                          ', "ignore" or "strict"')
+
     try:
         tree = parse_xmldom_html(htmlstring, encoding=encoding)
     except Exception as e:
@@ -65,6 +66,7 @@ def extract(htmlstring,
             return {}
         if errors == 'strict':
             raise
+
     processors = []
     if 'microdata' in syntaxes:
         processors.append(
@@ -95,6 +97,7 @@ def extract(htmlstring,
             ('rdfa', RDFaExtractor().extract_items,
              tree,
              ))
+
     output = {}
     for syntax, extract, document in processors:
         try:
@@ -108,6 +111,7 @@ def extract(htmlstring,
                 pass
             if errors == 'strict':
                 raise
+
     if uniform:
         uniform_processors = []
         if 'microdata' in syntaxes:
@@ -131,6 +135,7 @@ def extract(htmlstring,
                  output['opengraph'],
                  None,
                  ))
+
         for syntax, uniform, raw, schema_context in uniform_processors:
             try:
                 if syntax == 'opengraph':

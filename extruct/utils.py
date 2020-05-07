@@ -19,7 +19,7 @@ def parse_html(html, encoding):
     return lxml.html.fromstring(html, parser=parser)
 
 
-HTML_OR_JS_COMMENTLINE = re.compile(r'^\s*(//.*|<!--.*-->)')
+HTML_OR_JS_COMMENTLINE = re.compile(r'^\s*(//.*|<!--.*?-->)')
 
 
 def parse_json(json_string):

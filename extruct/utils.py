@@ -3,6 +3,11 @@
 import json
 import re
 
+try:
+    from json.decoder import JSONDecodeError
+except ImportError:
+    JSONDecodeError = ValueError
+
 import lxml.html
 
 from extruct.xmldom import XmlDomHTMLParser
@@ -26,7 +31,7 @@ def parse_json(json_string):
         while True:
             try:
                 return json.loads(json_string, strict=False)
-            except json.JSONDecodeError as error:
+            except JSONDecodeError as error:
                 if error.msg == "Expecting ',' delimiter":
                     if json_string[error.pos-1] == '"':
                         insertion_position = error.pos-1

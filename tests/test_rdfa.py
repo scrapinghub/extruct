@@ -90,6 +90,19 @@ class TestRDFa(unittest.TestCase):
 
         self.assertJsonLDEqual(data, expected)
 
+    def test_wikipedia_xhtml_rdfa_raw(self):
+        """
+        test wether raw json is extracted properly
+        using parse_json=False keyword argument for the extraction method
+        """
+        fileprefix = 'xhtml+rdfa'
+        body = get_testdata('wikipedia', fileprefix + '.html')
+        expected = get_testdata('wikipedia', fileprefix + '.expanded.json').decode('UTF-8').strip()
+        data = RDFaExtractor().extract(
+            body, base_url='http://www.example.com/index.html', parse_json=False
+        ).strip()
+        self.assertEquals(self.normalize_bnode_ids(data), self.normalize_bnode_ids(expected))
+
     def test_wikipedia_xhtml_rdfa_no_prefix(self):
         body = get_testdata('misc', 'Portfolio_Niels_Lubberman.html')
         expected = json.loads(
@@ -98,5 +111,4 @@ class TestRDFa(unittest.TestCase):
 
         rdfae = RDFaExtractor()
         data = rdfae.extract(body, base_url='http://nielslubberman.nl/drupal/')
-
         self.assertJsonLDEqual(data, expected)

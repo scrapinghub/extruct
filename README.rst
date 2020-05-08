@@ -391,6 +391,8 @@ JSON-LD extraction
     'jobTitle': 'Graduate research assistant',
     'name': 'John Doe',
     'url': 'http://www.example.com'}]
+ >>> # raw json output is also possible:
+ >>> raw_json = jslde.extract(parse_json=False)
 
 
 RDFa extraction (experimental)
@@ -435,6 +437,8 @@ RDFa extraction (experimental)
                                                  'photos than I do:\n'
                                                  '      '}],
     'http://schema.org/creator': [{'@id': 'http://www.example.com/index.html#me'}]}]
+ >>> # raw json output is also possible:
+ >>> raw_json = rdfae.extract(parse_json=False)
 
 You'll get a list of expanded JSON-LD nodes.
 

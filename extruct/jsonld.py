@@ -2,7 +2,7 @@
 """
 JSON-LD extractor
 """
-
+import jstyleson
 import json
 import re
 
@@ -34,7 +34,7 @@ class JsonLdExtractor(object):
             data = json.loads(script, strict=False)
         except ValueError:
             # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
-            data = json.loads(
+            data = jstyleson.loads(
                 HTML_OR_JS_COMMENTLINE.sub('', script), strict=False)
         if isinstance(data, list):
             return data

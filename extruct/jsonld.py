@@ -2,9 +2,10 @@
 """
 JSON-LD extractor
 """
-import jstyleson
 import json
 import re
+import jstyleson
+
 
 import lxml.etree
 

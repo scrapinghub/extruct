@@ -2,6 +2,7 @@
 """
 JSON-LD extractor
 """
+
 import json
 import re
 

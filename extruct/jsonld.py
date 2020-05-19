@@ -4,9 +4,8 @@ JSON-LD extractor
 """
 import json
 import re
+
 import jstyleson
-
-
 import lxml.etree
 
 from extruct.utils import parse_html

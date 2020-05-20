@@ -11,6 +11,7 @@ import lxml.etree
 
 from extruct.utils import parse_html
 
+HTML_OR_JS_COMMENTLINE = re.compile(r'^\s*(//.*|<!--.*-->)')
 
 
 class JsonLdExtractor(object):
@@ -34,7 +35,7 @@ class JsonLdExtractor(object):
             data = json.loads(script, strict=False)
         except ValueError:
             # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
-            data = jstyleson.loads(script, strict=False)
+            data = jstyleson.loads(HTML_OR_JS_COMMENTLINE.sub('', script),strict=False)
         if isinstance(data, list):
             return data
         elif isinstance(data, dict):

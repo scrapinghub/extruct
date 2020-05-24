@@ -1,21 +1,31 @@
 from six.moves.urllib.parse import urlparse, urljoin
 
 
-def _uopengraph(extracted):
+def _uopengraph(extracted, with_og_arr=False):
     out = []
     for obj in extracted:
-        # In order of appearance in the page
-        properties = list(reversed(obj['properties']))
-        # Ensuring that never empty value is returned if there is a duplicated
-        # property with non empty value
-        non_empty_props = {k for k, v in properties if v and v.strip()}
-        flattened = {k: v for k, v in properties
-                     if k not in non_empty_props or (v and v.strip())}
-        t = flattened.pop('og:type', None)
-        if t:
-            flattened['@type'] = t
-        flattened['@context'] = obj['namespace']
-        out.append(flattened)
+      properties = list(reversed(obj['properties']))
+      # Set of non empty properties
+      non_empty_props = {k for k, v in properties if v and v.strip()}
+      # Set of repeated properties with at least 2 non empty values
+      repeated_props = {}
+      if with_og_arr:
+        repeated_props = {k for k in non_empty_props if len([i for i,v in properties if i==k and (v and v.strip())]) > 1}
+      # Add properties that is either duplicated but has only 1 non empty value
+      # or has only empty values
+      flattened = {k: v for k, v in properties
+                       if k not in repeated_props and (k not in non_empty_props or (v and v.strip()))}
+      if with_og_arr:
+        # Add list suffix for those with duplicated and non empty values
+        for k in repeated_props: flattened[k+"_list"] = []
+        for k, v in properties:
+          if k in repeated_props:
+            flattened[k+"_list"].append(v)
+      t = flattened.pop('og:type', None)
+      if t:
+          flattened['@type'] = t
+      flattened['@context'] = obj['namespace']
+      out.append(flattened)
     return out
 
 

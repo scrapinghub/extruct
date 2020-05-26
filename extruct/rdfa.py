@@ -6,6 +6,7 @@ Based on pyrdfa3 and rdflib
 """
 import json
 import logging
+import re
 
 rdflib_logger = logging.getLogger('rdflib')
 rdflib_logger.setLevel(logging.ERROR)
@@ -28,6 +29,103 @@ initial_context["http://www.w3.org/2011/rdfa-context/rdfa-1.1"].ns.update({
 
 
 class RDFaExtractor(object):
+    
+    # expands namespace to match with returned json (ex: og -> 'http://ogp.me/ns#')
+    def replaceNS(self, prop, html_element, head_element):
+        
+        # context namespaces taken from pyrdfa3
+        # https://github.com/RDFLib/PyRDFa/blob/master/pyRdfa/initialcontext.py
+        context = {
+            'owl'   : 'http://www.w3.org/2002/07/owl#',
+            'gr'    : 'http://purl.org/goodrelations/v1#',
+            'ctag'    : 'http://commontag.org/ns#',
+            'cc'    : 'http://creativecommons.org/ns#',
+            'grddl'   : 'http://www.w3.org/2003/g/data-view#',
+            'rif'   : 'http://www.w3.org/2007/rif#',
+            'sioc'    : 'http://rdfs.org/sioc/ns#',
+            'skos'    : 'http://www.w3.org/2004/02/skos/core#',
+            'xml'   : 'http://www.w3.org/XML/1998/namespace',
+            'rdfs'    : 'http://www.w3.org/2000/01/rdf-schema#',
+            'rev'   : 'http://purl.org/stuff/rev#',
+            'rdfa'    : 'http://www.w3.org/ns/rdfa#',
+            'dc'    : 'http://purl.org/dc/terms/',
+            'foaf'    : 'http://xmlns.com/foaf/0.1/',
+            'void'    : 'http://rdfs.org/ns/void#',
+            'ical'    : 'http://www.w3.org/2002/12/cal/icaltzd#',
+            'vcard'   : 'http://www.w3.org/2006/vcard/ns#',
+            'wdrs'    : 'http://www.w3.org/2007/05/powder-s#',
+            'og'    : 'http://ogp.me/ns#',
+            'wdr'   : 'http://www.w3.org/2007/05/powder#',
+            'rdf'   : 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+            'xhv'   : 'http://www.w3.org/1999/xhtml/vocab#',
+            'xsd'   : 'http://www.w3.org/2001/XMLSchema#',
+            'v'     : 'http://rdf.data-vocabulary.org/#',
+            'skosxl'  : 'http://www.w3.org/2008/05/skos-xl#',
+            'schema'  : 'http://schema.org/',
+        }
+
+        if ':' not in prop:
+            return prop
+
+        prefix = prop.split(':')[0]
+        match = re.search(prefix + ': [^\s]+', head_element.get('prefix'))
+
+        # if namespace taken from prefix attribute in head tag
+        if match:
+            ns = match.group().split(': ')[1]
+            return ns + prop.split(':')[1]
+
+        # if namespace taken from xmlns attribute in html tag
+        if ('xmlns:' + prefix) in html_element.keys():
+            return html_element.get('xmlns:' + prefix) + prop.split(':')[1]
+
+        # if namspace present in inital context
+        if prefix in context:
+            return context[prefix] + prop.split(':')[1]
+
+        return prop
+    
+    # fixes order of rdfa tags in jsonld string
+    # by compares\ with order document object
+    def fixOrder(self, jsonld_string, document):
+        html_element = None
+        head_element = None
+
+        for element in document.iter():
+            if element.tag == 'html':
+                html_element = element
+
+            if element.tag == 'head':
+                head_element = element
+
+            if html_element != None and head_element != None:
+                break
+                
+        json_objects = json.loads(jsonld_string)
+
+        for json_object in json_objects:
+            keys = json_object.keys()
+
+            ordered = []
+            
+            for key in keys:
+                if type(json_object[key]) is list:
+                    if len(json_object[key]) > 1:
+                        for element in document.iter():
+                            if element.tag == 'meta' and element.get('property'):
+                                if self.replaceNS(element.get('property'), html_element, head_element) == key:
+                                    ordered.append(element.get('content'))
+
+                        for i in range(len(ordered)):
+                            if json_object[key][i]['@value'] != ordered[i]:
+                                for j in range(i, len(json_object[key])):
+                                    if json_object[key][j]['@value'] == ordered[i]:
+                                        t = json_object[key][j]
+                                        json_object[key][j] = json_object[key][i]
+                                        json_object[key][i] = t
+                                        continue
+
+        return json_objects
 
     def extract(self, htmlstring, base_url=None, encoding="UTF-8",
                 expanded=True):

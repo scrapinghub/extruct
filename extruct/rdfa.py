@@ -144,4 +144,5 @@ class RDFaExtractor(object):
 
         g = PyRdfa(options, base=base_url).graph_from_DOM(document, graph=Graph(), pgraph=Graph())
         jsonld_string = g.serialize(format='json-ld', auto_compact=not expanded).decode('utf-8')
-        return json.loads(jsonld_string)
+        
+        return self.fixOrder(jsonld_string, document)

@@ -22,7 +22,6 @@ class TestGeneric(unittest.TestCase):
         del expected['rdfa'][0]['http://ogp.me/ns#image']
         self.assertEqual(jsonize_dict(data), expected)
 
-    @pytest.mark.xfail
     def test_rdfa_not_preserving_order(self):
         # See https://github.com/scrapinghub/extruct/issues/116
         # RDFa is not preserving ordering on duplicated properties. So this

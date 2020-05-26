@@ -30,8 +30,7 @@ class TestGeneric(unittest.TestCase):
         body = get_testdata('songkick', 'elysianfields.html')
         expected = json.loads(get_testdata('songkick', 'elysianfields.json').decode('UTF-8'))
         data = extruct.extract(body,
-                               base_url='http://www.songkick.com/artists/236156-elysian-fields',
-                               syntaxes=['rdfa'])
+                               base_url='http://www.songkick.com/artists/236156-elysian-fields')
         self.assertEqual(jsonize_dict(data), expected)
 
     def test_microdata_custom_url(self):

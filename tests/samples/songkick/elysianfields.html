@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml">
-  <head prefix="og: http://ogp.me/ns# fb: http://www.facebook.com/2008/fbml songkick-concerts: http://ogp.me/ns/fb/songkick-concerts#">
+<html lang="en" xmlns:test1="http://example.org/test1#" xmlns:fb="http://www.facebook.com/2008/fbml">
+  <head prefix="test2: http://example.org/test2# fb: http://www.facebook.com/2008/fbml songkick-concerts: http://ogp.me/ns/fb/songkick-concerts#">
     <link rel="stylesheet" type="text/css" href="//assets.sk-static.com/assets/artist-8005aab.css">
     <script type="text/javascript">
   SK = typeof(SK) == 'undefined' ? {} : SK;
@@ -30,7 +30,11 @@
     <meta property="og:description" content="Buy tickets for an upcoming Elysian Fields concert near you. List of all Elysian Fields tickets and tour dates for 2017.">
     <meta property="og:url" content="http://www.songkick.com/artists/236156-elysian-fields">
     <meta property="og:image" content="http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg">
-    <meta property="og:image" content="http://images.sk-static.com/SECONDARY_IMAGE.jpg">
+    <meta property="http://ogp.me/ns#image" content="http://images.sk-static.com/SECONDARY_IMAGE.jpg">
+    <meta property="test1:image" content="http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg">
+    <meta property="test1:image" content="http://images.sk-static.com/SECONDARY_IMAGE.jpg">
+    <meta property="test2:image" content="http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg">
+    <meta property="test2:image" content="http://images.sk-static.com/SECONDARY_IMAGE.jpg">
   </head>
   <body>
     <script>

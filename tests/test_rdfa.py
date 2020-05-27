@@ -100,3 +100,14 @@ class TestRDFa(unittest.TestCase):
         data = rdfae.extract(body, base_url='http://nielslubberman.nl/drupal/')
 
         self.assertJsonLDEqual(data, expected)
+
+    def test_expanded_opengraph_support(self):
+        body = get_testdata('misc','expanded_OG_support_test.html')
+        expected = json.loads(
+                   get_testdata('misc','expanded_OG_support_test.json'
+                   ).decode('UTF-8'))
+
+        rdfae = RDFaExtractor()
+        data = rdfae.extract(body, base_url='http://www.example.com/index.html')
+
+        self.assertJsonLDEqual(data,expected)

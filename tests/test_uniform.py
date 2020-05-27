@@ -27,6 +27,25 @@ class TestUniform(unittest.TestCase):
         data = extruct.extract(body, syntaxes=['opengraph'], uniform=True)
         self.assertEqual(data['opengraph'], expected)
 
+    def test_uopengraph_with_og_array(self):
+        expected = [{"@context": {
+                        "og": "http://ogp.me/ns#",
+                        "fb": "http://www.facebook.com/2008/fbml",
+                        "concerts": "http://ogp.me/ns/fb/songkick-concerts#"
+                    },
+                    "fb:app_id": "308540029359",
+                    "og:site_name": "Songkick",
+                    "@type": "songkick-concerts:artist",
+                    "og:title": "Elysian Fields",
+                    "og:description": "Buy tickets for an upcoming Elysian Fields concert near you. List of all Elysian Fields tickets and tour dates for 2017.",
+                    "og:url": "http://www.songkick.com/artists/236156-elysian-fields",
+                    "og:image_list": [  "http://images.sk-static.com/SECONDARY_IMAGE.jpg",
+                                        "http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg"],
+                }]
+        body = get_testdata('songkick', 'elysianfields.html')
+        data = extruct.extract(body, syntaxes=['opengraph'], uniform=True, with_og_array=True)
+        self.assertEqual(data['opengraph'], expected)
+
     def test_uopengraph_duplicated_priorities(self):
         # Ensures that first seen property is kept when flattening
         data = _uopengraph([{'properties':

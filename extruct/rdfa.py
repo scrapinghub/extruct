@@ -64,7 +64,7 @@ class RDFaExtractor(object):
             'schema'  : 'http://schema.org/',
         }
 
-        if ':' not in prop:
+        if 'http://' in prop:
             return prop
 
         prefix = prop.split(':')[0]
@@ -79,28 +79,33 @@ class RDFaExtractor(object):
         if ('xmlns:' + prefix) in html_element.keys():
             return html_element.get('xmlns:' + prefix) + prop.split(':')[1]
 
-        # if namspace present in inital context
+        # if namespace present in inital context
         if prefix in context:
             return context[prefix] + prop.split(':')[1]
 
         return prop
     
+    # sorts the rdfa tags in jsonld string
+    def sort(self, json_object, ordered, key):
+        for i in range(len(ordered)):
+            if json_object[key][i]['@value'] != ordered[i]:
+                for j in range(i, len(json_object[key])):
+                    if json_object[key][j]['@value'] == ordered[i]:
+                        t = json_object[key][j]
+                        json_object[key][j] = json_object[key][i]
+                        json_object[key][i] = t
+                        continue
+    
+    
     # fixes order of rdfa tags in jsonld string
-    # by compares\ with order document object
+    # by comparing with order in document object
     def fixOrder(self, jsonld_string, document):
-        html_element = None
-        head_element = None
-
-        for element in document.iter():
-            if element.tag == 'html':
-                html_element = element
-
-            if element.tag == 'head':
-                head_element = element
-
-            if html_element != None and head_element != None:
-                break
+        html_element = document.xpath('/html')[0]
+        head_element = document.xpath('//head')[0]
                 
+        for meta_tag in head_element.xpath("meta[@property]"):
+            meta_tag.attrib['property'] = self.replaceNS(meta_tag.attrib['property'], html_element, head_element)
+            
         json_objects = json.loads(jsonld_string)
 
         for json_object in json_objects:
@@ -109,21 +114,11 @@ class RDFaExtractor(object):
             ordered = []
             
             for key in keys:
-                if type(json_object[key]) is list:
-                    if len(json_object[key]) > 1:
-                        for element in document.iter():
-                            if element.tag == 'meta' and element.get('property'):
-                                if self.replaceNS(element.get('property'), html_element, head_element) == key:
-                                    ordered.append(element.get('content'))
+                if type(json_object[key]) is list and len(json_object[key]) > 1:
+                    ordered = list(map(lambda meta_tag: meta_tag.get('content'), head_element.xpath("meta[@property='" + key + "']")))
 
-                        for i in range(len(ordered)):
-                            if json_object[key][i]['@value'] != ordered[i]:
-                                for j in range(i, len(json_object[key])):
-                                    if json_object[key][j]['@value'] == ordered[i]:
-                                        t = json_object[key][j]
-                                        json_object[key][j] = json_object[key][i]
-                                        json_object[key][i] = t
-                                        continue
+                    self.sort(json_object, ordered, key)
+                    ordered.clear()
 
         return json_objects
 

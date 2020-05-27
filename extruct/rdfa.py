@@ -68,7 +68,10 @@ class RDFaExtractor(object):
             return prop
 
         prefix = prop.split(':')[0]
-        match = re.search(prefix + ': [^\s]+', head_element.get('prefix'))
+        
+        match = None
+        if head_element.get('prefix'):
+            match = re.search(prefix + ': [^\s]+', head_element.get('prefix'))
 
         # if namespace taken from prefix attribute in head tag
         if match:
@@ -100,8 +103,11 @@ class RDFaExtractor(object):
     # fixes order of rdfa tags in jsonld string
     # by comparing with order in document object
     def fixOrder(self, jsonld_string, document):
-        html_element = document.xpath('/html')[0]
-        head_element = document.xpath('//head')[0]
+        try:
+            html_element = document.xpath('/html')[0]
+            head_element = document.xpath('//head')[0]
+        except IndexError:
+            return json.loads(jsonld_string)
                 
         for meta_tag in head_element.xpath("meta[@property]"):
             meta_tag.attrib['property'] = self.replaceNS(meta_tag.attrib['property'], html_element, head_element)

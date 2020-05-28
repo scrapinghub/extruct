@@ -1,28 +1,27 @@
 from six.moves.urllib.parse import urlparse, urljoin
 
 
-def _uopengraph(extracted, with_og_arr=False):
+def _uopengraph(extracted, with_og_array=False):
     out = []
     for obj in extracted:
+        # In order of appearance in the page
         properties = list(reversed(obj['properties']))
         # Set of non empty properties
         non_empty_props = {k for k, v in properties if v and v.strip()}
-        # Set of repeated properties with at least 2 non empty values
-        repeated_props = {}
-        if with_og_arr:
-            repeated_props = {k for k in non_empty_props
-                              if len([i for i, v in properties if i == k and (v and v.strip())]) > 1}
-        # Add properties that either have only empty values or are duplicated and
-        # have only 1 non empty value
-        flattened = {k: v for k, v in properties
-                     if k not in repeated_props and (k not in non_empty_props or (v and v.strip()))}
-        if with_og_arr:
-            # Add list suffix for those with duplicated and non empty values
-            for k in repeated_props:
-                flattened[k+"_list"] = []
-            for k, v in properties:
-                if k in repeated_props:
-                    flattened[k+"_list"].append(v)
+        flattened = {}
+        for k, v in properties:
+            if k not in non_empty_props:
+                flattened[k] = v
+            elif v and v.strip():
+                # If og_array isn't required or key isn't in flattened already
+                if not with_og_array or k not in flattened:
+                    flattened[k] = v
+                else:
+                    if isinstance(flattened[k], list):
+                        flattened[k].append(v)
+                    else:
+                        flattened[k] = [flattened[k], v]
+
         t = flattened.pop('og:type', None)
         if t:
             flattened['@type'] = t

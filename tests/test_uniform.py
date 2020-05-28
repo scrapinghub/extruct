@@ -39,8 +39,8 @@ class TestUniform(unittest.TestCase):
                     "og:title": "Elysian Fields",
                     "og:description": "Buy tickets for an upcoming Elysian Fields concert near you. List of all Elysian Fields tickets and tour dates for 2017.",
                     "og:url": "http://www.songkick.com/artists/236156-elysian-fields",
-                    "og:image_list": [  "http://images.sk-static.com/SECONDARY_IMAGE.jpg",
-                                        "http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg"],
+                    "og:image": ["http://images.sk-static.com/SECONDARY_IMAGE.jpg",
+                                 "http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg"],
                 }]
         body = get_testdata('songkick', 'elysianfields.html')
         data = extruct.extract(body, syntaxes=['opengraph'], uniform=True, with_og_array=True)

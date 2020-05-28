@@ -135,7 +135,7 @@ def extract(htmlstring,
         for syntax, uniform, raw, schema_context in uniform_processors:
             try:
                 if syntax == 'opengraph':
-                    output[syntax] = uniform(raw, with_og_array)
+                    output[syntax] = uniform(raw, with_og_array=with_og_array)
                 else:
                     output[syntax] = uniform(raw, schema_context)
             except Exception as e:

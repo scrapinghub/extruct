@@ -23,27 +23,14 @@ pyrdfa_logger.setLevel(logging.ERROR)
 
 initial_context["http://www.w3.org/2011/rdfa-context/rdfa-1.1"].ns.update({
     "twitter": "https://dev.twitter.com/cards#",
-    "fb": "http://ogp.me/ns/fb#"
+    "fb": "http://ogp.me/ns/fb#",
+    'og': 'http://ogp.me/ns#',
+	'music': 'http://ogp.me/ns/music#',
+	'video': 'http://ogp.me/ns/video#',
+	'article': 'http://ogp.me/ns/article#',
+	'book': 'http://ogp.me/ns/book#',
+	'profile': 'http://ogp.me/ns/profile#'
 })
-
-_OG_NAMESPACES = {
-  'og': 'http://ogp.me/ns#',
-  'music': 'http://ogp.me/ns/music#',
-  'video': 'http://ogp.me/ns/video#',
-  'article': 'http://ogp.me/ns/article#',
-  'book': 'http://ogp.me/ns/book#',
-  'profile': 'http://ogp.me/ns/profile#'
-}
-
-_OG_NAMESPACES_TAGS = {
-  'og': 'xmlns:og',
-  'music': 'xmlns:music',
-  'video': 'xmlns:video',
-  'article': 'xmlns:article',
-  'book': 'xmlns:book',
-  'profile': 'xmlns:profile'
-}
-
 
 class RDFaExtractor(object):
 
@@ -61,28 +48,6 @@ class RDFaExtractor(object):
                           vocab_cache_report=False,
                           refresh_vocab_cache=False,
                           check_lite=False)
-        document = self.expandedOGSupport(document)
         g = PyRdfa(options, base=base_url).graph_from_DOM(document, graph=Graph(), pgraph=Graph())
         jsonld_string = g.serialize(format='json-ld', auto_compact=not expanded).decode('utf-8')
         return json.loads(jsonld_string)
-
-    def expandedOGSupport(self,document):
-      prefixDic = {}
-      for head in document.xpath('//head'):
-        for el in head.xpath('meta[@property and @content]'):
-          prop = el.attrib['property']
-          ns = prop.partition(':')[0]
-          if ns in _OG_NAMESPACES.keys():
-            prefixDic[_OG_NAMESPACES_TAGS[ns]] = _OG_NAMESPACES[ns]
-
-      html_element = None
-      for element in document.iter():
-        if element.tag == 'html':
-          html_element = element
-          break
-
-      if html_element is not None:
-        for k in prefixDic.keys():
-          if not (html_element.get(k)):
-            html_element.set(k,prefixDic[k])
-      return document

@@ -14,7 +14,8 @@ def _uopengraph(extracted, with_og_array=False):
             elif v and v.strip():
                 # If og_array isn't required add first non empty value
                 if not with_og_array:
-                    flattened[k] = flattened[k] if flattened[k] and flattened[k].strip() else v
+                    if not flattened[k] or not flattened[k].strip():
+                        flattened[k] = v
                 else:
                     if isinstance(flattened[k], list):
                         flattened[k].append(v)

@@ -11,7 +11,6 @@ class TestUniform(unittest.TestCase):
 
     maxDiff = None
 
-    @pytest.mark.xfail
     def test_uopengraph(self):
         expected = [{"@context": {
                         "og": "http://ogp.me/ns#",

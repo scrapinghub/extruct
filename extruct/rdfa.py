@@ -64,6 +64,11 @@ class RDFaExtractor(object):
             'schema'  : 'http://schema.org/',
         }
 
+        # if bad property
+        if ':' not in prop:
+            return prop
+        
+        # if property has no prefix
         if 'http://' in prop:
             return prop
 
@@ -89,42 +94,33 @@ class RDFaExtractor(object):
         return prop
     
     # sorts the rdfa tags in jsonld string
-    def sort(self, json_object, ordered, key):
-        for i in range(len(ordered)):
-            if json_object[key][i]['@value'] != ordered[i]:
-                for j in range(i, len(json_object[key])):
-                    if json_object[key][j]['@value'] == ordered[i]:
-                        t = json_object[key][j]
-                        json_object[key][j] = json_object[key][i]
-                        json_object[key][i] = t
-                        continue
+    def sort(self, unordered, ordered):
+        idx_for_value = dict((value, idx) for idx, value in enumerate(ordered))
+        unordered.sort(key=lambda props: idx_for_value.get(props.get('@value'), len(ordered)))
     
     
     # fixes order of rdfa tags in jsonld string
     # by comparing with order in document object
     def fixOrder(self, jsonld_string, document):
-        try:
-            html_element = document.xpath('/html')[0]
-            head_element = document.xpath('//head')[0]
-        except IndexError:
-            return json.loads(jsonld_string)
+        html_element = document.xpath('/html')[0]
+        head_element = document.xpath('//head')[0]
                 
         for meta_tag in head_element.xpath("meta[@property]"):
-            meta_tag.attrib['property'] = self.replaceNS(meta_tag.attrib['property'], html_element, head_element)
+            meta_tag.attrib['property'] = self.replaceNS(meta_tag.attrib['property'], 
+                                                         html_element, 
+                                                         head_element)
             
         json_objects = json.loads(jsonld_string)
 
         for json_object in json_objects:
             keys = json_object.keys()
 
-            ordered = []
-            
             for key in keys:
                 if type(json_object[key]) is list and len(json_object[key]) > 1:
-                    ordered = list(map(lambda meta_tag: meta_tag.get('content'), head_element.xpath("meta[@property='" + key + "']")))
+                    meta_tags = head_element.xpath("meta[@property='" + key + "']")
+                    ordered = list(map(lambda meta_tag: meta_tag.get('content'), meta_tags))
 
-                    self.sort(json_object, ordered, key)
-                    ordered.clear()
+                    self.sort(json_object[key], ordered)
 
         return json_objects
 
@@ -146,4 +142,9 @@ class RDFaExtractor(object):
         g = PyRdfa(options, base=base_url).graph_from_DOM(document, graph=Graph(), pgraph=Graph())
         jsonld_string = g.serialize(format='json-ld', auto_compact=not expanded).decode('utf-8')
         
-        return self.fixOrder(jsonld_string, document)
+        try:
+            # hack to fix the ordering of duplicate properties (see issue 116)
+            # it should be disabled once PyRDFA fixes itself
+            return self.fixOrder(jsonld_string, document)
+        except:
+            return json.loads(jsonld_string)

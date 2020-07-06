@@ -20,10 +20,8 @@ class TestGeneric(unittest.TestCase):
                
         self.assertEqual(jsonize_dict(data), expected)
 
-    def test_rdfa_not_preserving_order(self):
+    def test_rdfa_is_preserving_order(self):
         # See https://github.com/scrapinghub/extruct/issues/116
-        # RDFa is not preserving ordering on duplicated properties. So this
-        # test sometimes fails for property 'http://ogp.me/ns#image'
         body = get_testdata('songkick', 'elysianfields_1.html')
         expected = json.loads(get_testdata('songkick', 'elysianfields_1.json').decode('UTF-8'))
         data = extruct.extract(body,

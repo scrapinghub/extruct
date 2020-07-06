@@ -1,7 +1,5 @@
 import unittest
 
-import pytest
-
 import extruct
 from extruct.uniform import _flatten, infer_context, flatten_dict, _uopengraph
 from tests import get_testdata

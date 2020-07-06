@@ -17,6 +17,8 @@ from rdflib.plugins.parsers.pyRdfa.initialcontext import initial_context
 
 from extruct.utils import parse_xmldom_html
 
+from collections import defaultdict
+
 
 # silence rdflib/PyRdfa INFO logs
 rdflib_logger.setLevel(logging.ERROR)
@@ -95,20 +97,23 @@ class RDFaExtractor(object):
     
     # sorts the rdfa tags in jsonld string
     def sort(self, unordered, ordered):
-        idx_for_value = dict((value, idx) for idx, value in enumerate(ordered))
+        idx_for_value = dict(reversed([(value, idx) for idx, value in enumerate(ordered)]))
         unordered.sort(key=lambda props: idx_for_value.get(props.get('@value'), len(ordered)))
     
     
     # fixes order of rdfa tags in jsonld string
     # by comparing with order in document object
-    def fixOrder(self, jsonld_string, document):
+    def fix_order(self, jsonld_string, document):
         html_element = document.xpath('/html')[0]
         head_element = document.xpath('//head')[0]
-                
+            
+        meta_tags = defaultdict(list)    
+            
         for meta_tag in head_element.xpath("meta[@property]"):
-            meta_tag.attrib['property'] = self.replaceNS(meta_tag.attrib['property'], 
+            expanded_property = self.replaceNS(meta_tag.attrib['property'], 
                                                          html_element, 
                                                          head_element)
+            meta_tags[expanded_property].append(meta_tag.get('content'))
             
         json_objects = json.loads(jsonld_string)
 
@@ -117,10 +122,7 @@ class RDFaExtractor(object):
 
             for key in keys:
                 if type(json_object[key]) is list and len(json_object[key]) > 1:
-                    meta_tags = head_element.xpath("meta[@property='" + key + "']")
-                    ordered = list(map(lambda meta_tag: meta_tag.get('content'), meta_tags))
-
-                    self.sort(json_object[key], ordered)
+                    self.sort(json_object[key], meta_tags[key])
 
         return json_objects
 
@@ -145,6 +147,6 @@ class RDFaExtractor(object):
         try:
             # hack to fix the ordering of duplicate properties (see issue 116)
             # it should be disabled once PyRDFA fixes itself
-            return self.fixOrder(jsonld_string, document)
+            return self.fix_order(jsonld_string, document)
         except:
             return json.loads(jsonld_string)

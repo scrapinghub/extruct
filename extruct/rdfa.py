@@ -26,7 +26,13 @@ pyrdfa_logger.setLevel(logging.ERROR)
 
 initial_context["http://www.w3.org/2011/rdfa-context/rdfa-1.1"].ns.update({
     "twitter": "https://dev.twitter.com/cards#",
-    "fb": "http://ogp.me/ns/fb#"
+    "fb": "http://ogp.me/ns/fb#",
+    "og": "http://ogp.me/ns#",
+    "music": "http://ogp.me/ns/music#",
+    "video": "http://ogp.me/ns/video#",
+    "article": "http://ogp.me/ns/article#",
+    "book": "http://ogp.me/ns/book#",
+    "profile": "http://ogp.me/ns/profile#"
 })
 
 
@@ -143,7 +149,6 @@ class RDFaExtractor(object):
                           vocab_cache_report=False,
                           refresh_vocab_cache=False,
                           check_lite=False)
-
         g = PyRdfa(options, base=base_url).graph_from_DOM(document, graph=Graph(), pgraph=Graph())
         jsonld_string = g.serialize(format='json-ld', auto_compact=not expanded).decode('utf-8')
         

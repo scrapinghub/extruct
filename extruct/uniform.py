@@ -1,16 +1,29 @@
 from six.moves.urllib.parse import urlparse, urljoin
 
 
-def _uopengraph(extracted):
+def _uopengraph(extracted, with_og_array=False):
     out = []
     for obj in extracted:
         # In order of appearance in the page
-        properties = list(reversed(obj['properties']))
-        # Ensuring that never empty value is returned if there is a duplicated
-        # property with non empty value
-        non_empty_props = {k for k, v in properties if v and v.strip()}
-        flattened = {k: v for k, v in properties
-                     if k not in non_empty_props or (v and v.strip())}
+        properties = list(obj['properties'])
+        flattened = {}
+
+        for k, v in properties:
+            if k not in flattened.keys():
+                flattened[k] = v
+            elif v and v.strip():
+                # If og_array isn't required add first non empty value
+                if not with_og_array:
+                    if not flattened[k] or not flattened[k].strip():
+                        flattened[k] = v
+                else:
+                    if isinstance(flattened[k], list):
+                        flattened[k].append(v)
+                    elif flattened[k] and flattened[k].strip():
+                        flattened[k] = [flattened[k], v]
+                    else:
+                        flattened[k] = v
+
         t = flattened.pop('og:type', None)
         if t:
             flattened['@type'] = t

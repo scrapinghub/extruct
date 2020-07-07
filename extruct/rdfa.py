@@ -31,9 +31,9 @@ initial_context["http://www.w3.org/2011/rdfa-context/rdfa-1.1"].ns.update({
 
 
 class RDFaExtractor(object):
-    
-    # expands namespace to match with returned json (ex: og -> 'http://ogp.me/ns#')
-    def replaceNS(self, prop, html_element, head_element):
+
+    def _replaceNS(self, prop, html_element, head_element):
+        """Expand namespace to match with returned json (e.g.: og -> 'http://ogp.me/ns#')"""
         
         # context namespaces taken from pyrdfa3
         # https://github.com/RDFLib/PyRDFa/blob/master/pyRdfa/initialcontext.py
@@ -94,26 +94,29 @@ class RDFaExtractor(object):
             return context[prefix] + prop.split(':')[1]
 
         return prop
-    
-    # sorts the rdfa tags in jsonld string
-    def sort(self, unordered, ordered):
+     
+    def _sort(self, unordered, ordered):
+        """Sort the rdfa tags in jsonld string"""
         idx_for_value = dict(reversed([(value, idx) for idx, value in enumerate(ordered)]))
         unordered.sort(key=lambda props: idx_for_value.get(props.get('@value'), len(ordered)))
     
-    
-    # fixes order of rdfa tags in jsonld string
-    # by comparing with order in document object
-    def fix_order(self, jsonld_string, document):
+
+    def _fix_order(self, jsonld_string, document):
+        """
+        Fix order of rdfa tags in jsonld string
+        by checking the appearance order in the HTML
+        """
         html_element = document.xpath('/html')[0]
         head_element = document.xpath('//head')[0]
-            
-        meta_tags = defaultdict(list)    
+
+        # Stores the values or each property in appearance order
+        values_for_property = defaultdict(list)
             
         for meta_tag in head_element.xpath("meta[@property]"):
-            expanded_property = self.replaceNS(meta_tag.attrib['property'], 
-                                                         html_element, 
-                                                         head_element)
-            meta_tags[expanded_property].append(meta_tag.get('content'))
+            expanded_property = self._replaceNS(meta_tag.attrib['property'],
+                                                html_element,
+                                                head_element)
+            values_for_property[expanded_property].append(meta_tag.get('content'))
             
         json_objects = json.loads(jsonld_string)
 
@@ -122,7 +125,7 @@ class RDFaExtractor(object):
 
             for key in keys:
                 if type(json_object[key]) is list and len(json_object[key]) > 1:
-                    self.sort(json_object[key], meta_tags[key])
+                    self._sort(json_object[key], values_for_property[key])
 
         return json_objects
 
@@ -145,8 +148,8 @@ class RDFaExtractor(object):
         jsonld_string = g.serialize(format='json-ld', auto_compact=not expanded).decode('utf-8')
         
         try:
-            # hack to fix the ordering of duplicate properties (see issue 116)
+            # hack to fix the ordering of multi-value properties (see issue 116)
             # it should be disabled once PyRDFA fixes itself
-            return self.fix_order(jsonld_string, document)
+            return self._fix_order(jsonld_string, document)
         except:
             return json.loads(jsonld_string)

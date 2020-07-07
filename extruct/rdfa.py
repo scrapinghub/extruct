@@ -112,8 +112,12 @@ class RDFaExtractor(object):
         Fix order of rdfa tags in jsonld string
         by checking the appearance order in the HTML
         """
-        html_element = document.xpath('/html')[0]
-        head_element = document.xpath('//head')[0]
+        json_objects = json.loads(jsonld_string)
+
+        html, head = document.xpath('/html'), document.xpath('//head')
+        if not html or not head:
+            return json_objects
+        html_element, head_element = html[0], head[0]
 
         # Stores the values or each property in appearance order
         values_for_property = defaultdict(list)
@@ -123,8 +127,6 @@ class RDFaExtractor(object):
                                                 html_element,
                                                 head_element)
             values_for_property[expanded_property].append(meta_tag.get('content'))
-            
-        json_objects = json.loads(jsonld_string)
 
         for json_object in json_objects:
             keys = json_object.keys()

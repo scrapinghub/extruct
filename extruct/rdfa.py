@@ -4,6 +4,8 @@ RDFa extractor
 
 Based on pyrdfa3 and rdflib
 """
+from collections import defaultdict
+
 import json
 import logging
 import re
@@ -16,8 +18,6 @@ from rdflib.plugins.parsers.pyRdfa import pyRdfa as PyRdfa, Options, logger as p
 from rdflib.plugins.parsers.pyRdfa.initialcontext import initial_context
 
 from extruct.utils import parse_xmldom_html
-
-from collections import defaultdict
 
 
 # silence rdflib/PyRdfa INFO logs

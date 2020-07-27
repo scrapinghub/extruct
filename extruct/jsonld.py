@@ -10,11 +10,10 @@ import lxml.etree
 
 from extruct.utils import parse_html
 
-HTML_OR_JS_COMMENTLINE = re.compile(r'^\s*(//.*|<!--.*-->)')
-
 
 class JsonLdExtractor(object):
-    _xp_jsonld = lxml.etree.XPath('descendant-or-self::script[@type="application/ld+json"]')
+    _xp_jsonld = lxml.etree.XPath(
+        'descendant-or-self::script[@type="application/ld+json"]')
 
     def extract(self, htmlstring, base_url=None, encoding="UTF-8"):
         tree = parse_html(htmlstring, encoding=encoding)
@@ -27,15 +26,42 @@ class JsonLdExtractor(object):
             if items for item in items if item
         ]
 
+    def _extract_json_objects(self, text, decoder=json.JSONDecoder()):
+        """Find JSON objects in text, and yield the decoded JSON data
+
+        Does not attempt to look for JSON arrays, text, or other JSON types outside
+        of a parent JSON object.
+
+        """
+        pos = 0
+        while True:
+            match = text.find('{', pos)
+            if match == -1:
+                break
+            try:
+                result, index = decoder.raw_decode(text[match:])
+                yield result
+                pos = match + index
+            except ValueError:
+                pos = match + 1
+
     def _extract_items(self, node):
         script = node.xpath('string()')
+
         try:
             # TODO: `strict=False` can be configurable if needed
             data = json.loads(script, strict=False)
         except ValueError:
             # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
-            data = json.loads(
-                HTML_OR_JS_COMMENTLINE.sub('', script), strict=False)
+            data = []
+            try:
+                text = str(script)
+                for result in self._extract_json_objects(text):
+                    if result:
+                        data.append(result)
+            except:
+                return None
+
         if isinstance(data, list):
             return data
         elif isinstance(data, dict):

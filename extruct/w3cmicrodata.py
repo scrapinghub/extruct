@@ -150,7 +150,7 @@ class LxmlMicrodataExtractor(object):
                              base_url=base_url)
         if 'itemprop' in ref_node.keys() and 'itemscope' in ref_node.keys():
             # An full item will be extracted from the node, no need to look
-            # for individual properties in childs
+            # for individual properties in child nodes
             for p, v in extract_fn(ref_node):
                 yield p, v
         else:

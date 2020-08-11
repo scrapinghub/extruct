@@ -17,8 +17,6 @@ extruct
 
 *extruct* is a library for extracting embedded metadata from HTML markup.
 
-It also has a built-in HTTP server to test its output as JSON.
-
 Currently, *extruct* supports:
 
 - `W3C's HTML Microdata`_
@@ -585,104 +583,6 @@ Microformat extraction
         ]
       }
    }]
-
-REST API service
-----------------
-
-*extruct* also ships with a REST API service to test its output from URLs.
-
-Dependencies
-++++++++++++
-
-* bottle_ (Web framework)
-* gevent_ (Aysnc framework)
-* requests_
-
-.. _bottle: https://pypi.python.org/pypi/bottle
-.. _gevent: http://www.gevent.org/
-.. _requests: http://docs.python-requests.org/
-
-Usage
-+++++
-
-::
-
-    python -m extruct.service
-
-launches an HTTP server listening on port 10005.
-
-Methods supported
-+++++++++++++++++
-
-::
-
-    /extruct/<URL>
-    method = GET
-
-
-    /extruct/batch
-    method = POST
-    params:
-        urls - a list of URLs separted by newlines
-        urlsfile - a file with one URL per line
-
-E.g. http://localhost:10005/extruct/http://www.sarenza.com/i-love-shoes-susket-s767163-p0000119412
-
-will output something like this:
-
->>>
-{ 'json-ld': [ { '@context': 'http://schema.org',
-                 '@id': 'FP',
-                 '@type': 'Product',
-                 'brand': { '@type': 'Brand',
-                            'url': 'https://www.sarenza.com/i-love-shoes'},
-                 'color': ['Lava', 'Black', 'Lt grey'],
-                 'image': [ 'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_09.jpg?201509221045&v=20180313113923',
-                            'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_02.jpg?201509291747&v=20180313113923',
-                            'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_03.jpg?201509221045&v=20180313113923',
-                            'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_04.jpg?201509221045&v=20180313113923',
-                            'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_05.jpg?201509221045&v=20180313113923',
-                            'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_06.jpg?201509221045&v=20180313113923',
-                            'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_07.jpg?201509221045&v=20180313113923',
-                            'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_08.jpg?201509221045&v=20180313113923'],
-                 'name': 'Susket',
-                 'offers': { '@type': 'AggregateOffer',
-                             'availability': 'InStock',
-                             'highPrice': '49.00',
-                             'lowPrice': '0.00',
-                             'price': '0.00',
-                             'priceCurrency': 'EUR'}}],
-  'microdata': [ { 'properties': { 'average': '4.7',
-                                   'best': '5',
-                                   'itemreviewed': 'Sarenza',
-                                   'rating': '4.7 / 5\n\t\t  (4 066 avis)',
-                                   'votes': '4 066'},
-                   'type': 'http://data-vocabulary.org/Review-aggregate'}],
-  'microformat': [],
-  'opengraph': [ { 'namespace': {'og': 'http://ogp.me/ns#'},
-                   'properties': [ ( 'og:title',
-                                     'I Love Shoes Susket @sarenza.com'),
-                                   ( 'og:image',
-                                     'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_09.jpg?201509221045&v=20180313113923'),
-                                   ('og:site_name', 'sarenza.com'),
-                                   ('og:type', 'product'),
-                                   ('og:description', '...'),
-                                   ( 'og:url',
-                                     'https://www.sarenza.com/i-love-shoes-susket-s767163-p0000119412'),
-                                   ('og:country-name', 'FRA')]}],
-  'rdfa': [ { '@id': 'https://www.sarenza.com/i-love-shoes-susket-s767163-p0000119412',
-              'http://ogp.me/ns#country-name': [{'@value': 'FRA'}],
-              'http://ogp.me/ns#description': [{'@value': '...'}],
-              'http://ogp.me/ns#image': [ { '@value': 'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_09.jpg?201509221045&v=20180313113923'}],
-              'http://ogp.me/ns#site_name': [{'@value': 'sarenza.com'}],
-              'http://ogp.me/ns#title': [ { '@value': 'I Love Shoes Susket '
-                                                      '@sarenza.com'}],
-              'http://ogp.me/ns#type': [{'@value': 'product'}],
-              'http://ogp.me/ns#url': [ { '@value': 'https://www.sarenza.com/i-love-shoes-susket-s767163-p0000119412'}],
-              'http://ogp.me/ns/fb#admins': [{'@value': '100001934697625'}],
-              'http://ogp.me/ns/fb#app_id': [{'@value': '148128758532914'}]},
-            { '@id': '_:Ncf1962068aa142b29000813372db7841',
-              'http://www.w3.org/1999/xhtml/vocab#role': [ { '@id': 'http://www.w3.org/1999/xhtml/vocab#navigation'}]}]}
 
 
 Command Line Tool

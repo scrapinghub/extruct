@@ -27,6 +27,25 @@ class TestUniform(unittest.TestCase):
         data = extruct.extract(body, syntaxes=['opengraph'], uniform=True)
         self.assertEqual(data['opengraph'], expected)
 
+    def test_uopengraph_with_og_array(self):
+        expected = [{"@context": {
+                        "og": "http://ogp.me/ns#",
+                        "fb": "http://www.facebook.com/2008/fbml",
+                        "concerts": "http://ogp.me/ns/fb/songkick-concerts#"
+                    },
+                    "fb:app_id": "308540029359",
+                    "og:site_name": "Songkick",
+                    "@type": "songkick-concerts:artist",
+                    "og:title": "Elysian Fields",
+                    "og:description": "Buy tickets for an upcoming Elysian Fields concert near you. List of all Elysian Fields tickets and tour dates for 2017.",
+                    "og:url": "http://www.songkick.com/artists/236156-elysian-fields",
+                    "og:image": [ "http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg",
+                                  "http://images.sk-static.com/SECONDARY_IMAGE.jpg"],
+                }]
+        body = get_testdata('songkick', 'elysianfields.html')
+        data = extruct.extract(body, syntaxes=['opengraph'], uniform=True, with_og_array=True)
+        self.assertEqual(data['opengraph'], expected)
+
     def test_uopengraph_duplicated_priorities(self):
         # Ensures that first seen property is kept when flattening
         data = _uopengraph([{'properties':
@@ -58,6 +77,36 @@ class TestUniform(unittest.TestCase):
         assert data[0]['prop_non_empty2'] == 'value!'
         assert data[0]['prop_non_empty3'] == 'value!'
 
+    def test_uopengraph_duplicated_with_og_array(self):
+        # Ensures that first seen property is kept when flattening
+        data = _uopengraph([{'properties':
+                                 [('prop_{}'.format(k), 'value_{}'.format(v))
+                                  for k in range(5)
+                                  for v in range(5)],
+                             'namespace': 'namespace'}], with_og_array=True)
+        for k in range(5):
+            assert data[0]['prop_{}'.format(k)] == ['value_0', 'value_1', 'value_2', 'value_3', 'value_4']
+
+        # Ensures that empty is not returned if a property contains any
+        # non empty value
+        data = _uopengraph([{'properties':
+                                 [('prop_empty', ' '),
+
+                                  ('prop_non_empty', ' '),
+                                  ('prop_non_empty', 'value!'),
+
+                                  ('prop_non_empty2', 'value!'),
+                                  ('prop_non_empty2', ' '),
+
+                                  ('prop_non_empty3', ' '),
+                                  ('prop_non_empty3', 'value!'),
+                                  ('prop_non_empty3', 'other value'),
+                                  ],
+                             'namespace': 'namespace'}], with_og_array=True)
+        assert data[0]['prop_empty'] == ' '
+        assert data[0]['prop_non_empty'] == 'value!'
+        assert data[0]['prop_non_empty2'] == 'value!'
+        assert data[0]['prop_non_empty3'] == ['value!', 'other value']
 
     def test_umicroformat(self):
         expected = [ { '@context': 'http://microformats.org/wiki/',

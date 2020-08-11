@@ -1,10 +1,8 @@
 # project requirements, install them using following command:
 # pip install -r requirements.txt
 lxml
-bottle
-gevent
 requests
-rdflib
+rdflib<5.0.0
 rdflib-jsonld
 mf2py>=1.1.0
 six>=1.11

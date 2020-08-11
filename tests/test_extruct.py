@@ -17,22 +17,16 @@ class TestGeneric(unittest.TestCase):
         body = get_testdata('songkick', 'elysianfields.html')
         expected = json.loads(get_testdata('songkick', 'elysianfields.json').decode('UTF-8'))
         data = extruct.extract(body, base_url='http://www.songkick.com/artists/236156-elysian-fields')
-        # See test_rdfa_not_preserving_order()
-        del data['rdfa'][0]['http://ogp.me/ns#image']
-        del expected['rdfa'][0]['http://ogp.me/ns#image']
+               
         self.assertEqual(jsonize_dict(data), expected)
 
-    @pytest.mark.xfail
-    def test_rdfa_not_preserving_order(self):
+    def test_rdfa_is_preserving_order(self):
         # See https://github.com/scrapinghub/extruct/issues/116
-        # RDFa is not preserving ordering on duplicated properties. So this
-        # test sometimes fails for property 'http://ogp.me/ns#image'
-        body = get_testdata('songkick', 'elysianfields.html')
-        expected = json.loads(get_testdata('songkick', 'elysianfields.json').decode('UTF-8'))
+        body = get_testdata('songkick', 'elysianfields_1.html')
+        expected = json.loads(get_testdata('songkick', 'elysianfields_1.json').decode('UTF-8'))
         data = extruct.extract(body,
-                               base_url='http://www.songkick.com/artists/236156-elysian-fields',
-                               syntaxes=['rdfa'])
-        self.assertEqual(jsonize_dict(data), expected)
+                               base_url='http://www.songkick.com/artists/236156-elysian-fields')
+        self.assertEqual(jsonize_dict(data)['rdfa'], expected['rdfa'])
 
     def test_microdata_custom_url(self):
         body, expected = self._microdata_custom_url('product_custom_url.json')

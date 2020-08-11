@@ -21,6 +21,7 @@ def extract(htmlstring,
             uniform=False,
             return_html_node=False,
             schema_context='http://schema.org',
+            with_og_array=False,
             **kwargs):
     """htmlstring: string with valid html document;
        base_url: base url of the html document
@@ -134,7 +135,7 @@ def extract(htmlstring,
         for syntax, uniform, raw, schema_context in uniform_processors:
             try:
                 if syntax == 'opengraph':
-                    output[syntax] = uniform(raw)
+                    output[syntax] = uniform(raw, with_og_array=with_og_array)
                 else:
                     output[syntax] = uniform(raw, schema_context)
             except Exception as e:

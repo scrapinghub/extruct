@@ -74,101 +74,20 @@ First fetch the HTML using python-requests and then feed the response body to ``
   >>>
   >>> pp.pprint(data)
   { 'json-ld': [ { '@context': 'https://schema.org',
-                   '@graph': [ { '@id': 'https://www.optimizesmart.com/#organization',
-                                 '@type': 'Organization',
-                                 'image': { '@id': 'https://www.optimizesmart.com/#logo'},
-                                 'logo': { '@id': 'https://www.optimizesmart.com/#logo',
-                                           '@type': 'ImageObject',
-                                           'caption': 'Optimize Smart',
-                                           'height': 83,
-                                           'url': 'https://www.optimizesmart.com/wp-content/uploads/2016/03/optimize-smart-Twitter-logo.jpg',
-                                           'width': 80},
-                                 'name': 'Optimize Smart',
-                                 'sameAs': [ 'https://www.facebook.com/optimizesmart/',
-                                             'https://uk.linkedin.com/in/analyticsnerd',
-                                             'https://www.youtube.com/user/optimizesmart',
-                                             'https://twitter.com/analyticsnerd'],
-                                 'url': 'https://www.optimizesmart.com/'},
-                               { '@id': 'https://www.optimizesmart.com/#website',
-                                 '@type': 'WebSite',
-                                 'description': 'Analytics Consulting &amp; '
-                                                'Conversion Optimization',
-                                 'name': 'Optimize Smart',
-                                 'potentialAction': { '@type': 'SearchAction',
-                                                      'query-input': 'required '
-                                                                     'name=search_term_string',
-                                                      'target': 'https://www.optimizesmart.com/?s={search_term_string}'},
-                                 'publisher': { '@id': 'https://www.optimizesmart.com/#organization'},
-                                 'url': 'https://www.optimizesmart.com/'},
-                               { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/#primaryimage',
-                                 '@type': 'ImageObject',
-                                 'height': 308,
-                                 'url': 'https://www.optimizesmart.com/wp-content/uploads/2017/10/thumbnail-attributionModelling.jpg',
-                                 'width': 193},
-                               { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/#webpage',
-                                 '@type': 'WebPage',
-                                 'dateModified': '2019-12-10T16:52:04+00:00',
-                                 'datePublished': '2017-02-02T18:57:23+00:00',
-                                 'description': 'What is Open Graph Protocol and '
-                                                'why you need it? Learn to '
-                                                'implement Open Graph Protocol '
-                                                'for Facebook on your website. '
-                                                'Open Graph Protocol Meta Tags.',
-                                 'inLanguage': 'en-US',
-                                 'isPartOf': { '@id': 'https://www.optimizesmart.com/#website'},
-                                 'name': 'Open Graph Protocol for Facebook '
-                                         'explained with examples',
-                                 'primaryImageOfPage': { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/#primaryimage'},
-                                 'url': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/'},
-                               { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/#article',
-                                 '@type': 'Article',
-                                 'articleSection': 'Facebook '
-                                                   'Tracking,Specialized '
-                                                   'Tracking',
-                                 'author': { '@id': 'https://www.optimizesmart.com/#/schema/person/e25aafbc307f2cbf359251aff777feb3'},
-                                 'commentCount': 0,
-                                 'dateModified': '2019-12-10T16:52:04+00:00',
-                                 'datePublished': '2017-02-02T18:57:23+00:00',
-                                 'headline': 'Open Graph Protocol for Facebook '
-                                             'Explained with Examples',
-                                 'image': { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/#primaryimage'},
-                                 'isPartOf': { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/#webpage'},
-                                 'mainEntityOfPage': { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/#webpage'},
-                                 'publisher': { '@id': 'https://www.optimizesmart.com/#organization'}},
-                               { '@id': 'https://www.optimizesmart.com/#/schema/person/e25aafbc307f2cbf359251aff777feb3',
-                                 '@type': ['Person'],
-                                 'name': 'Himanshu',
-                                 'sameAs': [ 'https://twitter.com/optimizesmart']}]},
+                   '@graph': [...]},
                  { '@context': 'http://schema.org',
                    '@id': '',
                    '@type': 'ProfessionalService',
-                   'address': { '@type': 'PostalAddress',
-                                'addressCountry': 'GB',
-                                'addressLocality': 'Southampton',
-                                'postalCode': '',
-                                'streetAddress': ''},
+                   'address': { '@type': 'PostalAddress',...},
                    'image': 'https://www.optimizesmart.com/wp-content/themes/Sept17OptimizeSmartDEV/images/logo-small.png',
                    'name': 'Optimize Smart',
-                   'openingHoursSpecification': { '@type': 'OpeningHoursSpecification',
-                                                  'closes': '23:59',
-                                                  'dayOfWeek': [ 'Monday',
-                                                                 'Tuesday',
-                                                                 'Wednesday',
-                                                                 'Thursday',
-                                                                 'Friday',
-                                                                 'Saturday',
-                                                                 'Sunday'],
-                                                  'opens': '00:00'},
-                   'sameAs': [ 'https://www.facebook.com/optimizesmart/',
-                               'https://twitter.com/OptimizeSmart',
-                               'https://www.youtube.com/user/optimizesmart',
-                               'https://www.linkedin.com/in/analyticsnerd/'],
+                   'openingHoursSpecification': { '@type': 'OpeningHoursSpecification',...},
+                   'sameAs': [...],
                    'telephone': '',
                    'url': 'https://www.optimizesmart.com'}],
     'microdata': [ { 'properties': {'headline': ''},
                      'type': 'http://schema.org/WPHeader'}],
-    'microformat': [ { 'children': [ { 'properties': { 'category': [ 'facebook-tracking',
-                                                                     'specialized-tracking']},
+    'microformat': [ { 'children': [ { 'properties': { 'category': [ 'facebook-tracking']},
                                        'type': ['h-entry']}],
                        'properties': {},
                        'type': ['h-feed']}],
@@ -185,52 +104,23 @@ First fetch the HTML using python-requests and then feed the response body to ``
                                        'Protocol for Facebook on your website. '
                                        'Open Graph Protocol Meta Tags.'),
                                      ( 'og:url',
-                                       'https://www.optimizesmart.com/how-to-use-open-graph-protocol/'),
-                                     ('og:site_name', 'Optimize Smart'),
-                                     ( 'article:publisher',
-                                       'https://www.facebook.com/optimizesmart/'),
-                                     ('article:section', 'Facebook Tracking'),
-                                     ( 'article:published_time',
-                                       '2017-02-02T18:57:23+00:00'),
-                                     ( 'article:modified_time',
-                                       '2019-12-10T16:52:04+00:00'),
-                                     ( 'og:updated_time',
-                                       '2019-12-10T16:52:04+00:00'),
-                                     ( 'og:image',
-                                       'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'),
-                                     ( 'og:image:secure_url',
-                                       'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'),
-                                     ('og:image:width', '711'),
-                                     ('og:image:height', '309')]}],
+                                       'https://www.optimizesmart.com/how-to-use-open-graph-protocol/'),...]}],
     'rdfa': [ { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/#header',
                 'http://www.w3.org/1999/xhtml/vocab#role': [ { '@id': 'http://www.w3.org/1999/xhtml/vocab#banner'}]},
               { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/',
-                'article:modified_time': [ { '@value': '2019-12-10T16:52:04+00:00'}],
-                'article:published_time': [ { '@value': '2017-02-02T18:57:23+00:00'}],
+                'article:modified_time': [ { '@value': '...'}],
+                'article:published_time': [ { '@value': '...'}],
                 'article:publisher': [ { '@value': 'https://www.facebook.com/optimizesmart/'}],
                 'article:section': [{'@value': 'Facebook Tracking'}],
-                'http://ogp.me/ns#description': [ { '@value': 'What is Open '
-                                                              'Graph Protocol '
-                                                              'and why you need '
-                                                              'it? Learn to '
-                                                              'implement Open '
-                                                              'Graph Protocol '
-                                                              'for Facebook on '
-                                                              'your website. '
-                                                              'Open Graph '
-                                                              'Protocol Meta '
-                                                              'Tags.'}],
+                'http://ogp.me/ns#description': [ { '@value':...}],
                 'http://ogp.me/ns#image': [ { '@value': 'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'}],
                 'http://ogp.me/ns#image:height': [{'@value': '309'}],
                 'http://ogp.me/ns#image:secure_url': [ { '@value': 'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'}],
                 'http://ogp.me/ns#image:width': [{'@value': '711'}],
                 'http://ogp.me/ns#locale': [{'@value': 'en_US'}],
                 'http://ogp.me/ns#site_name': [{'@value': 'Optimize Smart'}],
-                'http://ogp.me/ns#title': [ { '@value': 'Open Graph Protocol for '
-                                                        'Facebook explained with '
-                                                        'examples'}],
+                'http://ogp.me/ns#title': [ { '@value':...}],
                 'http://ogp.me/ns#type': [{'@value': 'article'}],
-                'http://ogp.me/ns#updated_time': [ { '@value': '2019-12-10T16:52:04+00:00'}],
                 'http://ogp.me/ns#url': [ { '@value': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/'}],
                 'https://api.w.org/': [ { '@id': 'https://www.optimizesmart.com/wp-json/'}]}]}
 
@@ -243,67 +133,17 @@ It is possible to select which syntaxes to extract by passing a list with the de
   >>> data = extruct.extract(r.text, base_url, syntaxes=['microdata', 'opengraph', 'rdfa'])
   >>>
   >>> pp.pprint(data)
-  { 'microdata': [ { 'properties': { 'author': 'rainerkromarek',
-                                     'itemReviewed': 'Elysian Fields',
-                                     'reviewBody': 'They played at a venue '
-                                                   'called Das Bett in '
-                                                   'Frankfurt, at an audience of '
-                                                   'maybe twenty people. I asked '
-                                                   'the girl at the beer counter '
-                                                   'why? She said that Frankfurt '
-                                                   'might be not the right place '
-                                                   'for music like this.\n'
-                                                   '\n'
-                                                   'Elysian Fields performed '
-                                                   'about one hour. I liked the '
-                                                   'music and her voice. But it '
-                                                   "wasn't so much fun in a such "
-                                                   'a situation.\n'
-                                                   '\n'
-                                                   'Anyway. Who missed the show '
-                                                   'should view their vids on '
-                                                   'YouTube. Really great!\n'
-                                                   '\n'
-                                                   'Read more\n'
-                                                   '\n'
-                                                   'Report as inappropriate'},
+  { 'microdata': [ { 'properties': { 'author': 'rainerkromarek',...},
                      'type': 'http://schema.org/Review'}],
     'opengraph': [ { 'namespace': { 'concerts': 'http://ogp.me/ns/fb/songkick-concerts#',
                                     'fb': 'http://www.facebook.com/2008/fbml',
                                     'og': 'http://ogp.me/ns#'},
-                     'properties': [ ('fb:app_id', '308540029359'),
-                                     ('og:site_name', 'Songkick'),
-                                     ('og:type', 'songkick-concerts:artist'),
-                                     ('og:title', 'Elysian Fields'),
-                                     ( 'og:description',
-                                       'Find out when Elysian Fields is next '
-                                       'playing live near you. List of all '
-                                       'Elysian Fields tour dates, concerts, '
-                                       'support acts, reviews and venue info.'),
-                                     ( 'og:url',
-                                       'https://www.songkick.com/artists/236156-elysian-fields'),
-                                     ( 'og:image',
-                                       'http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg')]}],
+                     'properties': [...]}],
     'rdfa': [ { '@id': 'https://www.songkick.com/artists/236156-elysian-fields',
                 'al:ios:app_name': [{'@value': 'Songkick Concerts'}],
                 'al:ios:app_store_id': [{'@value': '438690886'}],
                 'al:ios:url': [ { '@value': 'songkick://artists/236156-elysian-fields'}],
-                'http://ogp.me/ns#description': [ { '@value': 'Find out when '
-                                                              'Elysian Fields is '
-                                                              'next playing live '
-                                                              'near you. List of '
-                                                              'all Elysian '
-                                                              'Fields tour '
-                                                              'dates, concerts, '
-                                                              'support acts, '
-                                                              'reviews and venue '
-                                                              'info.'}],
-                'http://ogp.me/ns#image': [ { '@value': 'http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg'}],
-                'http://ogp.me/ns#site_name': [{'@value': 'Songkick'}],
-                'http://ogp.me/ns#title': [{'@value': 'Elysian Fields'}],
-                'http://ogp.me/ns#type': [{'@value': 'songkick-concerts:artist'}],
-                'http://ogp.me/ns#url': [ { '@value': 'https://www.songkick.com/artists/236156-elysian-fields'}],
-                'http://www.facebook.com/2008/fbmlapp_id': [ { '@value': '308540029359'}]}]}
+                ...}]}
 
 
 Uniform
@@ -326,55 +166,18 @@ To do so set ``uniform=True`` when calling ``extract``, it's false by default fo
                      '@type': 'Review',
                      'author': 'rainerkromarek',
                      'itemReviewed': 'Elysian Fields',
-                     'reviewBody': 'They played at a venue called Das Bett in '
-                                   'Frankfurt, at an audience of maybe twenty '
-                                   'people. I asked the girl at the beer counter '
-                                   'why? She said that Frankfurt might be not '
-                                   'the right place for music like this.\n'
-                                   '\n'
-                                   'Elysian Fields performed about one hour. I '
-                                   "liked the music and her voice. But it wasn't "
-                                   'so much fun in a such a situation.\n'
-                                   '\n'
-                                   'Anyway. Who missed the show should view '
-                                   'their vids on YouTube. Really great!\n'
-                                   '\n'
-                                   'Read more\n'
-                                   '\n'
-                                   'Report as inappropriate'}],
+                     ...}],
     'opengraph': [ { '@context': { 'concerts': 'http://ogp.me/ns/fb/songkick-concerts#',
                                    'fb': 'http://www.facebook.com/2008/fbml',
                                    'og': 'http://ogp.me/ns#'},
                      '@type': 'songkick-concerts:artist',
                      'fb:app_id': '308540029359',
-                     'og:description': 'Find out when Elysian Fields is next '
-                                       'playing live near you. List of all '
-                                       'Elysian Fields tour dates, concerts, '
-                                       'support acts, reviews and venue info.',
-                     'og:image': 'http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg',
-                     'og:site_name': 'Songkick',
-                     'og:title': 'Elysian Fields',
-                     'og:url': 'https://www.songkick.com/artists/236156-elysian-fields'}],
+                     ...}],
     'rdfa': [ { '@id': 'https://www.songkick.com/artists/236156-elysian-fields',
                 'al:ios:app_name': [{'@value': 'Songkick Concerts'}],
                 'al:ios:app_store_id': [{'@value': '438690886'}],
                 'al:ios:url': [ { '@value': 'songkick://artists/236156-elysian-fields'}],
-                'http://ogp.me/ns#description': [ { '@value': 'Find out when '
-                                                              'Elysian Fields is '
-                                                              'next playing live '
-                                                              'near you. List of '
-                                                              'all Elysian '
-                                                              'Fields tour '
-                                                              'dates, concerts, '
-                                                              'support acts, '
-                                                              'reviews and venue '
-                                                              'info.'}],
-                'http://ogp.me/ns#image': [ { '@value': 'http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg'}],
-                'http://ogp.me/ns#site_name': [{'@value': 'Songkick'}],
-                'http://ogp.me/ns#title': [{'@value': 'Elysian Fields'}],
-                'http://ogp.me/ns#type': [{'@value': 'songkick-concerts:artist'}],
-                'http://ogp.me/ns#url': [ { '@value': 'https://www.songkick.com/artists/236156-elysian-fields'}],
-                'http://www.facebook.com/2008/fbmlapp_id': [ { '@value': '308540029359'}]}]}
+                ...}]}
 
 NB rdfa structure is not uniformed yet
 
@@ -394,11 +197,7 @@ item. Each node is of ``lxml.etree.Element`` type: ::
   >>>
   >>> pp.pprint(data)
   { 'microdata': [ { 'htmlNode': <Element div at 0x7f10f8e6d3b8>,
-                     'properties': { 'description': 'KEEP RUGS FLAT ON CARPET!\n'
-                                                    'Not your thin sticky pad, '
-                                                    'No-Muv is truly the best!',
-                                     'image': ['', ''],
-                                     'name': ['No-Muv', 'No-Muv'],
+                     'properties': { ...
                                      'offers': [ { 'htmlNode': <Element div at 0x7f10f8e6d138>,
                                                    'properties': { 'availability': 'http://schema.org/InStock',
                                                                    'price': 'Price:  '
@@ -411,7 +210,7 @@ item. Each node is of ``lxml.etree.Element`` type: ::
                                                                             'for '
                                                                             'Pricing)'},
                                                    'type': 'http://schema.org/Offer'}],
-                                     'ratingValue': ['5.00', '5.00']},
+                                     ...},
                      'type': 'http://schema.org/Product'}]}
 
 Single extractors
@@ -759,50 +558,17 @@ will output something like this:
                  'brand': { '@type': 'Brand',
                             'url': 'https://www.sarenza.com/i-love-shoes'},
                  'color': ['Lava', 'Black', 'Lt grey'],
-                 'image': [ 'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_09.jpg?201509221045&v=20180313113923',
-                            'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_02.jpg?201509291747&v=20180313113923',
-                            'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_03.jpg?201509221045&v=20180313113923',
-                            'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_04.jpg?201509221045&v=20180313113923',
-                            'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_05.jpg?201509221045&v=20180313113923',
-                            'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_06.jpg?201509221045&v=20180313113923',
-                            'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_07.jpg?201509221045&v=20180313113923',
-                            'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_08.jpg?201509221045&v=20180313113923'],
+                 'image': [...],
                  'name': 'Susket',
-                 'offers': { '@type': 'AggregateOffer',
-                             'availability': 'InStock',
-                             'highPrice': '49.00',
-                             'lowPrice': '0.00',
-                             'price': '0.00',
-                             'priceCurrency': 'EUR'}}],
-  'microdata': [ { 'properties': { 'average': '4.7',
-                                   'best': '5',
-                                   'itemreviewed': 'Sarenza',
-                                   'rating': '4.7 / 5\n\t\t  (4 066 avis)',
-                                   'votes': '4 066'},
+                 'offers': { '@type': 'AggregateOffer',...}}],
+  'microdata': [ { 'properties': { 'average': '4.7',...},
                    'type': 'http://data-vocabulary.org/Review-aggregate'}],
   'microformat': [],
   'opengraph': [ { 'namespace': {'og': 'http://ogp.me/ns#'},
-                   'properties': [ ( 'og:title',
-                                     'I Love Shoes Susket @sarenza.com'),
-                                   ( 'og:image',
-                                     'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_09.jpg?201509221045&v=20180313113923'),
-                                   ('og:site_name', 'sarenza.com'),
-                                   ('og:type', 'product'),
-                                   ('og:description', '...'),
-                                   ( 'og:url',
-                                     'https://www.sarenza.com/i-love-shoes-susket-s767163-p0000119412'),
-                                   ('og:country-name', 'FRA')]}],
+                   'properties': [...]}],
   'rdfa': [ { '@id': 'https://www.sarenza.com/i-love-shoes-susket-s767163-p0000119412',
               'http://ogp.me/ns#country-name': [{'@value': 'FRA'}],
-              'http://ogp.me/ns#description': [{'@value': '...'}],
-              'http://ogp.me/ns#image': [ { '@value': 'https://cdn.sarenza.net/_img/productsv4/0000119412/MD_0000119412_223992_09.jpg?201509221045&v=20180313113923'}],
-              'http://ogp.me/ns#site_name': [{'@value': 'sarenza.com'}],
-              'http://ogp.me/ns#title': [ { '@value': 'I Love Shoes Susket '
-                                                      '@sarenza.com'}],
-              'http://ogp.me/ns#type': [{'@value': 'product'}],
-              'http://ogp.me/ns#url': [ { '@value': 'https://www.sarenza.com/i-love-shoes-susket-s767163-p0000119412'}],
-              'http://ogp.me/ns/fb#admins': [{'@value': '100001934697625'}],
-              'http://ogp.me/ns/fb#app_id': [{'@value': '148128758532914'}]},
+              ...},
             { '@id': '_:Ncf1962068aa142b29000813372db7841',
               'http://www.w3.org/1999/xhtml/vocab#role': [ { '@id': 'http://www.w3.org/1999/xhtml/vocab#navigation'}]}]}
 

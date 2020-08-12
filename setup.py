@@ -29,7 +29,7 @@ setup(
     packages=find_packages(exclude=['tests',]),
     package_data={'extruct': ['VERSION']},
     install_requires=['lxml', 
-                      'rdflib', 
+                      'rdflib < 5',
                       'rdflib-jsonld', 
                       'mf2py', 
                       'w3lib',

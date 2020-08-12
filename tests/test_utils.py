@@ -1,8 +1,11 @@
+from sys import version_info
+
 from pytest import mark
 
 from extruct.utils import parse_json
 
 
+@mark.skipif(version_info < (3,), reason="requires Python 3")
 @mark.parametrize(
     'input,output',
     [

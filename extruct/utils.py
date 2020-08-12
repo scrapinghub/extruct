@@ -32,13 +32,16 @@ def parse_json(json_string):
             try:
                 return json.loads(json_string, strict=False)
             except JSONDecodeError as error:
-                if re.search("Expecting (?:','|,) delimiter", str(error)):
-                    if json_string[error.pos-1] == '"':
-                        insertion_position = error.pos-1
-                        prefix = json_string[:insertion_position]
-                        suffix = json_string[insertion_position:]
-                        json_string = prefix + '\\' + suffix
-                        continue
+                if (
+                    hasattr(error, 'msg')
+                    and error.msg == "Expecting ',' delimiter"
+                    and json_string[error.pos-1] == '"'
+                ):
+                    insertion_position = error.pos-1
+                    prefix = json_string[:insertion_position]
+                    suffix = json_string[insertion_position:]
+                    json_string = prefix + '\\' + suffix
+                    continue
                 raise
 
 

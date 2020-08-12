@@ -1,11 +1,10 @@
 from sys import version_info
 
-from pytest import mark
+from pytest import mark, raises
 
 from extruct.utils import parse_json
 
 
-@mark.skipif(version_info < (3,), reason="requires Python 3")
 @mark.parametrize(
     'input,output',
     [
@@ -20,4 +19,8 @@ from extruct.utils import parse_json
     ]
 )
 def test_parse_json(input, output):
-    assert parse_json(input) == output
+    if version_info >= (3,):
+        assert parse_json(input) == output
+    else:
+        with raises(ValueError):
+            parse_json(input)

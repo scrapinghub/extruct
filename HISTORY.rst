@@ -2,6 +2,13 @@
 History
 =======
 
+v0.9.0 (2020-04-20)
+-------------------
+
+* REST API ``extruct.service`` removed
+* ``rdflib`` dependency restrited to <5.0.0, as parsers used by extruct
+  were removed in 5.0.0
+
 v0.8.0 (2019-10-07)
 -------------------
 * Python 3.4 support is dropped;

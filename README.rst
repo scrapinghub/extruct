@@ -17,8 +17,6 @@ extruct
 
 *extruct* is a library for extracting embedded metadata from HTML markup.
 
-It also has a built-in HTTP server to test its output as JSON.
-
 Currently, *extruct* supports:
 
 - `W3C's HTML Microdata`_
@@ -506,72 +504,6 @@ Microformat extraction
         ]
       }
    }]
-
-REST API service
-----------------
-
-*extruct* also ships with a REST API service to test its output from URLs.
-
-Dependencies
-++++++++++++
-
-* bottle_ (Web framework)
-* gevent_ (Aysnc framework)
-* requests_
-
-.. _bottle: https://pypi.python.org/pypi/bottle
-.. _gevent: http://www.gevent.org/
-.. _requests: http://docs.python-requests.org/
-
-Usage
-+++++
-
-::
-
-    python -m extruct.service
-
-launches an HTTP server listening on port 10005.
-
-Methods supported
-+++++++++++++++++
-
-::
-
-    /extruct/<URL>
-    method = GET
-
-
-    /extruct/batch
-    method = POST
-    params:
-        urls - a list of URLs separted by newlines
-        urlsfile - a file with one URL per line
-
-E.g. http://localhost:10005/extruct/http://www.sarenza.com/i-love-shoes-susket-s767163-p0000119412
-
-will output something like this:
-
->>>
-{ 'json-ld': [ { '@context': 'http://schema.org',
-                 '@id': 'FP',
-                 '@type': 'Product',
-                 'brand': { '@type': 'Brand',
-                            'url': 'https://www.sarenza.com/i-love-shoes'},
-                 'color': ['Lava', 'Black', 'Lt grey'],
-                 'image': [...],
-                 'name': 'Susket',
-                 'offers': { '@type': 'AggregateOffer',...}}],
-  'microdata': [ { 'properties': { 'average': '4.7',...},
-                   'type': 'http://data-vocabulary.org/Review-aggregate'}],
-  'microformat': [],
-  'opengraph': [ { 'namespace': {'og': 'http://ogp.me/ns#'},
-                   'properties': [...]}],
-  'rdfa': [ { '@id': 'https://www.sarenza.com/i-love-shoes-susket-s767163-p0000119412',
-              'http://ogp.me/ns#country-name': [{'@value': 'FRA'}],
-              ...},
-            { '@id': '_:Ncf1962068aa142b29000813372db7841',
-              'http://www.w3.org/1999/xhtml/vocab#role': [ { '@id': 'http://www.w3.org/1999/xhtml/vocab#navigation'}]}]}
-
 
 Command Line Tool
 -----------------

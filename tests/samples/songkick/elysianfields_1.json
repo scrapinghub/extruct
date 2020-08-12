@@ -172,7 +172,9 @@
             "namespace": {
                 "og": "http://ogp.me/ns#",
                 "fb": "http://www.facebook.com/2008/fbml",
-                "concerts": "http://ogp.me/ns/fb/songkick-concerts#"
+                "concerts": "http://ogp.me/ns/fb/songkick-concerts#",
+                "test1": "http://example.org/test1#",
+                "test2": "http://example.org/test2#"
             },
             "properties": [
                 [
@@ -206,6 +208,22 @@
                 [
                     "og:image",
                     "http://images.sk-static.com/SECONDARY_IMAGE.jpg"
+                ],
+                [
+                    "test1:image",
+                    "http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg"
+                ],
+                [
+                    "test1:image",
+                    "http://images.sk-static.com/SECONDARY_IMAGE.jpg"
+                ],
+                [
+                    "test2:image",
+                    "http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg"
+                ],
+                [
+                    "test2:image",
+                    "http://images.sk-static.com/SECONDARY_IMAGE.jpg"
                 ]
             ]
         }
@@ -227,6 +245,22 @@
             "al:ios:url": [
                 {
                     "@value": "songkick://artists/236156-elysian-fields"
+                }
+            ],
+            "http://example.org/test1#image": [ 
+                { 
+                    "@value": "http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg"
+                },
+                { 
+                    "@value": "http://images.sk-static.com/SECONDARY_IMAGE.jpg"
+                }
+            ],
+            "http://example.org/test2#image": [ 
+                { 
+                    "@value": "http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg"
+                },
+                { 
+                    "@value": "http://images.sk-static.com/SECONDARY_IMAGE.jpg"
                 }
             ],
             "http://ogp.me/ns#description": [

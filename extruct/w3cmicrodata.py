@@ -65,7 +65,7 @@ class LxmlMicrodataExtractor(object):
 
     def get_docid(self, node, itemids):
         try:
-            return itemids[node]  # same as self.get_docid(node, {})
+            itemid = itemids[node]  # same as self.get_docid(node, {})
         except KeyError:
             # Even after itemids are built,
             # this might fail if extract_items is called on a part of the document,
@@ -73,6 +73,10 @@ class LxmlMicrodataExtractor(object):
             # although this does not look likely in practice,
             # so not a performance concern.
             return int(self._xp_item_docid(node))
+        else:
+            # will be removed, this is to make sure optimization is correct
+            assert itemid == self.get_docid(node, {})
+            return itemid
 
     def extract(self, htmlstring, base_url=None, encoding="UTF-8"):
         tree = parse_html(htmlstring, encoding=encoding)

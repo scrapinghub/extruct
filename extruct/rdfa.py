@@ -95,7 +95,7 @@ class RDFaExtractor(object):
         if ('xmlns:' + prefix) in html_element.keys():
             return html_element.get('xmlns:' + prefix) + prop.split(':')[1]
 
-        # if namespace present in inital context
+        # if namespace present in initial context
         if prefix in context:
             return context[prefix] + prop.split(':')[1]
 

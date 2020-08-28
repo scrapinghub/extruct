@@ -80,7 +80,7 @@ v0.5.0 (2018-06-08)
   html nodes.
 * ``base_url`` substitutes ``url`` in ``MicroformatExtractor``, ``JsonLdExtractor``,
   ``OpenGraphExtractor``, ``RDFaExtractor``  and ``MicrodataExtractor``
-* individual extractors accpet ``base_url`` instead of ``url``, unused keyword 
+* individual extractors accept ``base_url`` instead of ``url``, unused keyword
   arguments are removed.
 * In ``w3microdata.extract_items`` ``items_seen`` and ``url`` are no longer 
   class variables but are passed as arguments.
@@ -152,7 +152,7 @@ v0.2.0 (2016-09-26)
 -------------------
 
 * Web service response content-type set to 'application/json'
-* Web service Python 3 compatiblity
+* Web service Python 3 compatibility
 * Code coverage reports
 * Fix extraction of ``<object>`` "data" URL with microdata
 * Handle textContent mixed with ``<script>`` and ``<style>`` tags

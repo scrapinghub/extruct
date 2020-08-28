@@ -45,34 +45,18 @@ cleaner = Cleaner(
 
 
 class LxmlMicrodataExtractor(object):
-    # iterate in document order (used below for get_docid optimization)
+    # iterate in document order (used below for fast get_docid)
     _xp_item = lxml.etree.XPath('descendant-or-self::*[@itemscope]')
     _xp_prop = lxml.etree.XPath("""set:difference(.//*[@itemprop],
                                                   .//*[@itemscope]//*[@itemprop])""",
                                 namespaces = {"set": "http://exslt.org/sets"})
     _xp_clean_text = lxml.etree.XPath('descendant-or-self::*[not(self::script or self::style)]/text()')
-    # ancestor and preceding axes contain all elements before the context node
-    # so counting them gives the "document order" of the context node
-    _xp_item_docid = lxml.etree.XPath("""count(preceding::*[@itemscope])
-                                       + count(ancestor::*[@itemscope])
-                                       + 1""")
 
     def __init__(self, nested=True, strict=False, add_text_content=False, add_html_node=False):
         self.nested = nested
         self.strict = strict
         self.add_text_content = add_text_content
         self.add_html_node = add_html_node
-
-    def get_docid(self, node, itemids):
-        try:
-            return itemids[node]  # same as self.get_docid(node, {})
-        except KeyError:
-            # Even after itemids are built,
-            # this might fail if extract_items is called on a part of the document,
-            # and then properties reference some node which is not in itemids,
-            # although this does not look likely in practice,
-            # so not a performance concern.
-            return int(self._xp_item_docid(node))
 
     def extract(self, htmlstring, base_url=None, encoding="UTF-8"):
         tree = parse_html(htmlstring, encoding=encoding)
@@ -88,19 +72,14 @@ class LxmlMicrodataExtractor(object):
                 for it in self._xp_item(document))
             if item]
 
+    def get_docid(self, node, itemids):
+        return itemids[node]
+
     def _build_itemids(self, document):
-        itemid = None
-        itemids = {}
-        for node in self._xp_item(document):
-            if itemid is None:
-                itemid = self.get_docid(node, {})
-                assert itemid is not None
-            else:
-                # this is the same as self.get_docid(node) but faster,
-                # calling get_docid on each iteration leads to quadratic complexity
-                itemid += 1
-            itemids[node] = itemid
-        return itemids
+        """ Build itemids for a fast get_docid implementation. Use document order.
+        """
+        root = document.getroottree().getroot()
+        return {node: idx + 1 for idx, node in enumerate(self._xp_item(root))}
 
     def _extract_item(self, node, items_seen, base_url, itemids):
         itemid = self.get_docid(node, itemids)

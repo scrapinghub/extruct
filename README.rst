@@ -660,4 +660,13 @@ Use bumpversion_ to conveniently change project version::
     bumpversion minor  # 0.0.1 -> 0.1.0
     bumpversion major  # 0.1.0 -> 1.0.0
 
+You can use ``--dry-run --verbose`` flags first to preview changes.
+
 .. _bumpversion: https://pypi.python.org/pypi/bumpversion
+
+Making releases
+---------------
+
+* Update ``HISTORY.rst`` in master (via PR or directly)
+* use bumpversion (see above) to update the version
+* push changes with tags: ``git push --follow-tags``

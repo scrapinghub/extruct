@@ -72,46 +72,25 @@ First fetch the HTML using python-requests and then feed the response body to ``
   >>>
   >>> pp.pprint(data)
   { 'json-ld': [ { '@context': 'https://schema.org',
-                   '@id': '#organization',
-                   '@type': 'Organization',
-                   'logo': 'https://www.optimizesmart.com/wp-content/uploads/2016/03/optimize-smart-Twitter-logo.jpg',
+                   '@graph': [...]},
+                 { '@context': 'http://schema.org',
+                   '@id': '',
+                   '@type': 'ProfessionalService',
+                   'address': { '@type': 'PostalAddress',...},
+                   'image': 'https://www.optimizesmart.com/wp-content/themes/Sept17OptimizeSmartDEV/images/logo-small.png',
                    'name': 'Optimize Smart',
-                   'sameAs': [ 'https://www.facebook.com/optimizesmart/',
-                               'https://uk.linkedin.com/in/analyticsnerd',
-                               'https://www.youtube.com/user/optimizesmart',
-                               'https://twitter.com/analyticsnerd'],
-                   'url': 'https://www.optimizesmart.com/'}],
+                   'openingHoursSpecification': { '@type': 'OpeningHoursSpecification',...},
+                   'sameAs': [...],
+                   'telephone': '',
+                   'url': 'https://www.optimizesmart.com'}],
     'microdata': [ { 'properties': {'headline': ''},
                      'type': 'http://schema.org/WPHeader'}],
-    'microformat': [ { 'children': [ { 'properties': { 'category': [ 'specialized-tracking'],
-                                                       'name': [ 'Open Graph '
-                                                                 'Protocol for '
-                                                                 'Facebook '
-                                                                 'explained with '
-                                                                 'examples\n'
-                                                                 '\n'
-                                                                 'Specialized '
-                                                                 'Tracking\n'
-                                                                 '\n'
-                                                                 '\n'
-                                                                 (...)
-                                                                 'Follow '
-                                                                 '@analyticsnerd\n'
-                                                                 '!function(d,s,id){var '
-                                                                 "js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, "
-                                                                 "'script', "
-                                                                 "'twitter-wjs');"]},
+    'microformat': [ { 'children': [ { 'properties': { 'category': [ 'facebook-tracking']},
                                        'type': ['h-entry']}],
-                       'properties': { 'name': [ 'Open Graph Protocol for '
-                                                 'Facebook explained with '
-                                                 'examples\n'
-                                                 (...)
-                                                 'Follow @analyticsnerd\n'
-                                                 '!function(d,s,id){var '
-                                                 "js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, "
-                                                 "'script', 'twitter-wjs');"]},
+                       'properties': {},
                        'type': ['h-feed']}],
-    'opengraph': [ { 'namespace': {'og': 'http://ogp.me/ns#'},
+    'opengraph': [ { 'namespace': { 'article': 'http://ogp.me/ns/article#',
+                                    'og': 'http://ogp.me/ns#'},
                      'properties': [ ('og:locale', 'en_US'),
                                      ('og:type', 'article'),
                                      ( 'og:title',
@@ -123,41 +102,23 @@ First fetch the HTML using python-requests and then feed the response body to ``
                                        'Protocol for Facebook on your website. '
                                        'Open Graph Protocol Meta Tags.'),
                                      ( 'og:url',
-                                       'https://www.optimizesmart.com/how-to-use-open-graph-protocol/'),
-                                     ('og:site_name', 'Optimize Smart'),
-                                     ( 'og:updated_time',
-                                       '2018-03-09T16:26:35+00:00'),
-                                     ( 'og:image',
-                                       'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'),
-                                     ( 'og:image:secure_url',
-                                       'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg')]}],
+                                       'https://www.optimizesmart.com/how-to-use-open-graph-protocol/'),...]}],
     'rdfa': [ { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/#header',
                 'http://www.w3.org/1999/xhtml/vocab#role': [ { '@id': 'http://www.w3.org/1999/xhtml/vocab#banner'}]},
               { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/',
-                'article:modified_time': [ { '@value': '2018-03-09T16:26:35+00:00'}],
-                'article:published_time': [ { '@value': '2010-07-02T18:57:23+00:00'}],
+                'article:modified_time': [ { '@value': '...'}],
+                'article:published_time': [ { '@value': '...'}],
                 'article:publisher': [ { '@value': 'https://www.facebook.com/optimizesmart/'}],
-                'article:section': [{'@value': 'Specialized Tracking'}],
-                'http://ogp.me/ns#description': [ { '@value': 'What is Open '
-                                                              'Graph Protocol '
-                                                              'and why you need '
-                                                              'it? Learn to '
-                                                              'implement Open '
-                                                              'Graph Protocol '
-                                                              'for Facebook on '
-                                                              'your website. '
-                                                              'Open Graph '
-                                                              'Protocol Meta '
-                                                              'Tags.'}],
+                'article:section': [{'@value': 'Facebook Tracking'}],
+                'http://ogp.me/ns#description': [ { '@value':...}],
                 'http://ogp.me/ns#image': [ { '@value': 'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'}],
+                'http://ogp.me/ns#image:height': [{'@value': '309'}],
                 'http://ogp.me/ns#image:secure_url': [ { '@value': 'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'}],
+                'http://ogp.me/ns#image:width': [{'@value': '711'}],
                 'http://ogp.me/ns#locale': [{'@value': 'en_US'}],
                 'http://ogp.me/ns#site_name': [{'@value': 'Optimize Smart'}],
-                'http://ogp.me/ns#title': [ { '@value': 'Open Graph Protocol for '
-                                                        'Facebook explained with '
-                                                        'examples'}],
+                'http://ogp.me/ns#title': [ { '@value':...}],
                 'http://ogp.me/ns#type': [{'@value': 'article'}],
-                'http://ogp.me/ns#updated_time': [ { '@value': '2018-03-09T16:26:35+00:00'}],
                 'http://ogp.me/ns#url': [ { '@value': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/'}],
                 'https://api.w.org/': [ { '@id': 'https://www.optimizesmart.com/wp-json/'}]}]}
 
@@ -170,39 +131,17 @@ It is possible to select which syntaxes to extract by passing a list with the de
   >>> data = extruct.extract(r.text, base_url, syntaxes=['microdata', 'opengraph', 'rdfa'])
   >>>
   >>> pp.pprint(data)
-  { 'microdata': [],
+  { 'microdata': [ { 'properties': { 'author': 'rainerkromarek',...},
+                     'type': 'http://schema.org/Review'}],
     'opengraph': [ { 'namespace': { 'concerts': 'http://ogp.me/ns/fb/songkick-concerts#',
                                     'fb': 'http://www.facebook.com/2008/fbml',
                                     'og': 'http://ogp.me/ns#'},
-                     'properties': [ ('fb:app_id', '308540029359'),
-                                     ('og:site_name', 'Songkick'),
-                                     ('og:type', 'songkick-concerts:artist'),
-                                     ('og:title', 'Elysian Fields'),
-                                     ( 'og:description',
-                                       'Find out when Elysian Fields is next '
-                                       'playing live near you. List of all '
-                                       'Elysian Fields tour dates and concerts.'),
-                                     ( 'og:url',
-                                       'https://www.songkick.com/artists/236156-elysian-fields'),
-                                     ( 'og:image',
-                                       'http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg')]}],
+                     'properties': [...]}],
     'rdfa': [ { '@id': 'https://www.songkick.com/artists/236156-elysian-fields',
                 'al:ios:app_name': [{'@value': 'Songkick Concerts'}],
                 'al:ios:app_store_id': [{'@value': '438690886'}],
                 'al:ios:url': [ { '@value': 'songkick://artists/236156-elysian-fields'}],
-                'http://ogp.me/ns#description': [ { '@value': 'Find out when '
-                                                              'Elysian Fields is '
-                                                              'next playing live '
-                                                              'near you. List of '
-                                                              'all Elysian '
-                                                              'Fields tour dates '
-                                                              'and concerts.'}],
-                'http://ogp.me/ns#image': [ { '@value': 'http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg'}],
-                'http://ogp.me/ns#site_name': [{'@value': 'Songkick'}],
-                'http://ogp.me/ns#title': [{'@value': 'Elysian Fields'}],
-                'http://ogp.me/ns#type': [{'@value': 'songkick-concerts:artist'}],
-                'http://ogp.me/ns#url': [ { '@value': 'https://www.songkick.com/artists/236156-elysian-fields'}],
-                'http://www.facebook.com/2008/fbmlapp_id': [ { '@value': '308540029359'}]}]}
+                ...}]}
 
 
 Uniform
@@ -221,36 +160,22 @@ To do so set ``uniform=True`` when calling ``extract``, it's false by default fo
   >>> data = extruct.extract(r.text, base_url, syntaxes=['microdata', 'opengraph', 'rdfa'], uniform=True)
   >>>
   >>> pp.pprint(data)
-  { 'microdata': [],
+  { 'microdata': [ { '@context': 'http://schema.org',
+                     '@type': 'Review',
+                     'author': 'rainerkromarek',
+                     'itemReviewed': 'Elysian Fields',
+                     ...}],
     'opengraph': [ { '@context': { 'concerts': 'http://ogp.me/ns/fb/songkick-concerts#',
-                                 'fb': 'http://www.facebook.com/2008/fbml',
-                                 'og': 'http://ogp.me/ns#'},
-                   '@type': 'songkick-concerts:artist',
-                   'fb:app_id': '308540029359',
-                   'og:description': 'Find out when Elysian Fields is next '
-                                     'playing live near you. List of all '
-                                     'Elysian Fields tour dates and concerts.',
-                   'og:image': 'http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg',
-                   'og:site_name': 'Songkick',
-                   'og:title': 'Elysian Fields',
-                   'og:url': 'https://www.songkick.com/artists/236156-elysian-fields'}],
+                                   'fb': 'http://www.facebook.com/2008/fbml',
+                                   'og': 'http://ogp.me/ns#'},
+                     '@type': 'songkick-concerts:artist',
+                     'fb:app_id': '308540029359',
+                     ...}],
     'rdfa': [ { '@id': 'https://www.songkick.com/artists/236156-elysian-fields',
                 'al:ios:app_name': [{'@value': 'Songkick Concerts'}],
                 'al:ios:app_store_id': [{'@value': '438690886'}],
                 'al:ios:url': [ { '@value': 'songkick://artists/236156-elysian-fields'}],
-                'http://ogp.me/ns#description': [ { '@value': 'Find out when '
-                                                              'Elysian Fields is '
-                                                              'next playing live '
-                                                              'near you. List of '
-                                                              'all Elysian '
-                                                              'Fields tour dates '
-                                                              'and concerts.'}],
-                'http://ogp.me/ns#image': [ { '@value': 'http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg'}],
-                'http://ogp.me/ns#site_name': [{'@value': 'Songkick'}],
-                'http://ogp.me/ns#title': [{'@value': 'Elysian Fields'}],
-                'http://ogp.me/ns#type': [{'@value': 'songkick-concerts:artist'}],
-                'http://ogp.me/ns#url': [ { '@value': 'https://www.songkick.com/artists/236156-elysian-fields'}],
-                'http://www.facebook.com/2008/fbmlapp_id': [ { '@value': '308540029359'}]}]}
+                ...}]}
 
 NB rdfa structure is not uniformed yet
 
@@ -270,11 +195,7 @@ item. Each node is of ``lxml.etree.Element`` type: ::
   >>>
   >>> pp.pprint(data)
   { 'microdata': [ { 'htmlNode': <Element div at 0x7f10f8e6d3b8>,
-                     'properties': { 'description': 'KEEP RUGS FLAT ON CARPET!\n'
-                                                    'Not your thin sticky pad, '
-                                                    'No-Muv is truly the best!',
-                                     'image': ['', ''],
-                                     'name': ['No-Muv', 'No-Muv'],
+                     'properties': { ...
                                      'offers': [ { 'htmlNode': <Element div at 0x7f10f8e6d138>,
                                                    'properties': { 'availability': 'http://schema.org/InStock',
                                                                    'price': 'Price:  '
@@ -287,7 +208,7 @@ item. Each node is of ``lxml.etree.Element`` type: ::
                                                                             'for '
                                                                             'Pricing)'},
                                                    'type': 'http://schema.org/Offer'}],
-                                     'ratingValue': ['5.00', '5.00']},
+                                     ...},
                      'type': 'http://schema.org/Product'}]}
 
 Single extractors
@@ -583,7 +504,6 @@ Microformat extraction
         ]
       }
    }]
-
 
 Command Line Tool
 -----------------

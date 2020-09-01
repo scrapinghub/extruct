@@ -2,6 +2,16 @@
 History
 =======
 
+v0.10.0 (2020-09-01)
+--------------------
+
+* support open graph arrays via ``with_og_array=True`` (PR #138)
+* support "expanded" Open Graph metadata based on og:type (PR #140)
+* parse JSON with JS comments for json-ld (PR #137)
+* preserve order for duplicated properties for RDFa (PR #139)
+* improve microdata parser performance with large number of items (PR #148)
+* spelling fixes (PR #145)
+
 v0.9.0 (2020-04-20)
 -------------------
 

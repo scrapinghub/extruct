@@ -649,15 +649,3 @@ Use tox_ to run tests with different Python versions::
 
 
 .. _tox: https://testrun.org/tox/latest/
-
-
-Versioning
-----------
-
-Use bumpversion_ to conveniently change project version::
-
-    bumpversion patch  # 0.0.0 -> 0.0.1
-    bumpversion minor  # 0.0.1 -> 0.1.0
-    bumpversion major  # 0.1.0 -> 1.0.0
-
-.. _bumpversion: https://pypi.python.org/pypi/bumpversion

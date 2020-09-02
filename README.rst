@@ -649,24 +649,3 @@ Use tox_ to run tests with different Python versions::
 
 
 .. _tox: https://testrun.org/tox/latest/
-
-
-Versioning
-----------
-
-Use bumpversion_ to conveniently change project version::
-
-    bumpversion patch  # 0.0.1 -> 0.0.2
-    bumpversion minor  # 0.1.0 -> 0.2.0
-    bumpversion major  # 1.0.0 -> 2.0.0
-
-You can use ``--dry-run --verbose`` flags first to preview changes.
-
-.. _bumpversion: https://pypi.python.org/pypi/bumpversion
-
-Making releases
----------------
-
-* Update ``HISTORY.rst`` in master (via PR or directly)
-* use ``bumpversion`` (see above) to update the version
-* push changes with tags: ``git push --tags && git push``

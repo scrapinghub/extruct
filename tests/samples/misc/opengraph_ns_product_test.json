@@ -1,0 +1,54 @@
+[
+    {
+        "namespace": {
+            "og": "http://ogp.me/ns#",
+            "product": "http://ogp.me/ns/product#"
+        },
+        "properties": [
+            [
+                "og:type",
+                "product.item"
+            ],
+            [
+                "og:url",
+                "https://www.fye.com/better-off-dead-exclusive-blu-ray-steelbook-fye.000000032429335302.html"
+            ],
+            [
+                "og:title",
+                "Better Off Dead [Exclusive Blu-ray Steelbook] - New on Blu-ray Disc | FYE"
+            ],
+            [
+                "og:description",
+                "Better Off Dead [Exclusive Blu-ray Steelbook] - 1980's classic starring John Cusack"
+            ],
+            [
+                "og:image",
+                "https://www.fye.com/dw/image/v2/BBNF_PRD/on/demandware.static/-/Sites-fye-master/default/dw74ad83df/fye/000/000000/fye.000000032429335302_0.jpg?sw=272"
+            ],
+            [
+                "product:condition",
+                "new"
+            ],
+            [
+                "product:availability",
+                "in stock"
+            ],
+            [
+                "product:price:amount",
+                "17.99"
+            ],
+            [
+                "product:price:currency",
+                "USD"
+            ],
+            [
+                "product:retailer_item_id",
+                "fye.000000032429335302"
+            ],
+            [
+                "product:gtin",
+                "32429335302"
+            ]
+        ]
+    }
+]

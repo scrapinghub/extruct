@@ -1,3 +1,4 @@
+import copy
 from six.moves.urllib.parse import urlparse, urljoin
 from extruct.dublincore import get_lower_attrib
 
@@ -26,11 +27,12 @@ def _umicrodata_microformat(extracted, schema_context):
 
 def _udublincore(extracted):
     out = []
-    for obj in list(extracted):
+    extracted_cpy = copy.deepcopy(extracted)
+    for obj in extracted_cpy:
         context = obj.pop('namespaces', None)
         obj['@context'] = context
         elements = obj['elements']
-        for element in list(elements):
+        for element in elements:
             for key, value in element.items():
                 if get_lower_attrib(value) == 'type':
                     obj['@type'] = element['content']

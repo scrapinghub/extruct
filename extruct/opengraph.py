@@ -11,6 +11,8 @@ _OG_NAMESPACES = {
     'article': 'http://ogp.me/ns/article#',
     'book': 'http://ogp.me/ns/book#',
     'profile': 'http://ogp.me/ns/profile#',
+    # non-standard but seen in the wild
+    'product': 'http://ogp.me/ns/product#',  # ~10% of product pages with OG
 }
 
 

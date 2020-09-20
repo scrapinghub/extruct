@@ -1,0 +1,69 @@
+[
+    {
+        "type": "http://schema.org/Product",
+        "properties": {
+            "referenced_product": {
+                "type": "http://schema.org/Product",
+                "properties": {
+                    "name": "REFERENCED PRODUCT",
+                    "image": "img-ref.jpg"
+                }
+            },
+            "prop3": "REFERENCED TO INCLUDE PROPERTIES AND ALSO INDIVIDUAL PRODUCT",
+            "image": [
+                "anvil_executive.jpg",
+                "img-2.jpg"
+            ],
+            "related_products": [
+                {
+                    "type": "http://schema.org/Product",
+                    "properties": {
+                        "name": "REL PROD 1",
+                        "image": "rel-prod-1.jpg"
+                    }
+                },
+                {
+                    "type": "http://schema.org/Product",
+                    "properties": {
+                        "name": "REL PROD 2",
+                        "image": "rel-prod-2.jpg"
+                    }
+                }
+            ],
+            "brand": "ACME",
+            "name": "Executive Anvil",
+            "description": "Sleeker than ACME's Classic Anvil, the Executive Anvil is perfect for the business traveler looking for something to drop from a height.",
+            "mpn": "925872",
+            "aggregateRating": {
+                "type": "http://schema.org/AggregateRating",
+                "properties": {
+                    "ratingValue": "4.4",
+                    "reviewCount": "89"
+                }
+            },
+            "offers": {
+                "type": "http://schema.org/Offer",
+                "properties": {
+                    "priceCurrency": "USD",
+                    "price": "119.99",
+                    "priceValidUntil": "2020-11-05",
+                    "seller": {
+                        "type": "http://schema.org/Organization",
+                        "properties": {
+                            "name": "Executive Objects"
+                        }
+                    },
+                    "itemCondition": "http://schema.org/UsedCondition",
+                    "availability": "http://schema.org/InStock"
+                }
+            }
+        }
+    },
+    {
+        "type": "http://schema.org/Product",
+        "properties": {
+            "prop3": "REFERENCED TO INCLUDE PROPERTIES AND ALSO INDIVIDUAL PRODUCT",
+            "image": "img-2.jpg"
+        }
+    }
+]

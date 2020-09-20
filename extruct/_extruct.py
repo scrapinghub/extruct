@@ -22,6 +22,7 @@ def extract(htmlstring,
             uniform=False,
             return_html_node=False,
             schema_context='http://schema.org',
+            with_og_array=False,
             **kwargs):
     """htmlstring: string with valid html document;
        base_url: base url of the html document

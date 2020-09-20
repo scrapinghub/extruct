@@ -5,6 +5,7 @@ import unittest
 import pytest
 
 import extruct
+from extruct import SYNTAXES
 from tests import get_testdata, jsonize_dict, replace_node_ref_with_node_id
 
 
@@ -16,7 +17,16 @@ class TestGeneric(unittest.TestCase):
         body = get_testdata('songkick', 'elysianfields.html')
         expected = json.loads(get_testdata('songkick', 'elysianfields.json').decode('UTF-8'))
         data = extruct.extract(body, base_url='http://www.songkick.com/artists/236156-elysian-fields')
+               
         self.assertEqual(jsonize_dict(data), expected)
+
+    def test_rdfa_is_preserving_order(self):
+        # See https://github.com/scrapinghub/extruct/issues/116
+        body = get_testdata('songkick', 'elysianfields_1.html')
+        expected = json.loads(get_testdata('songkick', 'elysianfields_1.json').decode('UTF-8'))
+        data = extruct.extract(body,
+                               base_url='http://www.songkick.com/artists/236156-elysian-fields')
+        self.assertEqual(jsonize_dict(data)['rdfa'], expected['rdfa'])
 
     def test_microdata_custom_url(self):
         body, expected = self._microdata_custom_url('product_custom_url.json')

@@ -3,10 +3,29 @@ from six.moves.urllib.parse import urlparse, urljoin
 from extruct.dublincore import get_lower_attrib
 
 
-def _uopengraph(extracted):
+def _uopengraph(extracted, with_og_array=False):
     out = []
     for obj in extracted:
-        flattened = dict(obj['properties'])
+        # In order of appearance in the page
+        properties = list(obj['properties'])
+        flattened = {}
+
+        for k, v in properties:
+            if k not in flattened.keys():
+                flattened[k] = v
+            elif v and v.strip():
+                # If og_array isn't required add first non empty value
+                if not with_og_array:
+                    if not flattened[k] or not flattened[k].strip():
+                        flattened[k] = v
+                else:
+                    if isinstance(flattened[k], list):
+                        flattened[k].append(v)
+                    elif flattened[k] and flattened[k].strip():
+                        flattened[k] = [flattened[k], v]
+                    else:
+                        flattened[k] = v
+
         t = flattened.pop('og:type', None)
         if t:
             flattened['@type'] = t

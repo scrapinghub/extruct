@@ -78,6 +78,15 @@ class TestRDFa(unittest.TestCase):
             data = rdfae.extract(body, base_url='http://www.example.com/index.html')
             self.assertJsonLDEqual(data, expected)
 
+            # This is for testing that the fix to issue 116 does not affect
+            # severely rdfa output even in a presence of a bug in the code
+            def mocked_fix_order(x, y, z):
+                raise Exception()
+
+            rdfae._fix_order = mocked_fix_order
+            data = rdfae.extract(body, base_url='http://www.example.com/index.html')
+            self.assertJsonLDEqual(data, expected)
+
     def test_wikipedia_xhtml_rdfa(self):
         fileprefix = 'xhtml+rdfa'
         body = get_testdata('wikipedia', fileprefix + '.html')
@@ -100,3 +109,14 @@ class TestRDFa(unittest.TestCase):
         data = rdfae.extract(body, base_url='http://nielslubberman.nl/drupal/')
 
         self.assertJsonLDEqual(data, expected)
+
+    def test_expanded_opengraph_support(self):
+        body = get_testdata('misc','expanded_OG_support_test.html')
+        expected = json.loads(
+                   get_testdata('misc','expanded_OG_support_test.json'
+                   ).decode('UTF-8'))
+
+        rdfae = RDFaExtractor()
+        data = rdfae.extract(body, base_url='http://www.example.com/index.html')
+
+        self.assertJsonLDEqual(data,expected)

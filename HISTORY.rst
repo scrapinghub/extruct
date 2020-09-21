@@ -2,6 +2,23 @@
 History
 =======
 
+v0.10.0 (2020-09-01)
+--------------------
+
+* support open graph arrays via ``with_og_array=True`` (PR #138)
+* support "expanded" Open Graph metadata based on og:type (PR #140)
+* parse JSON with JS comments for json-ld (PR #137)
+* preserve order for duplicated properties for RDFa (PR #139)
+* improve microdata parser performance with large number of items (PR #148)
+* spelling fixes (PR #145)
+
+v0.9.0 (2020-04-20)
+-------------------
+
+* REST API ``extruct.service`` removed
+* ``rdflib`` dependency restrited to <5.0.0, as parsers used by extruct
+  were removed in 5.0.0
+
 v0.8.0 (2019-10-07)
 -------------------
 * Python 3.4 support is dropped;
@@ -73,7 +90,7 @@ v0.5.0 (2018-06-08)
   html nodes.
 * ``base_url`` substitutes ``url`` in ``MicroformatExtractor``, ``JsonLdExtractor``,
   ``OpenGraphExtractor``, ``RDFaExtractor``  and ``MicrodataExtractor``
-* individual extractors accpet ``base_url`` instead of ``url``, unused keyword 
+* individual extractors accept ``base_url`` instead of ``url``, unused keyword
   arguments are removed.
 * In ``w3microdata.extract_items`` ``items_seen`` and ``url`` are no longer 
   class variables but are passed as arguments.
@@ -145,7 +162,7 @@ v0.2.0 (2016-09-26)
 -------------------
 
 * Web service response content-type set to 'application/json'
-* Web service Python 3 compatiblity
+* Web service Python 3 compatibility
 * Code coverage reports
 * Fix extraction of ``<object>`` "data" URL with microdata
 * Handle textContent mixed with ``<script>`` and ``<style>`` tags

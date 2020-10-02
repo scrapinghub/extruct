@@ -33,7 +33,7 @@ Currently, *extruct* supports:
 .. _Microformat: http://microformats.org/wiki/Main_Page
 .. _mf2py: https://github.com/microformats/mf2py
 .. _Facebook's Open Graph: http://ogp.me/
-.. _Dublin Core Metadata: http://dublincore.org/documents/dcq-html/
+.. _Dublin Core Metadata: https://www.dublincore.org/specifications/dublin-core/dcq-html/
 
 The microdata algorithm is a revisit of `this Scrapinghub blog post`_ showing how to use EXSLT extensions.
 

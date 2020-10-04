@@ -24,7 +24,7 @@ Currently, *extruct* supports:
 - `Microformat`_ via `mf2py`_
 - `Facebook's Open Graph`_
 - (experimental) `RDFa`_ via `rdflib`_
-- `Dublin Core Metadata`_
+- `Dublin Core Metadata (DC-HTML-2003)`_
 
 .. _W3C's HTML Microdata: http://www.w3.org/TR/microdata/
 .. _embedded JSON-LD: http://www.w3.org/TR/json-ld/#embedding-json-ld-in-html-documents
@@ -33,7 +33,7 @@ Currently, *extruct* supports:
 .. _Microformat: http://microformats.org/wiki/Main_Page
 .. _mf2py: https://github.com/microformats/mf2py
 .. _Facebook's Open Graph: http://ogp.me/
-.. _Dublin Core Metadata: https://www.dublincore.org/specifications/dublin-core/dcq-html/
+.. _Dublin Core Metadata (DC-HTML-2003): https://www.dublincore.org/specifications/dublin-core/dcq-html/2003-11-30/
 
 The microdata algorithm is a revisit of `this Scrapinghub blog post`_ showing how to use EXSLT extensions.
 

@@ -1,4 +1,6 @@
+import copy
 from six.moves.urllib.parse import urlparse, urljoin
+from extruct.dublincore import get_lower_attrib
 
 
 def _uopengraph(extracted, with_og_array=False):
@@ -40,6 +42,23 @@ def _umicrodata_microformat(extracted, schema_context):
     elif isinstance(extracted, dict):
         res.append(flatten_dict(extracted, schema_context, False))
     return res
+
+
+def _udublincore(extracted):
+    out = []
+    extracted_cpy = copy.deepcopy(extracted)
+    for obj in extracted_cpy:
+        context = obj.pop('namespaces', None)
+        obj['@context'] = context
+        elements = obj['elements']
+        for element in elements:
+            for key, value in element.items():
+                if get_lower_attrib(value) == 'type':
+                    obj['@type'] = element['content']
+                    obj['elements'].remove(element)
+                    break
+        out.append(obj)
+    return out
 
 
 def _flatten(element, schema_context):

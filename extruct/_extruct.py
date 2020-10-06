@@ -6,11 +6,12 @@ from extruct.rdfa import RDFaExtractor
 from extruct.w3cmicrodata import MicrodataExtractor
 from extruct.opengraph import OpenGraphExtractor
 from extruct.microformat import MicroformatExtractor
-from extruct.uniform import _umicrodata_microformat, _uopengraph
+from extruct.dublincore import DublinCoreExtractor
+from extruct.uniform import _umicrodata_microformat, _uopengraph, _udublincore
 from extruct.utils import parse_xmldom_html
 
 logger = logging.getLogger(__name__)
-SYNTAXES = ['microdata', 'opengraph', 'json-ld', 'microformat', 'rdfa']
+SYNTAXES = ['microdata', 'opengraph', 'json-ld', 'microformat', 'rdfa', 'dublincore']
 
 
 def extract(htmlstring,
@@ -96,6 +97,11 @@ def extract(htmlstring,
             ('rdfa', RDFaExtractor().extract_items,
              tree,
              ))
+    if 'dublincore' in syntaxes:
+        processors.append(
+            ('dublincore', DublinCoreExtractor().extract_items,
+             tree,
+             ))
     output = {}
     for syntax, extract, document in processors:
         try:
@@ -132,10 +138,20 @@ def extract(htmlstring,
                  output['opengraph'],
                  None,
                  ))
+        if 'dublincore' in syntaxes:
+            uniform_processors.append(
+                ('dublincore',
+                 _udublincore,
+                 output['dublincore'],
+                 None,
+                 ))
+
         for syntax, uniform, raw, schema_context in uniform_processors:
             try:
                 if syntax == 'opengraph':
                     output[syntax] = uniform(raw, with_og_array=with_og_array)
+                elif syntax == 'dublincore':
+                    output[syntax] = uniform(raw)
                 else:
                     output[syntax] = uniform(raw, schema_context)
             except Exception as e:

@@ -8,6 +8,7 @@ try:
 except ImportError:
     JSONDecodeError = ValueError
 
+import jstyleson
 import lxml.html
 
 from extruct.xmldom import XmlDomHTMLParser
@@ -26,23 +27,26 @@ def parse_json(json_string):
     try:
         return json.loads(json_string, strict=False)
     except ValueError:
-        # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
-        json_string = HTML_OR_JS_COMMENTLINE.sub('', json_string)
-        while True:
-            try:
-                return json.loads(json_string, strict=False)
-            except JSONDecodeError as error:
-                if (
-                    hasattr(error, 'msg')
-                    and error.msg == "Expecting ',' delimiter"
-                    and json_string[error.pos-1] == '"'
-                ):
-                    insertion_position = error.pos-1
-                    prefix = json_string[:insertion_position]
-                    suffix = json_string[insertion_position:]
-                    json_string = prefix + '\\' + suffix
-                    continue
-                raise
+        pass
+
+    # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
+    json_string = HTML_OR_JS_COMMENTLINE.sub('', json_string)
+
+    while True:
+        try:
+            return jstyleson.loads(json_string, strict=False)
+        except JSONDecodeError as error:
+            if (
+                hasattr(error, 'msg')
+                and error.msg == "Expecting ',' delimiter"
+                and json_string[error.pos-1] == '"'
+            ):
+                insertion_position = error.pos-1
+                prefix = json_string[:insertion_position]
+                suffix = json_string[insertion_position:]
+                json_string = prefix + '\\' + suffix
+                continue
+            raise
 
 
 def parse_xmldom_html(html, encoding):

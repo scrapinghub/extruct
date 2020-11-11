@@ -24,6 +24,7 @@ Currently, *extruct* supports:
 - `Microformat`_ via `mf2py`_
 - `Facebook's Open Graph`_
 - (experimental) `RDFa`_ via `rdflib`_
+- `Dublin Core Metadata (DC-HTML-2003)`_
 
 .. _W3C's HTML Microdata: http://www.w3.org/TR/microdata/
 .. _embedded JSON-LD: http://www.w3.org/TR/json-ld/#embedding-json-ld-in-html-documents
@@ -32,6 +33,7 @@ Currently, *extruct* supports:
 .. _Microformat: http://microformats.org/wiki/Main_Page
 .. _mf2py: https://github.com/microformats/mf2py
 .. _Facebook's Open Graph: http://ogp.me/
+.. _Dublin Core Metadata (DC-HTML-2003): https://www.dublincore.org/specifications/dublin-core/dcq-html/2003-11-30/
 
 The microdata algorithm is a revisit of `this Scrapinghub blog post`_ showing how to use EXSLT extensions.
 
@@ -71,7 +73,17 @@ First fetch the HTML using python-requests and then feed the response body to ``
   >>> data = extruct.extract(r.text, base_url=base_url)
   >>>
   >>> pp.pprint(data)
-  { 'json-ld': [ { '@context': 'https://schema.org',
+  { 'dublincore': [ { 'elements': [ { 'URI': 'http://purl.org/dc/elements/1.1/description',
+                                        'content': 'What is Open Graph Protocol '
+                                                   'and why you need it? Learn to '
+                                                   'implement Open Graph Protocol '
+                                                   'for Facebook on your website. '
+                                                   'Open Graph Protocol Meta Tags.',
+                                        'name': 'description'}],
+                        'namespaces': {},
+                        'terms': []}],
+
+  'json-ld': [ { '@context': 'https://schema.org',
                    '@id': '#organization',
                    '@type': 'Organization',
                    'logo': 'https://www.optimizesmart.com/wp-content/uploads/2016/03/optimize-smart-Twitter-logo.jpg',
@@ -163,7 +175,7 @@ First fetch the HTML using python-requests and then feed the response body to ``
 
 Select syntaxes
 +++++++++++++++
-It is possible to select which syntaxes to extract by passing a list with the desired ones to extract. Valid values: 'microdata', 'json-ld', 'opengraph', 'microformat', 'rdfa'. If no list is passed all syntaxes will be extracted and returned::
+It is possible to select which syntaxes to extract by passing a list with the desired ones to extract. Valid values: 'microdata', 'json-ld', 'opengraph', 'microformat', 'rdfa' and 'dublincore'. If no list is passed all syntaxes will be extracted and returned::
 
   >>> r = requests.get('http://www.songkick.com/artists/236156-elysian-fields')
   >>> base_url = get_base_url(r.text, r.url)
@@ -207,9 +219,9 @@ It is possible to select which syntaxes to extract by passing a list with the de
 
 Uniform
 +++++++
-Another option is to uniform the output of microformat, opengraph, microdata and json-ld syntaxes to the following structure: ::
+Another option is to uniform the output of microformat, opengraph, microdata, dublincore and json-ld syntaxes to the following structure: ::
 
-    {'@context': 'http://example.com', 
+    {'@context': 'http://example.com',
                  '@type': 'example_type',
                  /* All other the properties in keys here */
                  }
@@ -584,6 +596,80 @@ Microformat extraction
       }
    }]
 
+DublinCore extraction
+++++++++++++++++++++++++++++++
+::
+
+    >>> import pprint
+    >>> pp = pprint.PrettyPrinter(indent=2)
+    >>> from extruct.dublincore import DublinCoreExtractor
+    >>> html = '''<head profile="http://dublincore.org/documents/dcq-html/">
+    ... <title>Expressing Dublin Core in HTML/XHTML meta and link elements</title>
+    ... <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
+    ... <link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" />
+    ...
+    ...
+    ... <meta name="DC.title" lang="en" content="Expressing Dublin Core
+    ... in HTML/XHTML meta and link elements" />
+    ... <meta name="DC.creator" content="Andy Powell, UKOLN, University of Bath" />
+    ... <meta name="DCTERMS.issued" scheme="DCTERMS.W3CDTF" content="2003-11-01" />
+    ... <meta name="DC.identifier" scheme="DCTERMS.URI"
+    ... content="http://dublincore.org/documents/dcq-html/" />
+    ... <link rel="DCTERMS.replaces" hreflang="en"
+    ... href="http://dublincore.org/documents/2000/08/15/dcq-html/" />
+    ... <meta name="DCTERMS.abstract" content="This document describes how
+    ... qualified Dublin Core metadata can be encoded
+    ... in HTML/XHTML &lt;meta&gt; elements" />
+    ... <meta name="DC.format" scheme="DCTERMS.IMT" content="text/html" />
+    ... <meta name="DC.type" scheme="DCTERMS.DCMIType" content="Text" />
+    ... <meta name="DC.Date.modified" content="2001-07-18" />
+    ... <meta name="DCTERMS.modified" content="2001-07-18" />'''
+    >>> dublinlde = DublinCoreExtractor()
+    >>> data = dublinlde.extract(html)
+    >>> pp.pprint(data)
+    [ { 'elements': [ { 'URI': 'http://purl.org/dc/elements/1.1/title',
+                        'content': 'Expressing Dublin Core\n'
+                                   'in HTML/XHTML meta and link elements',
+                        'lang': 'en',
+                        'name': 'DC.title'},
+                      { 'URI': 'http://purl.org/dc/elements/1.1/creator',
+                        'content': 'Andy Powell, UKOLN, University of Bath',
+                        'name': 'DC.creator'},
+                      { 'URI': 'http://purl.org/dc/elements/1.1/identifier',
+                        'content': 'http://dublincore.org/documents/dcq-html/',
+                        'name': 'DC.identifier',
+                        'scheme': 'DCTERMS.URI'},
+                      { 'URI': 'http://purl.org/dc/elements/1.1/format',
+                        'content': 'text/html',
+                        'name': 'DC.format',
+                        'scheme': 'DCTERMS.IMT'},
+                      { 'URI': 'http://purl.org/dc/elements/1.1/type',
+                        'content': 'Text',
+                        'name': 'DC.type',
+                        'scheme': 'DCTERMS.DCMIType'}],
+        'namespaces': { 'DC': 'http://purl.org/dc/elements/1.1/',
+                        'DCTERMS': 'http://purl.org/dc/terms/'},
+        'terms': [ { 'URI': 'http://purl.org/dc/terms/issued',
+                     'content': '2003-11-01',
+                     'name': 'DCTERMS.issued',
+                     'scheme': 'DCTERMS.W3CDTF'},
+                   { 'URI': 'http://purl.org/dc/terms/abstract',
+                     'content': 'This document describes how\n'
+                                'qualified Dublin Core metadata can be encoded\n'
+                                'in HTML/XHTML <meta> elements',
+                     'name': 'DCTERMS.abstract'},
+                   { 'URI': 'http://purl.org/dc/terms/modified',
+                     'content': '2001-07-18',
+                     'name': 'DC.Date.modified'},
+                   { 'URI': 'http://purl.org/dc/terms/modified',
+                     'content': '2001-07-18',
+                     'name': 'DCTERMS.modified'},
+                   { 'URI': 'http://purl.org/dc/terms/replaces',
+                     'href': 'http://dublincore.org/documents/2000/08/15/dcq-html/',
+                     'hreflang': 'en',
+                     'rel': 'DCTERMS.replaces'}]}]
+
+
 
 Command Line Tool
 -----------------
@@ -622,7 +708,7 @@ those, you can pass their individual names collected in a list through 'syntaxes
 For example, this command extracts only Microdata and JSON-LD metadata from
 "http://example.com"::
 
-    extruct "http://example.com" --syntaxes microdata json-ld 
+    extruct "http://example.com" --syntaxes microdata json-ld
 
 NB syntaxes names passed must correspond to these: microdata, json-ld, rdfa, opengraph, microformat
 
@@ -649,15 +735,3 @@ Use tox_ to run tests with different Python versions::
 
 
 .. _tox: https://testrun.org/tox/latest/
-
-
-Versioning
-----------
-
-Use bumpversion_ to conveniently change project version::
-
-    bumpversion patch  # 0.0.0 -> 0.0.1
-    bumpversion minor  # 0.0.1 -> 0.1.0
-    bumpversion major  # 0.1.0 -> 1.0.0
-
-.. _bumpversion: https://pypi.python.org/pypi/bumpversion

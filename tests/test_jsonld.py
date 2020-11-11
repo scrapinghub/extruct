@@ -40,6 +40,11 @@ class TestJsonLD(unittest.TestCase):
         self.assertJsonLdCorrect(
             folder='custom.invalid',
             page='JSONLD_with_control_characters_comment')
+        
+    def test_jsonld_with_json_including_js_comment(self):
+        self.assertJsonLdCorrect(
+            folder='custom.invalid',
+            page='JSONLD_with_JS_comment')
 
     def assertJsonLdCorrect(self, folder, page):
         body, expected = self._get_body_expected(folder, page)

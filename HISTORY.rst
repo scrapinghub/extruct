@@ -2,6 +2,13 @@
 History
 =======
 
+v0.11.0 (2020-11-1N)
+--------------------
+
+* support Dublin Core Metadata (DC-HTML-2003) (PR #101)
+* support the non-standard ``product`` Open Graph namespace (PR #152)
+* move release documentation to the wiki (PR #150)
+
 v0.10.0 (2020-09-01)
 --------------------
 

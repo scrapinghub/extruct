@@ -2,7 +2,7 @@
 History
 =======
 
-v0.11.0 (2020-11-1N)
+v0.11.0 (2020-11-23)
 --------------------
 
 * support Dublin Core Metadata (DC-HTML-2003) (PR #101)

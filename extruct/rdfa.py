@@ -20,7 +20,7 @@ from pyRdfa.initialcontext import initial_context
 from extruct.utils import parse_xmldom_html
 
 
-# silence rdflib/PyRdfa INFO logs
+# silence rdflib INFO logs
 rdflib_logger.setLevel(logging.ERROR)
 
 initial_context["http://www.w3.org/2011/rdfa-context/rdfa-1.1"].ns.update({

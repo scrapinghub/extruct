@@ -30,7 +30,6 @@ setup(
     package_data={'extruct': ['VERSION']},
     install_requires=['bleach-extras',
                       'html5lib',
-                      'lxml',
                       'rdflib',
                       'rdflib-jsonld',
                       'py-dom-xpath-six',

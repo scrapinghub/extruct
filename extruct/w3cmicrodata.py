@@ -10,13 +10,19 @@ follows http://www.w3.org/TR/microdata/#json
 
 import collections
 from functools import partial
+from xml.sax.saxutils import unescape
 
 try:
     from urlparse import urljoin
 except ImportError:
     from urllib.parse import urljoin
 
-from lxml.html.clean import Cleaner
+from bleach_extras import cleaner_factory__strip_content as Cleaner
+from bleach.sanitizer import (
+    ALLOWED_TAGS,
+    ALLOWED_ATTRIBUTES,
+)
+from html5lib.filters.whitespace import collapse_spaces
 from w3lib.html import strip_html5_whitespace
 import html_text
 import xpath
@@ -24,23 +30,13 @@ import xpath
 from extruct.utils import parse_html
 
 
-# Cleaner which is similar to html_text cleaner, but is less aggressive
-# TODO: replace with 'bleach' library?
 cleaner = Cleaner(
-    scripts=True,
-    javascript=False,  # onclick attributes are fine
-    comments=True,
-    style=True,
-    links=True,
-    meta=True,
-    page_structure=False,  # <title> may be nice to have
-    processing_instructions=True,
-    embedded=False,  # keep embedded content
-    frames=False,  # keep frames
-    forms=False,  # keep forms
-    annoying_tags=False,
-    remove_unknown_tags=False,
-    safe_attrs_only=False,
+    tags=[],
+    attributes=ALLOWED_ATTRIBUTES,
+    styles=[],
+    protocols=[],
+    strip=True,
+    strip_comments=True
 )
 
 
@@ -211,9 +207,9 @@ class MicrodataExtractor(object):
             return node.getAttribute("content")
 
         else:
-            return self._extract_textContent(node)
+            text = self._extract_textContent(node)
+            return collapse_spaces(text)
 
     def _extract_textContent(self, node):
-        # TODO: replace with 'bleach' library?
-        clean_node = cleaner.clean_html(node.toxml())
-        return html_text.extract_text(clean_node)
+        clean_text = cleaner.clean(node.toxml()).strip()
+        return unescape(clean_text)

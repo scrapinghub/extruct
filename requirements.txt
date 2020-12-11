@@ -1,5 +1,6 @@
 # project requirements, install them using following command:
 # pip install -r requirements.txt
+bleach-extras
 html5lib
 lxml
 requests

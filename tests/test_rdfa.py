@@ -2,19 +2,17 @@
 import json
 from pprint import pformat
 import unittest
+from xml.etree.ElementTree import canonicalize
 
 from extruct.rdfa import RDFaExtractor
-from lxml.etree import XML, canonicalize
 from tests import get_testdata
 
 def tupleize(d):
     if isinstance(d, list):
         return sorted(tupleize(e) for e in d)
     if isinstance(d, dict):
-        # Workaround: canonicalize XML so that attribute re-ordering is ignored
-        # See: https://github.com/scrapinghub/extruct/pull/161
         if d.get('@type') == 'http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral':
-            d['@value'] = canonicalize(XML(d['@value']))
+            d['@value'] = canonicalize(d['@value'])
         return sorted((k, tupleize(v)) for k, v in d.items())
     return d
 

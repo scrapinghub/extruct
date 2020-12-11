@@ -1,9 +1,11 @@
 # project requirements, install them using following command:
 # pip install -r requirements.txt
+html5lib
 lxml
 requests
 rdflib
 rdflib-jsonld
+py-dom-xpath-six
 pyrdfa3
 mf2py>=1.1.0
 six>=1.11

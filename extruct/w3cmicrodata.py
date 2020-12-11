@@ -4,7 +4,6 @@ HTML Microdata parser
 Piece of code extracted form:
 * http://blog.scrapinghub.com/2014/06/18/extracting-schema-org-microdata-using-scrapy-selectors-and-xpath/
 
-Ported to lxml
 follows http://www.w3.org/TR/microdata/#json
 
 """
@@ -17,15 +16,16 @@ try:
 except ImportError:
     from urllib.parse import urljoin
 
-import lxml.etree
 from lxml.html.clean import Cleaner
 from w3lib.html import strip_html5_whitespace
 import html_text
+import xpath
 
 from extruct.utils import parse_html
 
 
 # Cleaner which is similar to html_text cleaner, but is less aggressive
+# TODO: replace with 'bleach' library?
 cleaner = Cleaner(
     scripts=True,
     javascript=False,  # onclick attributes are fine
@@ -44,13 +44,12 @@ cleaner = Cleaner(
 )
 
 
-class LxmlMicrodataExtractor(object):
+class MicrodataExtractor(object):
     # iterate in document order (used below for fast get_docid)
-    _xp_item = lxml.etree.XPath('descendant-or-self::*[@itemscope]')
-    _xp_prop = lxml.etree.XPath("""set:difference(.//*[@itemprop],
-                                                  .//*[@itemscope]//*[@itemprop])""",
-                                namespaces = {"set": "http://exslt.org/sets"})
-    _xp_clean_text = lxml.etree.XPath('descendant-or-self::*[not(self::script or self::style)]/text()')
+    _xp_item = 'descendant-or-self::*[@itemscope]'
+    _xp_prop = './/*[@itemprop]'
+    _xp_scope = './/*[@itemscope]//*[@itemprop]'
+    _xp_clean_text = 'descendant-or-self::*[not(self::script or self::style)]/text()'
 
     def __init__(self, nested=True, strict=False, add_text_content=False, add_html_node=False):
         self.nested = nested
@@ -65,12 +64,13 @@ class LxmlMicrodataExtractor(object):
     def extract_items(self, document, base_url):
         itemids = self._build_itemids(document)
         items_seen = set()
-        return [
+        items = [
             item for item in (
                 self._extract_item(
                     it, items_seen=items_seen, base_url=base_url, itemids=itemids)
-                for it in self._xp_item(document))
+                for it in xpath.find(self._xp_item, document))
             if item]
+        return items
 
     def get_docid(self, node, itemids):
         return itemids[node]
@@ -78,8 +78,7 @@ class LxmlMicrodataExtractor(object):
     def _build_itemids(self, document):
         """ Build itemids for a fast get_docid implementation. Use document order.
         """
-        root = document.getroottree().getroot()
-        return {node: idx + 1 for idx, node in enumerate(self._xp_item(root))}
+        return {node: idx + 1 for idx, node in enumerate(xpath.find(self._xp_item, document))}
 
     def _extract_item(self, node, items_seen, base_url, itemids):
         itemid = self.get_docid(node, itemids)
@@ -92,14 +91,14 @@ class LxmlMicrodataExtractor(object):
         item = {}
         if not self.nested:
             item["iid"] = itemid
-        types = node.get('itemtype', '').split()
+        types = node.getAttribute('itemtype').split()
         if types:
             if not self.strict and len(types) == 1:
                 item["type"] = types[0]
             else:
                 item["type"] = types
 
-            nodeid = node.get('itemid')
+            nodeid = node.getAttribute('itemid')
             if nodeid:
                 item["id"] = nodeid.strip()
 
@@ -109,7 +108,7 @@ class LxmlMicrodataExtractor(object):
             properties[name].append(value)
 
         # process item references
-        refs = node.get('itemref', '').split()
+        refs = node.getAttribute('itemref').split()
         if refs:
             for refid in refs:
                 for name, value in self._extract_property_refs(
@@ -142,75 +141,79 @@ class LxmlMicrodataExtractor(object):
         return item
 
     def _extract_properties(self, node, items_seen, base_url, itemids):
-        for prop in self._xp_prop(node):
+        scopes = set()
+        for scope in xpath.find(self._xp_scope, node):
+            scopes.add(scope)
+        for prop in xpath.find(self._xp_prop, node):
+            if prop in scopes:
+                continue
             for p, v in self._extract_property(
                     prop, items_seen=items_seen, base_url=base_url, itemids=itemids):
                 yield p, v
 
     def _extract_property_refs(self, node, refid, items_seen, base_url, itemids):
-        ref_node = node.xpath("id($refid)[1]", refid=refid)
+        ctx = xpath.XPathContext(variables={'refid': refid})
+        ref_node = ctx.find("//*[@id=$refid][1]", node)
         if not ref_node:
             return
         ref_node = ref_node[0]
         extract_fn = partial(self._extract_property, items_seen=items_seen,
                              base_url=base_url, itemids=itemids)
-        if 'itemprop' in ref_node.keys() and 'itemscope' in ref_node.keys():
+        if 'itemprop' in ref_node.attributes and 'itemscope' in ref_node.attributes:
             # An full item will be extracted from the node, no need to look
             # for individual properties in child nodes
             for p, v in extract_fn(ref_node):
                 yield p, v
         else:
-            base_parent_scope = ref_node.xpath("ancestor-or-self::*[@itemscope][1]")
-            for prop in ref_node.xpath("descendant-or-self::*[@itemprop]"):
-                parent_scope = prop.xpath("ancestor::*[@itemscope][1]")
+            base_parent_scope = xpath.find("ancestor-or-self::*[@itemscope][1]", ref_node)
+            for prop in xpath.find("descendant-or-self::*[@itemprop]", ref_node):
+                parent_scope = xpath.find("ancestor::*[@itemscope][1]", prop)
                 # Skip properties defined in a different scope than the ref_node
                 if parent_scope == base_parent_scope:
                     for p, v in extract_fn(prop):
                         yield p, v
 
     def _extract_property(self, node, items_seen, base_url, itemids):
-        props = node.get("itemprop").split()
+        props = node.getAttribute("itemprop").split()
         value = self._extract_property_value(
             node, items_seen=items_seen, base_url=base_url, itemids=itemids)
         return [(p, value) for p in props]
 
     def _extract_property_value(self, node, items_seen, base_url, itemids, force=False):
         #http://www.w3.org/TR/microdata/#values
-        if not force and node.get("itemscope") is not None:
+        if not force and 'itemscope' in node.attributes:
             if self.nested:
                 return self._extract_item(
                     node, items_seen=items_seen, base_url=base_url, itemids=itemids)
             else:
                 return {"iid_ref": self.get_docid(node, itemids)}
 
-        elif node.tag == "meta":
-            return node.get("content", "")
+        elif node.tagName == "meta":
+            return node.getAttribute("content")
 
-        elif node.tag in ("audio", "embed", "iframe", "img", "source", "track", "video"):
-            return urljoin(base_url, strip_html5_whitespace(node.get("src", "")))
+        elif node.tagName in ("audio", "embed", "iframe", "img", "source", "track", "video"):
+            return urljoin(base_url, strip_html5_whitespace(node.getAttribute("src")))
 
-        elif node.tag in ("a", "area", "link"):
-            return urljoin(base_url, strip_html5_whitespace(node.get("href", "")))
+        elif node.tagName in ("a", "area", "link"):
+            return urljoin(base_url, strip_html5_whitespace(node.getAttribute("href")))
 
-        elif node.tag in ("object",):
-            return urljoin(base_url, strip_html5_whitespace(node.get("data", "")))
+        elif node.tagName in ("object",):
+            return urljoin(base_url, strip_html5_whitespace(node.getAttribute("data")))
 
-        elif node.tag in ("data", "meter"):
-            return node.get("value", "")
+        elif node.tagName in ("data", "meter"):
+            return node.getAttribute("value")
 
-        elif node.tag in ("time",):
-            return node.get("datetime", "")
+        elif node.tagName in ("time",):
+            return node.getAttribute("datetime")
 
         # not in W3C specs but used in schema.org examples
-        elif node.get("content"):
-            return node.get("content")
+        elif "content" in node.attributes:
+            return node.getAttribute("content")
 
         else:
             return self._extract_textContent(node)
 
     def _extract_textContent(self, node):
-        clean_node = cleaner.clean_html(node)
-        return html_text.etree_to_text(clean_node)
-
-
-MicrodataExtractor = LxmlMicrodataExtractor
+        # TODO: replace with 'bleach' library?
+        clean_node = cleaner.clean_html(node.toxml())
+        return html_text.extract_text(clean_node)

@@ -2,6 +2,10 @@ import re
 
 from extruct.utils import parse_html
 from w3lib.html import strip_html5_whitespace
+from xpath import XPathContext
+
+# TODO: is there a better way to identify the default namespace?
+xpath = XPathContext(default_namespace='http://www.w3.org/1999/xhtml')
 
 _DC_ELEMENTS = {  # Defined according DCMES(DCM Version 1.1): http://dublincore.org/documents/dces/
     'contributor': 'http://purl.org/dc/elements/1.1/contributor',
@@ -124,32 +128,36 @@ class DublinCoreExtractor(object):
 
         def populate_results(node, main_attrib):
             # fill list with DC Elements or DC Terms
-            node_attrib = node.attrib
+            node_attrib = node.attributes
             if main_attrib not in node_attrib:
                 return
 
-            name = node.attrib[main_attrib]
+            name = node.attributes[main_attrib].value
             lower_name = get_lower_attrib(name)
             if lower_name in _DC_ELEMENTS:
-                node.attrib.update({'URI': _DC_ELEMENTS[lower_name]})
-                elements.append(attrib_to_dict(node.attrib))
+                elements.append({
+                    **{'URI': _DC_ELEMENTS[lower_name]},
+                    **attrib_to_dict(node.attributes),
+                })
 
             elif lower_name in _DC_TERMS:
-                node.attrib.update({'URI': _DC_TERMS[lower_name]})
-                terms.append(attrib_to_dict(node.attrib))
+                terms.append({
+                    **{'URI': _DC_TERMS[lower_name]},
+                    **attrib_to_dict(node.attributes),
+                })
 
-        namespaces_nodes = document.xpath('//link[contains(@rel,"schema")]')
+        namespaces_nodes = xpath.find('//link[contains(@rel,"schema")]', document)
         namespaces = {}
         for i in namespaces_nodes:
-            url = strip_html5_whitespace(i.attrib['href'])
+            url = strip_html5_whitespace(i.attributes['href'].value)
             if url in _URL_NAMESPACES:
-                namespaces.update({re.sub(r"schema\.", "", i.attrib['rel']): url})
+                namespaces.update({re.sub(r"schema\.", "", i.attributes['rel'].value): url})
 
-        list_meta_node = document.xpath('//meta')
+        list_meta_node = xpath.find('//meta', document)
         for meta_node in list_meta_node:
             populate_results(meta_node, 'name')
 
-        list_link_node = document.xpath('//link')
+        list_link_node = xpath.find('//link', document)
         for link_node in list_link_node:
             populate_results(link_node, 'rel')
 

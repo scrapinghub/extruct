@@ -1,7 +1,11 @@
 import re
 
+from xpath import XPathContext
+
 from extruct.utils import parse_html
 
+# TODO: is there a better way to identify the default namespace?
+xpath = XPathContext(default_namespace='http://www.w3.org/1999/xhtml')
 
 _PREFIX_PATTERN = re.compile(r'\s*(\w+):\s*([^\s]+)')
 _OG_NAMESPACES = {
@@ -25,15 +29,15 @@ class OpenGraphExtractor(object):
 
     def extract_items(self, document, base_url=None):
         # OpenGraph defines a web page as a single rich object.
-        for head in document.xpath('//head'):
-            html_elems = document.head.xpath("parent::html")
+        for head in xpath.find('//head', document):
+            html_elems = xpath.find('parent::html', head)
             namespaces = self.get_namespaces(
                 html_elems[0]) if html_elems else {}
             namespaces.update(self.get_namespaces(head))
             props = []
-            for el in head.xpath('meta[@property and @content]'):
-                prop = el.attrib['property']
-                val = el.attrib['content']
+            for el in xpath.find('meta[@property and @content]', head):
+                prop = el.attributes['property'].value
+                val = el.attributes['content'].value
                 ns = prop.partition(':')[0]
                 if ns in _OG_NAMESPACES:
                     namespaces[ns] = _OG_NAMESPACES[ns]
@@ -44,5 +48,5 @@ class OpenGraphExtractor(object):
 
     def get_namespaces(self, element):
         return dict(
-            _PREFIX_PATTERN.findall(element.attrib.get('prefix', ''))
+            _PREFIX_PATTERN.findall(element.getAttribute('prefix'))
         )

@@ -25,7 +25,7 @@ def replace_node_ref_with_node_id(item):
         for key in list(item):
             val = item[key]
             if key == "htmlNode":
-                item["_nodeId_"] = val.get("id")
+                item["_nodeId_"] = val.getAttribute("id")
                 del item[key]
             else:
                 replace_node_ref_with_node_id(val)

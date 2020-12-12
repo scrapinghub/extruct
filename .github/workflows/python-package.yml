@@ -30,4 +30,4 @@ jobs:
         python -m pip install -r requirements-dev.txt
     - name: tox
       run: |
-        tox -e `python -c "import sys; print('py' + ''.join(sys.version.split('.')[:2]))"`
+        tox -e py

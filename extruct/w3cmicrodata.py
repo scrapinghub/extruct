@@ -18,10 +18,7 @@ except ImportError:
     from urllib.parse import urljoin
 
 from bleach_extras import cleaner_factory__strip_content as Cleaner
-from bleach.sanitizer import (
-    ALLOWED_TAGS,
-    ALLOWED_ATTRIBUTES,
-)
+from bleach.sanitizer import ALLOWED_ATTRIBUTES
 from html5lib.filters.whitespace import collapse_spaces
 from w3lib.html import strip_html5_whitespace
 import xpath

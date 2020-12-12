@@ -2,7 +2,19 @@
 import json
 from pprint import pformat
 import unittest
-from xml.etree.ElementTree import canonicalize
+
+# Workaround: XML literal attribute ordering is currently implementation
+# dependent; reduce strings to a common comparable form before asserting
+# equality on them.
+
+# Since XML canonicalization isn't readily available in Python 2.7, we use
+# raw string character sorting instead; ugly, and hard to debug, but should
+# catch all except for very unusual edge cases
+try:
+    from xml.etree.ElementTree import canonicalize as reduce_for_comparison
+except:
+    # Ugly Python2.7-compatibility workaround
+    reduce_for_comparison = sorted
 
 from extruct.rdfa import RDFaExtractor
 from tests import get_testdata
@@ -12,7 +24,7 @@ def tupleize(d):
         return sorted(tupleize(e) for e in d)
     if isinstance(d, dict):
         if d.get('@type') == 'http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral':
-            d['@value'] = canonicalize(d['@value'])
+            d['@value'] = reduce_for_comparison(d['@value'])
         return sorted((k, tupleize(v)) for k, v in d.items())
     return d
 

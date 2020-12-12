@@ -36,7 +36,6 @@ setup(
                       'pyrdfa3',
                       'mf2py',
                       'w3lib',
-                      'html-text>=0.5.1',
                       'six',
                       'jstyleson'
                       ],

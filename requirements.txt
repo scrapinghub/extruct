@@ -10,5 +10,4 @@ pyrdfa3
 mf2py>=1.1.0
 six>=1.11
 w3lib
-html-text
 jstyleson

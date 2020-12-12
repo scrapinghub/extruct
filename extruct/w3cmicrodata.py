@@ -24,7 +24,6 @@ from bleach.sanitizer import (
 )
 from html5lib.filters.whitespace import collapse_spaces
 from w3lib.html import strip_html5_whitespace
-import html_text
 import xpath
 
 from extruct.utils import parse_html

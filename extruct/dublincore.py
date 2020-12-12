@@ -135,16 +135,16 @@ class DublinCoreExtractor(object):
             name = node.attributes[main_attrib].value
             lower_name = get_lower_attrib(name)
             if lower_name in _DC_ELEMENTS:
-                elements.append({
-                    **{'URI': _DC_ELEMENTS[lower_name]},
-                    **attrib_to_dict(node.attributes),
-                })
+                element = {'URI': _DC_ELEMENTS[lower_name]}
+                for attrib, value in attrib_to_dict(node.attributes).items():
+                    element[attrib] = value
+                elements.append(element)
 
             elif lower_name in _DC_TERMS:
-                terms.append({
-                    **{'URI': _DC_TERMS[lower_name]},
-                    **attrib_to_dict(node.attributes),
-                })
+                term = {'URI': _DC_TERMS[lower_name]}
+                for attrib, value in attrib_to_dict(node.attributes).items():
+                    term[attrib] = value
+                terms.append(term)
 
         namespaces_nodes = xpath.find('//link[contains(@rel,"schema")]', document)
         namespaces = {}

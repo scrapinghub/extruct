@@ -14,15 +14,14 @@ rdflib_logger = logging.getLogger('rdflib')
 rdflib_logger.setLevel(logging.ERROR)
 
 from rdflib import Graph, logger as rdflib_logger
-from rdflib.plugins.parsers.pyRdfa import pyRdfa as PyRdfa, Options, logger as pyrdfa_logger
-from rdflib.plugins.parsers.pyRdfa.initialcontext import initial_context
+from pyRdfa import pyRdfa as PyRdfa, Options
+from pyRdfa.initialcontext import initial_context
 
 from extruct.utils import parse_xmldom_html
 
 
-# silence rdflib/PyRdfa INFO logs
+# silence rdflib INFO logs
 rdflib_logger.setLevel(logging.ERROR)
-pyrdfa_logger.setLevel(logging.ERROR)
 
 initial_context["http://www.w3.org/2011/rdfa-context/rdfa-1.1"].ns.update({
     "twitter": "https://dev.twitter.com/cards#",

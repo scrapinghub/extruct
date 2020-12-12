@@ -2,8 +2,9 @@
 # pip install -r requirements.txt
 lxml
 requests
-rdflib<5.0.0
+rdflib
 rdflib-jsonld
+pyrdfa3
 mf2py>=1.1.0
 six>=1.11
 w3lib

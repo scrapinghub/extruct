@@ -129,7 +129,7 @@ class DublinCoreExtractor(object):
         def populate_results(node, main_attrib):
             # fill list with DC Elements or DC Terms
             node_attrib = node.attributes
-            if main_attrib not in node_attrib:
+            if main_attrib not in node_attrib.keys():
                 return
 
             name = node.attributes[main_attrib].value

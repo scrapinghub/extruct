@@ -151,7 +151,7 @@ class MicrodataExtractor(object):
         ref_node = ref_node[0]
         extract_fn = partial(self._extract_property, items_seen=items_seen,
                              base_url=base_url, itemids=itemids)
-        if 'itemprop' in ref_node.attributes and 'itemscope' in ref_node.attributes:
+        if 'itemprop' in ref_node.attributes.keys() and 'itemscope' in ref_node.attributes.keys():
             # An full item will be extracted from the node, no need to look
             # for individual properties in child nodes
             for p, v in extract_fn(ref_node):
@@ -173,7 +173,7 @@ class MicrodataExtractor(object):
 
     def _extract_property_value(self, node, items_seen, base_url, itemids, force=False):
         #http://www.w3.org/TR/microdata/#values
-        if not force and 'itemscope' in node.attributes:
+        if not force and 'itemscope' in node.attributes.keys():
             if self.nested:
                 return self._extract_item(
                     node, items_seen=items_seen, base_url=base_url, itemids=itemids)
@@ -199,7 +199,7 @@ class MicrodataExtractor(object):
             return node.getAttribute("datetime")
 
         # not in W3C specs but used in schema.org examples
-        elif "content" in node.attributes:
+        elif "content" in node.attributes.keys():
             return node.getAttribute("content")
 
         else:

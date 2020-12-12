@@ -2,8 +2,8 @@
 extruct
 =======
 
-.. image:: https://img.shields.io/travis/scrapinghub/extruct/master.svg
-    :target: https://travis-ci.org/scrapinghub/extruct
+.. image:: https://github.com/scrapinghub/extruct/workflows/build/badge.svg?branch=master
+    :target: https://github.com/scrapinghub/extruct/actions
     :alt: Build Status
 
 .. image:: https://img.shields.io/codecov/c/github/scrapinghub/extruct/master.svg?maxAge=2592000

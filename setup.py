@@ -24,7 +24,7 @@ setup(
     version=get_version(),
     description='Extract embedded metadata from HTML markup',
     long_description=get_readme(),
-    long_description_content_type='text/markdown',
+    long_description_content_type='text/x-rst',
     author='Scrapinghub',
     author_email='info@scrapinghub.com',
     maintainer='Scrapinghub',

@@ -3,6 +3,13 @@ from setuptools import setup, find_packages
 import os
 
 
+def get_readme():
+    path = os.path.join(
+        os.path.dirname(__file__), 'README.rst')
+    with open(path) as f:
+        return f.read().strip()
+
+
 def get_version():
     path = os.path.join(
         os.path.dirname(__file__), 'extruct', 'VERSION')
@@ -16,6 +23,8 @@ setup(
     name='extruct',
     version=get_version(),
     description='Extract embedded metadata from HTML markup',
+    long_description=get_readme(),
+    long_description_content_type='text/x-rst',
     author='Scrapinghub',
     author_email='info@scrapinghub.com',
     maintainer='Scrapinghub',

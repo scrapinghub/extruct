@@ -56,13 +56,12 @@ class MicrodataExtractor(object):
     def extract_items(self, document, base_url):
         itemids = self._build_itemids(document)
         items_seen = set()
-        items = [
+        return [
             item for item in (
                 self._extract_item(
                     it, items_seen=items_seen, base_url=base_url, itemids=itemids)
                 for it in xpath.find(self._xp_item, document))
             if item]
-        return items
 
     def get_docid(self, node, itemids):
         return itemids[node]

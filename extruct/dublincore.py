@@ -122,27 +122,22 @@ class DublinCoreExtractor(object):
         elements = []
         terms = []
 
-        def attrib_to_dict(attribs):
-            # convert _attrib type to dict
-            return dict(attribs.items())
-
         def populate_results(node, main_attrib):
             # fill list with DC Elements or DC Terms
-            node_attrib = node.attributes
-            if main_attrib not in node_attrib.keys():
+            if main_attrib not in node.attributes:
                 return
 
             name = node.attributes[main_attrib].value
             lower_name = get_lower_attrib(name)
             if lower_name in _DC_ELEMENTS:
                 element = {'URI': _DC_ELEMENTS[lower_name]}
-                for attrib, value in attrib_to_dict(node.attributes).items():
+                for attrib, value in node.attributes.items():
                     element[attrib] = value
                 elements.append(element)
 
             elif lower_name in _DC_TERMS:
                 term = {'URI': _DC_TERMS[lower_name]}
-                for attrib, value in attrib_to_dict(node.attributes).items():
+                for attrib, value in node.attributes.items():
                     term[attrib] = value
                 terms.append(term)
 

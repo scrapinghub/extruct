@@ -2,6 +2,17 @@
 History
 =======
 
+v0.12.0 (2020-12-28)
+--------------------
+
+* Support for rdflib 5.0.0 and up.
+  When upgrading, we recommend switching to latest versions of
+  rdflib, mf2py, rdflib-jsonld and pyrdfa3. (PR #161)
+* Support for Python 3.8 and 3.9
+* Show full README on PyPI (PR #162)
+* README rendering fixed and tested (PR #170)
+* Using github actions instead of Travis CI
+
 v0.11.0 (2020-11-23)
 --------------------
 

@@ -3,9 +3,10 @@
 
 -r requirements.txt
 
-pytest
 tox
-flake8
-readme_renderer
-
 bumpversion
+
+pytest
+pytest-cov
+readme_renderer
+mock

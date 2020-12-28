@@ -6,5 +6,6 @@
 pytest
 tox
 flake8
+readme_renderer
 
 bumpversion

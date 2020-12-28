@@ -9,6 +9,7 @@ v0.12.0 (2020-12-28)
   When upgrading, we recommend switching to latest versions of
   rdflib, mf2py, rdflib-jsonld and pyrdfa3. (PR #161)
 * Support for Python 3.8 and 3.9
+* Show full README on PyPI (PR #162)
 * Using github actions instead of Travis CI
 
 v0.11.0 (2020-11-23)

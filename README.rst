@@ -680,7 +680,7 @@ extract the metadata from it directly from the command line.
 Dependencies
 ++++++++++++
 
-The command line tool depends on requests_, which is not installed by default
+The command line tool depends on ``requests``, which is not installed by default
 when you install **extruct**. In order to use the command line tool, you can
 install **extruct** with the `cli` extra requirements::
 
@@ -735,3 +735,4 @@ Use tox_ to run tests with different Python versions::
 
 
 .. _tox: https://testrun.org/tox/latest/
+.. _ogp: https://ogp.me/

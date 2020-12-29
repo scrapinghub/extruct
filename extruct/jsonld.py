@@ -4,14 +4,10 @@ JSON-LD extractor
 """
 
 import json
-import re
 
-import jstyleson
 import lxml.etree
 
-from extruct.utils import parse_html
-
-HTML_OR_JS_COMMENTLINE = re.compile(r'^\s*(//.*|<!--.*-->)')
+from extruct.utils import parse_html, parse_json
 
 
 class JsonLdExtractor(object):
@@ -29,13 +25,7 @@ class JsonLdExtractor(object):
         ]
 
     def _extract_items(self, node):
-        script = node.xpath('string()')
-        try:
-            # TODO: `strict=False` can be configurable if needed
-            data = json.loads(script, strict=False)
-        except ValueError:
-            # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
-            data = jstyleson.loads(HTML_OR_JS_COMMENTLINE.sub('', script),strict=False)
+        data = parse_json(node.xpath('string()'))
         if isinstance(data, list):
             return data
         elif isinstance(data, dict):

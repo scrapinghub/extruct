@@ -17,7 +17,7 @@ from rdflib import Graph, logger as rdflib_logger
 from pyRdfa import pyRdfa as PyRdfa, Options
 from pyRdfa.initialcontext import initial_context
 
-from extruct.utils import parse_xmldom_html
+from extruct.utils import parse_json, parse_xmldom_html
 
 
 # silence rdflib INFO logs
@@ -158,4 +158,4 @@ class RDFaExtractor(object):
             # it should be disabled once PyRDFA fixes itself
             return self._fix_order(jsonld_string, document)
         except:
-            return json.loads(jsonld_string)
+            return parse_json(jsonld_string)

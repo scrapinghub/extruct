@@ -59,3 +59,12 @@ class TestJsonLD(unittest.TestCase):
         jsonlde = JsonLdExtractor()
         data = jsonlde.extract(body)
         self.assertEqual(data, expected)
+
+    def test_null(self):
+        page = "null_ld_mock"
+        body = get_testdata('misc', '{}.html'.format(page))
+        expected = json.loads(get_testdata('misc', '{}.jsonld'.format(page)).decode('UTF-8'))
+
+        jsonlde = JsonLdExtractor()
+        data = jsonlde.extract(body)
+        self.assertEqual(data, expected)

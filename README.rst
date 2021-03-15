@@ -684,7 +684,7 @@ The command line tool depends on ``requests``, which is not installed by default
 when you install **extruct**. In order to use the command line tool, you can
 install **extruct** with the `cli` extra requirements::
 
-    pip install extruct[cli]
+    pip install 'extruct[cli]'
 
 
 Usage

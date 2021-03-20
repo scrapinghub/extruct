@@ -25,13 +25,13 @@ class OpenGraphExtractor(object):
 
     def extract_items(self, document, base_url=None):
         # OpenGraph defines a web page as a single rich object.
-        for head in document.xpath('//head'):
+        for root in document.xpath('//head') + document.xpath('//body'):
             html_elems = document.head.xpath("parent::html")
             namespaces = self.get_namespaces(
                 html_elems[0]) if html_elems else {}
-            namespaces.update(self.get_namespaces(head))
+            namespaces.update(self.get_namespaces(root))
             props = []
-            for el in head.xpath('meta[@property and @content]'):
+            for el in root.xpath('meta[@property and @content]'):
                 prop = el.attrib['property']
                 val = el.attrib['content']
                 ns = prop.partition(':')[0]

@@ -151,7 +151,11 @@ class RDFaExtractor(object):
                           refresh_vocab_cache=False,
                           check_lite=False)
         g = PyRdfa(options, base=base_url).graph_from_DOM(document, graph=Graph(), pgraph=Graph())
-        jsonld_string = g.serialize(format='json-ld', auto_compact=not expanded).decode('utf-8')
+        jsonld_string = g.serialize(format='json-ld', auto_compact=not expanded)
+
+        # rdflib may return either bytes or strings
+        if isinstance(jsonld_string, bytes):
+            jsonld_string = jsonld_string.decode('utf-8')
         
         try:
             # hack to fix the ordering of multi-value properties (see issue 116)

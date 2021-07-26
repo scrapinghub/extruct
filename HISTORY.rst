@@ -2,6 +2,13 @@
 History
 =======
 
+v0.13.0 (2021-07-26)
+--------------------
+
+* Support for rdflib 6.0.0 (PR #177)
+* Fix for when jsonld is null (PR #56)
+* Documentation fixe (PR #173)
+
 v0.12.0 (2020-12-28)
 --------------------
 

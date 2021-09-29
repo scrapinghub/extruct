@@ -39,7 +39,7 @@ setup(
     package_data={'extruct': ['VERSION']},
     install_requires=['lxml',
                       'rdflib<6.0.0;python_version<"3.7"',
-                      'rdflib-jsonld;python_version<"3.7"',
+                      'rdflib-jsonld<=0.5.0;python_version<"3.7"',
                       # rdflib 6.x.y (only on 3.7 and up) contains jsonld
                       'rdflib>=6.0.1;python_version>="3.7"',
                       'pyrdfa3',

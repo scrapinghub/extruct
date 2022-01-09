@@ -40,7 +40,7 @@ class JsonLdExtractor(object):
         # check if valid json.
         if not data:
             script = jstyleson.dispose( HTML_OR_JS_COMMENTLINE.sub('', script))
-        data = self._may_be_get_json(script)
+            data = self._may_be_get_json(script)
         # After processing check if json is still valid.
         if not data:
             return False

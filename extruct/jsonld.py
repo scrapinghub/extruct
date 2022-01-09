@@ -28,14 +28,24 @@ class JsonLdExtractor(object):
             if items for item in items if item
         ]
 
+    def _is_valid_json(self, script):
+        try:
+            json.loads(script)
+            return True
+        except Exception:
+            return False
+
     def _extract_items(self, node):
         script = node.xpath('string()')
-        try:
-            # TODO: `strict=False` can be configurable if needed
-            data = json.loads(script, strict=False)
-        except ValueError:
-            # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
-            data = jstyleson.loads(HTML_OR_JS_COMMENTLINE.sub('', script), strict=False)
+        # check if valid json.
+        if not self._is_valid_json(script):
+            script = jstyleson.dispose( HTML_OR_JS_COMMENTLINE.sub('', script))
+        # After processing check if json is still valid.
+        if not self._is_valid_json(script):
+            return False
+
+        # if its valid then process the data.
+        data = json.loads(script, strict=False)
         if isinstance(data, list):
             for item in data:
                 yield item

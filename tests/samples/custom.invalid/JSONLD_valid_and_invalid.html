@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script type="application/ld+json">
+        { foo: bar}
+    </script>
+    <!-- only the below tag should be parsed -->
+        <script type="application/ld+json">
+            {"foo" :  "bar"}
+    </script>
+</head>
+
+<body></body>
+
+</html>

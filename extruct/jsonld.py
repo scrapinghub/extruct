@@ -45,8 +45,6 @@ class JsonLdExtractor(object):
         if not data:
             return False
 
-        # if its valid then process the data.
-        data = json.loads(script, strict=False)
         if isinstance(data, list):
             for item in data:
                 yield item

@@ -8,6 +8,7 @@ import re
 
 import jstyleson
 import lxml.etree
+import logging
 
 from extruct.utils import parse_html
 
@@ -44,6 +45,7 @@ class JsonLdExtractor(object):
             data = self._may_be_get_json(script)
         # After processing check if json is still valid.
         if not data:
+            logging.exception('Invalid jsonld element detected %s', script)
             return
 
         if isinstance(data, list):

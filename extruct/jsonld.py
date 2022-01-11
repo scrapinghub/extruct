@@ -32,18 +32,19 @@ class JsonLdExtractor(object):
         try:
             return json.loads(script, strict=False)
         except Exception:
-            return False
+            return None
 
     def _extract_items(self, node):
         script = node.xpath('string()')
         data = self._may_be_get_json(script)
         # check if valid json.
         if not data:
-            script = jstyleson.dispose( HTML_OR_JS_COMMENTLINE.sub('', script))
+            # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
+            script = jstyleson.dispose(HTML_OR_JS_COMMENTLINE.sub('', script))
             data = self._may_be_get_json(script)
         # After processing check if json is still valid.
         if not data:
-            return False
+            return
 
         if isinstance(data, list):
             for item in data:

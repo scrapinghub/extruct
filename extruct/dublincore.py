@@ -12,7 +12,7 @@ _DC_ELEMENTS = {  # Defined according DCMES(DCM Version 1.1): http://dublincore.
     'format': 'http://purl.org/dc/elements/1.1/format',
     'identifier': 'http://purl.org/dc/elements/1.1/identifier',
     'language': 'http://purl.org/dc/elements/1.1/language',
-    'publisher': 'http://purl.org/dc/elements/1.1/publiser',
+    'publisher': 'http://purl.org/dc/elements/1.1/publisher',
     'relation': 'http://purl.org/dc/elements/1.1/relation',
     'rights': 'http://purl.org/dc/elements/1.1/rights',
     'source': 'http://purl.org/dc/elements/1.1/source',

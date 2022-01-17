@@ -2,8 +2,9 @@
 # pip install -r requirements.txt
 lxml
 requests
-rdflib
-rdflib-jsonld
+rdflib>=6.0.0; python_version>="3.7"
+rdflib<6.0.0; python_version<"3.7"
+rdflib-jsonld<=0.5.0; python_version<"3.7"
 pyrdfa3
 mf2py>=1.1.0
 six>=1.11

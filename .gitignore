@@ -4,6 +4,7 @@
 /build/
 /dist/
 *.egg-info
+venv/
 
 # Mac OS
 *.DS_Store

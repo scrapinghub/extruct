@@ -4,4 +4,5 @@ from .rdfa import RDFaExtractor
 from .w3cmicrodata import MicrodataExtractor
 from .opengraph import OpenGraphExtractor
 from .microformat import MicroformatExtractor
+from .twittercard import TwitterCardExtractor
 from .xmldom import XmlDomHTMLParser

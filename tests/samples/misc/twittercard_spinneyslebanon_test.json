@@ -1,0 +1,81 @@
+[
+  {
+    "namespace": {
+      "twitter": "https://dev.twitter.com/cards#"
+    },
+    "properties": [
+      [
+        "twitter:card",
+        "summary_large_image"
+      ],
+      [
+        "twitter:site",
+        "@spinneyslebanon"
+      ],
+      [
+        "twitter:creator",
+        "@spinneyslebanon"
+      ],
+      [
+        "twitter:title",
+        "Mevgal Bio Feta Cheese 200g | Chilled & Deli  | Spinneys Lebanon"
+      ],
+      [
+        "twitter:url",
+        "https://www.spinneyslebanon.com/mevgal-bio-feta-cheese-200g.html"
+      ],
+      [
+        "twitter:description",
+        "This bio feta cheese is smooth and creamy and will make a great addition to your salads or cheese dips."
+      ],
+      [
+        "twitter:image",
+        "https://d145dj1pf6foch.cloudfront.net/catalog/product/cache/96439f90b2da9c0500e3c88801966a5f/4/8/489874-v001-1_1.jpg"
+      ],
+      [
+        "twitter:card",
+        "summary_large_image"
+      ],
+      [
+        "twitter:domain",
+        "https://www.spinneyslebanon.com/"
+      ],
+      [
+        "twitter:site",
+        "@https://twitter.com/spinneyslebanon"
+      ],
+      [
+        "twitter:creator",
+        "@spinneyslebanon"
+      ],
+      [
+        "twitter:title",
+        "Mevgal Bio Feta Cheese 200g "
+      ],
+      [
+        "twitter:description",
+        "This bio feta cheese is smooth and creamy and  will make a great addition to your salads or cheese dips. "
+      ],
+      [
+        "twitter:image",
+        "https://d145dj1pf6foch.cloudfront.net/catalog/product/cache/1dfbce20f903bb776ac5277b1934e5b0/4/8/489874-v001-1_1.jpg"
+      ],
+      [
+        "twitter:data1",
+        "LBP139999.00"
+      ],
+      [
+        "twitter:label1",
+        "PRICE"
+      ],
+      [
+        "twitter:data2",
+        "LB"
+      ],
+      [
+        "twitter:label2",
+        "LOCATION"
+      ]
+    ]
+  }
+]

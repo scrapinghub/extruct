@@ -1,0 +1,29 @@
+[
+  {
+    "namespace": {
+      "twitter": "https://dev.twitter.com/cards#"
+    },
+    "properties": [
+      [
+        "twitter:title",
+        "Chess.com - Play Chess Online - Free Games"
+      ],
+      [
+        "twitter:card",
+        "summary_large_image"
+      ],
+      [
+        "twitter:site",
+        "@chesscom"
+      ],
+      [
+        "twitter:description",
+        "Play chess online for free on Chess.com with over 50 million members from around the world. Have fun playing with friends or challenging the computer!"
+      ],
+      [
+        "twitter:image",
+        "https://www.chess.com/bundles/web/images/social/share-home.a3e2cdbb.png"
+      ]
+    ]
+  }
+]

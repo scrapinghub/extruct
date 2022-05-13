@@ -3,16 +3,36 @@ import re
 from extruct.utils import parse_html
 
 
-_PREFIX_PATTERN = re.compile(r'\s*(\w+):\s*([^\s]+)')
+# _PREFIX_PATTERN = re.compile(r'\s*(\w+):\s*([^\s]+)')
+_PREFIX_PATTERN = re.compile(r'^\s*(?:<!--\s*)?(?:@|\#)twittercard\s*(?:-->)?\s*$', re.I)
 _TW_NAMESPACES = {
     'twitter': 'https://dev.twitter.com/cards#',
-    'schema': 'http://schema.org/',
-    'product': 'http://ogp.me/ns/product#',
-    'music': 'http://ogp.me/ns/music#',
-    'video': 'http://ogp.me/ns/video#',
-    'article': 'http://ogp.me/ns/article#',
-    'book': 'http://ogp.me/ns/book#',
-    'profile': 'http://ogp.me/ns/profile#',
+    'owl'   : 'http://www.w3.org/2002/07/owl#',
+    'gr'    : 'http://purl.org/goodrelations/v1#',
+    'ctag'    : 'http://commontag.org/ns#',
+    'cc'    : 'http://creativecommons.org/ns#',
+    'grddl'   : 'http://www.w3.org/2003/g/data-view#',
+    'rif'   : 'http://www.w3.org/2007/rif#',
+    'sioc'    : 'http://rdfs.org/sioc/ns#',
+    'skos'    : 'http://www.w3.org/2004/02/skos/core#',
+    'xml'   : 'http://www.w3.org/XML/1998/namespace',
+    'rdfs'    : 'http://www.w3.org/2000/01/rdf-schema#',
+    'rev'   : 'http://purl.org/stuff/rev#',
+    'rdfa'    : 'http://www.w3.org/ns/rdfa#',
+    'dc'    : 'http://purl.org/dc/terms/',
+    'foaf'    : 'http://xmlns.com/foaf/0.1/',
+    'void'    : 'http://rdfs.org/ns/void#',
+    'ical'    : 'http://www.w3.org/2002/12/cal/icaltzd#',
+    'vcard'   : 'http://www.w3.org/2006/vcard/ns#',
+    'wdrs'    : 'http://www.w3.org/2007/05/powder-s#',
+    'og'    : 'http://ogp.me/ns#',
+    'wdr'   : 'http://www.w3.org/2007/05/powder#',
+    'rdf'   : 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+    'xhv'   : 'http://www.w3.org/1999/xhtml/vocab#',
+    'xsd'   : 'http://www.w3.org/2001/XMLSchema#',
+    'v'     : 'http://rdf.data-vocabulary.org/#',
+    'skosxl'  : 'http://www.w3.org/2008/05/skos-xl#',
+    'schema'  : 'http://schema.org/',
 }
 
 class TwitterCardExtractor(object):

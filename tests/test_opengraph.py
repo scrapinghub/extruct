@@ -11,15 +11,17 @@ class TestOpengraph(unittest.TestCase):
     maxDiff = None
 
     def _test_opengraph(self, name):
-        body = get_testdata('misc', name + '.html')
-        expected = json.loads(get_testdata('misc', name + '.json').decode('UTF-8'))
-
+        body = get_testdata("misc", name + ".html")
+        expected = json.loads(get_testdata("misc", name + ".json").decode("UTF-8"))
         opengraphe = OpenGraphExtractor()
         data = opengraphe.extract(body)
         self.assertEqual(jsonize_dict(data), expected)
 
     def test_opengraph(self):
-        self._test_opengraph('opengraph_test')
+        self._test_opengraph("opengraph_test")
+
+    def test_opengraph_2(self):
+        self._test_opengraph("opengraph_test_2")
 
     def test_opengraph_ns_product(self):
-        self._test_opengraph('opengraph_ns_product_test')
+        self._test_opengraph("opengraph_ns_product_test")

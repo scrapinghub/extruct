@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import json
-from pprint import pformat
 import unittest
+from pprint import pformat
+
+from lxml.etree import XML, canonicalize
 
 from extruct.rdfa import RDFaExtractor
-from lxml.etree import XML, canonicalize
 from tests import get_testdata
+
 
 def tupleize(d):
     if isinstance(d, list):
@@ -13,17 +15,20 @@ def tupleize(d):
     if isinstance(d, dict):
         # Workaround: canonicalize XML so that attribute re-ordering is ignored
         # See: https://github.com/scrapinghub/extruct/pull/161
-        if d.get('@type') == 'http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral':
-            d['@value'] = canonicalize(XML(d['@value']))
+        if d.get("@type") == "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral":
+            d["@value"] = canonicalize(XML(d["@value"]))
         return sorted((k, tupleize(v)) for k, v in d.items())
     return d
+
 
 class TestRDFa(unittest.TestCase):
 
     maxDiff = None
 
     def assertJsonLDEqual(self, a, b, normalize_bnode_ids=True):
-        json_kwargs = dict(indent=2, separators=(',', ': '), sort_keys=True, ensure_ascii=True)
+        json_kwargs = dict(
+            indent=2, separators=(",", ": "), sort_keys=True, ensure_ascii=True
+        )
         sa = json.dumps(a, **json_kwargs)
         sb = json.dumps(b, **json_kwargs)
         if normalize_bnode_ids:
@@ -40,7 +45,9 @@ class TestRDFa(unittest.TestCase):
         return jsld
 
     def prettify(self, a, normalize_bnode_ids=True):
-        json_kwargs = dict(indent=2, separators=(',', ': '), sort_keys=True, ensure_ascii=True)
+        json_kwargs = dict(
+            indent=2, separators=(",", ": "), sort_keys=True, ensure_ascii=True
+        )
         output = json.dumps(a, **json_kwargs)
         if normalize_bnode_ids:
             output = self.normalize_bnode_ids(output)
@@ -48,39 +55,39 @@ class TestRDFa(unittest.TestCase):
 
     def test_w3c_rdfalite(self):
         for i in [3, 4, 5]:
-            fileprefix = 'w3c.rdfalite.example{:03d}'.format(i)
-            body = get_testdata('w3crdfa', fileprefix + '.html')
+            fileprefix = "w3c.rdfalite.example{:03d}".format(i)
+            body = get_testdata("w3crdfa", fileprefix + ".html")
             expected = json.loads(
-                    get_testdata('w3crdfa', fileprefix + '.expanded.json'
-                ).decode('UTF-8'))
+                get_testdata("w3crdfa", fileprefix + ".expanded.json").decode("UTF-8")
+            )
 
             rdfae = RDFaExtractor()
-            data = rdfae.extract(body, base_url='http://www.example.com/index.html')
+            data = rdfae.extract(body, base_url="http://www.example.com/index.html")
             self.assertJsonLDEqual(data, expected)
 
     def test_w3c_rdf11primer(self):
         for i in [14]:
-            fileprefix = 'w3c.rdf11primer.example{:03d}'.format(i)
-            body = get_testdata('w3crdfa', fileprefix + '.html')
+            fileprefix = "w3c.rdf11primer.example{:03d}".format(i)
+            body = get_testdata("w3crdfa", fileprefix + ".html")
             expected = json.loads(
-                    get_testdata('w3crdfa', fileprefix + '.expanded.json'
-                ).decode('UTF-8'))
+                get_testdata("w3crdfa", fileprefix + ".expanded.json").decode("UTF-8")
+            )
 
             rdfae = RDFaExtractor()
-            data = rdfae.extract(body, base_url='http://www.example.com/index.html')
+            data = rdfae.extract(body, base_url="http://www.example.com/index.html")
             self.assertJsonLDEqual(data, expected)
 
     def test_w3c_rdfaprimer(self):
         for i in [5, 6, 7, 8, 9, 10, 11, 15]:
-            fileprefix = 'w3c.rdfaprimer.example{:03d}'.format(i)
+            fileprefix = "w3c.rdfaprimer.example{:03d}".format(i)
             print(fileprefix)
-            body = get_testdata('w3crdfa', fileprefix + '.html')
+            body = get_testdata("w3crdfa", fileprefix + ".html")
             expected = json.loads(
-                       get_testdata('w3crdfa', fileprefix + '.expanded.json'
-                       ).decode('UTF-8'))
+                get_testdata("w3crdfa", fileprefix + ".expanded.json").decode("UTF-8")
+            )
 
             rdfae = RDFaExtractor()
-            data = rdfae.extract(body, base_url='http://www.example.com/index.html')
+            data = rdfae.extract(body, base_url="http://www.example.com/index.html")
             self.assertJsonLDEqual(data, expected)
 
             # This is for testing that the fix to issue 116 does not affect
@@ -89,39 +96,39 @@ class TestRDFa(unittest.TestCase):
                 raise Exception()
 
             rdfae._fix_order = mocked_fix_order
-            data = rdfae.extract(body, base_url='http://www.example.com/index.html')
+            data = rdfae.extract(body, base_url="http://www.example.com/index.html")
             self.assertJsonLDEqual(data, expected)
 
     def test_wikipedia_xhtml_rdfa(self):
-        fileprefix = 'xhtml+rdfa'
-        body = get_testdata('wikipedia', fileprefix + '.html')
+        fileprefix = "xhtml+rdfa"
+        body = get_testdata("wikipedia", fileprefix + ".html")
         expected = json.loads(
-                   get_testdata('wikipedia', fileprefix + '.expanded.json'
-                   ).decode('UTF-8'))
+            get_testdata("wikipedia", fileprefix + ".expanded.json").decode("UTF-8")
+        )
 
         rdfae = RDFaExtractor()
-        data = rdfae.extract(body, base_url='http://www.example.com/index.html')
+        data = rdfae.extract(body, base_url="http://www.example.com/index.html")
 
         self.assertJsonLDEqual(data, expected)
 
     def test_wikipedia_xhtml_rdfa_no_prefix(self):
-        body = get_testdata('misc', 'Portfolio_Niels_Lubberman.html')
+        body = get_testdata("misc", "Portfolio_Niels_Lubberman.html")
         expected = json.loads(
-                   get_testdata('misc', 'Portfolio_Niels_Lubberman.json'
-                   ).decode('UTF-8'))
+            get_testdata("misc", "Portfolio_Niels_Lubberman.json").decode("UTF-8")
+        )
 
         rdfae = RDFaExtractor()
-        data = rdfae.extract(body, base_url='http://nielslubberman.nl/drupal/')
+        data = rdfae.extract(body, base_url="http://nielslubberman.nl/drupal/")
 
         self.assertJsonLDEqual(data, expected)
 
     def test_expanded_opengraph_support(self):
-        body = get_testdata('misc','expanded_OG_support_test.html')
+        body = get_testdata("misc", "expanded_OG_support_test.html")
         expected = json.loads(
-                   get_testdata('misc','expanded_OG_support_test.json'
-                   ).decode('UTF-8'))
+            get_testdata("misc", "expanded_OG_support_test.json").decode("UTF-8")
+        )
 
         rdfae = RDFaExtractor()
-        data = rdfae.extract(body, base_url='http://www.example.com/index.html')
+        data = rdfae.extract(body, base_url="http://www.example.com/index.html")
 
-        self.assertJsonLDEqual(data,expected)
+        self.assertJsonLDEqual(data, expected)

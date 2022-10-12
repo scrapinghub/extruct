@@ -47,8 +47,9 @@ class LxmlMicrodataExtractor(object):
     # iterate in document order (used below for fast get_docid)
     _xp_item = lxml.etree.XPath("descendant-or-self::*[@itemscope]")
     _xp_prop = lxml.etree.XPath(
-        """set:difference(.//*[@itemprop],
-                                                  .//*[@itemscope]//*[@itemprop])""",
+        """set:difference(
+            .//*[@itemprop],
+            .//*[@itemscope]//*[@itemprop])""",
         namespaces={"set": "http://exslt.org/sets"},
     )
     _xp_clean_text = lxml.etree.XPath(

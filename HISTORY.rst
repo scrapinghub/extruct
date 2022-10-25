@@ -2,6 +2,14 @@
 History
 =======
 
+v0.14.0 (2022-10-25)
+--------------------
+
+* Removed support for Python 2.7 and 3.5 (PR #200)
+* Removed rdflib-jsonld dependency (PR #188)
+* Fixed typo in dublincore definitions (PR #190)
+* Fixed linguist stats (which language is used) (PR #180)
+
 v0.13.0 (2021-07-26)
 --------------------
 

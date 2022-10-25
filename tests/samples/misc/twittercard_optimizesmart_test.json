@@ -1,0 +1,49 @@
+[
+  {
+    "namespace": {
+      "twitter": "https://dev.twitter.com/cards#"
+    },
+    "properties": [
+      [
+        "twitter:card",
+        "summary_large_image"
+      ],
+      [
+        "twitter:title",
+        "#Open #Graph #Protocol for #Facebook explained with examples"
+      ],
+      [
+        "twitter:description",
+        "What is Open Graph Protocol and why you need it? Learn to implement Open Graph Protocol for Facebook on your website. Open Graph Protocol Meta Tags."
+      ],
+      [
+        "twitter:site",
+        "@optimizesmart"
+      ],
+      [
+        "twitter:creator",
+        "@optimizesmart"
+      ],
+      [
+        "twitter:image",
+        "https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg"
+      ],
+      [
+        "twitter:label1",
+        "Written by"
+      ],
+      [
+        "twitter:data1",
+        "Himanshu"
+      ],
+      [
+        "twitter:label2",
+        "Time to read"
+      ],
+      [
+        "twitter:data2",
+        "13 minutes"
+      ]
+    ]
+  }
+]

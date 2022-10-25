@@ -3,6 +3,7 @@ import warnings
 
 from extruct.jsonld import JsonLdExtractor
 from extruct.rdfa import RDFaExtractor
+from extruct.twittercard import TwitterCardExtractor
 from extruct.w3cmicrodata import MicrodataExtractor
 from extruct.opengraph import OpenGraphExtractor
 from extruct.microformat import MicroformatExtractor
@@ -11,7 +12,7 @@ from extruct.uniform import _umicrodata_microformat, _uopengraph, _udublincore
 from extruct.utils import parse_xmldom_html
 
 logger = logging.getLogger(__name__)
-SYNTAXES = ['microdata', 'opengraph', 'json-ld', 'microformat', 'rdfa', 'dublincore']
+SYNTAXES = ['microdata', 'opengraph', 'json-ld', 'microformat', 'rdfa', 'dublincore', 'twittercard']
 
 
 def extract(htmlstring,
@@ -102,6 +103,11 @@ def extract(htmlstring,
             ('dublincore', DublinCoreExtractor().extract_items,
              tree,
              ))
+    if 'twittercard' in syntaxes:
+        processors.append(
+            ('twittercard', TwitterCardExtractor().extract_items,
+                tree,
+             ))
     output = {}
     for syntax, extract, document in processors:
         try:
@@ -162,7 +168,7 @@ def extract(htmlstring,
                     logger.exception(
                         'Failed to uniform extracted for {}, raises {}'
                         .format(syntax, e)
-                        )
+                    )
                 if errors == 'strict':
                     raise
 

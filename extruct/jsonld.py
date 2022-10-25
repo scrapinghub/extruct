@@ -8,6 +8,7 @@ import re
 
 import jstyleson
 import lxml.etree
+import logging
 
 from extruct.utils import parse_html
 
@@ -28,14 +29,25 @@ class JsonLdExtractor(object):
             if items for item in items if item
         ]
 
+    def _may_be_get_json(self, script):
+        try:
+            return json.loads(script, strict=False)
+        except Exception:
+            return None
+
     def _extract_items(self, node):
         script = node.xpath('string()')
-        try:
-            # TODO: `strict=False` can be configurable if needed
-            data = json.loads(script, strict=False)
-        except ValueError:
+        data = self._may_be_get_json(script)
+        # check if valid json.
+        if not data:
             # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
-            data = jstyleson.loads(HTML_OR_JS_COMMENTLINE.sub('', script), strict=False)
+            script = jstyleson.dispose(HTML_OR_JS_COMMENTLINE.sub('', script))
+            data = self._may_be_get_json(script)
+        # After processing check if json is still valid.
+        if not data:
+            logging.exception('Invalid jsonld element detected %s', script)
+            return
+
         if isinstance(data, list):
             for item in data:
                 yield item

@@ -18,6 +18,12 @@ class TestJsonLD(unittest.TestCase):
             'Elysian Fields Brooklyn Tickets, The Owl Music Parlor, 31 Oct 2015'
         )
 
+    def test_when_page_has_invalid_jsonld_elements_should_skip(self):
+        self.assertJsonLdCorrect(
+            folder='custom.invalid',
+            page='JSONLD_valid_and_invalid'
+        )
+
     def test_jsonld_empty_item(self):
         self.assertJsonLdCorrect(
             folder='songkick',

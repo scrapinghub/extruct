@@ -30,6 +30,7 @@ class JsonLdExtractor(object):
 
     def _extract_items(self, node):
         script = node.xpath('string()')
+        script = self.clean_special_characters(script)
         try:
             # TODO: `strict=False` can be configurable if needed
             data = json.loads(script, strict=False)
@@ -41,3 +42,38 @@ class JsonLdExtractor(object):
                 yield item
         elif isinstance(data, dict):
             yield data
+
+    def clean_special_characters(self, script):
+        special_character_dict = {
+            '\\x27': "\'",
+            '\\x22': '\"',
+            '\\x3c': '<',
+            '\\x3e': '>',
+            '\\x2f': '/',
+            '\\x5c': '\\',
+            '\\x2a': '*',
+            '\\x3d': '=',
+            '\\x3f': '?',
+            '\\x21': '!',
+            '\\x7b': '{',
+            '\\x7d': '}',
+            '\\x7c': '|',
+            '\\x5e': '^',
+            '\\x60': '`',
+            '\\x40': '@',
+            '\\x23': '#',
+            '\\x24': '$',
+            '\\x25': '%',
+            '\\x5b': '[',
+            '\\x5d': ']',
+            '\\x5f': '_',
+            '\\x3a': ':',
+            '\\x3b': ';',
+            '\\x2c': ',',
+            '\\x2e': '.',
+            '\\x2d': '-',
+            '\\x2b': '+',
+        }
+        for key, value in special_character_dict.items():
+            script = script.replace(key, value)
+        return script

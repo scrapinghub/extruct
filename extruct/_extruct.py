@@ -26,7 +26,8 @@ def extract(
     with_og_array=False,
     **kwargs
 ):
-    """htmlstring: string with valid html document;
+    """
+    htmlstring: string with valid html document;
     base_url: base url of the html document
     encoding: encoding of the html document
     syntaxes: list of syntaxes to extract, default SYNTAXES

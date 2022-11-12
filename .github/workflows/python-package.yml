@@ -30,7 +30,7 @@ jobs:
         python -m pip install -r requirements-dev.txt
     - name: tox
       run: |
-        tox -e ${{ matrix.python-version }}
+        tox -e `python -c "import sys; print('py' + ''.join(sys.version.split('.')[:2]))"`
 
   check:
     runs-on: ubuntu-latest

@@ -10,3 +10,5 @@ pytest
 pytest-cov
 readme_renderer
 mock
+black
+pre-commit

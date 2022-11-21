@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
-from copy import deepcopy, copy
+from copy import copy, deepcopy
 from xml.dom import Node
 from xml.dom.minidom import Attr, NamedNodeMap
 
-from lxml.etree import (ElementBase, _ElementStringResult,
-                        _ElementUnicodeResult, XPath, tostring)
-from lxml.html import HTMLParser, HtmlElementClassLookup
+from lxml.etree import (
+    ElementBase,
+    XPath,
+    _ElementStringResult,
+    _ElementUnicodeResult,
+    tostring,
+)
+from lxml.html import HtmlElementClassLookup, HTMLParser
 
 
 class DomElementUnicodeResult(object):
@@ -53,7 +58,7 @@ class DomHtmlMixin(object):
     ELEMENT_NODE = Node.ELEMENT_NODE
     TEXT_NODE = Node.TEXT_NODE
 
-    _xp_childrennodes = XPath('child::node()')
+    _xp_childrennodes = XPath("child::node()")
 
     @property
     def documentElement(self):
@@ -74,7 +79,7 @@ class DomHtmlMixin(object):
 
     @property
     def localName(self):
-        return self.xpath('local-name(.)')
+        return self.xpath("local-name(.)")
 
     def hasAttribute(self, name):
         return name in self.attrib
@@ -140,8 +145,7 @@ class DomHtmlMixin(object):
             raise RuntimeError
 
     def toxml(self, encoding=None):
-        return tostring(self, encoding=encoding if encoding is not None
-            else 'unicode')
+        return tostring(self, encoding=encoding if encoding is not None else "unicode")
 
 
 class DomHtmlElementClassLookup(HtmlElementClassLookup):
@@ -153,8 +157,10 @@ class DomHtmlElementClassLookup(HtmlElementClassLookup):
         k = (node_type, document, namespace, name)
         t = self._lookups.get(k)
         if t is None:
-            cur = super(DomHtmlElementClassLookup, self).lookup(node_type, document, namespace, name)
-            newtype = type('Dom'+cur.__name__, (cur, DomHtmlMixin), {})
+            cur = super(DomHtmlElementClassLookup, self).lookup(
+                node_type, document, namespace, name
+            )
+            newtype = type("Dom" + cur.__name__, (cur, DomHtmlMixin), {})
             self._lookups[k] = newtype
             return newtype
         else:
@@ -165,6 +171,7 @@ class XmlDomHTMLParser(HTMLParser):
     """An HTML parser that is configured to return XmlDomHtmlElement
     objects, compatible with xml.dom API
     """
+
     def __init__(self, **kwargs):
         super(HTMLParser, self).__init__(**kwargs)
         parser_lookup = DomHtmlElementClassLookup()

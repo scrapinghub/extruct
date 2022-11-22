@@ -1,5 +1,7 @@
+from __future__ import annotations
 import argparse
 import json
+from typing import Any
 
 import requests
 
@@ -8,14 +10,17 @@ from extruct import SYNTAXES
 
 
 def metadata_from_url(
-    url,
-    syntaxes=SYNTAXES,
-    uniform=False,
-    schema_context="http://schema.org",
-    errors="strict",
-):
+    url: str,
+    syntaxes: list[str] = SYNTAXES,
+    uniform: bool = False,
+    schema_context: str = "http://schema.org",
+    errors: str = "strict",
+) -> dict[str, Any]:
     resp = requests.get(url, timeout=30)
-    result = {"url": url, "status": "{} {}".format(resp.status_code, resp.reason)}
+    result: dict[str, Any] = {
+        "url": url,
+        "status": "{} {}".format(resp.status_code, resp.reason),
+    }
     try:
         resp.raise_for_status()
     except requests.exceptions.HTTPError:
@@ -33,7 +38,7 @@ def metadata_from_url(
     return result
 
 
-def main(args=None):
+def main(args: Any | None = None) -> Any:
     parser = argparse.ArgumentParser(prog="extruct", description=__doc__)
     arg = parser.add_argument
     arg("url", help="The target URL")
@@ -51,7 +56,7 @@ def main(args=None):
         default=False,
         help="""If True uniform output format of all syntaxes to a list of dicts.
                 Returned dicts structure:
-                {'@context': 'http://example.com', 
+                {'@context': 'http://example.com',
                  '@type': 'example_type',
                  /* All other the properties in keys here */
                  }""",

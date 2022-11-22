@@ -16,8 +16,6 @@ def get_version():
         return f.read().strip()
 
 
-requirements = []
-
 setup(
     name="extruct",
     version=get_version(),

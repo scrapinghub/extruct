@@ -1,0 +1,6 @@
+# Contains commits to be ignored due to linting
+
+# https://github.com/scrapinghub/extruct/pull/201
+c52cdf2a0caaeaaa0bee978b9d06451c93b7e8be
+f6c235fa8a7513f21cb3381bfa429674cc566781
+f2fc2231706905de1b818fae2040ef61ed2c4418

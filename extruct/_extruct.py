@@ -1,6 +1,6 @@
 import logging
-from typing import Any, Callable
 import warnings
+from typing import Any, Callable
 
 from extruct.dublincore import DublinCoreExtractor
 from extruct.jsonld import JsonLdExtractor

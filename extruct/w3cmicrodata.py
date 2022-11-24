@@ -11,6 +11,7 @@ follows http://www.w3.org/TR/microdata/#json
 """
 
 from __future__ import annotations
+
 import collections
 from functools import partial
 from typing import Any, Set

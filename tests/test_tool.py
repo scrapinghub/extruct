@@ -1,10 +1,11 @@
+# mypy: disallow_untyped_defs=False
 import json
 import unittest
 
 try:
     import unittest.mock as mock
 except ImportError:
-    import mock
+    import mock  # type: ignore[no-redef]
 
 from requests.exceptions import HTTPError
 
@@ -149,12 +150,12 @@ class TestTool(unittest.TestCase):
 
     @mock.patch("extruct.tool.requests.get")
     def test_main_single_syntax(self, mock_get):
-        expected = {
+        data = {
             "opengraph": self.expected["opengraph"],
             "url": self.url,
             "status": "200 OK",
         }
-        expected = json.dumps(expected, indent=2, sort_keys=True)
+        expected = json.dumps(data, indent=2, sort_keys=True)
         mock_response = build_mock_response(
             url=self.url,
             content=get_testdata("songkick", "tovestyrke.html"),
@@ -166,13 +167,13 @@ class TestTool(unittest.TestCase):
 
     @mock.patch("extruct.tool.requests.get")
     def test_main_multiple_syntaxes(self, mock_get):
-        expected = {
+        data = {
             "opengraph": self.expected["opengraph"],
             "microdata": self.expected["microdata"],
             "url": self.url,
             "status": "200 OK",
         }
-        expected = json.dumps(expected, indent=2, sort_keys=True)
+        expected = json.dumps(data, indent=2, sort_keys=True)
         mock_response = build_mock_response(
             url=self.url,
             content=get_testdata("songkick", "tovestyrke.html"),

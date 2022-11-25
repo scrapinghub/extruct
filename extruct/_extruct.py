@@ -25,7 +25,7 @@ def extract(
     return_html_node: bool = False,
     schema_context: str = "http://schema.org",
     with_og_array: bool = False,
-    **kwargs: None
+    url: str | None = None,  # deprecated
 ) -> dict[str, list[dict[str, Any]]]:
     """
     htmlstring: string with valid html document;
@@ -45,15 +45,13 @@ def extract(
                       The feature is supported only by microdata syntax.
                       Each node is of `lxml.etree.Element` type.
     schema_context: schema's context for current page"""
-    if base_url is None and "url" in kwargs:
+    if base_url is None and url is not None:
         warnings.warn(
             '"url" argument is deprecated, please use "base_url"',
             DeprecationWarning,
             stacklevel=2,
         )
-        base_url = kwargs.pop("url")
-    if kwargs:
-        raise TypeError("Unexpected keyword arguments")
+        base_url = url
     if not (isinstance(syntaxes, list) and all(v in SYNTAXES for v in syntaxes)):
         raise ValueError(
             "syntaxes must be a list with any or all (default) of"

@@ -1,3 +1,4 @@
+# mypy: disallow_untyped_defs=False
 # -*- coding: utf-8 -*-
 import json
 import unittest
@@ -26,11 +27,12 @@ class TestRDFa(unittest.TestCase):
     maxDiff = None
 
     def assertJsonLDEqual(self, a, b, normalize_bnode_ids=True):
-        json_kwargs = dict(
-            indent=2, separators=(",", ": "), sort_keys=True, ensure_ascii=True
+        sa = json.dumps(
+            a, indent=2, separators=(",", ": "), sort_keys=True, ensure_ascii=True
         )
-        sa = json.dumps(a, **json_kwargs)
-        sb = json.dumps(b, **json_kwargs)
+        sb = json.dumps(
+            b, indent=2, separators=(",", ": "), sort_keys=True, ensure_ascii=True
+        )
         if normalize_bnode_ids:
             sa = self.normalize_bnode_ids(sa)
             sb = self.normalize_bnode_ids(sb)
@@ -45,10 +47,9 @@ class TestRDFa(unittest.TestCase):
         return jsld
 
     def prettify(self, a, normalize_bnode_ids=True):
-        json_kwargs = dict(
-            indent=2, separators=(",", ": "), sort_keys=True, ensure_ascii=True
+        output = json.dumps(
+            a, indent=2, separators=(",", ": "), sort_keys=True, ensure_ascii=True
         )
-        output = json.dumps(a, **json_kwargs)
         if normalize_bnode_ids:
             output = self.normalize_bnode_ids(output)
         return output
@@ -95,7 +96,7 @@ class TestRDFa(unittest.TestCase):
             def mocked_fix_order(x, y, z):
                 raise Exception()
 
-            rdfae._fix_order = mocked_fix_order
+            rdfae._fix_order = mocked_fix_order  # type: ignore[assignment]
             data = rdfae.extract(body, base_url="http://www.example.com/index.html")
             self.assertJsonLDEqual(data, expected)
 

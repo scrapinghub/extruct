@@ -85,7 +85,7 @@ class DomHtmlMixin:
         return self.xpath("local-name(.)")  # type: ignore[attr-defined]
 
     def hasAttribute(self, name):
-        return name in self.attri  # type: ignore[attr-defined]
+        return name in self.attrib  # type: ignore[attr-defined]
 
     def getAttribute(self, name):
         return self.get(name)  # type: ignore[attr-defined]

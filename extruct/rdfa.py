@@ -17,7 +17,7 @@ from pyRdfa import Options
 from pyRdfa import pyRdfa as PyRdfa
 from pyRdfa.initialcontext import initial_context
 from rdflib import Graph
-from rdflib import logger as rdflib_logger  # type: ignore[no-redef]
+from rdflib import logger as rdflib_logger
 
 from extruct.utils import parse_xmldom_html
 

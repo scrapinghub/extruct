@@ -1,3 +1,4 @@
+# mypy: disallow_untyped_defs=False
 # -*- coding: utf-8 -*-
 import json
 import unittest
@@ -66,7 +67,7 @@ class TestGeneric(unittest.TestCase):
     def test_extra_kwargs(self):
         body, expected = self._microdata_custom_url("product_custom_url.json")
         with self.assertRaises(TypeError):
-            extruct.extract(body, foo="bar")
+            extruct.extract(body, foo="bar")  # type: ignore[call-arg]
 
     def _microdata_custom_url(self, test_file):
         body = get_testdata("schema.org", "product.html")
@@ -85,10 +86,9 @@ class TestGeneric(unittest.TestCase):
             data = extruct.extract(body)
 
         # ignore exceptions
-        expected = {}
         data = extruct.extract(body, errors="ignore")
-        assert data == expected
+        assert data == {}
 
         # ignore exceptions
         data = extruct.extract(body, errors="log")
-        assert data == expected
+        assert data == {}

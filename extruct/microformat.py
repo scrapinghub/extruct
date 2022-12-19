@@ -1,7 +1,8 @@
+# mypy: disallow_untyped_defs=False
 import mf2py
 
 
-class MicroformatExtractor(object):
+class MicroformatExtractor:
     def extract(self, htmlstring, base_url=None, encoding="UTF-8"):
         return list(self.extract_items(htmlstring, base_url=base_url))
 

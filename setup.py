@@ -1,3 +1,4 @@
+# mypy: disallow_untyped_defs=False
 # -*- coding: utf-8 -*-
 import os
 
@@ -15,8 +16,6 @@ def get_version():
     with open(path) as f:
         return f.read().strip()
 
-
-requirements = []
 
 setup(
     name="extruct",
@@ -66,7 +65,6 @@ setup(
         "Natural Language :: English",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",

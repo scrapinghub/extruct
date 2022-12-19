@@ -1,4 +1,6 @@
+# mypy: disallow_untyped_defs=False
 import copy
+from typing import Any
 
 from six.moves.urllib.parse import urljoin, urlparse
 
@@ -10,7 +12,7 @@ def _uopengraph(extracted, with_og_array=False):
     for obj in extracted:
         # In order of appearance in the page
         properties = list(obj["properties"])
-        flattened = {}
+        flattened: dict[Any, Any] = {}
 
         for k, v in properties:
             if k not in flattened.keys():

@@ -1,3 +1,4 @@
+# mypy: disallow_untyped_defs=False
 import re
 
 from w3lib.html import strip_html5_whitespace
@@ -110,7 +111,7 @@ def get_lower_attrib(name):
     return re.sub(r".*\.", "", name).lower()
 
 
-class DublinCoreExtractor(object):
+class DublinCoreExtractor:
     """DublinCore extractor following extruct API."""
 
     def extract(self, htmlstring, base_url=None, encoding="UTF-8"):

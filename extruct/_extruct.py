@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import logging
 import warnings
+from typing import Any, Callable
 
 from extruct.dublincore import DublinCoreExtractor
 from extruct.jsonld import JsonLdExtractor
@@ -15,17 +18,17 @@ SYNTAXES = ["microdata", "opengraph", "json-ld", "microformat", "rdfa", "dublinc
 
 
 def extract(
-    htmlstring,
-    base_url=None,
-    encoding="UTF-8",
-    syntaxes=SYNTAXES,
-    errors="strict",
-    uniform=False,
-    return_html_node=False,
-    schema_context="http://schema.org",
-    with_og_array=False,
-    **kwargs
-):
+    htmlstring: str | bytes,
+    base_url: str | None = None,
+    encoding: str = "UTF-8",
+    syntaxes: list[str] = SYNTAXES,
+    errors: str = "strict",
+    uniform: bool = False,
+    return_html_node: bool = False,
+    schema_context: str = "http://schema.org",
+    with_og_array: bool = False,
+    url: str | None = None,  # deprecated
+) -> dict[str, list[dict[str, Any]]]:
     """
     htmlstring: string with valid html document;
     base_url: base url of the html document
@@ -44,15 +47,13 @@ def extract(
                       The feature is supported only by microdata syntax.
                       Each node is of `lxml.etree.Element` type.
     schema_context: schema's context for current page"""
-    if base_url is None and "url" in kwargs:
+    if base_url is None and url is not None:
         warnings.warn(
             '"url" argument is deprecated, please use "base_url"',
             DeprecationWarning,
             stacklevel=2,
         )
-        base_url = kwargs.pop("url")
-    if kwargs:
-        raise TypeError("Unexpected keyword arguments")
+        base_url = url
     if not (isinstance(syntaxes, list) and all(v in SYNTAXES for v in syntaxes)):
         raise ValueError(
             "syntaxes must be a list with any or all (default) of"
@@ -112,7 +113,7 @@ def extract(
                 tree,
             )
         )
-    output = {}
+    output: dict[str, list[dict[str, Any]]] = {}
     for syntax, extract, document in processors:
         try:
             output[syntax] = list(extract(document, base_url=base_url))
@@ -124,7 +125,9 @@ def extract(
             if errors == "strict":
                 raise
     if uniform:
-        uniform_processors = []
+        uniform_processors: list[
+            tuple[str, Callable[..., Any], list[Any], str | None]
+        ] = []
         if "microdata" in syntaxes:
             uniform_processors.append(
                 (
@@ -162,14 +165,14 @@ def extract(
                 )
             )
 
-        for syntax, uniform, raw, schema_context in uniform_processors:
+        for syntax, uniform_fn, raw, schema_ctx in uniform_processors:
             try:
                 if syntax == "opengraph":
-                    output[syntax] = uniform(raw, with_og_array=with_og_array)
+                    output[syntax] = uniform_fn(raw, with_og_array=with_og_array)
                 elif syntax == "dublincore":
-                    output[syntax] = uniform(raw)
+                    output[syntax] = uniform_fn(raw)
                 else:
-                    output[syntax] = uniform(raw, schema_context)
+                    output[syntax] = uniform_fn(raw, schema_ctx)
             except Exception as e:
                 if errors == "ignore":
                     output[syntax] = []

@@ -1,3 +1,4 @@
+# mypy: disallow_untyped_defs=False
 # -*- coding: utf-8 -*-
 """
 RDFa extractor
@@ -16,7 +17,7 @@ from pyRdfa import Options
 from pyRdfa import pyRdfa as PyRdfa
 from pyRdfa.initialcontext import initial_context
 from rdflib import Graph
-from rdflib import logger as rdflib_logger
+from rdflib import logger as rdflib_logger  # type: ignore[no-redef]
 
 from extruct.utils import parse_xmldom_html
 
@@ -37,7 +38,7 @@ initial_context["http://www.w3.org/2011/rdfa-context/rdfa-1.1"].ns.update(
 )
 
 
-class RDFaExtractor(object):
+class RDFaExtractor:
     def _replaceNS(self, prop, html_element, head_element):
         """Expand namespace to match with returned json (e.g.: og -> 'http://ogp.me/ns#')"""
 

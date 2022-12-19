@@ -1,3 +1,4 @@
+# mypy: disallow_untyped_defs=False
 # -*- coding: utf-8 -*-
 """
 JSON-LD extractor
@@ -14,7 +15,7 @@ from extruct.utils import parse_html
 HTML_OR_JS_COMMENTLINE = re.compile(r"^\s*(//.*|<!--.*-->)")
 
 
-class JsonLdExtractor(object):
+class JsonLdExtractor:
     _xp_jsonld = lxml.etree.XPath(
         'descendant-or-self::script[@type="application/ld+json"]'
     )
@@ -26,7 +27,7 @@ class JsonLdExtractor(object):
     def extract_items(self, document, base_url=None):
         return [
             item
-            for items in map(self._extract_items, self._xp_jsonld(document))
+            for items in map(self._extract_items, self._xp_jsonld(document))  # type: ignore[arg-type]
             if items
             for item in items
             if item

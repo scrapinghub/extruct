@@ -1,3 +1,4 @@
+# mypy: disallow_untyped_defs=False
 import re
 
 from extruct.utils import parse_html
@@ -15,7 +16,7 @@ _OG_NAMESPACES = {
 }
 
 
-class OpenGraphExtractor(object):
+class OpenGraphExtractor:
     """OpenGraph extractor following extruct API."""
 
     def extract(self, htmlstring, base_url=None, encoding="UTF-8"):

@@ -1,3 +1,4 @@
+# mypy: disallow_untyped_defs=False
 """
 HTML Microdata parser
 
@@ -9,8 +10,11 @@ follows http://www.w3.org/TR/microdata/#json
 
 """
 
+from __future__ import annotations
+
 import collections
 from functools import partial
+from typing import Any, Set
 
 try:
     from urlparse import urljoin
@@ -43,7 +47,7 @@ cleaner = Cleaner(
 )
 
 
-class LxmlMicrodataExtractor(object):
+class LxmlMicrodataExtractor:
     # iterate in document order (used below for fast get_docid)
     _xp_item = lxml.etree.XPath("descendant-or-self::*[@itemscope]")
     _xp_prop = lxml.etree.XPath(
@@ -70,14 +74,14 @@ class LxmlMicrodataExtractor(object):
 
     def extract_items(self, document, base_url):
         itemids = self._build_itemids(document)
-        items_seen = set()
+        items_seen: Set[Any] = set()
         return [
             item
             for item in (
                 self._extract_item(
                     it, items_seen=items_seen, base_url=base_url, itemids=itemids
                 )
-                for it in self._xp_item(document)
+                for it in self._xp_item(document)  # type: ignore[union-attr]
             )
             if item
         ]
@@ -88,7 +92,7 @@ class LxmlMicrodataExtractor(object):
     def _build_itemids(self, document):
         """Build itemids for a fast get_docid implementation. Use document order."""
         root = document.getroottree().getroot()
-        return {node: idx + 1 for idx, node in enumerate(self._xp_item(root))}
+        return {node: idx + 1 for idx, node in enumerate(self._xp_item(root))}  # type: ignore[arg-type]
 
     def _extract_item(self, node, items_seen, base_url, itemids):
         itemid = self.get_docid(node, itemids)
@@ -160,7 +164,7 @@ class LxmlMicrodataExtractor(object):
         return item
 
     def _extract_properties(self, node, items_seen, base_url, itemids):
-        for prop in self._xp_prop(node):
+        for prop in self._xp_prop(node):  # type: ignore[union-attr]
             for p, v in self._extract_property(
                 prop, items_seen=items_seen, base_url=base_url, itemids=itemids
             ):

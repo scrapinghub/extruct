@@ -4,13 +4,15 @@ import logging
 import warnings
 from typing import Any, Callable
 
+from lxml.html import HtmlElement
+
 from extruct.dublincore import DublinCoreExtractor
 from extruct.jsonld import JsonLdExtractor
 from extruct.microformat import MicroformatExtractor
 from extruct.opengraph import OpenGraphExtractor
 from extruct.rdfa import RDFaExtractor
 from extruct.uniform import _udublincore, _umicrodata_microformat, _uopengraph
-from extruct.utils import parse_xmldom_html
+from extruct.utils import parse_html, parse_xmldom_html
 from extruct.w3cmicrodata import MicrodataExtractor
 
 logger = logging.getLogger(__name__)
@@ -18,7 +20,7 @@ SYNTAXES = ["microdata", "opengraph", "json-ld", "microformat", "rdfa", "dublinc
 
 
 def extract(
-    htmlstring: str | bytes,
+    htmlstring_or_tree: str | bytes | HtmlElement,
     base_url: str | None = None,
     encoding: str = "UTF-8",
     syntaxes: list[str] = SYNTAXES,
@@ -64,16 +66,26 @@ def extract(
             'Invalid error command, valid values are either "log"'
             ', "ignore" or "strict"'
         )
-    try:
-        tree = parse_xmldom_html(htmlstring, encoding=encoding)
-    except Exception as e:
-        if errors == "ignore":
-            return {}
-        if errors == "log":
-            logger.exception("Failed to parse html, raises {}".format(e))
-            return {}
-        if errors == "strict":
-            raise
+    if isinstance(htmlstring_or_tree, (str, bytes)):
+        parser = parse_xmldom_html if "rdfa" in syntaxes else parse_html
+        try:
+            tree = parser(htmlstring_or_tree, encoding=encoding)
+        except Exception as e:
+            if errors == "ignore":
+                return {}
+            if errors == "log":
+                logger.exception("Failed to parse html, raises {}".format(e))
+                return {}
+            if errors == "strict":
+                raise
+    else:
+        if "microformat" in syntaxes:
+            raise ValueError(
+                "'microformat' syntax requires a string, not a parsed tree. "
+                "Consider adjusting the 'syntaxes' argument to exclude it, "
+                "or passing an HTML string or bytes."
+            )
+        tree = htmlstring_or_tree
     processors = []
     if "microdata" in syntaxes:
         processors.append(
@@ -95,7 +107,7 @@ def extract(
         processors.append(("opengraph", OpenGraphExtractor().extract_items, tree))
     if "microformat" in syntaxes:
         processors.append(
-            ("microformat", MicroformatExtractor().extract_items, htmlstring)
+            ("microformat", MicroformatExtractor().extract_items, htmlstring_or_tree)
         )
     if "rdfa" in syntaxes:
         processors.append(

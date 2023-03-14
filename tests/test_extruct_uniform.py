@@ -16,7 +16,7 @@ class TestFlatten(unittest.TestCase):
         expected = json.loads(
             get_testdata("schema.org", "CreativeWork_flat.001.json").decode("UTF-8")
         )
-        data = extruct.extract(body, uniform=True)
+        data = extruct.extract(body, uniform=True, syntaxes=["microdata"])
         self.assertEqual(jsonize_dict(data["microdata"]), expected["microdata"])
 
     def test_microdata_with_returning_node(self):
@@ -26,7 +26,9 @@ class TestFlatten(unittest.TestCase):
                 "schema.org", "CreativeWork_flat_with_node_id.001.json"
             ).decode("UTF-8")
         )
-        data = extruct.extract(body, uniform=True, return_html_node=True)
+        data = extruct.extract(
+            body, uniform=True, return_html_node=True, syntaxes=["microdata"]
+        )
         replace_node_ref_with_node_id(data["microdata"])
         self.assertEqual(jsonize_dict(data["microdata"]), expected["microdata"])
 
@@ -35,7 +37,7 @@ class TestFlatten(unittest.TestCase):
         expected = json.loads(
             get_testdata("misc", "microformat_flat_test.json").decode("UTF-8")
         )
-        data = extruct.extract(body, uniform=True)
+        data = extruct.extract(body, uniform=True, syntaxes=["microformat"])
         self.assertEqual(jsonize_dict(data["microformat"]), expected)
 
     def test_opengraph(self):
@@ -43,5 +45,5 @@ class TestFlatten(unittest.TestCase):
         expected = json.loads(
             get_testdata("misc", "opengraph_flat_test.json").decode("UTF-8")
         )
-        data = extruct.extract(body, uniform=True)
+        data = extruct.extract(body, uniform=True, syntaxes=["opengraph"])
         self.assertEqual(jsonize_dict(data["opengraph"]), expected)

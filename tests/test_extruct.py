@@ -6,7 +6,7 @@ import unittest
 import pytest
 
 import extruct
-from extruct import SYNTAXES
+from extruct.utils import parse_html
 from tests import get_testdata, jsonize_dict, replace_node_ref_with_node_id
 
 
@@ -38,8 +38,9 @@ class TestGeneric(unittest.TestCase):
 
     def test_microdata_custom_url(self):
         body, expected = self._microdata_custom_url("product_custom_url.json")
+        tree = parse_html(body, encoding="UTF-8")
         data = extruct.extract(
-            body, base_url="http://some-example.com", syntaxes=["microdata"]
+            tree, base_url="http://some-example.com", syntaxes=["microdata"]
         )
         self.assertEqual(data, expected)
 
@@ -65,7 +66,7 @@ class TestGeneric(unittest.TestCase):
         self.assertEqual(data, expected)
 
     def test_extra_kwargs(self):
-        body, expected = self._microdata_custom_url("product_custom_url.json")
+        body, _ = self._microdata_custom_url("product_custom_url.json")
         with self.assertRaises(TypeError):
             extruct.extract(body, foo="bar")  # type: ignore[call-arg]
 

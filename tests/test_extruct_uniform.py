@@ -17,7 +17,6 @@ class TestFlatten(unittest.TestCase):
             "schema.org",
             "CreativeWork.001.html",
             "CreativeWork_flat.001.json",
-
         )
         syntax = "microdata"
         data = extruct.extract(body, uniform=True, syntaxes=[syntax])

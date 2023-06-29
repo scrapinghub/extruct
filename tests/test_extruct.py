@@ -83,7 +83,7 @@ class TestGeneric(unittest.TestCase):
         body = ""
 
         # raise exceptions
-        with pytest.raises(Exception):
+        with self.assertRaises(Exception):
             data = extruct.extract(body)
 
         # ignore exceptions

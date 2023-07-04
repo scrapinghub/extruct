@@ -216,6 +216,15 @@ It is possible to select which syntaxes to extract by passing a list with the de
                 'http://ogp.me/ns#url': [ { '@value': 'https://www.songkick.com/artists/236156-elysian-fields'}],
                 'http://www.facebook.com/2008/fbmlapp_id': [ { '@value': '308540029359'}]}]}
 
+Alternatively, if you already parsed the HTML before calling extruct, you can use the tree instead of the HTML string: ::
+
+  >>> # using the request from the previous example
+  >>> base_url = get_base_url(r.text, r.url)
+  >>> from extruct.utils import parse_html
+  >>> tree = parse_html(r.text)
+  >>> data = extruct.extract(tree, base_url, syntaxes=['microdata', 'opengraph', 'rdfa'])
+
+Microformat format doesn't support the HTML tree, so you need to use a HTML string.
 
 Uniform
 +++++++
@@ -264,7 +273,7 @@ To do so set ``uniform=True`` when calling ``extract``, it's false by default fo
                 'http://ogp.me/ns#url': [ { '@value': 'https://www.songkick.com/artists/236156-elysian-fields'}],
                 'http://www.facebook.com/2008/fbmlapp_id': [ { '@value': '308540029359'}]}]}
 
-NB rdfa structure is not uniformed yet
+NB rdfa structure is not uniformed yet.
 
 Returning HTML node
 +++++++++++++++++++

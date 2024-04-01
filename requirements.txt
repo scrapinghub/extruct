@@ -1,6 +1,6 @@
 # project requirements, install them using following command:
 # pip install -r requirements.txt
-lxml
+lxml>=5.2.0[html_clean]
 requests
 rdflib>=6.0.0; python_version>="3.7"
 rdflib<6.0.0; python_version<"3.7"

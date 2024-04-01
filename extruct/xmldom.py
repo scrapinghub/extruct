@@ -6,14 +6,21 @@ from copy import copy, deepcopy
 from xml.dom import Node
 from xml.dom.minidom import Attr, NamedNodeMap
 
-from lxml.etree import (
-    ElementBase,
-    XPath,
-    _ElementStringResult,
-    _ElementUnicodeResult,
-    tostring,
-)
+from lxml.etree import ElementBase, XPath, _ElementUnicodeResult, tostring
 from lxml.html import HtmlElementClassLookup, HTMLParser
+
+try:
+    from lxml.etree import _ElementStringResult
+except ImportError:
+
+    class _ElementStringResult(bytes):
+        """
+        _ElementStringResult is removed in lxml >= 5.1.0,
+        so we define it here for compatibility.
+        """
+
+        def getparent(self):
+            return self._parent
 
 
 class DomElementUnicodeResult:

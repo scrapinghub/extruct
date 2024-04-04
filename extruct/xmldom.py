@@ -9,6 +9,19 @@ from xml.dom.minidom import Attr, NamedNodeMap
 from lxml.etree import ElementBase, XPath, _ElementUnicodeResult, tostring
 from lxml.html import HtmlElementClassLookup, HTMLParser
 
+try:
+    from lxml.etree import _ElementStringResult
+except ImportError:
+
+    class _ElementStringResult(bytes):  # type: ignore[no-redef]
+        """
+        _ElementStringResult is removed in lxml >= 5.1.0,
+        so we define it here for compatibility.
+        """
+
+        def getparent(self):
+            return self._parent  # type: ignore[attr-defined]
+
 
 class DomElementUnicodeResult:
     CDATA_SECTION_NODE = Node.CDATA_SECTION_NODE
@@ -41,7 +54,7 @@ def lxmlDomNodeType(node):
     if isinstance(node, ElementBase):
         return Node.ELEMENT_NODE
 
-    elif isinstance(node, _ElementUnicodeResult):
+    elif isinstance(node, (_ElementStringResult, _ElementUnicodeResult)):
         if node.is_attribute:
             return Node.ATTRIBUTE_NODE
         else:
@@ -110,7 +123,7 @@ class DomHtmlMixin:
             if isinstance(n, ElementBase):
                 yield n
 
-            elif isinstance(n, _ElementUnicodeResult):
+            elif isinstance(n, (_ElementStringResult, _ElementUnicodeResult)):
 
                 if isinstance(n, _ElementUnicodeResult):
                     n = DomElementUnicodeResult(n)
@@ -136,7 +149,7 @@ class DomHtmlMixin:
 
     @property
     def data(self):
-        if isinstance(self, _ElementUnicodeResult):
+        if isinstance(self, (_ElementStringResult, _ElementUnicodeResult)):
             return self
         else:
             raise RuntimeError

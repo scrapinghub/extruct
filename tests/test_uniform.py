@@ -167,7 +167,10 @@ class TestUniform(unittest.TestCase):
                             "Canvas"
                         ],
                         "photo": [
-                            "/on/demandware.static/-/Sites-main/default/dwa3227ee6/images/small/CN1148.jpg"
+                            {
+                                "alt": "aJ Styles FastLane 2018 15 x 17 Framed Plaque w/ Ring Canvas",
+                                "value": "/on/demandware.static/-/Sites-main/default/dwa3227ee6/images/small/CN1148.jpg",
+                            }
                         ],
                     },
                 ],

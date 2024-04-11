@@ -15,7 +15,7 @@ except ImportError:
 
     class _ElementStringResult(bytes):  # type: ignore[no-redef]
         """
-        _ElementStringResult is removed in lxml >= 5.1.0,
+        _ElementStringResult is removed in lxml >= 5.1.1,
         so we define it here for compatibility.
         """
 

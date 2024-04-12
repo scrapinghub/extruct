@@ -85,7 +85,7 @@ class RDFaExtractor:
 
         match = None
         if head_element.get("prefix"):
-            match = re.search(prefix + ": [^\\s]+", head_element.get("prefix"))
+            match = re.search(prefix + r": [^\s]+", head_element.get("prefix"))
 
         # if namespace taken from prefix attribute in head tag
         if match:

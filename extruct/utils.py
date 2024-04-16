@@ -1,5 +1,4 @@
 # mypy: disallow_untyped_defs=False
-# -*- coding: utf-8 -*-
 import lxml.html
 
 from extruct.xmldom import XmlDomHTMLParser

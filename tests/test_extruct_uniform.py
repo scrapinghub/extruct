@@ -1,5 +1,4 @@
 # mypy: disallow_untyped_defs=False
-# -*- coding: utf-8 -*-
 import json
 import unittest
 

@@ -42,7 +42,6 @@ class JsonLdExtractor:
             # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
             data = jstyleson.loads(HTML_OR_JS_COMMENTLINE.sub("", script), strict=False)
         if isinstance(data, list):
-            for item in data:
-                yield item
+            yield from data
         elif isinstance(data, dict):
             yield data

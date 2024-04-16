@@ -39,6 +39,7 @@ setup(
         ]
     ),
     package_data={"extruct": ["VERSION"]},
+    python_requires=">=3.8",
     install_requires=[
         "lxml",
         "rdflib>=6.0.0",

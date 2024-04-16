@@ -80,7 +80,7 @@ class DomHtmlMixin:
 
     @property
     def nodeName(self):
-        # FIXME: this is a simpification
+        # FIXME: this is a simplification
         return self.tag  # type: ignore[attr-defined]
 
     @property

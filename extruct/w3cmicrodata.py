@@ -74,7 +74,7 @@ class LxmlMicrodataExtractor:
 
     def extract_items(self, document, base_url):
         itemids = self._build_itemids(document)
-        items_seen: Set[Any] = set()
+        items_seen: set[Any] = set()
         return [
             item
             for item in (

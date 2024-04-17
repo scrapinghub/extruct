@@ -1,8 +1,7 @@
 # mypy: disallow_untyped_defs=False
 import copy
 from typing import Any
-
-from six.moves.urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin, urlparse
 
 from extruct.dublincore import get_lower_attrib
 

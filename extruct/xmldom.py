@@ -1,7 +1,6 @@
 # mypy: disallow_untyped_defs=False
 from __future__ import annotations
 
-# -*- coding: utf-8 -*-
 from copy import copy, deepcopy
 from xml.dom import Node
 from xml.dom.minidom import Attr, NamedNodeMap

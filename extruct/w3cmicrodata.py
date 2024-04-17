@@ -136,7 +136,7 @@ class LxmlMicrodataExtractor:
                     properties[name].append(value)
 
         props = []
-        for (name, values) in properties.items():
+        for name, values in properties.items():
             if not self.strict and len(values) == 1:
                 props.append((name, values[0]))
             else:

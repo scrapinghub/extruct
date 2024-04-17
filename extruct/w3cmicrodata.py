@@ -15,11 +15,7 @@ from __future__ import annotations
 import collections
 from functools import partial
 from typing import Any, Set
-
-try:
-    from urlparse import urljoin
-except ImportError:
-    from urllib.parse import urljoin
+from urllib.parse import urljoin
 
 import html_text
 import lxml.etree

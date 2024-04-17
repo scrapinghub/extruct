@@ -1,11 +1,7 @@
 # mypy: disallow_untyped_defs=False
 import json
 import unittest
-
-try:
-    import unittest.mock as mock
-except ImportError:
-    import mock  # type: ignore[no-redef]
+import unittest.mock as mock
 
 from requests.exceptions import HTTPError
 

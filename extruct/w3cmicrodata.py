@@ -70,7 +70,7 @@ class LxmlMicrodataExtractor:
 
     def extract_items(self, document, base_url):
         itemids = self._build_itemids(document)
-        items_seen: Set[Any] = set()
+        items_seen: set[Any] = set()
         return [
             item
             for item in (
@@ -132,7 +132,7 @@ class LxmlMicrodataExtractor:
                     properties[name].append(value)
 
         props = []
-        for (name, values) in properties.items():
+        for name, values in properties.items():
             if not self.strict and len(values) == 1:
                 props.append((name, values[0]))
             else:

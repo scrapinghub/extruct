@@ -41,6 +41,7 @@ setup(
     python_requires=">=3.8",
     install_requires=[
         "lxml",
+        "lxml-html-clean",
         "rdflib>=6.0.0",
         "pyrdfa3",
         "mf2py",

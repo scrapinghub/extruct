@@ -1,6 +1,7 @@
 # project requirements, install them using following command:
 # pip install -r requirements.txt
-lxml[html_clean]
+lxml
+lxml-html-clean
 requests
 rdflib>=6.0.0
 pyrdfa3

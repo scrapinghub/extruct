@@ -2,6 +2,15 @@
 History
 =======
 
+v0.17.0 (YYYY-MM-DD)
+--------------------
+
+* Added support for Python 3.12 (PR #218)
+* Added support for lxml >= 5.2.0 (PR #217, #234)
+* Cleaned up and modernized the code (PR #214, #219, #220, #222, #223, #224,
+  #225, #226, #227)
+* Improved the pre-commit and CI configuration (PR #226, #233)
+
 v0.16.0 (2023-07-07)
 --------------------
 

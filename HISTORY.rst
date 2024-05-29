@@ -2,7 +2,7 @@
 History
 =======
 
-v0.17.0 (YYYY-MM-DD)
+v0.17.0 (2024-05-29)
 --------------------
 
 * Added support for Python 3.12 (PR #218)

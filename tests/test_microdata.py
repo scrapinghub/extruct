@@ -21,7 +21,6 @@ class TestMicrodata(unittest.TestCase):
             data = mde.extract(body)
             self.assertEqual(data, expected)
 
-
     def test_schemaorg_CreativeWork(self):
         for i in [1]:
             body = get_testdata("schema.org", "CreativeWork.{:03d}.html".format(i))

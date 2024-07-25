@@ -236,9 +236,8 @@ class LxmlMicrodataExtractor:
             return node.get("content")
 
         # https://schema.org/docs/actions.html#part-4
-        elif (
-            (itemprop := node.get("itemprop"))
-            and (itemprop.endswith("-input") or itemprop.endswith("-output"))
+        elif (itemprop := node.get("itemprop")) and (
+            itemprop.endswith("-input") or itemprop.endswith("-output")
         ):
             result = {}
             if "required" in node.attrib:

@@ -10,6 +10,18 @@ class TestMicrodata(unittest.TestCase):
 
     maxDiff = None
 
+    def _test_schemaorg(self, schema, indexes=None):
+        indexes = indexes or [1]
+        for i in indexes:
+            body = get_testdata("schema.org", f"{schema}.{i:03d}.html")
+            expected = json.loads(
+                get_testdata("schema.org", f"{schema}.{i:03d}.json").decode()
+            )
+            mde = MicrodataExtractor()
+            data = mde.extract(body)
+            self.assertEqual(data, expected)
+
+
     def test_schemaorg_CreativeWork(self):
         for i in [1]:
             body = get_testdata("schema.org", "CreativeWork.{:03d}.html".format(i))
@@ -62,6 +74,9 @@ class TestMicrodata(unittest.TestCase):
             data = mde.extract(body)
 
             self.assertEqual(data, expected)
+
+    def test_schemaorg_SearchAction(self):
+        self._test_schemaorg("SearchAction")
 
     def test_w3c_textContent_values(self):
         body = get_testdata("w3c", "microdata.4.2.strings.html")

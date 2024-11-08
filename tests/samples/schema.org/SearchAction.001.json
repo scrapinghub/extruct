@@ -1,0 +1,1 @@
+[{"type": "https://schema.org/WebSite", "properties": {"url": "https://www.example.com/", "potentialAction": {"type": "https://schema.org/SearchAction", "properties": {"target": "https://query.example.com/search?q={search_term_string}", "query-input": {"valueRequired": true, "valueName": "search_term_string"}}}}}]

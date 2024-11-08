@@ -235,6 +235,17 @@ class LxmlMicrodataExtractor:
         elif node.get("content"):
             return node.get("content")
 
+        # https://schema.org/docs/actions.html#part-4
+        elif (itemprop := node.get("itemprop")) and (
+            itemprop.endswith("-input") or itemprop.endswith("-output")
+        ):
+            result = {}
+            if "required" in node.attrib:
+                result["valueRequired"] = True
+            if name := node.get("name"):
+                result["valueName"] = name
+            return result
+
         else:
             return self._extract_textContent(node)
 

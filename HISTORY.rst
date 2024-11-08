@@ -2,6 +2,12 @@
 History
 =======
 
+v0.18.0 (2024-11-08)
+--------------------
+
+* Addded support for the ``valueRequired`` and ``valueName`` fields of `action
+  I/O <https://schema.org/docs/actions.html#part-4>`_ to the microdata parser.
+
 v0.17.0 (2024-05-29)
 --------------------
 

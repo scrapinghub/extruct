@@ -2,7 +2,7 @@
 History
 =======
 
-v0.18.0 (2024-11-DD)
+v0.18.0 (2024-11-08)
 --------------------
 
 * Addded support for the ``valueRequired`` and ``valueName`` fields of `action

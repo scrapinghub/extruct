@@ -31,6 +31,10 @@ jobs:
     - name: tox
       run: |
         tox -e `python -c "import sys; print('py' + ''.join(sys.version.split('.')[:2]))"`
+    - name: Upload coverage report
+      uses: codecov/codecov-action@v5
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
 
   check:
     runs-on: ubuntu-latest

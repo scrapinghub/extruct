@@ -63,3 +63,9 @@ class TestJsonLD(unittest.TestCase):
         jsonlde = JsonLdExtractor()
         data = jsonlde.extract(body)
         self.assertEqual(data, expected)
+
+    def test_empty_jsonld_script(self):
+        jsonlde = JsonLdExtractor()
+        body = '<script type="application/ld+json">   \n\n  </script>'
+        data = jsonlde.extract(body)
+        self.assertEqual(data, [])

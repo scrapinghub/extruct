@@ -34,7 +34,8 @@ class JsonLdExtractor:
 
     def _extract_items(self, node):
         script = node.xpath("string()").strip()
-        if not script: return
+        if not script:
+            return
         try:
             # TODO: `strict=False` can be configurable if needed
             data = json.loads(script, strict=False)

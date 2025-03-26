@@ -8,6 +8,7 @@ import re
 
 import jstyleson
 import lxml.etree
+from jsonStringFixer import addMissingQuotesInJsonString
 
 from extruct.utils import parse_html
 
@@ -40,6 +41,7 @@ class JsonLdExtractor:
             # TODO: `strict=False` can be configurable if needed
             data = json.loads(script, strict=False)
         except ValueError:
+            script = addMissingQuotesInJsonString(script)
             # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
             data = jstyleson.loads(HTML_OR_JS_COMMENTLINE.sub("", script), strict=False)
         if isinstance(data, list):

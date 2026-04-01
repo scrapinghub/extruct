@@ -41,7 +41,10 @@ class JsonLdExtractor:
             data = json.loads(script, strict=False)
         except ValueError:
             # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
-            data = jstyleson.loads(HTML_OR_JS_COMMENTLINE.sub("", script), strict=False)
+            try:
+                data = jstyleson.loads(HTML_OR_JS_COMMENTLINE.sub("", script), strict=False)
+            except ValueError:
+                return
         if isinstance(data, list):
             yield from data
         elif isinstance(data, dict):

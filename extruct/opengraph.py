@@ -30,7 +30,7 @@ class OpenGraphExtractor:
             namespaces = self.get_namespaces(html_elems[0]) if html_elems else {}
             namespaces.update(self.get_namespaces(head))
             props = []
-            for el in head.xpath("meta[@property and @content]"):
+            for el in document.xpath(".//meta[@property and @content]"):
                 prop = el.attrib["property"]
                 val = el.attrib["content"]
                 ns = prop.partition(":")[0]

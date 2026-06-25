@@ -69,3 +69,45 @@ class TestJsonLD(unittest.TestCase):
         body = '<script type="application/ld+json">   \n\n  </script>'
         data = jsonlde.extract(body)
         self.assertEqual(data, [])
+
+    def test_jsonld_with_html_entities(self):
+        """HTML-encoded JSON-LD (e.g. &quot; instead of ") is parsed correctly.
+
+        Some sites incorrectly escape script content as HTML, producing JSON-LD
+        with named entities (&quot;, &amp;) or numeric references (&#34;).
+        See https://github.com/scrapinghub/extruct/issues/208
+        """
+        jsonlde = JsonLdExtractor()
+
+        # Named entity &quot; for double-quotes
+        body_named = (
+            b'<html><body>'
+            b'<script type="application/ld+json">'
+            b'{&quot;@context&quot;:&quot;http://schema.org/&quot;,'
+            b'&quot;@type&quot;:&quot;Product&quot;,'
+            b'&quot;name&quot;:&quot;My Product&quot;}'
+            b'</script></body></html>'
+        )
+        data = jsonlde.extract(body_named)
+        self.assertEqual(data, [{"@context": "http://schema.org/", "@type": "Product", "name": "My Product"}])
+
+        # Numeric entity &#34; for double-quotes
+        body_numeric = (
+            b'<html><body>'
+            b'<script type="application/ld+json">'
+            b'{&#34;@context&#34;:&#34;http://schema.org/&#34;,'
+            b'&#34;@type&#34;:&#34;WebPage&#34;}'
+            b'</script></body></html>'
+        )
+        data = jsonlde.extract(body_numeric)
+        self.assertEqual(data, [{"@context": "http://schema.org/", "@type": "WebPage"}])
+
+        # &amp; in a value is unescaped to &
+        body_amp = (
+            b'<html><body>'
+            b'<script type="application/ld+json">'
+            b'{"@context":"http://schema.org/","@type":"Organization","name":"Foo &amp; Bar"}'
+            b'</script></body></html>'
+        )
+        data = jsonlde.extract(body_amp)
+        self.assertEqual(data, [{"@context": "http://schema.org/", "@type": "Organization", "name": "Foo & Bar"}])

@@ -3,6 +3,7 @@
 JSON-LD extractor
 """
 
+import html
 import json
 import re
 
@@ -36,6 +37,9 @@ class JsonLdExtractor:
         script = node.xpath("string()").strip()
         if not script:
             return
+        # Some sites incorrectly HTML-encode the JSON-LD content (e.g. &quot; instead of ").
+        # Unescape HTML entities before parsing so json.loads sees valid JSON.
+        script = html.unescape(script)
         try:
             # TODO: `strict=False` can be configurable if needed
             data = json.loads(script, strict=False)

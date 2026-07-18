@@ -1,7 +1,5 @@
 # mypy: disallow_untyped_defs=False
 import json
-import unittest
-from pprint import pformat
 
 from lxml.etree import XML, canonicalize
 
@@ -21,10 +19,7 @@ def tupleize(d):
     return d
 
 
-class TestRDFa(unittest.TestCase):
-
-    maxDiff = None
-
+class TestRDFa:
     def assertJsonLDEqual(self, a, b, normalize_bnode_ids=True):
         sa = json.dumps(
             a, indent=2, separators=(",", ": "), sort_keys=True, ensure_ascii=True
@@ -35,7 +30,7 @@ class TestRDFa(unittest.TestCase):
         if normalize_bnode_ids:
             sa = self.normalize_bnode_ids(sa)
             sb = self.normalize_bnode_ids(sb)
-        self.assertEqual(tupleize(json.loads(sa)), tupleize(json.loads(sb)))
+        assert tupleize(json.loads(sa)) == tupleize(json.loads(sb))
 
     def normalize_bnode_ids(self, jsld):
         import re

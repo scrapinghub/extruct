@@ -1,15 +1,11 @@
 # mypy: disallow_untyped_defs=False
 import json
-import unittest
 
 from extruct.w3cmicrodata import MicrodataExtractor
 from tests import get_testdata
 
 
-class TestMicrodata(unittest.TestCase):
-
-    maxDiff = None
-
+class TestMicrodata:
     def _test_schemaorg(self, schema, indexes=None):
         indexes = indexes or [1]
         for i in indexes:
@@ -19,7 +15,7 @@ class TestMicrodata(unittest.TestCase):
             )
             mde = MicrodataExtractor()
             data = mde.extract(body)
-            self.assertEqual(data, expected)
+            assert data == expected
 
     def test_schemaorg_CreativeWork(self):
         for i in [1]:
@@ -29,10 +25,9 @@ class TestMicrodata(unittest.TestCase):
                     "UTF-8"
                 )
             )
-
             mde = MicrodataExtractor()
             data = mde.extract(body)
-            self.assertEqual(data, expected)
+            assert data == expected
 
     def test_schemaorg_LocalBusiness(self):
         for i in [2, 3]:
@@ -42,10 +37,9 @@ class TestMicrodata(unittest.TestCase):
                     "schema.org", "LocalBusiness.{:03d}.json".format(i)
                 ).decode("UTF-8")
             )
-
             mde = MicrodataExtractor()
             data = mde.extract(body)
-            self.assertEqual(data, expected)
+            assert data == expected
 
     def test_schemaorg_MusicRecording(self):
         for i in [1]:
@@ -55,10 +49,9 @@ class TestMicrodata(unittest.TestCase):
                     "schema.org", "MusicRecording.{:03d}.json".format(i)
                 ).decode("UTF-8")
             )
-
             mde = MicrodataExtractor()
             data = mde.extract(body)
-            self.assertEqual(data, expected)
+            assert data == expected
 
     def test_schemaorg_Event(self):
         for i in [1, 2, 3, 4, 8]:
@@ -68,11 +61,9 @@ class TestMicrodata(unittest.TestCase):
                     "UTF-8"
                 )
             )
-
             mde = MicrodataExtractor()
             data = mde.extract(body)
-
-            self.assertEqual(data, expected)
+            assert data == expected
 
     def test_schemaorg_SearchAction(self):
         self._test_schemaorg("SearchAction")
@@ -82,20 +73,18 @@ class TestMicrodata(unittest.TestCase):
         expected = json.loads(
             get_testdata("w3c", "microdata.4.2.strings.json").decode("UTF-8")
         )
-
         mde = MicrodataExtractor(strict=True)
         data = mde.extract(body)
-        self.assertEqual(data, expected)
+        assert data == expected
 
     def test_w3c_textContent_values_unclean(self):
         body = get_testdata("w3c", "microdata.4.2.strings.unclean.html")
         expected = json.loads(
             get_testdata("w3c", "microdata.4.2.strings.unclean.json").decode("UTF-8")
         )
-
         mde = MicrodataExtractor(strict=True)
         data = mde.extract(body)
-        self.assertEqual(data, expected)
+        assert data == expected
 
     def test_w3c_5_2(self):
         body = get_testdata("w3c", "microdata.5.2.html")
@@ -103,7 +92,7 @@ class TestMicrodata(unittest.TestCase):
 
         mde = MicrodataExtractor(strict=True)
         data = mde.extract(body)
-        self.assertEqual(data, expected)
+        assert data == expected
 
     def test_w3c_5_3(self):
         body = get_testdata("w3c", "microdata.5.3.html")
@@ -111,7 +100,7 @@ class TestMicrodata(unittest.TestCase):
 
         mde = MicrodataExtractor(strict=True)
         data = mde.extract(body)
-        self.assertEqual(data, expected)
+        assert data == expected
 
     def test_w3c_5_5(self):
         body = get_testdata("w3c", "microdata.5.5.html")
@@ -119,15 +108,14 @@ class TestMicrodata(unittest.TestCase):
 
         mde = MicrodataExtractor(strict=True)
         data = mde.extract(body)
-        self.assertEqual(data, expected)
+        assert data == expected
 
     def test_w3c_7_1(self):
         body = get_testdata("w3c", "microdata.7.1.html")
         expected = json.loads(get_testdata("w3c", "microdata.7.1.json").decode("UTF-8"))
-
         mde = MicrodataExtractor(strict=True)
         data = mde.extract(body, "http://blog.example.com/progress-report")
-        self.assertEqual(data, expected)
+        assert data == expected
 
     def test_w3c_meter_element(self):
         body = get_testdata("w3c", "microdata.4.2.meter.html")
@@ -137,7 +125,7 @@ class TestMicrodata(unittest.TestCase):
 
         mde = MicrodataExtractor(strict=True)
         data = mde.extract(body)
-        self.assertEqual(data, expected)
+        assert data == expected
 
     def test_w3c_data_element(self):
         body = get_testdata("w3c", "microdata.4.2.data.html")
@@ -147,7 +135,7 @@ class TestMicrodata(unittest.TestCase):
 
         mde = MicrodataExtractor(strict=True)
         data = mde.extract(body)
-        self.assertEqual(data, expected)
+        assert data == expected
 
     def test_w3c_object_element(self):
         body = get_testdata("w3c", "microdata.object.html")
@@ -157,13 +145,10 @@ class TestMicrodata(unittest.TestCase):
 
         mde = MicrodataExtractor(strict=True)
         data = mde.extract(body, "http://www.example.com/microdata/test")
-        self.assertEqual(data, expected)
+        assert data == expected
 
 
-class TestMicrodataFlat(unittest.TestCase):
-
-    maxDiff = None
-
+class TestMicrodataFlat:
     def test_w3c_5_2(self):
         body = get_testdata("w3c", "microdata.5.2.html")
         expected = json.loads(
@@ -172,7 +157,7 @@ class TestMicrodataFlat(unittest.TestCase):
 
         mde = MicrodataExtractor(nested=False, strict=True)
         data = mde.extract(body)
-        self.assertEqual(data, expected)
+        assert data == expected
 
     def test_w3c_7_1(self):
         body = get_testdata("w3c", "microdata.7.1.html")
@@ -182,13 +167,10 @@ class TestMicrodataFlat(unittest.TestCase):
 
         mde = MicrodataExtractor(nested=False, strict=True)
         data = mde.extract(body, "http://blog.example.com/progress-report")
-        self.assertEqual(data, expected)
+        assert data == expected
 
 
-class TestMicrodataWithText(unittest.TestCase):
-
-    maxDiff = None
-
+class TestMicrodataWithText:
     def test_w3c_5_2(self):
         body = get_testdata("w3c", "microdata.5.2.html")
         expected = json.loads(
@@ -197,13 +179,10 @@ class TestMicrodataWithText(unittest.TestCase):
 
         mde = MicrodataExtractor(add_text_content=True)
         data = mde.extract(body)
-        self.assertEqual(data, expected)
+        assert data == expected
 
 
-class TestUrlJoin(unittest.TestCase):
-
-    maxDiff = None
-
+class TestUrlJoin:
     def test_join_none(self):
         body = get_testdata("schema.org", "product.html")
         expected = json.loads(
@@ -212,7 +191,7 @@ class TestUrlJoin(unittest.TestCase):
 
         mde = MicrodataExtractor()
         data = mde.extract(body)
-        self.assertEqual(data, expected)
+        assert data == expected
 
     def test_join_custom_url(self):
         body = get_testdata("schema.org", "product.html")
@@ -222,13 +201,10 @@ class TestUrlJoin(unittest.TestCase):
 
         mde = MicrodataExtractor()
         data = mde.extract(body, base_url="http://some-example.com")
-        self.assertEqual(data, expected)
+        assert data == expected
 
 
-class TestItemref(unittest.TestCase):
-
-    maxDiff = None
-
+class TestItemref:
     def test_join_none(self):
         body = get_testdata("schema.org", "product-ref.html")
         expected = json.loads(
@@ -237,12 +213,10 @@ class TestItemref(unittest.TestCase):
 
         mde = MicrodataExtractor()
         data = mde.extract(body)
-        self.assertEqual(data, expected)
+        assert data == expected
 
 
-class TestMicrodataWithDescription(unittest.TestCase):
-    maxDiff = None
-
+class TestMicrodataWithDescription:
     def test_if_punctuations_in_description_are_correctly_formatted(self):
         body = get_testdata("websites", "microdata-with-description.html")
         expected = json.loads(
@@ -251,5 +225,4 @@ class TestMicrodataWithDescription(unittest.TestCase):
 
         mde = MicrodataExtractor()
         data = mde.extract(body)
-
-        self.assertEqual(data, expected)
+        assert data == expected

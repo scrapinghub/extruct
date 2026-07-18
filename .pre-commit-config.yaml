@@ -2,17 +2,21 @@ repos:
   - hooks:
       - id: black
     repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 24.4.2
+    rev: 26.5.1
   - hooks:
       - id: isort
     repo: https://github.com/PyCQA/isort
-    rev: 5.13.2
+    rev: 8.0.1
   - hooks:
     - id: mypy
       additional_dependencies: [types-requests, types-mock, lxml-stubs]
     repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.10.0
+    rev: v2.1.0
   - hooks:
     - id: pyupgrade
     repo: https://github.com/asottile/pyupgrade
-    rev: v3.15.2
+    rev: v3.21.2
+  - hooks:
+      - id: pyproject-fmt
+    repo: https://github.com/tox-dev/pyproject-fmt
+    rev: v2.25.0

@@ -1,15 +1,11 @@
 # mypy: disallow_untyped_defs=False
-import unittest
 
 import extruct
 from extruct.uniform import _flatten, _uopengraph, flatten_dict, infer_context
 from tests import get_testdata
 
 
-class TestUniform(unittest.TestCase):
-
-    maxDiff = None
-
+class TestUniform:
     def test_uopengraph(self):
         expected = [
             {
@@ -29,7 +25,7 @@ class TestUniform(unittest.TestCase):
         ]
         body = get_testdata("songkick", "elysianfields.html")
         data = extruct.extract(body, syntaxes=["opengraph"], uniform=True)
-        self.assertEqual(data["opengraph"], expected)
+        assert data["opengraph"] == expected
 
     def test_uopengraph_with_og_array(self):
         expected = [
@@ -55,7 +51,7 @@ class TestUniform(unittest.TestCase):
         data = extruct.extract(
             body, syntaxes=["opengraph"], uniform=True, with_og_array=True
         )
-        self.assertEqual(data["opengraph"], expected)
+        assert data["opengraph"] == expected
 
     def test_uopengraph_duplicated_priorities(self):
         # Ensures that first seen property is kept when flattening
@@ -196,7 +192,7 @@ class TestUniform(unittest.TestCase):
         ]
         body = get_testdata("misc", "microformat_test.html")
         data = extruct.extract(body, syntaxes=["microformat"], uniform=True)
-        self.assertEqual(data["microformat"], expected)
+        assert data["microformat"] == expected
 
     def test_umicrodata(self):
         expected = [
@@ -226,7 +222,7 @@ class TestUniform(unittest.TestCase):
         ]
         body = get_testdata("misc", "product_microdata.html")
         data = extruct.extract(body, syntaxes=["microdata"], uniform=True)
-        self.assertEqual(data["microdata"], expected)
+        assert data["microdata"] == expected
 
     def test_udublincore(self):
         expected = [
@@ -294,17 +290,17 @@ class TestUniform(unittest.TestCase):
         ]
         body = get_testdata("misc", "dublincore_test.html")
         data = extruct.extract(body, syntaxes=["dublincore"], uniform=True)
-        self.assertEqual(data["dublincore"], expected)
+        assert data["dublincore"] == expected
 
     def test_infer_context(self):
         context = "http://schema.org/UsedCondition"
-        self.assertEqual(infer_context(context), ("http://schema.org", "UsedCondition"))
+        assert infer_context(context) == ("http://schema.org", "UsedCondition")
 
         context = "http://ogp.me/ns#description"
-        self.assertEqual(infer_context(context), ("http://ogp.me/ns", "description"))
+        assert infer_context(context) == ("http://ogp.me/ns", "description")
 
         context = "http://ogp.me/ns/fb#app_id"
-        self.assertEqual(infer_context(context), ("http://ogp.me/ns/fb", "app_id"))
+        assert infer_context(context) == ("http://ogp.me/ns/fb", "app_id")
 
     def test_flatten_dict(self):
         d = {
@@ -322,9 +318,9 @@ class TestUniform(unittest.TestCase):
             "extra_weapon": "fear",
             "another_one": "ruthless efficiency",
         }
-        self.assertEqual(
-            flatten_dict(d, schema_context="http://schema.org", add_context=True),
-            expected,
+        assert (
+            flatten_dict(d, schema_context="http://schema.org", add_context=True)
+            == expected
         )
 
     def test_flatten(self):
@@ -369,4 +365,4 @@ class TestUniform(unittest.TestCase):
             "name": [""],
             "@type": ["h-hidden-phone"],
         }
-        self.assertEqual(_flatten(d, schema_context="http://schema.org"), expected)
+        assert _flatten(d, schema_context="http://schema.org") == expected

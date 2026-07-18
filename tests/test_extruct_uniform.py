@@ -1,16 +1,12 @@
 # mypy: disallow_untyped_defs=False
 import json
-import unittest
 
 import extruct
 from extruct.utils import parse_html
 from tests import get_testdata, jsonize_dict, replace_node_ref_with_node_id
 
 
-class TestFlatten(unittest.TestCase):
-
-    maxDiff = None
-
+class TestFlatten:
     def test_microdata(self):
         body, tree, expected = self._testdata_html_and_tree(
             "schema.org",
@@ -19,10 +15,10 @@ class TestFlatten(unittest.TestCase):
         )
         syntax = "microdata"
         data = extruct.extract(body, uniform=True, syntaxes=[syntax])
-        self.assertEqual(jsonize_dict(data[syntax]), expected[syntax])
+        assert jsonize_dict(data[syntax]) == expected[syntax]
 
         data = extruct.extract(tree, uniform=True, syntaxes=[syntax])
-        self.assertEqual(jsonize_dict(data[syntax]), expected[syntax])
+        assert jsonize_dict(data[syntax]) == expected[syntax]
 
     def test_opengraph(self):
         body, tree, expected = self._testdata_html_and_tree(
@@ -32,10 +28,10 @@ class TestFlatten(unittest.TestCase):
         )
         syntax = "opengraph"
         data = extruct.extract(body, uniform=True, syntaxes=[syntax])
-        self.assertEqual(jsonize_dict(data[syntax]), expected)
+        assert jsonize_dict(data[syntax]) == expected
 
         data = extruct.extract(tree, uniform=True, syntaxes=[syntax])
-        self.assertEqual(jsonize_dict(data[syntax]), expected)
+        assert jsonize_dict(data[syntax]) == expected
 
     def test_microdata_with_returning_node(self):
         body, tree, expected = self._testdata_html_and_tree(
@@ -48,13 +44,13 @@ class TestFlatten(unittest.TestCase):
             body, uniform=True, return_html_node=True, syntaxes=[syntax]
         )
         replace_node_ref_with_node_id(data[syntax])
-        self.assertEqual(jsonize_dict(data[syntax]), expected[syntax])
+        assert jsonize_dict(data[syntax]) == expected[syntax]
 
         data = extruct.extract(
             tree, uniform=True, return_html_node=True, syntaxes=[syntax]
         )
         replace_node_ref_with_node_id(data[syntax])
-        self.assertEqual(jsonize_dict(data[syntax]), expected[syntax])
+        assert jsonize_dict(data[syntax]) == expected[syntax]
 
     def test_microformat(self):
         body = get_testdata("misc", "microformat_test.html")
@@ -62,7 +58,7 @@ class TestFlatten(unittest.TestCase):
             get_testdata("misc", "microformat_flat_test.json").decode("UTF-8")
         )
         data = extruct.extract(body, uniform=True, syntaxes=["microformat"])
-        self.assertEqual(jsonize_dict(data["microformat"]), expected)
+        assert jsonize_dict(data["microformat"]) == expected
 
     def _testdata_html_and_tree(self, root, path1, path2):
         body = get_testdata(root, path1)

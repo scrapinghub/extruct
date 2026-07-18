@@ -2,7 +2,7 @@
 extruct
 =======
 
-.. image:: https://github.com/scrapinghub/extruct/workflows/build/badge.svg?branch=master
+.. image:: https://github.com/scrapinghub/extruct/actions/workflows/python-package.yml/badge.svg?branch=master
     :target: https://github.com/scrapinghub/extruct/actions
     :alt: Build Status
 
@@ -727,7 +727,7 @@ Development version
 ::
 
     mkvirtualenv extruct
-    pip install -r requirements-dev.txt
+    pip install --group dev
 
 
 Tests

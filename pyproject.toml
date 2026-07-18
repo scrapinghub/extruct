@@ -1,23 +1,157 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [ "setuptools>=77" ]
+
+[project]
+name = "extruct"
+description = "Extract embedded metadata from HTML markup"
+readme = "README.rst"
+keywords = [ "extruct" ]
+license-files = [ "LICENSE" ]
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dynamic = [ "version" ]
+dependencies = [
+    "html-text>=0.5.1",
+    "jstyleson",
+    "lxml",
+    "lxml-html-clean",
+    "mf2py>=1.1.0",
+    "pyrdfa3",
+    "rdflib>=6.0.0",
+    "w3lib",
+]
+[[project.authors]]
+name = "Scrapinghub"
+email = "info@scrapinghub.com"
+[[project.maintainers]]
+name = "Scrapinghub"
+email = "info@scrapinghub.com"
+[project.optional-dependencies]
+cli = [ "requests" ]
+[project.scripts]
+extruct = "extruct.tool:main"
+[project.urls]
+Homepage = "https://github.com/scrapinghub/extruct"
+
+[dependency-groups]
+dev = [
+    "pre-commit",
+    "pytest>=9.1.1",
+    "pytest-cov",
+    "readme-renderer",
+    "readme-renderer[md]",
+    "tox>=4.21",
+]
+
+[tool.setuptools]
+include-package-data = true
+[tool.setuptools.dynamic]
+version = { file = "extruct/VERSION" }
+[tool.setuptools.package-data]
+extruct = [ "VERSION" ]
+[tool.setuptools.packages.find]
+exclude = [ "tests" ]
+
+[tool.isort]
+profile = "black"
+
+[tool.pyproject-fmt]
+indent = 4
+keep_full_version = true
+table_format = "long"
+
 [tool.mypy]
+disallow_any_generics = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+warn_unreachable = true
+extra_checks = true
+strict_equality = true
+strict_equality_for_none = true
 show_column_numbers = true
-
-disallow_untyped_defs=true
-disallow_incomplete_defs=true
-check_untyped_defs=true
-
-warn_redundant_casts=true
-warn_unused_ignores=true
-warn_return_any=true
-
-strict_equality=true
-
+warn_unused_configs = true
 [[tool.mypy.overrides]]
 module = [
-    'mf2py.*',
-    'pyRdfa.*',
-    'rdflib.*',
-    'jstyleson.*',
-    'urlparse.*',
-    'html_text.*',
+    "html_text.*",
+    "jstyleson.*",
+    "mf2py.*",
+    "pyRdfa.*",
+    "rdflib.*",
+    "urlparse.*",
 ]
-ignore_missing_imports=true
+ignore_missing_imports = true
+
+[tool.pytest]
+filterwarnings = [
+    # mf2py
+    "ignore::DeprecationWarning:mf2py.*",
+    # pyRdfa
+    "ignore::DeprecationWarning:pyRdfa.*",
+]
+testpaths = [
+    "tests",
+]
+
+[tool.coverage.run]
+branch = true
+source = [ "extruct" ]
+omit = [ "extruct/service.py" ]
+
+[tool.tox]
+env_list = [ "py314", "py313", "py312", "py311", "py310", "linters", "twinecheck" ]
+[tool.tox.env.linters]
+package = "skip"
+commands = [
+    [ "pre-commit", "run", "--all-files", "--show-diff-on-failure" ],
+]
+
+[tool.tox.env.py314]
+commands = [
+    [
+        "pytest",
+        "--cov-report=term",
+        "--cov-report=",
+        "--cov-report=xml",
+        "--cov=extruct",
+        "{posargs}"
+    ],
+    [ "python", "-m", "readme_renderer", "README.rst", "-o", "/tmp/README.html" ],
+]
+
+[tool.tox.env.twinecheck]
+deps = [ "build==1.2.1", "twine==5.1" ]
+commands = [
+    [ "python", "-m", "build", "--sdist" ],
+    [ "twine", "check", "dist/*" ],
+]
+
+[tool.tox.env_run_base]
+dependency_groups = [ "dev" ]
+commands = [
+    [
+        "pytest",
+        "--cov-report=term",
+        "--cov-report=",
+        "--cov-report=xml",
+        "--cov=extruct",
+        "{posargs}"
+    ],
+]

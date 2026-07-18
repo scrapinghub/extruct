@@ -1,45 +1,46 @@
 # mypy: disallow_untyped_defs=False
 import json
-import unittest
 
 from extruct.jsonld import JsonLdExtractor
 from tests import get_testdata
 
 
-class TestJsonLD(unittest.TestCase):
+class TestJsonLD:
     def test_schemaorg_CreativeWork(self):
-        self.assertJsonLdCorrect(folder="schema.org", page="CreativeWork.001")
+        self._assert_jsonld_correct(folder="schema.org", page="CreativeWork.001")
 
     def test_songkick(self):
-        self.assertJsonLdCorrect(
+        self._assert_jsonld_correct(
             folder="songkick",
             page="Elysian Fields Brooklyn Tickets, The Owl Music Parlor, 31 Oct 2015",
         )
 
     def test_jsonld_empty_item(self):
-        self.assertJsonLdCorrect(folder="songkick", page="jsonld_empty_item_test")
+        self._assert_jsonld_correct(folder="songkick", page="jsonld_empty_item_test")
 
     def test_jsonld_with_comments(self):
         for page in ["JoinAction.001", "AllocateAction.001"]:
-            self.assertJsonLdCorrect(folder="schema.org.invalid", page=page)
+            self._assert_jsonld_correct(folder="schema.org.invalid", page=page)
 
         for page in ["JoinAction.001", "AllocateAction.001"]:
-            self.assertJsonLdCorrect(folder="custom.invalid", page=page)
+            self._assert_jsonld_correct(folder="custom.invalid", page=page)
 
     def test_jsonld_with_control_characters(self):
-        self.assertJsonLdCorrect(
+        self._assert_jsonld_correct(
             folder="custom.invalid", page="JSONLD_with_control_characters"
         )
 
     def test_jsonld_with_control_characters_comment(self):
-        self.assertJsonLdCorrect(
+        self._assert_jsonld_correct(
             folder="custom.invalid", page="JSONLD_with_control_characters_comment"
         )
 
     def test_jsonld_with_json_including_js_comment(self):
-        self.assertJsonLdCorrect(folder="custom.invalid", page="JSONLD_with_JS_comment")
+        self._assert_jsonld_correct(
+            folder="custom.invalid", page="JSONLD_with_JS_comment"
+        )
 
-    def assertJsonLdCorrect(self, folder, page):
+    def _assert_jsonld_correct(self, folder, page):
         body, expected = self._get_body_expected(folder, page)
         self._check_jsonld(body, expected)
 
@@ -51,7 +52,7 @@ class TestJsonLD(unittest.TestCase):
     def _check_jsonld(self, body, expected):
         jsonlde = JsonLdExtractor()
         data = jsonlde.extract(body)
-        self.assertEqual(data, expected)
+        assert data == expected
 
     def test_null(self):
         page = "null_ld_mock"
@@ -62,10 +63,10 @@ class TestJsonLD(unittest.TestCase):
 
         jsonlde = JsonLdExtractor()
         data = jsonlde.extract(body)
-        self.assertEqual(data, expected)
+        assert data == expected
 
     def test_empty_jsonld_script(self):
         jsonlde = JsonLdExtractor()
         body = '<script type="application/ld+json">   \n\n  </script>'
         data = jsonlde.extract(body)
-        self.assertEqual(data, [])
+        assert data == []

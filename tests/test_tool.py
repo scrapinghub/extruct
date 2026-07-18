@@ -28,7 +28,7 @@ class TestTool(unittest.TestCase):
         mock_get.return_value = mock_response
 
         data = metadata_from_url(self.url)
-        self.assertEqual(jsonize_dict(data), expected)
+        assert jsonize_dict(data) == expected
 
     @mock.patch("extruct.tool.requests.get")
     def test_metadata_from_url_jsonld_only(self, mock_get):
@@ -44,7 +44,7 @@ class TestTool(unittest.TestCase):
         mock_get.return_value = mock_response
 
         data = metadata_from_url(self.url, syntaxes=["json-ld"])
-        self.assertEqual(jsonize_dict(data), expected)
+        assert jsonize_dict(data) == expected
 
     @mock.patch("extruct.tool.requests.get")
     def test_metadata_from_url_microdata_only(self, mock_get):
@@ -61,7 +61,7 @@ class TestTool(unittest.TestCase):
 
         data = metadata_from_url(self.url, syntaxes=["microdata"])
 
-        self.assertEqual(jsonize_dict(data), expected)
+        assert jsonize_dict(data) == expected
 
     @mock.patch("extruct.tool.requests.get")
     def test_metadata_from_url_rdfa_only(self, mock_get):
@@ -77,7 +77,7 @@ class TestTool(unittest.TestCase):
         mock_get.return_value = mock_response
 
         data = metadata_from_url(self.url, syntaxes=["rdfa"])
-        self.assertEqual(jsonize_dict(data), expected)
+        assert jsonize_dict(data) == expected
 
     @mock.patch("extruct.tool.requests.get")
     def test_metadata_from_url_opengraph_only(self, mock_get):
@@ -93,7 +93,7 @@ class TestTool(unittest.TestCase):
         mock_get.return_value = mock_response
 
         data = metadata_from_url(self.url, syntaxes=["opengraph"])
-        self.assertEqual(jsonize_dict(data), expected)
+        assert jsonize_dict(data) == expected
 
     @mock.patch("extruct.tool.requests.get")
     def test_metadata_from_url_microformat_only(self, mock_get):
@@ -109,7 +109,7 @@ class TestTool(unittest.TestCase):
         mock_get.return_value = mock_response
 
         data = metadata_from_url(self.url, syntaxes=["microformat"])
-        self.assertEqual(jsonize_dict(data), expected)
+        assert jsonize_dict(data) == expected
 
     @mock.patch("extruct.tool.requests.get")
     def test_metadata_from_url_unauthorized_page(self, mock_get):
@@ -127,7 +127,7 @@ class TestTool(unittest.TestCase):
         mock_response.raise_for_status.side_effect = http_error
 
         data = metadata_from_url(url)
-        self.assertEqual(data, expected)
+        assert data == expected
 
     @mock.patch("extruct.tool.requests.get")
     def test_main_all(self, mock_get):
@@ -142,7 +142,7 @@ class TestTool(unittest.TestCase):
         mock_get.return_value = mock_response
 
         data = main([self.url])
-        self.assertEqual(data, expected)
+        assert data == expected
 
     @mock.patch("extruct.tool.requests.get")
     def test_main_single_syntax(self, mock_get):
@@ -159,7 +159,7 @@ class TestTool(unittest.TestCase):
         mock_get.return_value = mock_response
 
         data = main([self.url, "--syntax", "opengraph"])
-        self.assertEqual(data, expected)
+        assert data == expected
 
     @mock.patch("extruct.tool.requests.get")
     def test_main_multiple_syntaxes(self, mock_get):
@@ -177,7 +177,7 @@ class TestTool(unittest.TestCase):
         mock_get.return_value = mock_response
 
         data = main([self.url, "--syntax", "opengraph", "microdata"])
-        self.assertEqual(data, expected)
+        assert data == expected
 
 
 def build_mock_response(url, encoding="utf-8", content="", reason="OK", status=200):

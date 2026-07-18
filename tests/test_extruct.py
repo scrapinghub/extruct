@@ -92,3 +92,24 @@ class TestGeneric(unittest.TestCase):
         # ignore exceptions
         data = extruct.extract(body, errors="log")
         assert data == {}
+
+    def test_errors_ignore_keeps_valid_jsonld_siblings(self):
+        body = (
+            "<html><head>"
+            '<script type="application/ld+json">'
+            '{"@type":"Person","name":"Ada"}'
+            "</script>"
+            '<script type="application/ld+json">{not-json}</script>'
+            "</head></html>"
+        )
+        expected = {"json-ld": [{"@type": "Person", "name": "Ada"}]}
+        data = extruct.extract(body, errors="ignore", syntaxes=["json-ld"])
+        self.assertEqual(data, expected)
+
+        with self.assertLogs("extruct.jsonld", level="ERROR") as cm:
+            data = extruct.extract(body, errors="log", syntaxes=["json-ld"])
+        self.assertEqual(data, expected)
+        self.assertTrue(any("json-ld script" in line for line in cm.output))
+
+        with self.assertRaises(ValueError):
+            extruct.extract(body, errors="strict", syntaxes=["json-ld"])

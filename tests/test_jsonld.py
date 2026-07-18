@@ -69,3 +69,29 @@ class TestJsonLD(unittest.TestCase):
         body = '<script type="application/ld+json">   \n\n  </script>'
         data = jsonlde.extract(body)
         self.assertEqual(data, [])
+
+    def test_malformed_sibling_raises_by_default(self):
+        jsonlde = JsonLdExtractor()
+        body = (
+            "<html><head>"
+            '<script type="application/ld+json">'
+            '{"@type":"Person","name":"Ada"}'
+            "</script>"
+            '<script type="application/ld+json">{not-json}</script>'
+            "</head></html>"
+        )
+        with self.assertRaises(ValueError):
+            jsonlde.extract(body)
+
+    def test_malformed_sibling_skipped_when_ignoring(self):
+        body = (
+            "<html><head>"
+            '<script type="application/ld+json">'
+            '{"@type":"Person","name":"Ada"}'
+            "</script>"
+            '<script type="application/ld+json">{not-json}</script>'
+            "</head></html>"
+        )
+        data = JsonLdExtractor(errors="ignore").extract(body)
+        self.assertEqual(data, [{"@type": "Person", "name": "Ada"}])
+

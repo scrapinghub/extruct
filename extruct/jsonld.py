@@ -5,7 +5,7 @@ JSON-LD extractor
 
 import lxml.etree
 
-from extruct.utils import parse_html, parse_json
+from extruct.utils import _parse_json, parse_html
 
 
 class JsonLdExtractor:
@@ -30,7 +30,7 @@ class JsonLdExtractor:
         script = node.xpath("string()").strip()
         if not script:
             return
-        data = parse_json(script)
+        data = _parse_json(script)
         if isinstance(data, list):
             yield from data
         elif isinstance(data, dict):

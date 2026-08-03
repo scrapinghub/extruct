@@ -14,33 +14,38 @@ def parse_html(html, encoding):
     return lxml.html.fromstring(html, parser=parser)
 
 
-HTML_OR_JS_COMMENTLINE = re.compile(r"^\s*(//.*|<!--.*?-->)")
+_HTML_COMMENTLINE = re.compile(r"^\s*<!--.*?-->")
 
 
-def parse_json(json_string):
+def _parse_json(json_string):
     try:
         return json.loads(json_string, strict=False)
     except ValueError:
         pass
 
-    # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
-    json_string = HTML_OR_JS_COMMENTLINE.sub("", json_string)
+    # Comments are stripped once, up front: the error offsets used below must
+    # refer to the same string that json.loads() reads. jstyleson.dispose()
+    # handles JavaScript comments and trailing commas, but not HTML comments.
+    json_string = jstyleson.dispose(_HTML_COMMENTLINE.sub("", json_string))
 
+    # Each iteration escapes one quote and never adds one, so the loop runs at
+    # most as many times as there are quotes in the string.
     while True:
         try:
-            return jstyleson.loads(json_string, strict=False)
+            return json.loads(json_string, strict=False)
         except json.JSONDecodeError as error:
-            # unescaped quote inside a string value: escape it and retry
+            # An unescaped double quote inside a string value ends that value
+            # early, so the parser finds text where it expects the next item.
+            # Escape the quote that ended the value and try again. The reported
+            # position is past any whitespace that follows the quote.
+            quote = json_string.rfind('"', 0, error.pos)
             if (
-                error.msg == "Expecting ',' delimiter"
-                and json_string[error.pos - 1] == '"'
+                error.msg != "Expecting ',' delimiter"
+                or quote < 0
+                or json_string[quote + 1 : error.pos].strip()
             ):
-                insertion_position = error.pos - 1
-                prefix = json_string[:insertion_position]
-                suffix = json_string[insertion_position:]
-                json_string = prefix + "\\" + suffix
-                continue
-            raise
+                raise
+            json_string = json_string[:quote] + "\\" + json_string[quote:]
 
 
 def parse_xmldom_html(html, encoding):

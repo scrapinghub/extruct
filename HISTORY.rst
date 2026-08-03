@@ -2,6 +2,68 @@
 History
 =======
 
+v0.18.0 (2024-11-08)
+--------------------
+
+* Addded support for the ``valueRequired`` and ``valueName`` fields of `action
+  I/O <https://schema.org/docs/actions.html#part-4>`_ to the microdata parser.
+
+v0.17.0 (2024-05-29)
+--------------------
+
+* Added support for Python 3.12 (PR #218)
+* Added support for lxml >= 5.2.0 (PR #217, #234)
+* Cleaned up and modernized the code (PR #214, #219, #220, #222, #223, #224,
+  #225, #226, #227)
+* Improved the pre-commit and CI configuration (PR #226, #233)
+
+v0.16.0 (2023-07-07)
+--------------------
+
+* identical with v0.15
+
+v0.15.0 (2023-07-07)
+--------------------
+
+* Allow extruct to receive a parsed tree, instead of
+  an HTML string (PR #206)
+* Added support for Python 3.10 and 3.11
+* Removed support for Python 3.7 (PR #206)
+* Code auto-formatted with black & isort
+
+v0.14.0 (2022-10-25)
+--------------------
+
+* Removed support for Python 2.7 and 3.5 (PR #200)
+* Removed rdflib-jsonld dependency (PR #188)
+* Fixed typo in dublincore definitions (PR #190)
+* Fixed linguist stats (which language is used) (PR #180)
+
+v0.13.0 (2021-07-26)
+--------------------
+
+* Support for rdflib 6.0.0 (PR #177)
+* Fix for when jsonld is null (PR #56)
+* Documentation fixe (PR #173)
+
+v0.12.0 (2020-12-28)
+--------------------
+
+* Support for rdflib 5.0.0 and up.
+  When upgrading, we recommend switching to latest versions of
+  rdflib, mf2py, rdflib-jsonld and pyrdfa3. (PR #161)
+* Support for Python 3.8 and 3.9
+* Show full README on PyPI (PR #162)
+* README rendering fixed and tested (PR #170)
+* Using github actions instead of Travis CI
+
+v0.11.0 (2020-11-23)
+--------------------
+
+* support Dublin Core Metadata (DC-HTML-2003) (PR #101)
+* support the non-standard ``product`` Open Graph namespace (PR #152)
+* move release documentation to the wiki (PR #150)
+
 v0.10.0 (2020-09-01)
 --------------------
 

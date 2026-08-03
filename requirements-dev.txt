@@ -3,8 +3,12 @@
 
 -r requirements.txt
 
-pytest
 tox
-flake8
-
 bumpversion
+
+pytest
+pytest-cov
+readme_renderer
+mock
+black
+pre-commit

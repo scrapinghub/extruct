@@ -1,17 +1,17 @@
-# -*- coding: utf-8 -*-
+# mypy: disallow_untyped_defs=False
 """
 JSON-LD extractor
 """
-
-import json
 
 import lxml.etree
 
 from extruct.utils import parse_html, parse_json
 
 
-class JsonLdExtractor(object):
-    _xp_jsonld = lxml.etree.XPath('descendant-or-self::script[@type="application/ld+json"]')
+class JsonLdExtractor:
+    _xp_jsonld = lxml.etree.XPath(
+        'descendant-or-self::script[@type="application/ld+json"]'
+    )
 
     def extract(self, htmlstring, base_url=None, encoding="UTF-8"):
         tree = parse_html(htmlstring, encoding=encoding)
@@ -20,13 +20,18 @@ class JsonLdExtractor(object):
     def extract_items(self, document, base_url=None):
         return [
             item
-            for items in map(self._extract_items, self._xp_jsonld(document))
-            if items for item in items if item
+            for items in map(self._extract_items, self._xp_jsonld(document))  # type: ignore[arg-type]
+            if items
+            for item in items
+            if item
         ]
 
     def _extract_items(self, node):
-        data = parse_json(node.xpath('string()'))
+        script = node.xpath("string()").strip()
+        if not script:
+            return
+        data = parse_json(script)
         if isinstance(data, list):
-            return data
+            yield from data
         elif isinstance(data, dict):
-            return [data]
+            yield data

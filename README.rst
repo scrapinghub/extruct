@@ -2,8 +2,8 @@
 extruct
 =======
 
-.. image:: https://img.shields.io/travis/scrapinghub/extruct/master.svg
-    :target: https://travis-ci.org/scrapinghub/extruct
+.. image:: https://github.com/scrapinghub/extruct/workflows/build/badge.svg?branch=master
+    :target: https://github.com/scrapinghub/extruct/actions
     :alt: Build Status
 
 .. image:: https://img.shields.io/codecov/c/github/scrapinghub/extruct/master.svg?maxAge=2592000
@@ -216,6 +216,15 @@ It is possible to select which syntaxes to extract by passing a list with the de
                 'http://ogp.me/ns#url': [ { '@value': 'https://www.songkick.com/artists/236156-elysian-fields'}],
                 'http://www.facebook.com/2008/fbmlapp_id': [ { '@value': '308540029359'}]}]}
 
+Alternatively, if you already parsed the HTML before calling extruct, you can use the tree instead of the HTML string: ::
+
+  >>> # using the request from the previous example
+  >>> base_url = get_base_url(r.text, r.url)
+  >>> from extruct.utils import parse_html
+  >>> tree = parse_html(r.text)
+  >>> data = extruct.extract(tree, base_url, syntaxes=['microdata', 'opengraph', 'rdfa'])
+
+Microformat format doesn't support the HTML tree, so you need to use a HTML string.
 
 Uniform
 +++++++
@@ -264,7 +273,7 @@ To do so set ``uniform=True`` when calling ``extract``, it's false by default fo
                 'http://ogp.me/ns#url': [ { '@value': 'https://www.songkick.com/artists/236156-elysian-fields'}],
                 'http://www.facebook.com/2008/fbmlapp_id': [ { '@value': '308540029359'}]}]}
 
-NB rdfa structure is not uniformed yet
+NB rdfa structure is not uniformed yet.
 
 Returning HTML node
 +++++++++++++++++++
@@ -680,11 +689,11 @@ extract the metadata from it directly from the command line.
 Dependencies
 ++++++++++++
 
-The command line tool depends on requests_, which is not installed by default
+The command line tool depends on ``requests``, which is not installed by default
 when you install **extruct**. In order to use the command line tool, you can
 install **extruct** with the `cli` extra requirements::
 
-    pip install extruct[cli]
+    pip install 'extruct[cli]'
 
 
 Usage
@@ -735,3 +744,4 @@ Use tox_ to run tests with different Python versions::
 
 
 .. _tox: https://testrun.org/tox/latest/
+.. _ogp: https://ogp.me/

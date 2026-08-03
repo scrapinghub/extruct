@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# mypy: disallow_untyped_defs=False
 import json
 import unittest
 
@@ -11,8 +11,10 @@ class TestMicroformat(unittest.TestCase):
     maxDiff = None
 
     def test_microformat(self):
-        body = get_testdata('misc', 'microformat_test.html')
-        expected = json.loads(get_testdata('misc', 'microformat_test.json').decode('UTF-8'))
+        body = get_testdata("misc", "microformat_test.html")
+        expected = json.loads(
+            get_testdata("misc", "microformat_test.json").decode("UTF-8")
+        )
 
         opengraphe = MicroformatExtractor()
         data = opengraphe.extract(body)

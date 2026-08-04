@@ -150,6 +150,17 @@ class TestRDFa(unittest.TestCase):
             ["http://creativecommons.org/ns#", "http://purl.org/dc/terms/"],
         )
 
+    def test_list_order_kept(self):
+        data = RDFaExtractor().extract(
+            get_testdata("misc", "rdfa_inlist.html"),
+            base_url="http://www.example.com/index.html",
+        )
+        creators = data[0]["http://purl.org/dc/terms/creator"][0]["@list"]
+        self.assertEqual(
+            [creator["@value"] for creator in creators],
+            ["Charlie", "Alice", "Bob"],
+        )
+
     def test_expanded_opengraph_support(self):
         body = get_testdata("misc", "expanded_OG_support_test.html")
         expected = json.loads(

@@ -130,6 +130,20 @@ class TestTool(unittest.TestCase):
         self.assertEqual(data, expected)
 
     @mock.patch("extruct.tool.requests.get")
+    def test_metadata_from_url_base_href(self, mock_get):
+        mock_get.return_value = build_mock_response(
+            url="https://example.com/a/b",
+            content=(
+                b'<html><head><base href="/c/"></head><body><div itemscope>'
+                b'<a itemprop="url" href="d">x</a></div></body></html>'
+            ),
+        )
+        data = metadata_from_url("https://example.com/a/b", syntaxes=["microdata"])
+        self.assertEqual(
+            data["microdata"][0]["properties"]["url"], "https://example.com/c/d"
+        )
+
+    @mock.patch("extruct.tool.requests.get")
     def test_main_all(self, mock_get):
         expected = self.expected
         expected["url"] = self.url
@@ -185,6 +199,9 @@ def build_mock_response(url, encoding="utf-8", content="", reason="OK", status=2
     mock_response.url = url
     mock_response.encoding = encoding
     mock_response.content = content
+    mock_response.text = (
+        content.decode(encoding) if isinstance(content, bytes) else content
+    )
     mock_response.reason = reason
     mock_response.status_code = status
     return mock_response

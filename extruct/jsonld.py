@@ -37,7 +37,6 @@ class JsonLdExtractor:
         if not script:
             return
         try:
-            # TODO: `strict=False` can be configurable if needed
             data = json.loads(script, strict=False)
         except ValueError:
             # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments

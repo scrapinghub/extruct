@@ -1,0 +1,10 @@
+[
+  {
+    "@context": "http://schema.org",
+    "@type": "VideoObject",
+    "name": "Some video",
+    "author": "Bob's Channel",
+    "description": "Featuring R&B and caf\u00e9 music",
+    "filePath": "C:\\videos\\clip.mp4"
+  }
+]

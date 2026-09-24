@@ -92,3 +92,19 @@ class TestGeneric(unittest.TestCase):
         # ignore exceptions
         data = extruct.extract(body, errors="log")
         assert data == {}
+
+    def test_invalid_jsonld_script_is_contained(self):
+        body = get_testdata("custom.invalid", "JSONLD_mixed_valid_invalid.html")
+        expected = json.loads(
+            get_testdata("custom.invalid", "JSONLD_mixed_valid_invalid.jsonld").decode(
+                "UTF-8"
+            )
+        )
+
+        with self.assertRaises(ValueError):
+            extruct.extract(body, syntaxes=["json-ld"])
+
+        for errors in ["log", "ignore"]:
+            data = extruct.extract(body, syntaxes=["json-ld"], errors=errors)
+            # The whole syntax used to be dropped because of the one bad script.
+            self.assertEqual(data["json-ld"], expected)

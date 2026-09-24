@@ -18,7 +18,8 @@ HTML_OR_JS_COMMENTLINE = re.compile(r"^\s*(//.*|<!--.*-->)")
 
 # Framing that pages use to hide JSON-LD from HTML/XML parsers: HTML comments,
 # CDATA sections, and the JavaScript line comments that often accompany them.
-FRAMING_TOKENS = re.compile(r"//|/\*|\*/|<!--|-->|<!\[CDATA\[|\]\]>|\s+")
+# HTML allows a comment to end with either "-->" or "--!>".
+FRAMING_TOKENS = re.compile(r"//|/\*|\*/|<!--|--!?>|<!\[CDATA\[|\]\]>|\s+")
 
 
 def _is_framing_line(line):

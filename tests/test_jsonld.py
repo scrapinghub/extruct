@@ -2,7 +2,12 @@
 import json
 import unittest
 
-from extruct.jsonld import JsonLdExtractor, _repair_escapes, _repair_quotes
+from extruct.jsonld import (
+    JsonLdExtractor,
+    _is_framing_line,
+    _repair_escapes,
+    _repair_quotes,
+)
 from tests import get_testdata
 
 
@@ -83,6 +88,7 @@ class TestJsonLD(unittest.TestCase):
             "/* <![CDATA[ */\n{}\n/* ]]> */",
             "<![CDATA[\n{}\n]]>",
             "<!--\n{}\n-->",
+            "<!--\n{}\n--!>",
             "// leading comment\n{}",
             "{}\n// trailing comment",
         ]
@@ -92,6 +98,16 @@ class TestJsonLD(unittest.TestCase):
                     wrapper.format(payload)
                 )
                 self.assertEqual(jsonlde.extract(body), expected)
+
+    def test_is_framing_line(self):
+        # HTML allows a comment to end with either "-->" or "--!>", so both
+        # have to be recognised here rather than left to the trailing-junk step
+        for line in ["<!--", "-->", "--!>", "<![CDATA[", "]]>", "// ]]>", "  ", ""]:
+            with self.subTest(line=line):
+                self.assertTrue(_is_framing_line(line))
+        for line in ["{", '"a": 1', "}", "// a real comment"]:
+            with self.subTest(line=line):
+                self.assertFalse(_is_framing_line(line))
 
     def test_framing_does_not_touch_slashes_in_values(self):
         jsonlde = JsonLdExtractor()

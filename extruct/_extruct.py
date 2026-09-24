@@ -99,7 +99,7 @@ def extract(
         processors.append(
             (
                 "json-ld",
-                JsonLdExtractor().extract_items,
+                JsonLdExtractor(errors=errors).extract_items,
                 tree,
             )
         )

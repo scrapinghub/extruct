@@ -1,0 +1,12 @@
+[
+  {
+    "@context": "http://schema.org",
+    "@type": "Product",
+    "name": "A valid product, before the broken script"
+  },
+  {
+    "@context": "http://schema.org",
+    "@type": "Offer",
+    "price": "9.99"
+  }
+]

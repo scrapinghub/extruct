@@ -1,0 +1,16 @@
+[
+  {
+    "@context": "http://schema.org",
+    "@type": "Recipe",
+    "name": "Snowmen",
+    "recipeInstructions": [
+      "1. blablabla two \"buttons\".5. Dab  Snowmen!"
+    ]
+  },
+  {
+    "@context": "http://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Community Kitchen",
+    "description": "<p style=\"text-align: left;\">Open daily.\nCall ahead.</p>"
+  }
+]

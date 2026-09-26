@@ -109,7 +109,7 @@ class DomHtmlMixin:
             a = Attr(name)
             a.value = value
             attrs[name] = a
-        return NamedNodeMap(attrs, {}, self)
+        return NamedNodeMap(attrs, {}, self)  # type: ignore[arg-type]
 
     @property
     def parentNode(self):

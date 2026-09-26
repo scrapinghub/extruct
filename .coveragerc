@@ -2,3 +2,7 @@
 branch = true
 source = extruct
 omit = extruct/service.py
+
+[report]
+exclude_also =
+    if TYPE_CHECKING:

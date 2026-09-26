@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING, Any, cast
 from xml.dom import Node
 from xml.dom.minidom import Attr, NamedNodeMap
 
-import lxml.etree
 from lxml.etree import ElementBase, XPath, _ElementUnicodeResult, tostring
 from lxml.html import HtmlElement, HtmlElementClassLookup, HTMLParser
 
@@ -18,14 +17,6 @@ if TYPE_CHECKING:
     _DomHtmlMixinBase = HtmlElement
 else:
     _DomHtmlMixinBase = object
-
-# _ElementStringResult is removed in lxml >= 5.1.1.
-_ElementStringResult: type[bytes] | None = getattr(
-    lxml.etree, "_ElementStringResult", None
-)
-_TEXT_RESULT_TYPES: tuple[type, ...] = (_ElementUnicodeResult,) + (
-    (_ElementStringResult,) if _ElementStringResult else ()
-)
 
 
 class DomElementUnicodeResult:
@@ -59,8 +50,8 @@ def lxmlDomNodeType(node: object) -> int:
     if isinstance(node, ElementBase):
         return Node.ELEMENT_NODE
 
-    elif isinstance(node, _TEXT_RESULT_TYPES):
-        if node.is_attribute:  # type: ignore[attr-defined]
+    elif isinstance(node, _ElementUnicodeResult):
+        if node.is_attribute:
             return Node.ATTRIBUTE_NODE
         else:
             return Node.TEXT_NODE
@@ -128,14 +119,8 @@ class DomHtmlMixin(_DomHtmlMixinBase):
             if isinstance(n, ElementBase):
                 yield n
 
-            elif isinstance(n, _TEXT_RESULT_TYPES):
-
-                if isinstance(n, _ElementUnicodeResult):
-                    n = DomElementUnicodeResult(n)
-                else:
-                    n.nodeType = Node.TEXT_NODE  # type: ignore[attr-defined]
-                    n.data = n  # type: ignore[attr-defined]
-                yield n
+            elif isinstance(n, _ElementUnicodeResult):
+                yield DomElementUnicodeResult(n)
 
     @property
     def childNodes(self) -> Iterator[HtmlElement | DomTextNode]:
@@ -154,10 +139,7 @@ class DomHtmlMixin(_DomHtmlMixinBase):
 
     @property
     def data(self) -> str:
-        if isinstance(self, _TEXT_RESULT_TYPES):
-            return cast(str, self)
-        else:
-            raise RuntimeError
+        raise RuntimeError
 
     def toxml(self, encoding: str | None = None) -> str | bytes:
         return tostring(self, encoding=encoding if encoding is not None else "unicode")

@@ -42,7 +42,7 @@ class TestRDFa(unittest.TestCase):
 
         bnode_ids = set(re.findall(r'"_:(\w+)"', jsld))
         for i, bnid in enumerate(bnode_ids, start=1):
-            jsld = jsld.replace(bnid, "%06d" % i)
+            jsld = jsld.replace(bnid, f"{i:06d}")
         return jsld
 
     def prettify(self, a, normalize_bnode_ids=True):

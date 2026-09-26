@@ -58,8 +58,8 @@ def extract(
         base_url = url
     if not (isinstance(syntaxes, list) and all(v in SYNTAXES for v in syntaxes)):
         raise ValueError(
-            "syntaxes must be a list with any or all (default) of"
-            "these values: {}".format(SYNTAXES)
+            "syntaxes must be a list with any or all (default) of "
+            f"these values: {SYNTAXES}"
         )
     if errors not in ["log", "ignore", "strict"]:
         raise ValueError(
@@ -191,9 +191,7 @@ def extract(
                 if errors == "log":
                     output[syntax] = []
                     logger.exception(
-                        "Failed to uniform extracted for {}, raises {}".format(
-                            syntax, e
-                        )
+                        f"Failed to uniform extracted for {syntax}, raises {e}"
                     )
                 if errors == "strict":
                     raise

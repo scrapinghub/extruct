@@ -195,6 +195,11 @@ class LxmlMicrodataExtractor:
         )
         return [(p, value) for p in props]
 
+    def _extract_url(self, node, attr, base_url):
+        # Fall back to the content attribute, e.g. for lazy-loaded images.
+        url = strip_html5_whitespace(node.get(attr) or node.get("content") or "")
+        return urljoin(base_url, url) if url else ""
+
     def _extract_property_value(self, node, items_seen, base_url, itemids, force=False):
         # http://www.w3.org/TR/microdata/#values
         if not force and node.get("itemscope") is not None:
@@ -217,13 +222,13 @@ class LxmlMicrodataExtractor:
             "track",
             "video",
         ):
-            return urljoin(base_url, strip_html5_whitespace(node.get("src", "")))
+            return self._extract_url(node, "src", base_url)
 
         elif node.tag in ("a", "area", "link"):
-            return urljoin(base_url, strip_html5_whitespace(node.get("href", "")))
+            return self._extract_url(node, "href", base_url)
 
         elif node.tag in ("object",):
-            return urljoin(base_url, strip_html5_whitespace(node.get("data", "")))
+            return self._extract_url(node, "data", base_url)
 
         elif node.tag in ("data", "meter"):
             return node.get("value", "")

@@ -159,6 +159,28 @@ class TestMicrodata(unittest.TestCase):
         data = mde.extract(body, "http://www.example.com/microdata/test")
         self.assertEqual(data, expected)
 
+    def test_missing_url(self):
+        body = b"""<div itemscope itemtype="http://schema.org/Product">
+        <img itemprop="image" data-src="lazy.jpg" content="http://example.com/a.jpg">
+        <img itemprop="image" src="" content="b.jpg">
+        <img itemprop="image">
+        <a itemprop="url">x</a>
+        <img itemprop="image" src="c.jpg" content="ignored.jpg">
+        </div>"""
+        data = MicrodataExtractor().extract(body, "http://example.com/p.html")
+        self.assertEqual(
+            data[0]["properties"],
+            {
+                "image": [
+                    "http://example.com/a.jpg",
+                    "http://example.com/b.jpg",
+                    "",
+                    "http://example.com/c.jpg",
+                ],
+                "url": "",
+            },
+        )
+
 
 class TestMicrodataFlat(unittest.TestCase):
 

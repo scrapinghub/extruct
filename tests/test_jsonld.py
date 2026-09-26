@@ -69,3 +69,14 @@ class TestJsonLD(unittest.TestCase):
         body = '<script type="application/ld+json">   \n\n  </script>'
         data = jsonlde.extract(body)
         self.assertEqual(data, [])
+
+    def test_invalid_jsonld_script(self):
+        body = (
+            '<script type="application/ld+json">{invalid}</script>'
+            '<script type="application/ld+json">{"foo": "bar"}</script>'
+        )
+        with self.assertRaises(ValueError):
+            JsonLdExtractor().extract(body)
+        for errors in ("log", "ignore"):
+            data = JsonLdExtractor(errors=errors).extract(body)
+            self.assertEqual(data, [{"foo": "bar"}])

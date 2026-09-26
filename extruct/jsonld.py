@@ -4,6 +4,7 @@ JSON-LD extractor
 """
 
 import json
+import logging
 import re
 
 import jstyleson
@@ -13,11 +14,19 @@ from extruct.utils import parse_html
 
 HTML_OR_JS_COMMENTLINE = re.compile(r"^\s*(//.*|<!--.*-->)")
 
+logger = logging.getLogger(__name__)
+
 
 class JsonLdExtractor:
     _xp_jsonld = lxml.etree.XPath(
         'descendant-or-self::script[@type="application/ld+json"]'
     )
+
+    def __init__(self, errors="strict"):
+        """With *errors* set to ``"log"`` or ``"ignore"``, scripts that are not
+        valid JSON are skipped, logging the error or not respectively, instead
+        of raising an exception."""
+        self._errors = errors
 
     def extract(self, htmlstring, base_url=None, encoding="UTF-8"):
         tree = parse_html(htmlstring, encoding=encoding)
@@ -37,12 +46,23 @@ class JsonLdExtractor:
         if not script:
             return
         try:
-            # TODO: `strict=False` can be configurable if needed
-            data = json.loads(script, strict=False)
+            data = self._load_json(script)
         except ValueError:
-            # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
-            data = jstyleson.loads(HTML_OR_JS_COMMENTLINE.sub("", script), strict=False)
+            if self._errors == "strict":
+                raise
+            if self._errors == "log":
+                logger.exception(f"Skipping invalid JSON-LD: {script!r}")
+            return
         if isinstance(data, list):
             yield from data
         elif isinstance(data, dict):
             yield data
+
+    @staticmethod
+    def _load_json(script):
+        try:
+            # TODO: `strict=False` can be configurable if needed
+            return json.loads(script, strict=False)
+        except ValueError:
+            # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
+            return jstyleson.loads(HTML_OR_JS_COMMENTLINE.sub("", script), strict=False)

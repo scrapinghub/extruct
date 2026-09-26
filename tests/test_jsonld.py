@@ -1,59 +1,61 @@
-# mypy: disallow_untyped_defs=False
+from __future__ import annotations
+
 import json
 import unittest
+from typing import Any
 
 from extruct.jsonld import JsonLdExtractor
 from tests import get_testdata
 
 
 class TestJsonLD(unittest.TestCase):
-    def test_schemaorg_CreativeWork(self):
+    def test_schemaorg_CreativeWork(self) -> None:
         self.assertJsonLdCorrect(folder="schema.org", page="CreativeWork.001")
 
-    def test_songkick(self):
+    def test_songkick(self) -> None:
         self.assertJsonLdCorrect(
             folder="songkick",
             page="Elysian Fields Brooklyn Tickets, The Owl Music Parlor, 31 Oct 2015",
         )
 
-    def test_jsonld_empty_item(self):
+    def test_jsonld_empty_item(self) -> None:
         self.assertJsonLdCorrect(folder="songkick", page="jsonld_empty_item_test")
 
-    def test_jsonld_with_comments(self):
+    def test_jsonld_with_comments(self) -> None:
         for page in ["JoinAction.001", "AllocateAction.001"]:
             self.assertJsonLdCorrect(folder="schema.org.invalid", page=page)
 
         for page in ["JoinAction.001", "AllocateAction.001"]:
             self.assertJsonLdCorrect(folder="custom.invalid", page=page)
 
-    def test_jsonld_with_control_characters(self):
+    def test_jsonld_with_control_characters(self) -> None:
         self.assertJsonLdCorrect(
             folder="custom.invalid", page="JSONLD_with_control_characters"
         )
 
-    def test_jsonld_with_control_characters_comment(self):
+    def test_jsonld_with_control_characters_comment(self) -> None:
         self.assertJsonLdCorrect(
             folder="custom.invalid", page="JSONLD_with_control_characters_comment"
         )
 
-    def test_jsonld_with_json_including_js_comment(self):
+    def test_jsonld_with_json_including_js_comment(self) -> None:
         self.assertJsonLdCorrect(folder="custom.invalid", page="JSONLD_with_JS_comment")
 
-    def assertJsonLdCorrect(self, folder, page):
+    def assertJsonLdCorrect(self, folder: str, page: str) -> None:
         body, expected = self._get_body_expected(folder, page)
         self._check_jsonld(body, expected)
 
-    def _get_body_expected(self, folder, page):
+    def _get_body_expected(self, folder: str, page: str) -> tuple[bytes, Any]:
         body = get_testdata(folder, "{}.html".format(page))
         expected = get_testdata(folder, "{}.jsonld".format(page))
         return body, json.loads(expected.decode("utf8"))
 
-    def _check_jsonld(self, body, expected):
+    def _check_jsonld(self, body: bytes, expected: Any) -> None:
         jsonlde = JsonLdExtractor()
         data = jsonlde.extract(body)
         self.assertEqual(data, expected)
 
-    def test_null(self):
+    def test_null(self) -> None:
         page = "null_ld_mock"
         body = get_testdata("misc", "{}.html".format(page))
         expected = json.loads(
@@ -64,7 +66,7 @@ class TestJsonLD(unittest.TestCase):
         data = jsonlde.extract(body)
         self.assertEqual(data, expected)
 
-    def test_empty_jsonld_script(self):
+    def test_empty_jsonld_script(self) -> None:
         jsonlde = JsonLdExtractor()
         body = '<script type="application/ld+json">   \n\n  </script>'
         data = jsonlde.extract(body)

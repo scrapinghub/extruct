@@ -1,13 +1,17 @@
-# mypy: disallow_untyped_defs=False
 """
 JSON-LD extractor
 """
 
+from __future__ import annotations
+
 import json
 import re
+from collections.abc import Iterator
+from typing import Any
 
 import jstyleson
 import lxml.etree
+from lxml.html import HtmlElement
 
 from extruct.utils import parse_html
 
@@ -19,20 +23,27 @@ class JsonLdExtractor:
         'descendant-or-self::script[@type="application/ld+json"]'
     )
 
-    def extract(self, htmlstring, base_url=None, encoding="UTF-8"):
+    def extract(
+        self,
+        htmlstring: str | bytes,
+        base_url: str | None = None,
+        encoding: str = "UTF-8",
+    ) -> list[Any]:
         tree = parse_html(htmlstring, encoding=encoding)
         return self.extract_items(tree, base_url=base_url)
 
-    def extract_items(self, document, base_url=None):
+    def extract_items(
+        self, document: HtmlElement, base_url: str | None = None
+    ) -> list[Any]:
         return [
             item
-            for items in map(self._extract_items, self._xp_jsonld(document))  # type: ignore[arg-type]
+            for items in map(self._extract_items, self._xp_jsonld(document))
             if items
             for item in items
             if item
         ]
 
-    def _extract_items(self, node):
+    def _extract_items(self, node: HtmlElement) -> Iterator[Any]:
         script = node.xpath("string()").strip()
         if not script:
             return

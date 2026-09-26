@@ -1,5 +1,10 @@
-# mypy: disallow_untyped_defs=False
+from __future__ import annotations
+
 import re
+from collections.abc import Iterator
+from typing import Any
+
+from lxml.html import HtmlElement
 
 from extruct.utils import parse_html
 
@@ -19,14 +24,21 @@ _OG_NAMESPACES = {
 class OpenGraphExtractor:
     """OpenGraph extractor following extruct API."""
 
-    def extract(self, htmlstring, base_url=None, encoding="UTF-8"):
+    def extract(
+        self,
+        htmlstring: str | bytes,
+        base_url: str | None = None,
+        encoding: str = "UTF-8",
+    ) -> list[dict[str, Any]]:
         tree = parse_html(htmlstring, encoding=encoding)
         return list(self.extract_items(tree, base_url=base_url))
 
-    def extract_items(self, document, base_url=None):
+    def extract_items(
+        self, document: HtmlElement, base_url: str | None = None
+    ) -> Iterator[dict[str, Any]]:
         # OpenGraph defines a web page as a single rich object.
         for head in document.xpath("//head"):
-            html_elems = document.head.xpath("parent::html")
+            html_elems = head.xpath("parent::html")
             namespaces = self.get_namespaces(html_elems[0]) if html_elems else {}
             namespaces.update(self.get_namespaces(head))
             props = []
@@ -41,5 +53,5 @@ class OpenGraphExtractor:
             if props:
                 yield {"namespace": namespaces, "properties": props}
 
-    def get_namespaces(self, element):
+    def get_namespaces(self, element: HtmlElement) -> dict[str, str]:
         return dict(_PREFIX_PATTERN.findall(element.attrib.get("prefix", "")))

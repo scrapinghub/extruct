@@ -39,7 +39,7 @@ def metadata_from_url(
     return result
 
 
-def main(args: Any | None = None) -> Any:
+def main(args: list[str] | None = None) -> str:
     parser = argparse.ArgumentParser(prog="extruct", description=__doc__)
     arg = parser.add_argument
     arg("url", help="The target URL")
@@ -74,8 +74,12 @@ def main(args: Any | None = None) -> Any:
         help="errors: set to 'log'(default) to log the exceptions, 'ignore' to ignore"
         " them or 'strict' to raise them",
     )
-    args = parser.parse_args(args)
+    parsed_args = parser.parse_args(args)
     metadata = metadata_from_url(
-        args.url, args.syntaxes, args.uniform, args.schema_context, args.errors
+        parsed_args.url,
+        parsed_args.syntaxes,
+        parsed_args.uniform,
+        parsed_args.schema_context,
+        parsed_args.errors,
     )
     return json.dumps(metadata, indent=2, sort_keys=True)

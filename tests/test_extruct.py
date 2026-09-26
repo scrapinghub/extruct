@@ -1,6 +1,8 @@
-# mypy: disallow_untyped_defs=False
+from __future__ import annotations
+
 import json
 import unittest
+from typing import Any
 
 import pytest
 
@@ -13,7 +15,7 @@ class TestGeneric(unittest.TestCase):
 
     maxDiff = None
 
-    def test_all(self):
+    def test_all(self) -> None:
         body = get_testdata("songkick", "elysianfields.html")
         expected = json.loads(
             get_testdata("songkick", "elysianfields.json").decode("UTF-8")
@@ -24,7 +26,7 @@ class TestGeneric(unittest.TestCase):
 
         self.assertEqual(jsonize_dict(data), expected)
 
-    def test_rdfa_is_preserving_order(self):
+    def test_rdfa_is_preserving_order(self) -> None:
         # See https://github.com/scrapinghub/extruct/issues/116
         body = get_testdata("songkick", "elysianfields_1.html")
         expected = json.loads(
@@ -35,7 +37,7 @@ class TestGeneric(unittest.TestCase):
         )
         self.assertEqual(jsonize_dict(data)["rdfa"], expected["rdfa"])
 
-    def test_microdata_custom_url(self):
+    def test_microdata_custom_url(self) -> None:
         body, expected = self._microdata_custom_url("product_custom_url.json")
         tree = parse_html(body, encoding="UTF-8")
         data = extruct.extract(
@@ -43,7 +45,7 @@ class TestGeneric(unittest.TestCase):
         )
         self.assertEqual(data, expected)
 
-    def test_microdata_with_returning_node(self):
+    def test_microdata_with_returning_node(self) -> None:
         body, expected = self._microdata_custom_url(
             "product_custom_url_and_node_id.json"
         )
@@ -56,7 +58,7 @@ class TestGeneric(unittest.TestCase):
         replace_node_ref_with_node_id(data)
         self.assertEqual(data, expected)
 
-    def test_deprecated_url(self):
+    def test_deprecated_url(self) -> None:
         body, expected = self._microdata_custom_url("product_custom_url.json")
         with pytest.warns(DeprecationWarning):
             data = extruct.extract(
@@ -64,12 +66,12 @@ class TestGeneric(unittest.TestCase):
             )
         self.assertEqual(data, expected)
 
-    def test_extra_kwargs(self):
+    def test_extra_kwargs(self) -> None:
         body, _ = self._microdata_custom_url("product_custom_url.json")
         with self.assertRaises(TypeError):
             extruct.extract(body, foo="bar")  # type: ignore[call-arg]
 
-    def _microdata_custom_url(self, test_file):
+    def _microdata_custom_url(self, test_file: str) -> tuple[bytes, dict[str, Any]]:
         body = get_testdata("schema.org", "product.html")
         expected = {
             "microdata": json.loads(
@@ -78,7 +80,7 @@ class TestGeneric(unittest.TestCase):
         }
         return body, expected
 
-    def test_errors(self):
+    def test_errors(self) -> None:
         body = ""
 
         # raise exceptions

@@ -1,25 +1,31 @@
-# mypy: disallow_untyped_defs=False
 from __future__ import annotations
 
+from collections.abc import Iterator
 from copy import copy, deepcopy
+from typing import TYPE_CHECKING, Any, cast
 from xml.dom import Node
 from xml.dom.minidom import Attr, NamedNodeMap
 
+import lxml.etree
 from lxml.etree import ElementBase, XPath, _ElementUnicodeResult, tostring
-from lxml.html import HtmlElementClassLookup, HTMLParser
+from lxml.html import HtmlElement, HtmlElementClassLookup, HTMLParser
 
-try:
-    from lxml.etree import _ElementStringResult
-except ImportError:
+if TYPE_CHECKING:
+    from typing import Literal
 
-    class _ElementStringResult(bytes):  # type: ignore[no-redef]
-        """
-        _ElementStringResult is removed in lxml >= 5.1.1,
-        so we define it here for compatibility.
-        """
+    from typing_extensions import Self
 
-        def getparent(self):
-            return self._parent  # type: ignore[attr-defined]
+    _DomHtmlMixinBase = HtmlElement
+else:
+    _DomHtmlMixinBase = object
+
+# _ElementStringResult is removed in lxml >= 5.1.1.
+_ElementStringResult: type[bytes] | None = getattr(
+    lxml.etree, "_ElementStringResult", None
+)
+_TEXT_RESULT_TYPES: tuple[type, ...] = (_ElementUnicodeResult,) + (
+    (_ElementStringResult,) if _ElementStringResult else ()
+)
 
 
 class DomElementUnicodeResult:
@@ -27,12 +33,12 @@ class DomElementUnicodeResult:
     ELEMENT_NODE = Node.ELEMENT_NODE
     TEXT_NODE = Node.TEXT_NODE
 
-    def __init__(self, text):
+    def __init__(self, text: str) -> None:
         self.text = text
         self.nodeType = Node.TEXT_NODE
 
     @property
-    def data(self):
+    def data(self) -> str:
         if isinstance(self.text, _ElementUnicodeResult):
             return self.text
         else:
@@ -44,17 +50,17 @@ class DomTextNode:
     ELEMENT_NODE = Node.ELEMENT_NODE
     TEXT_NODE = Node.TEXT_NODE
 
-    def __init__(self, text):
+    def __init__(self, text: str) -> None:
         self.data = text
         self.nodeType = Node.TEXT_NODE
 
 
-def lxmlDomNodeType(node):
+def lxmlDomNodeType(node: object) -> int:
     if isinstance(node, ElementBase):
         return Node.ELEMENT_NODE
 
-    elif isinstance(node, (_ElementStringResult, _ElementUnicodeResult)):
-        if node.is_attribute:
+    elif isinstance(node, _TEXT_RESULT_TYPES):
+        if node.is_attribute:  # type: ignore[attr-defined]
             return Node.ATTRIBUTE_NODE
         else:
             return Node.TEXT_NODE
@@ -62,7 +68,7 @@ def lxmlDomNodeType(node):
         return Node.NOTATION_NODE
 
 
-class DomHtmlMixin:
+class DomHtmlMixin(_DomHtmlMixinBase):
     CDATA_SECTION_NODE = Node.CDATA_SECTION_NODE
     ELEMENT_NODE = Node.ELEMENT_NODE
     TEXT_NODE = Node.TEXT_NODE
@@ -70,59 +76,59 @@ class DomHtmlMixin:
     _xp_childrennodes = XPath("child::node()")
 
     @property
-    def documentElement(self):
-        return self.getroottree().getroot()  # type: ignore[attr-defined]
+    def documentElement(self) -> HtmlElement:
+        return self.getroottree().getroot()
 
     @property
-    def nodeType(self):
+    def nodeType(self) -> int:
         return Node.ELEMENT_NODE
 
     @property
-    def nodeName(self):
+    def nodeName(self) -> str:
         # FIXME: this is a simplification
-        return self.tag  # type: ignore[attr-defined]
+        return cast(str, self.tag)
 
     @property
-    def tagName(self):
-        return self.tag  # type: ignore[attr-defined]
+    def tagName(self) -> str:
+        return cast(str, self.tag)
 
     @property
-    def localName(self):
-        return self.xpath("local-name(.)")  # type: ignore[attr-defined]
+    def localName(self) -> str:
+        return cast(str, self.xpath("local-name(.)"))
 
-    def hasAttribute(self, name):
-        return name in self.attrib  # type: ignore[attr-defined]
+    def hasAttribute(self, name: str) -> bool:
+        return name in self.attrib
 
-    def getAttribute(self, name):
-        return self.get(name)  # type: ignore[attr-defined]
+    def getAttribute(self, name: str) -> str | None:
+        return self.get(name)
 
-    def setAttribute(self, name, value):
-        self.set(name, value)  # type: ignore[attr-defined]
+    def setAttribute(self, name: str, value: str) -> None:
+        self.set(name, value)
 
-    def cloneNode(self, deep):
+    def cloneNode(self, deep: bool) -> Self:
         return deepcopy(self) if deep else copy(self)
 
     @property
-    def attributes(self):
+    def attributes(self) -> NamedNodeMap:
         attrs = {}
-        for name, value in self.attrib.items():  # type: ignore[attr-defined]
+        for name, value in self.attrib.items():
             a = Attr(name)
             a.value = value
             attrs[name] = a
-        return NamedNodeMap(attrs, {}, self)
+        return NamedNodeMap(attrs, {}, self)  # type: ignore[arg-type]
 
     @property
-    def parentNode(self):
-        return self.getparent()  # type: ignore[attr-defined]
+    def parentNode(self) -> HtmlElement | None:
+        return self.getparent()
 
     @property
-    def childNodes_xpath(self):
-        for n in self._xp_childrennodes(self):  # type: ignore[union-attr,arg-type]
+    def childNodes_xpath(self) -> Iterator[Any]:
+        for n in cast("list[Any]", self._xp_childrennodes(self)):
 
             if isinstance(n, ElementBase):
                 yield n
 
-            elif isinstance(n, (_ElementStringResult, _ElementUnicodeResult)):
+            elif isinstance(n, _TEXT_RESULT_TYPES):
 
                 if isinstance(n, _ElementUnicodeResult):
                     n = DomElementUnicodeResult(n)
@@ -132,42 +138,53 @@ class DomHtmlMixin:
                 yield n
 
     @property
-    def childNodes(self):
-        if self.text:  # type: ignore[attr-defined]
-            yield DomTextNode(self.text)  # type: ignore[attr-defined]
-        for n in self.iterchildren():  # type: ignore[attr-defined]
+    def childNodes(self) -> Iterator[HtmlElement | DomTextNode]:
+        if self.text:
+            yield DomTextNode(self.text)
+        for n in self.iterchildren():
             yield n
             if n.tail:
                 yield DomTextNode(n.tail)
 
-    def getElementsByTagName(self, name):
-        return self.iterdescendants(name)  # type: ignore[attr-defined]
+    def getElementsByTagName(self, name: str) -> Iterator[HtmlElement]:
+        return self.iterdescendants(name)
 
-    def getElementById(self, i):
-        return self.get_element_by_id(i)  # type: ignore[attr-defined]
+    def getElementById(self, i: str) -> HtmlElement:
+        return self.get_element_by_id(i)
 
     @property
-    def data(self):
-        if isinstance(self, (_ElementStringResult, _ElementUnicodeResult)):
-            return self
+    def data(self) -> str:
+        if isinstance(self, _TEXT_RESULT_TYPES):
+            return cast(str, self)
         else:
             raise RuntimeError
 
-    def toxml(self, encoding=None):
-        return tostring(self, encoding=encoding if encoding is not None else "unicode")  # type: ignore[call-overload]
+    def toxml(self, encoding: str | None = None) -> str | bytes:
+        return tostring(self, encoding=encoding if encoding is not None else "unicode")
 
 
 class DomHtmlElementClassLookup(HtmlElementClassLookup):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
-        self._lookups = {}
+        self._lookups: dict[tuple[Any, ...], type[HtmlElement]] = {}
 
-    def lookup(self, node_type, document, namespace, name):
+    def lookup(
+        self,
+        node_type: Literal["element", "comment", "PI", "entity"] | None,
+        document: object,
+        namespace: object,
+        name: str,  # type: ignore[override]
+    ) -> type[HtmlElement] | None:
         k = (node_type, document, namespace, name)
         t = self._lookups.get(k)
         if t is None:
             cur = super().lookup(node_type, document, namespace, name)
-            newtype = type("Dom" + cur.__name__, (cur, DomHtmlMixin), {})
+            if cur is None:
+                return None
+            newtype = cast(
+                "type[HtmlElement]",
+                type("Dom" + cur.__name__, (cur, DomHtmlMixin), {}),
+            )
             self._lookups[k] = newtype
             return newtype
         else:
@@ -179,7 +196,7 @@ class XmlDomHTMLParser(HTMLParser):
     objects, compatible with xml.dom API
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         parser_lookup = DomHtmlElementClassLookup()
         self.set_element_class_lookup(parser_lookup)

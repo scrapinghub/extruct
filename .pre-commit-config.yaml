@@ -1,4 +1,10 @@
+exclude: ^tests/samples/
 repos:
+  - hooks:
+    - id: ruff-check
+      args: [--fix]
+    repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.8
   - hooks:
       - id: black
     repo: https://github.com/psf/black-pre-commit-mirror
@@ -13,10 +19,12 @@ repos:
     repo: https://github.com/pre-commit/mirrors-mypy
     rev: v2.1.0
   - hooks:
-    - id: pyupgrade
-    repo: https://github.com/asottile/pyupgrade
-    rev: v3.21.2
+    - id: end-of-file-fixer
+    - id: trailing-whitespace
+    repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
   - hooks:
-      - id: pyproject-fmt
-    repo: https://github.com/tox-dev/pyproject-fmt
-    rev: v2.25.0
+    - id: zizmor
+      args: [--no-progress, --fix]
+    repo: https://github.com/zizmorcore/zizmor-pre-commit
+    rev: v1.28.0

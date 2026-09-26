@@ -2,7 +2,7 @@
 extruct
 =======
 
-.. image:: https://github.com/scrapinghub/extruct/actions/workflows/python-package.yml/badge.svg?branch=master
+.. image:: https://github.com/scrapinghub/extruct/actions/workflows/ci.yml/badge.svg?branch=master
     :target: https://github.com/scrapinghub/extruct/actions
     :alt: Build Status
 
@@ -727,21 +727,16 @@ Development version
 ::
 
     mkvirtualenv extruct
-    pip install --group dev
+    pip install -e .[cli]
 
 
 Tests
 -----
-
-Run tests in current environment::
-
-    py.test tests
-
 
 Use tox_ to run tests with different Python versions::
 
     tox
 
 
-.. _tox: https://testrun.org/tox/latest/
+.. _tox: https://tox.wiki/
 .. _ogp: https://ogp.me/

@@ -44,8 +44,8 @@ class TestJsonLD(unittest.TestCase):
         self._check_jsonld(body, expected)
 
     def _get_body_expected(self, folder, page):
-        body = get_testdata(folder, "{}.html".format(page))
-        expected = get_testdata(folder, "{}.jsonld".format(page))
+        body = get_testdata(folder, f"{page}.html")
+        expected = get_testdata(folder, f"{page}.jsonld")
         return body, json.loads(expected.decode("utf8"))
 
     def _check_jsonld(self, body, expected):
@@ -55,10 +55,8 @@ class TestJsonLD(unittest.TestCase):
 
     def test_null(self):
         page = "null_ld_mock"
-        body = get_testdata("misc", "{}.html".format(page))
-        expected = json.loads(
-            get_testdata("misc", "{}.jsonld".format(page)).decode("UTF-8")
-        )
+        body = get_testdata("misc", f"{page}.html")
+        expected = json.loads(get_testdata("misc", f"{page}.jsonld").decode("UTF-8"))
 
         jsonlde = JsonLdExtractor()
         data = jsonlde.extract(body)

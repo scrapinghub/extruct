@@ -67,7 +67,7 @@ def _strip_framing(script):
     Only whole lines are removed, and only from the ends, so that ``//``
     sequences inside JSON string values are left alone.
     """
-    lines = script.splitlines()
+    lines = script.split("\n")
     start, end = 0, len(lines)
     while start < end and _is_framing_line(lines[start]):
         start += 1

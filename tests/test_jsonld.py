@@ -1,8 +1,10 @@
 # mypy: disallow_untyped_defs=False
 import json
 import unittest
+from unittest import mock
 
-from extruct.jsonld import JsonLdExtractor, _is_framing_line, _repair_escapes
+from extruct import jsonld
+from extruct.jsonld import JsonLdExtractor, _repair_escapes
 from tests import get_testdata
 
 
@@ -130,25 +132,37 @@ class TestJsonLD(unittest.TestCase):
                 body = '<script type="application/ld+json">{}</script>'.format(
                     wrapper.format(payload)
                 )
-                self.assertEqual(jsonlde.extract(body), expected)
-
-    def test_is_framing_line(self):
-        # HTML allows a comment to end with either "-->" or "--!>"
-        for line in ["<!--", "-->", "--!>", "<![CDATA[", "]]>", "// ]]>", "  ", ""]:
-            with self.subTest(line=line):
-                self.assertTrue(_is_framing_line(line))
-        for line in ["{", '"a": 1', "}", "// a real comment"]:
-            with self.subTest(line=line):
-                self.assertFalse(_is_framing_line(line))
+                # the framing is removed outright, so the trailing-junk step
+                # never runs and nothing is reported as ignored
+                with mock.patch.object(jsonld.logger, "warning") as warning:
+                    self.assertEqual(jsonlde.extract(body), expected)
+                warning.assert_not_called()
 
     def test_framing_does_not_touch_slashes_in_values(self):
+        # framed, so that the fallback this is about actually runs
         jsonlde = JsonLdExtractor()
         body = (
             '<script type="application/ld+json">\n'
-            '{\n"url": "http://example.com/a//b"\n}\n'
+            "// <![CDATA[\n"
+            '{"url": "http://example.com/a//b"}\n'
+            "// ]]>\n"
             "</script>"
         )
         self.assertEqual(jsonlde.extract(body), [{"url": "http://example.com/a//b"}])
+
+    def test_framing_keeps_unicode_line_separators(self):
+        # str.splitlines() would break on U+2028 and rejoining would turn it
+        # into a newline inside the value
+        jsonlde = JsonLdExtractor()
+        name = "a\u2028b"
+        body = (
+            '<script type="application/ld+json">\n'
+            "// <![CDATA[\n"
+            '{"name": "' + name + '"}\n'
+            "// ]]>\n"
+            "</script>"
+        )
+        self.assertEqual(jsonlde.extract(body), [{"name": name}])
 
     def test_jsonld_with_trailing_brace(self):
         # https://github.com/scrapinghub/extruct/issues/87

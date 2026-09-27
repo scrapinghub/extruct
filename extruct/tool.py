@@ -5,6 +5,7 @@ import json
 from typing import Any
 
 import requests
+from w3lib.html import get_base_url
 
 import extruct
 from extruct import SYNTAXES
@@ -29,7 +30,7 @@ def metadata_from_url(
     result.update(
         extruct.extract(
             resp.content,
-            base_url=url,  # FIXME: use base url
+            base_url=get_base_url(resp.text, resp.url),
             syntaxes=syntaxes,
             uniform=uniform,
             schema_context=schema_context,

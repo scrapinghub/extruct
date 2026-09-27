@@ -147,4 +147,7 @@ class JsonLdExtractor:
         except ValueError:
             # Some sites incorrectly HTML-encode the JSON-LD syntax. Only unescape
             # after the original input fails, so entities in valid JSON values stay literal.
-            yield from _iter_jsonld(html.unescape(script))
+            unescaped = html.unescape(script)
+            if unescaped == script:
+                raise
+            yield from _iter_jsonld(unescaped)

@@ -1,6 +1,7 @@
 # mypy: disallow_untyped_defs=False
 import json
 import unittest
+from unittest.mock import patch
 
 from extruct.jsonld import JsonLdExtractor, _repair_escapes
 from tests import get_testdata
@@ -153,17 +154,9 @@ class TestJsonLD(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     jsonlde.extract(body)
 
-    def test_jsonld_with_html_entities(self):
-        """HTML-encoded JSON-LD (e.g. &quot; instead of ") is parsed correctly.
-
-        Some sites incorrectly escape script content as HTML, producing JSON-LD
-        with named entities (&quot;, &amp;) or numeric references (&#34;).
-        See https://github.com/scrapinghub/extruct/issues/208
-        """
-        jsonlde = JsonLdExtractor()
-
-        # Named entity &quot; for double-quotes
-        body_named = (
+    def test_jsonld_with_named_html_entities(self):
+        """See https://github.com/scrapinghub/extruct/issues/208."""
+        body = (
             b"<html><body>"
             b'<script type="application/ld+json">'
             b"{&quot;@context&quot;:&quot;http://schema.org/&quot;,"
@@ -171,9 +164,8 @@ class TestJsonLD(unittest.TestCase):
             b"&quot;name&quot;:&quot;My Product&quot;}"
             b"</script></body></html>"
         )
-        data = jsonlde.extract(body_named)
         self.assertEqual(
-            data,
+            JsonLdExtractor().extract(body),
             [
                 {
                     "@context": "http://schema.org/",
@@ -183,27 +175,28 @@ class TestJsonLD(unittest.TestCase):
             ],
         )
 
-        # Numeric entity &#34; for double-quotes
-        body_numeric = (
+    def test_jsonld_with_numeric_html_entities(self):
+        body = (
             b"<html><body>"
             b'<script type="application/ld+json">'
             b"{&#34;@context&#34;:&#34;http://schema.org/&#34;,"
             b"&#34;@type&#34;:&#34;WebPage&#34;}"
             b"</script></body></html>"
         )
-        data = jsonlde.extract(body_numeric)
-        self.assertEqual(data, [{"@context": "http://schema.org/", "@type": "WebPage"}])
+        self.assertEqual(
+            JsonLdExtractor().extract(body),
+            [{"@context": "http://schema.org/", "@type": "WebPage"}],
+        )
 
-        # Entities inside otherwise valid JSON strings remain literal.
-        body_amp = (
+    def test_html_entity_in_valid_json_value_stays_literal(self):
+        body = (
             b"<html><body>"
             b'<script type="application/ld+json">'
             b'{"@context":"http://schema.org/","@type":"Organization","name":"Foo &amp; Bar"}'
             b"</script></body></html>"
         )
-        data = jsonlde.extract(body_amp)
         self.assertEqual(
-            data,
+            JsonLdExtractor().extract(body),
             [
                 {
                     "@context": "http://schema.org/",
@@ -213,21 +206,42 @@ class TestJsonLD(unittest.TestCase):
             ],
         )
 
-        body_quoted_value = (
+    def test_quote_entity_in_valid_json_value_stays_literal(self):
+        body = (
             b"<html><body>"
             b'<script type="application/ld+json">'
             b'{"description":"Say &quot;hi&quot;"}'
             b"</script></body></html>"
         )
-        data = jsonlde.extract(body_quoted_value)
-        self.assertEqual(data, [{"description": "Say &quot;hi&quot;"}])
+        self.assertEqual(
+            JsonLdExtractor().extract(body),
+            [{"description": "Say &quot;hi&quot;"}],
+        )
 
-        body_comment = (
+    def test_quote_entity_after_comment_stays_literal(self):
+        body = (
             b"<html><body>"
             b'<script type="application/ld+json">'
             b"// generated metadata\n"
             b'{"description":"Say &quot;hi&quot;"}'
             b"</script></body></html>"
         )
-        data = jsonlde.extract(body_comment)
-        self.assertEqual(data, [{"description": "Say &quot;hi&quot;"}])
+        self.assertEqual(
+            JsonLdExtractor().extract(body),
+            [{"description": "Say &quot;hi&quot;"}],
+        )
+
+    def test_unchanged_unescape_reraises_original_error(self):
+        original_error = ValueError("original decoder error")
+        retry_error = ValueError("duplicate retry error")
+        body = '<script type="application/ld+json">not json</script>'
+
+        with patch(
+            "extruct.jsonld._iter_jsonld",
+            side_effect=[original_error, retry_error],
+        ) as iter_jsonld:
+            with self.assertRaises(ValueError) as cm:
+                JsonLdExtractor().extract(body)
+
+        self.assertIs(cm.exception, original_error)
+        self.assertEqual(iter_jsonld.call_count, 1)

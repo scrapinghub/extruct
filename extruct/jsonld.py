@@ -18,8 +18,8 @@ HTML_OR_JS_COMMENTLINE = re.compile(r"^\s*(//.*|<!--.*-->)")
 
 # An escape sequence, matched as a unit so that a "\\" pair is consumed whole
 # and its second backslash cannot be mistaken for the start of another escape.
-ESCAPE_SEQUENCE = re.compile(r"\\(u[0-9a-fA-F]{4}|x[0-9a-fA-F]{2}|.)", re.S)
-VALID_ESCAPE_CHARS = set('"\\/bfnrt')
+_ESCAPE_SEQUENCE = re.compile(r"\\(u[0-9a-fA-F]{4}|x[0-9a-fA-F]{2}|.)", re.S)
+_VALID_ESCAPE_CHARS = set('"\\/bfnrt')
 
 
 def _repair_escape(match):
@@ -29,7 +29,7 @@ def _repair_escape(match):
     if len(escape) == 3 and escape[0] == "x":
         # JavaScript hex escape; JSON only understands the \uXXXX form
         return "\\u00" + escape[1:]
-    if escape in VALID_ESCAPE_CHARS:
+    if escape in _VALID_ESCAPE_CHARS:
         return match.group(0)
     if escape == "'":
         # a JavaScript habit; a single quote needs no escaping in JSON
@@ -47,7 +47,7 @@ def _repair_escapes(script):
     doubled rather than dropped. Valid escapes are left untouched, so this is
     a no-op on well-formed JSON.
     """
-    return ESCAPE_SEQUENCE.sub(_repair_escape, script)
+    return _ESCAPE_SEQUENCE.sub(_repair_escape, script)
 
 
 JSON_SPACE = " \t\r\n"

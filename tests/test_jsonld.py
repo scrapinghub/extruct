@@ -1,6 +1,7 @@
 # mypy: disallow_untyped_defs=False
 import json
 import unittest
+from unittest.mock import patch
 
 from extruct.jsonld import JsonLdExtractor, _repair_escapes
 from tests import get_testdata
@@ -152,3 +153,95 @@ class TestJsonLD(unittest.TestCase):
                 body = '<script type="application/ld+json">{}</script>'.format(script)
                 with self.assertRaises(ValueError):
                     jsonlde.extract(body)
+
+    def test_jsonld_with_named_html_entities(self):
+        """See https://github.com/scrapinghub/extruct/issues/208."""
+        body = (
+            b"<html><body>"
+            b'<script type="application/ld+json">'
+            b"{&quot;@context&quot;:&quot;http://schema.org/&quot;,"
+            b"&quot;@type&quot;:&quot;Product&quot;,"
+            b"&quot;name&quot;:&quot;My Product&quot;}"
+            b"</script></body></html>"
+        )
+        self.assertEqual(
+            JsonLdExtractor().extract(body),
+            [
+                {
+                    "@context": "http://schema.org/",
+                    "@type": "Product",
+                    "name": "My Product",
+                }
+            ],
+        )
+
+    def test_jsonld_with_numeric_html_entities(self):
+        body = (
+            b"<html><body>"
+            b'<script type="application/ld+json">'
+            b"{&#34;@context&#34;:&#34;http://schema.org/&#34;,"
+            b"&#34;@type&#34;:&#34;WebPage&#34;}"
+            b"</script></body></html>"
+        )
+        self.assertEqual(
+            JsonLdExtractor().extract(body),
+            [{"@context": "http://schema.org/", "@type": "WebPage"}],
+        )
+
+    def test_html_entity_in_valid_json_value_stays_literal(self):
+        body = (
+            b"<html><body>"
+            b'<script type="application/ld+json">'
+            b'{"@context":"http://schema.org/","@type":"Organization","name":"Foo &amp; Bar"}'
+            b"</script></body></html>"
+        )
+        self.assertEqual(
+            JsonLdExtractor().extract(body),
+            [
+                {
+                    "@context": "http://schema.org/",
+                    "@type": "Organization",
+                    "name": "Foo &amp; Bar",
+                }
+            ],
+        )
+
+    def test_quote_entity_in_valid_json_value_stays_literal(self):
+        body = (
+            b"<html><body>"
+            b'<script type="application/ld+json">'
+            b'{"description":"Say &quot;hi&quot;"}'
+            b"</script></body></html>"
+        )
+        self.assertEqual(
+            JsonLdExtractor().extract(body),
+            [{"description": "Say &quot;hi&quot;"}],
+        )
+
+    def test_quote_entity_after_comment_stays_literal(self):
+        body = (
+            b"<html><body>"
+            b'<script type="application/ld+json">'
+            b"// generated metadata\n"
+            b'{"description":"Say &quot;hi&quot;"}'
+            b"</script></body></html>"
+        )
+        self.assertEqual(
+            JsonLdExtractor().extract(body),
+            [{"description": "Say &quot;hi&quot;"}],
+        )
+
+    def test_unchanged_unescape_reraises_original_error(self):
+        original_error = ValueError("original decoder error")
+        retry_error = ValueError("duplicate retry error")
+        body = '<script type="application/ld+json">not json</script>'
+
+        with patch(
+            "extruct.jsonld._iter_jsonld",
+            side_effect=[original_error, retry_error],
+        ) as iter_jsonld:
+            with self.assertRaises(ValueError) as cm:
+                JsonLdExtractor().extract(body)
+
+        self.assertIs(cm.exception, original_error)
+        self.assertEqual(iter_jsonld.call_count, 1)

@@ -8,6 +8,7 @@ import json
 import logging
 import re
 from collections import defaultdict
+from functools import partial
 
 rdflib_logger = logging.getLogger("rdflib")
 rdflib_logger.setLevel(logging.ERROR)
@@ -110,13 +111,28 @@ class RDFaExtractor:
             key=lambda props: idx_for_value.get(props.get("@value"), len(ordered))
         )
 
-    def _fix_order(self, jsonld_string, document):
-        """
-        Fix order of rdfa tags in jsonld string
-        by checking the appearance order in the HTML
-        """
-        json_objects = json.loads(jsonld_string)
+    def _sort_unordered_lists(self, data, sort=True):
+        """Give every JSON-LD list whose order carries no meaning a canonical
+        order, since rdflib serializes them in an arbitrary order that changes
+        from execution to execution.
 
+        Objects that only differ in the label of a blank node still get an
+        arbitrary order, because rdflib generates those labels randomly.
+        """
+        if isinstance(data, list):
+            for item in data:
+                self._sort_unordered_lists(item)
+            if sort:
+                data.sort(key=partial(json.dumps, sort_keys=True))
+        elif isinstance(data, dict):
+            for key, value in data.items():
+                # The order of the items of an @list is meaningful.
+                self._sort_unordered_lists(value, sort=key != "@list")
+
+    def _fix_order(self, json_objects, document):
+        """
+        Fix order of rdfa tags by checking the appearance order in the HTML
+        """
         html, head = document.xpath("/html"), document.xpath("//head")
         if not html or not head:
             return json_objects
@@ -164,9 +180,12 @@ class RDFaExtractor:
         if isinstance(jsonld_string, bytes):
             jsonld_string = jsonld_string.decode("utf-8")
 
+        json_objects = json.loads(jsonld_string)
+
+        # hacks to fix the ordering of the output (see issues 116 and 146),
+        # they should be disabled once rdflib and PyRDFa fix themselves
+        self._sort_unordered_lists(json_objects)
         try:
-            # hack to fix the ordering of multi-value properties (see issue 116)
-            # it should be disabled once PyRDFA fixes itself
-            return self._fix_order(jsonld_string, document)
+            return self._fix_order(json_objects, document)
         except:
-            return json.loads(jsonld_string)
+            return json_objects

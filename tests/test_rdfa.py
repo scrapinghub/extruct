@@ -122,6 +122,45 @@ class TestRDFa(unittest.TestCase):
 
         self.assertJsonLDEqual(data, expected)
 
+    def test_deterministic_order(self):
+        # See https://github.com/scrapinghub/extruct/issues/146
+        rdfae = RDFaExtractor()
+        base_url = "http://www.example.com/index.html"
+
+        data = rdfae.extract(
+            get_testdata("w3crdfa", "w3c.rdfaprimer.example011.html"),
+            base_url=base_url,
+        )
+        self.assertEqual(
+            [obj["@id"] for obj in data],
+            [
+                "http://example.com/bob/photos/sunset.jpg",
+                "http://www.example.com/alice/posts/jos_barbecue",
+                "http://www.example.com/alice/posts/trouble_with_bob",
+                "http://www.example.com/index.html",
+            ],
+        )
+
+        data = rdfae.extract(
+            get_testdata("w3crdfa", "w3c.rdfaprimer.example009.html"),
+            base_url=base_url,
+        )
+        self.assertEqual(
+            [obj["@id"] for obj in data[0]["http://www.w3.org/ns/rdfa#usesVocabulary"]],
+            ["http://creativecommons.org/ns#", "http://purl.org/dc/terms/"],
+        )
+
+    def test_list_order_kept(self):
+        data = RDFaExtractor().extract(
+            get_testdata("misc", "rdfa_inlist.html"),
+            base_url="http://www.example.com/index.html",
+        )
+        creators = data[0]["http://purl.org/dc/terms/creator"][0]["@list"]
+        self.assertEqual(
+            [creator["@value"] for creator in creators],
+            ["Charlie", "Alice", "Bob"],
+        )
+
     def test_expanded_opengraph_support(self):
         body = get_testdata("misc", "expanded_OG_support_test.html")
         expected = json.loads(

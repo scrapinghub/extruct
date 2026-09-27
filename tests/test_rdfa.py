@@ -42,7 +42,7 @@ class TestRDFa(unittest.TestCase):
 
         bnode_ids = set(re.findall(r'"_:(\w+)"', jsld))
         for i, bnid in enumerate(bnode_ids, start=1):
-            jsld = jsld.replace(bnid, "%06d" % i)
+            jsld = jsld.replace(bnid, f"{i:06d}")
         return jsld
 
     def prettify(self, a, normalize_bnode_ids=True):
@@ -55,7 +55,7 @@ class TestRDFa(unittest.TestCase):
 
     def test_w3c_rdfalite(self):
         for i in [3, 4, 5]:
-            fileprefix = "w3c.rdfalite.example{:03d}".format(i)
+            fileprefix = f"w3c.rdfalite.example{i:03d}"
             body = get_testdata("w3crdfa", fileprefix + ".html")
             expected = json.loads(
                 get_testdata("w3crdfa", fileprefix + ".expanded.json").decode("UTF-8")
@@ -67,7 +67,7 @@ class TestRDFa(unittest.TestCase):
 
     def test_w3c_rdf11primer(self):
         for i in [14]:
-            fileprefix = "w3c.rdf11primer.example{:03d}".format(i)
+            fileprefix = f"w3c.rdf11primer.example{i:03d}"
             body = get_testdata("w3crdfa", fileprefix + ".html")
             expected = json.loads(
                 get_testdata("w3crdfa", fileprefix + ".expanded.json").decode("UTF-8")
@@ -79,7 +79,7 @@ class TestRDFa(unittest.TestCase):
 
     def test_w3c_rdfaprimer(self):
         for i in [5, 6, 7, 8, 9, 10, 11, 15]:
-            fileprefix = "w3c.rdfaprimer.example{:03d}".format(i)
+            fileprefix = f"w3c.rdfaprimer.example{i:03d}"
             print(fileprefix)
             body = get_testdata("w3crdfa", fileprefix + ".html")
             expected = json.loads(

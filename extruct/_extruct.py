@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import logging
 import warnings
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from lxml.html import HtmlElement
 
@@ -59,7 +60,7 @@ def extract(
     if not (isinstance(syntaxes, list) and all(v in SYNTAXES for v in syntaxes)):
         raise ValueError(
             "syntaxes must be a list with any or all (default) of"
-            "these values: {}".format(SYNTAXES)
+            f"these values: {SYNTAXES}"
         )
     if errors not in ["log", "ignore", "strict"]:
         raise ValueError(
@@ -74,7 +75,7 @@ def extract(
             if errors == "ignore":
                 return {}
             if errors == "log":
-                logger.exception("Failed to parse html, raises {}".format(e))
+                logger.exception(f"Failed to parse html, raises {e}")
                 return {}
             if errors == "strict":
                 raise
@@ -131,7 +132,7 @@ def extract(
             output[syntax] = list(extract(document, base_url=base_url))
         except Exception as e:
             if errors == "log":
-                logger.exception("Failed to extract {}, raises {}".format(syntax, e))
+                logger.exception(f"Failed to extract {syntax}, raises {e}")
             if errors == "ignore":
                 pass
             if errors == "strict":
@@ -191,9 +192,7 @@ def extract(
                 if errors == "log":
                     output[syntax] = []
                     logger.exception(
-                        "Failed to uniform extracted for {}, raises {}".format(
-                            syntax, e
-                        )
+                        f"Failed to uniform extracted for {syntax}, raises {e}"
                     )
                 if errors == "strict":
                     raise

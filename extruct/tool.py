@@ -20,7 +20,7 @@ def metadata_from_url(
     resp = requests.get(url, timeout=30)
     result: dict[str, Any] = {
         "url": url,
-        "status": "{} {}".format(resp.status_code, resp.reason),
+        "status": f"{resp.status_code} {resp.reason}",
     }
     try:
         resp.raise_for_status()

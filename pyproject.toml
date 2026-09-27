@@ -1,23 +1,108 @@
+[build-system]
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "extruct"
+version = "0.18.0"
+description = "Extract embedded metadata from HTML markup"
+dependencies = [
+    "html-text>=0.5.1",
+    "jstyleson",
+    "lxml",
+    "lxml-html-clean",
+    "mf2py>=1.1.0",
+    "pyrdfa3",
+    "rdflib>=6.0.0",
+    "w3lib",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+]
+keywords = ["extruct"]
+license = "BSD-3-Clause"
+license-files = ["LICENSE", "AUTHORS"]
+readme = "README.rst"
+requires-python = ">=3.10"
+authors = [{ name = "Scrapinghub", email = "info@scrapinghub.com" }]
+maintainers = [{ name = "Scrapinghub", email = "info@scrapinghub.com" }]
+
+[project.urls]
+Source = "https://github.com/scrapinghub/extruct"
+Tracker = "https://github.com/scrapinghub/extruct/issues"
+"Release notes" = "https://github.com/scrapinghub/extruct/blob/master/HISTORY.rst"
+
+[project.optional-dependencies]
+cli = ["requests"]
+
+[project.scripts]
+extruct = "extruct.tool:main"
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/extruct",
+  "/tests",
+  "/HISTORY.rst",
+  "/tox.ini",
+]
+
+[tool.bumpversion]
+current_version = "0.18.0"
+commit = true
+tag = true
+tag_name = "v{new_version}"
+
+[tool.coverage.run]
+branch = true
+source = ["extruct"]
+omit = ["extruct/service.py"]
+
+[tool.ruff.lint]
+select = ["UP"]
+
+[tool.isort]
+profile = "black"
+
 [tool.mypy]
+disallow_any_generics = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+warn_unreachable = true
+extra_checks = true
+strict_equality = true
+strict_equality_for_none = true
 show_column_numbers = true
-
-disallow_untyped_defs=true
-disallow_incomplete_defs=true
-check_untyped_defs=true
-
-warn_redundant_casts=true
-warn_unused_ignores=true
-warn_return_any=true
-
-strict_equality=true
+warn_unused_configs = true
 
 [[tool.mypy.overrides]]
 module = [
-    'mf2py.*',
-    'pyRdfa.*',
-    'rdflib.*',
-    'jstyleson.*',
-    'urlparse.*',
-    'html_text.*',
+    "html_text.*",
+    "jstyleson.*",
+    "mf2py.*",
+    "pyRdfa.*",
+    "rdflib.*",
+    "urlparse.*",
 ]
-ignore_missing_imports=true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::DeprecationWarning:mf2py.*",
+    "ignore::DeprecationWarning:pyRdfa.*",
+]
+testpaths = ["tests"]

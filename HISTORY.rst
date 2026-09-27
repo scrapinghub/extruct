@@ -154,13 +154,13 @@ v0.5.0 (2018-06-08)
   ``OpenGraphExtractor``, ``RDFaExtractor``  and ``MicrodataExtractor``
 * individual extractors accept ``base_url`` instead of ``url``, unused keyword
   arguments are removed.
-* In ``w3microdata.extract_items`` ``items_seen`` and ``url`` are no longer 
+* In ``w3microdata.extract_items`` ``items_seen`` and ``url`` are no longer
   class variables but are passed as arguments.
 * In ``w3microdata`` the following functions are now private:
   ``extract_item``, ``extract_property_value``, ``extract_textContent``,
   ``_extract_property``, ``_extract_properties``, ``_extract_property_refs``
   and ``_extract_textContent``.
-* In ``w3microdata`` ``_extract_properties``, ``_extract_property_refs``, 
+* In ``w3microdata`` ``_extract_properties``, ``_extract_property_refs``,
   ``_extract_property``, ``_extract_property_value`` and ``_extract_item``
   now need ``items_seen`` and ``url`` to be passed as arguments.
 * Add argument ``return_html_node`` to ``extract``, it allows to return HTML
@@ -169,9 +169,9 @@ v0.5.0 (2018-06-08)
 
 Warning: backward-incompatible change:
 
-* ``base_url`` is used instead of ``url`` in ``extruct.extract``, ``url`` is 
+* ``base_url`` is used instead of ``url`` in ``extruct.extract``, ``url`` is
   still supported by deprecated.
-* In ``extruct.extract`` default ``base_url`` is now ``None`` to avoid wrong 
+* In ``extruct.extract`` default ``base_url`` is now ``None`` to avoid wrong
   results with ``urljoin``.
 
 

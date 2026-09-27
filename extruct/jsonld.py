@@ -3,6 +3,7 @@
 JSON-LD extractor
 """
 
+import html
 import json
 import logging
 import re
@@ -119,6 +120,35 @@ def _iter_items(data):
         yield data
 
 
+def _iter_jsonld(script):
+    try:
+        # TODO: `strict=False` can be configurable if needed
+        data = json.loads(script, strict=False)
+    except ValueError:
+        # sometimes JSON-decoding errors are due to leading HTML or JavaScript
+        # comments, or to the CDATA/comment framing used to hide JSON-LD from
+        # HTML parsers
+        unwrapped = HTML_OR_JS_COMMENTLINE.sub("", _strip_framing(script)) + "\n"
+        try:
+            data = jstyleson.loads(unwrapped, strict=False)
+        except ValueError:
+            # invalid escape sequences such as \' or \x27 come from
+            # JavaScript string literals finding their way into JSON
+            repaired = _repair_escapes(unwrapped)
+            try:
+                data = jstyleson.loads(repaired, strict=False)
+            except ValueError:
+                # the script may still start with one or more valid values,
+                # followed by trailing junk
+                values = _decode_leading_values(repaired)
+                if not values:
+                    raise
+                for value in values:
+                    yield from _iter_items(value)
+                return
+    yield from _iter_items(data)
+
+
 class JsonLdExtractor:
     _xp_jsonld = lxml.etree.XPath(
         'descendant-or-self::script[@type="application/ld+json"]'
@@ -142,30 +172,11 @@ class JsonLdExtractor:
         if not script:
             return
         try:
-            # TODO: `strict=False` can be configurable if needed
-            data = json.loads(script, strict=False)
+            yield from _iter_jsonld(script)
         except ValueError:
-            # sometimes JSON-decoding errors are due to leading HTML or JavaScript
-            # comments, or to the CDATA/comment framing used to hide JSON-LD from
-            # HTML parsers
-            # jstyleson only strips a "//" comment that is terminated by a
-            # newline, and the trailing one was removed above
-            unwrapped = HTML_OR_JS_COMMENTLINE.sub("", _strip_framing(script)) + "\n"
-            try:
-                data = jstyleson.loads(unwrapped, strict=False)
-            except ValueError:
-                # invalid escape sequences such as \' or \x27 come from
-                # JavaScript string literals finding their way into JSON
-                repaired = _repair_escapes(unwrapped)
-                try:
-                    data = jstyleson.loads(repaired, strict=False)
-                except ValueError:
-                    # the script may still start with one or more valid values,
-                    # followed by trailing junk
-                    values = _decode_leading_values(repaired)
-                    if not values:
-                        raise
-                    for value in values:
-                        yield from _iter_items(value)
-                    return
-        yield from _iter_items(data)
+            # Some sites incorrectly HTML-encode the JSON-LD syntax. Only unescape
+            # after the original input fails, so entities in valid JSON values stay literal.
+            unescaped = html.unescape(script)
+            if unescaped == script:
+                raise
+            yield from _iter_jsonld(unescaped)

@@ -2,7 +2,7 @@
 import json
 import unittest
 
-from extruct.jsonld import JsonLdExtractor
+from extruct.jsonld import JsonLdExtractor, _repair_escapes
 from tests import get_testdata
 
 
@@ -69,6 +69,44 @@ class TestJsonLD(unittest.TestCase):
         body = '<script type="application/ld+json">   \n\n  </script>'
         data = jsonlde.extract(body)
         self.assertEqual(data, [])
+
+    def test_jsonld_with_invalid_escapes(self):
+        # https://github.com/scrapinghub/extruct/issues/171
+        self.assertJsonLdCorrect(
+            folder="custom.invalid", page="JSONLD_with_invalid_escapes"
+        )
+
+    def test_repair_escapes(self):
+        backslash = "\\"
+        cases = [
+            # invalid escapes are repaired
+            (r'"Bob\'s"', '"Bob\'s"'),
+            (r'"Bob\x27s"', r'"Bob\u0027s"'),
+            # any other backslash is doubled, never dropped
+            (r'"\u12"', r'"\\u12"'),
+            (r'"c:\videos"', r'"c:\\videos"'),
+            # valid escapes are left alone
+            (r'"x\\y"', r'"x\\y"'),
+            (r'"q\"b"', r'"q\"b"'),
+            (r'"\u00e9"', r'"\u00e9"'),
+            (r'"c:\temp"', r'"c:\temp"'),
+            # a "\\" pair is consumed whole, so the next escape is still seen
+            ('"x' + backslash * 2 + backslash + "'y\"", '"x' + backslash * 2 + "'y\""),
+        ]
+        for source, expected in cases:
+            with self.subTest(source=source):
+                self.assertEqual(_repair_escapes(source), expected)
+
+    def test_valid_escapes_survive_extraction(self):
+        jsonlde = JsonLdExtractor()
+        body = (
+            '<script type="application/ld+json">'
+            r'{"path": "C:\\Users\\x", "name": "caf\u00e9"}'
+            "</script>"
+        )
+        self.assertEqual(
+            jsonlde.extract(body), [{"path": r"C:\Users\x", "name": "caf\u00e9"}]
+        )
 
     def test_jsonld_with_trailing_brace(self):
         # https://github.com/scrapinghub/extruct/issues/87

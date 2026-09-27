@@ -16,6 +16,40 @@ logger = logging.getLogger(__name__)
 
 HTML_OR_JS_COMMENTLINE = re.compile(r"^\s*(//.*|<!--.*-->)")
 
+# An escape sequence, matched as a unit so that a "\\" pair is consumed whole
+# and its second backslash cannot be mistaken for the start of another escape.
+ESCAPE_SEQUENCE = re.compile(r"\\(u[0-9a-fA-F]{4}|x[0-9a-fA-F]{2}|.)", re.S)
+VALID_ESCAPE_CHARS = set('"\\/bfnrt')
+
+
+def _repair_escape(match):
+    escape = match.group(1)
+    if len(escape) == 5 and escape[0] == "u":
+        return match.group(0)  # \uXXXX, the only multi-character JSON escape
+    if len(escape) == 3 and escape[0] == "x":
+        # JavaScript hex escape; JSON only understands the \uXXXX form
+        return "\\u00" + escape[1:]
+    if escape in VALID_ESCAPE_CHARS:
+        return match.group(0)
+    if escape == "'":
+        # a JavaScript habit; a single quote needs no escaping in JSON
+        return escape
+    # most likely a literal backslash that was never escaped, as in a Windows
+    # path or a regular expression, so keep it rather than lose a character
+    return "\\\\" + escape
+
+
+def _repair_escapes(script):
+    """Rewrite JavaScript escape sequences that JSON does not allow.
+
+    ``\\'`` becomes ``'`` and ``\\x27`` becomes ``\\u0027``. Any other
+    backslash is treated as a literal that should have been escaped, and is
+    doubled rather than dropped. Valid escapes are left untouched, so this is
+    a no-op on well-formed JSON.
+    """
+    return ESCAPE_SEQUENCE.sub(_repair_escape, script)
+
+
 JSON_SPACE = " \t\r\n"
 
 
@@ -89,12 +123,18 @@ class JsonLdExtractor:
             try:
                 data = jstyleson.loads(unwrapped, strict=False)
             except ValueError:
-                # the script may still start with one or more valid values,
-                # followed by trailing junk
-                values = _decode_leading_values(unwrapped)
-                if not values:
-                    raise
-                for value in values:
-                    yield from _iter_items(value)
-                return
+                # invalid escape sequences such as \' or \x27 come from
+                # JavaScript string literals finding their way into JSON
+                repaired = _repair_escapes(unwrapped)
+                try:
+                    data = jstyleson.loads(repaired, strict=False)
+                except ValueError:
+                    # the script may still start with one or more valid values,
+                    # followed by trailing junk
+                    values = _decode_leading_values(repaired)
+                    if not values:
+                        raise
+                    for value in values:
+                        yield from _iter_items(value)
+                    return
         yield from _iter_items(data)

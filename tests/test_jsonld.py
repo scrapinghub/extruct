@@ -1,6 +1,8 @@
-# mypy: disallow_untyped_defs=False
+from __future__ import annotations
+
 import json
 import unittest
+from typing import Any
 from unittest.mock import patch
 
 from extruct import jsonld
@@ -9,53 +11,53 @@ from tests import get_testdata
 
 
 class TestJsonLD(unittest.TestCase):
-    def test_schemaorg_CreativeWork(self):
+    def test_schemaorg_CreativeWork(self) -> None:
         self.assertJsonLdCorrect(folder="schema.org", page="CreativeWork.001")
 
-    def test_songkick(self):
+    def test_songkick(self) -> None:
         self.assertJsonLdCorrect(
             folder="songkick",
             page="Elysian Fields Brooklyn Tickets, The Owl Music Parlor, 31 Oct 2015",
         )
 
-    def test_jsonld_empty_item(self):
+    def test_jsonld_empty_item(self) -> None:
         self.assertJsonLdCorrect(folder="songkick", page="jsonld_empty_item_test")
 
-    def test_jsonld_with_comments(self):
+    def test_jsonld_with_comments(self) -> None:
         for page in ["JoinAction.001", "AllocateAction.001"]:
             self.assertJsonLdCorrect(folder="schema.org.invalid", page=page)
 
         for page in ["JoinAction.001", "AllocateAction.001"]:
             self.assertJsonLdCorrect(folder="custom.invalid", page=page)
 
-    def test_jsonld_with_control_characters(self):
+    def test_jsonld_with_control_characters(self) -> None:
         self.assertJsonLdCorrect(
             folder="custom.invalid", page="JSONLD_with_control_characters"
         )
 
-    def test_jsonld_with_control_characters_comment(self):
+    def test_jsonld_with_control_characters_comment(self) -> None:
         self.assertJsonLdCorrect(
             folder="custom.invalid", page="JSONLD_with_control_characters_comment"
         )
 
-    def test_jsonld_with_json_including_js_comment(self):
+    def test_jsonld_with_json_including_js_comment(self) -> None:
         self.assertJsonLdCorrect(folder="custom.invalid", page="JSONLD_with_JS_comment")
 
-    def assertJsonLdCorrect(self, folder, page):
+    def assertJsonLdCorrect(self, folder: str, page: str) -> None:
         body, expected = self._get_body_expected(folder, page)
         self._check_jsonld(body, expected)
 
-    def _get_body_expected(self, folder, page):
+    def _get_body_expected(self, folder: str, page: str) -> tuple[bytes, Any]:
         body = get_testdata(folder, "{}.html".format(page))
         expected = get_testdata(folder, "{}.jsonld".format(page))
         return body, json.loads(expected.decode("utf8"))
 
-    def _check_jsonld(self, body, expected):
+    def _check_jsonld(self, body: bytes, expected: Any) -> None:
         jsonlde = JsonLdExtractor()
         data = jsonlde.extract(body)
         self.assertEqual(data, expected)
 
-    def test_null(self):
+    def test_null(self) -> None:
         page = "null_ld_mock"
         body = get_testdata("misc", "{}.html".format(page))
         expected = json.loads(
@@ -66,19 +68,19 @@ class TestJsonLD(unittest.TestCase):
         data = jsonlde.extract(body)
         self.assertEqual(data, expected)
 
-    def test_empty_jsonld_script(self):
+    def test_empty_jsonld_script(self) -> None:
         jsonlde = JsonLdExtractor()
         body = '<script type="application/ld+json">   \n\n  </script>'
         data = jsonlde.extract(body)
         self.assertEqual(data, [])
 
-    def test_jsonld_with_invalid_escapes(self):
+    def test_jsonld_with_invalid_escapes(self) -> None:
         # https://github.com/scrapinghub/extruct/issues/171
         self.assertJsonLdCorrect(
             folder="custom.invalid", page="JSONLD_with_invalid_escapes"
         )
 
-    def test_repair_escapes(self):
+    def test_repair_escapes(self) -> None:
         backslash = "\\"
         cases = [
             # invalid escapes are repaired
@@ -99,7 +101,7 @@ class TestJsonLD(unittest.TestCase):
             with self.subTest(source=source):
                 self.assertEqual(_repair_escapes(source), expected)
 
-    def test_valid_escapes_survive_extraction(self):
+    def test_valid_escapes_survive_extraction(self) -> None:
         jsonlde = JsonLdExtractor()
         body = (
             '<script type="application/ld+json">'
@@ -110,11 +112,11 @@ class TestJsonLD(unittest.TestCase):
             jsonlde.extract(body), [{"path": r"C:\Users\x", "name": "caf\u00e9"}]
         )
 
-    def test_jsonld_with_cdata_section(self):
+    def test_jsonld_with_cdata_section(self) -> None:
         # https://github.com/scrapinghub/extruct/issues/143
         self.assertJsonLdCorrect(folder="custom.invalid", page="JSONLD_with_CDATA")
 
-    def test_jsonld_with_framing(self):
+    def test_jsonld_with_framing(self) -> None:
         jsonlde = JsonLdExtractor()
         payload = '{"@context": "http://schema.org/", "name": "Lubelska"}'
         expected = [{"@context": "http://schema.org/", "name": "Lubelska"}]
@@ -138,7 +140,7 @@ class TestJsonLD(unittest.TestCase):
                     self.assertEqual(jsonlde.extract(body), expected)
                 warning.assert_not_called()
 
-    def test_framing_does_not_touch_slashes_in_values(self):
+    def test_framing_does_not_touch_slashes_in_values(self) -> None:
         jsonlde = JsonLdExtractor()
         body = (
             '<script type="application/ld+json">\n'
@@ -149,7 +151,7 @@ class TestJsonLD(unittest.TestCase):
         )
         self.assertEqual(jsonlde.extract(body), [{"url": "http://example.com/a//b"}])
 
-    def test_framing_keeps_unicode_line_separators(self):
+    def test_framing_keeps_unicode_line_separators(self) -> None:
         jsonlde = JsonLdExtractor()
         name = "a\u2028b"
         body = (
@@ -161,14 +163,14 @@ class TestJsonLD(unittest.TestCase):
         )
         self.assertEqual(jsonlde.extract(body), [{"name": name}])
 
-    def test_jsonld_with_unescaped_quotes(self):
+    def test_jsonld_with_unescaped_quotes(self) -> None:
         # https://github.com/scrapinghub/extruct/issues/53
         # https://github.com/scrapinghub/extruct/issues/175
         self.assertJsonLdCorrect(
             folder="custom.invalid", page="JSONLD_with_unescaped_quotes"
         )
 
-    def test_jsonld_with_unescaped_quotes_over_several_lines(self):
+    def test_jsonld_with_unescaped_quotes_over_several_lines(self) -> None:
         # the value itself spans lines, as in the page reported in #175;
         # written inline so the test does not depend on the fixture's newlines
         jsonlde = JsonLdExtractor()
@@ -182,7 +184,7 @@ class TestJsonLD(unittest.TestCase):
             [{"description": '<p style="left">Open daily.\nCall ahead.</p>'}],
         )
 
-    def test_repair_quotes_leaves_valid_json_alone(self):
+    def test_repair_quotes_leaves_valid_json_alone(self) -> None:
         for source in [
             '{"a": "x", "b": ["y", "z"], "c": {"d": 1}}',
             r'{"a": "he said \"hi\" loudly"}',
@@ -193,7 +195,7 @@ class TestJsonLD(unittest.TestCase):
             with self.subTest(source=source):
                 self.assertEqual(_repair_quotes(source), source)
 
-    def test_repair_quotes_escapes_inner_quotes(self):
+    def test_repair_quotes_escapes_inner_quotes(self) -> None:
         cases = [
             ('{"a": "two "buttons" here"}', r'{"a": "two \"buttons\" here"}'),
             ('{"a": "<p style="left">x</p>"}', r'{"a": "<p style=\"left\">x</p>"}'),
@@ -202,7 +204,7 @@ class TestJsonLD(unittest.TestCase):
             with self.subTest(source=source):
                 self.assertEqual(_repair_quotes(source), expected)
 
-    def test_guessed_quotes_are_logged(self):
+    def test_guessed_quotes_are_logged(self) -> None:
         body = (
             '<script type="application/ld+json">'
             '{"a": "two "buttons" here"}'
@@ -213,13 +215,13 @@ class TestJsonLD(unittest.TestCase):
         self.assertEqual(data, [{"a": 'two "buttons" here'}])
         self.assertIn("Guessed which quotes", cm.output[0])
 
-    def test_jsonld_with_trailing_brace(self):
+    def test_jsonld_with_trailing_brace(self) -> None:
         # https://github.com/scrapinghub/extruct/issues/87
         self.assertJsonLdCorrect(
             folder="custom.invalid", page="JSONLD_with_trailing_brace"
         )
 
-    def test_jsonld_with_trailing_junk(self):
+    def test_jsonld_with_trailing_junk(self) -> None:
         jsonlde = JsonLdExtractor()
         expected = [{"@type": "Product", "name": "a"}]
         for script in [
@@ -232,7 +234,7 @@ class TestJsonLD(unittest.TestCase):
                 body = '<script type="application/ld+json">{}</script>'.format(script)
                 self.assertEqual(jsonlde.extract(body), expected)
 
-    def test_jsonld_concatenated_values(self):
+    def test_jsonld_concatenated_values(self) -> None:
         jsonlde = JsonLdExtractor()
         body = (
             '<script type="application/ld+json">'
@@ -244,13 +246,13 @@ class TestJsonLD(unittest.TestCase):
             [{"@type": "Product", "name": "a"}, {"@type": "Offer", "price": "1"}],
         )
 
-    def test_jsonld_trailing_junk_is_logged(self):
+    def test_jsonld_trailing_junk_is_logged(self) -> None:
         body = '<script type="application/ld+json">{"name": "a"} junk</script>'
         with self.assertLogs("extruct.jsonld", level="WARNING") as cm:
             JsonLdExtractor().extract(body)
         self.assertIn("Ignoring 4 trailing characters", cm.output[0])
 
-    def test_truncated_jsonld_still_raises(self):
+    def test_truncated_jsonld_still_raises(self) -> None:
         jsonlde = JsonLdExtractor()
         for script in ['{"@type": "Product", "name":', "hello world"]:
             with self.subTest(script=script):
@@ -258,7 +260,7 @@ class TestJsonLD(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     jsonlde.extract(body)
 
-    def test_jsonld_with_named_html_entities(self):
+    def test_jsonld_with_named_html_entities(self) -> None:
         """See https://github.com/scrapinghub/extruct/issues/208."""
         body = (
             b"<html><body>"
@@ -279,7 +281,7 @@ class TestJsonLD(unittest.TestCase):
             ],
         )
 
-    def test_jsonld_with_numeric_html_entities(self):
+    def test_jsonld_with_numeric_html_entities(self) -> None:
         body = (
             b"<html><body>"
             b'<script type="application/ld+json">'
@@ -292,7 +294,7 @@ class TestJsonLD(unittest.TestCase):
             [{"@context": "http://schema.org/", "@type": "WebPage"}],
         )
 
-    def test_html_entity_in_valid_json_value_stays_literal(self):
+    def test_html_entity_in_valid_json_value_stays_literal(self) -> None:
         body = (
             b"<html><body>"
             b'<script type="application/ld+json">'
@@ -310,7 +312,7 @@ class TestJsonLD(unittest.TestCase):
             ],
         )
 
-    def test_quote_entity_in_valid_json_value_stays_literal(self):
+    def test_quote_entity_in_valid_json_value_stays_literal(self) -> None:
         body = (
             b"<html><body>"
             b'<script type="application/ld+json">'
@@ -322,7 +324,7 @@ class TestJsonLD(unittest.TestCase):
             [{"description": "Say &quot;hi&quot;"}],
         )
 
-    def test_quote_entity_after_comment_stays_literal(self):
+    def test_quote_entity_after_comment_stays_literal(self) -> None:
         body = (
             b"<html><body>"
             b'<script type="application/ld+json">'
@@ -335,7 +337,7 @@ class TestJsonLD(unittest.TestCase):
             [{"description": "Say &quot;hi&quot;"}],
         )
 
-    def test_unchanged_unescape_reraises_original_error(self):
+    def test_unchanged_unescape_reraises_original_error(self) -> None:
         original_error = ValueError("original decoder error")
         retry_error = ValueError("duplicate retry error")
         body = '<script type="application/ld+json">not json</script>'

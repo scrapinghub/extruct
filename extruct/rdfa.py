@@ -1,22 +1,26 @@
-# mypy: disallow_untyped_defs=False
 """
 RDFa extractor
 
 Based on pyrdfa3 and rdflib
 """
+
+from __future__ import annotations
+
 import json
 import logging
 import re
 from collections import defaultdict
+from typing import Any
 
 rdflib_logger = logging.getLogger("rdflib")
 rdflib_logger.setLevel(logging.ERROR)
 
+from lxml.html import HtmlElement
 from pyRdfa import Options
 from pyRdfa import pyRdfa as PyRdfa
 from pyRdfa.initialcontext import initial_context
 from rdflib import Graph
-from rdflib import logger as rdflib_logger  # type: ignore[no-redef]
+from rdflib import logger as rdflib_logger
 
 from extruct.utils import parse_xmldom_html
 
@@ -38,7 +42,9 @@ initial_context["http://www.w3.org/2011/rdfa-context/rdfa-1.1"].ns.update(
 
 
 class RDFaExtractor:
-    def _replaceNS(self, prop, html_element, head_element):
+    def _replaceNS(
+        self, prop: str, html_element: HtmlElement, head_element: HtmlElement
+    ) -> str:
         """Expand namespace to match with returned json (e.g.: og -> 'http://ogp.me/ns#')"""
 
         # context namespaces taken from pyrdfa3
@@ -83,8 +89,8 @@ class RDFaExtractor:
         prefix = prop.split(":")[0]
 
         match = None
-        if head_element.get("prefix"):
-            match = re.search(prefix + r": [^\s]+", head_element.get("prefix"))
+        if head_prefix := head_element.get("prefix"):
+            match = re.search(prefix + r": [^\s]+", head_prefix)
 
         # if namespace taken from prefix attribute in head tag
         if match:
@@ -92,8 +98,8 @@ class RDFaExtractor:
             return ns + prop.split(":")[1]
 
         # if namespace taken from xmlns attribute in html tag
-        if ("xmlns:" + prefix) in html_element.keys():
-            return html_element.get("xmlns:" + prefix) + prop.split(":")[1]
+        if (xmlns := html_element.get("xmlns:" + prefix)) is not None:
+            return xmlns + prop.split(":")[1]
 
         # if namespace present in initial context
         if prefix in context:
@@ -101,7 +107,7 @@ class RDFaExtractor:
 
         return prop
 
-    def _sort(self, unordered, ordered):
+    def _sort(self, unordered: list[dict[str, Any]], ordered: list[str | None]) -> None:
         """Sort the rdfa tags in jsonld string"""
         idx_for_value = dict(
             reversed([(value, idx) for idx, value in enumerate(ordered)])
@@ -110,12 +116,14 @@ class RDFaExtractor:
             key=lambda props: idx_for_value.get(props.get("@value"), len(ordered))
         )
 
-    def _fix_order(self, jsonld_string, document):
+    def _fix_order(
+        self, jsonld_string: str, document: HtmlElement
+    ) -> list[dict[str, Any]]:
         """
         Fix order of rdfa tags in jsonld string
         by checking the appearance order in the HTML
         """
-        json_objects = json.loads(jsonld_string)
+        json_objects: list[dict[str, Any]] = json.loads(jsonld_string)
 
         html, head = document.xpath("/html"), document.xpath("//head")
         if not html or not head:
@@ -123,7 +131,7 @@ class RDFaExtractor:
         html_element, head_element = html[0], head[0]
 
         # Stores the values or each property in appearance order
-        values_for_property = defaultdict(list)
+        values_for_property: defaultdict[str, list[str | None]] = defaultdict(list)
 
         for meta_tag in head_element.xpath("meta[@property]"):
             expanded_property = self._replaceNS(
@@ -140,11 +148,22 @@ class RDFaExtractor:
 
         return json_objects
 
-    def extract(self, htmlstring, base_url=None, encoding="UTF-8", expanded=True):
+    def extract(
+        self,
+        htmlstring: str | bytes,
+        base_url: str | None = None,
+        encoding: str = "UTF-8",
+        expanded: bool = True,
+    ) -> list[dict[str, Any]]:
         tree = parse_xmldom_html(htmlstring, encoding=encoding)
         return self.extract_items(tree, base_url=base_url, expanded=expanded)
 
-    def extract_items(self, document, base_url=None, expanded=True):
+    def extract_items(
+        self,
+        document: HtmlElement,
+        base_url: str | None = None,
+        expanded: bool = True,
+    ) -> list[dict[str, Any]]:
         options = Options(
             output_processor_graph=True,
             embedded_rdf=False,
@@ -169,4 +188,5 @@ class RDFaExtractor:
             # it should be disabled once PyRDFA fixes itself
             return self._fix_order(jsonld_string, document)
         except:
-            return json.loads(jsonld_string)
+            result: list[dict[str, Any]] = json.loads(jsonld_string)
+            return result

@@ -1,15 +1,19 @@
-# mypy: disallow_untyped_defs=False
 """
 JSON-LD extractor
 """
+
+from __future__ import annotations
 
 import html
 import json
 import logging
 import re
+from collections.abc import Iterator
+from typing import Any
 
 import jstyleson
 import lxml.etree
+from lxml.html import HtmlElement
 
 from extruct.utils import parse_html
 
@@ -23,7 +27,7 @@ _ESCAPE_SEQUENCE = re.compile(r"\\(u[0-9a-fA-F]{4}|x[0-9a-fA-F]{2}|.)", re.S)
 _VALID_ESCAPE_CHARS = set('"\\/bfnrt')
 
 
-def _repair_escape(match):
+def _repair_escape(match: re.Match[str]) -> str:
     escape = match.group(1)
     if len(escape) == 5 and escape[0] == "u":
         return match.group(0)  # \uXXXX, the only multi-character JSON escape
@@ -40,7 +44,7 @@ def _repair_escape(match):
     return "\\\\" + escape
 
 
-def _repair_escapes(script):
+def _repair_escapes(script: str) -> str:
     """Rewrite JavaScript escape sequences that JSON does not allow.
 
     ``\\'`` becomes ``'`` and ``\\x27`` becomes ``\\u0027``. Any other
@@ -57,12 +61,12 @@ def _repair_escapes(script):
 _FRAMING_TOKENS = re.compile(r"//|/\*|\*/|<!--|--!?>|<!\[CDATA\[|\]\]>|\s+")
 
 
-def _is_framing_line(line):
+def _is_framing_line(line: str) -> bool:
     """Whether a line consists only of wrapper framing and whitespace."""
     return not _FRAMING_TOKENS.sub("", line)
 
 
-def _strip_framing(script):
+def _strip_framing(script: str) -> str:
     """Drop wrapper framing lines from both ends of a script.
 
     Only whole lines are removed, and only from the ends, so that ``//``
@@ -83,13 +87,13 @@ JSON_SPACE = " \t\r\n"
 _STRUCTURAL_CHARS = set(",}]:")
 
 
-def _skip_space(script, index):
+def _skip_space(script: str, index: int) -> int:
     while index < len(script) and script[index] in JSON_SPACE:
         index += 1
     return index
 
 
-def _repair_quotes(script):
+def _repair_quotes(script: str) -> str:
     """Escape double quotes that appear inside a JSON string.
 
     A quote is taken to close the string only when the next non-space
@@ -127,7 +131,7 @@ def _repair_quotes(script):
     return "".join(out)
 
 
-def _decode_leading_values(script):
+def _decode_leading_values(script: str) -> list[Any]:
     """Decode as many complete JSON values as ``script`` starts with.
 
     Pages sometimes append junk to an otherwise valid value (a stray closing
@@ -154,14 +158,14 @@ def _decode_leading_values(script):
     return values
 
 
-def _iter_items(data):
+def _iter_items(data: Any) -> Iterator[Any]:
     if isinstance(data, list):
         yield from data
     elif isinstance(data, dict):
         yield data
 
 
-def _iter_jsonld(script):
+def _iter_jsonld(script: str) -> Iterator[Any]:
     try:
         # TODO: `strict=False` can be configurable if needed
         data = json.loads(script, strict=False)
@@ -204,20 +208,27 @@ class JsonLdExtractor:
         'descendant-or-self::script[@type="application/ld+json"]'
     )
 
-    def extract(self, htmlstring, base_url=None, encoding="UTF-8"):
+    def extract(
+        self,
+        htmlstring: str | bytes,
+        base_url: str | None = None,
+        encoding: str = "UTF-8",
+    ) -> list[Any]:
         tree = parse_html(htmlstring, encoding=encoding)
         return self.extract_items(tree, base_url=base_url)
 
-    def extract_items(self, document, base_url=None):
+    def extract_items(
+        self, document: HtmlElement, base_url: str | None = None
+    ) -> list[Any]:
         return [
             item
-            for items in map(self._extract_items, self._xp_jsonld(document))  # type: ignore[arg-type]
+            for items in map(self._extract_items, self._xp_jsonld(document))
             if items
             for item in items
             if item
         ]
 
-    def _extract_items(self, node):
+    def _extract_items(self, node: HtmlElement) -> Iterator[Any]:
         script = node.xpath("string()").strip()
         if not script:
             return

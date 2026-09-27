@@ -1,4 +1,5 @@
-# mypy: disallow_untyped_defs=False
+from __future__ import annotations
+
 import copy
 from typing import Any
 from urllib.parse import urljoin, urlparse
@@ -6,7 +7,9 @@ from urllib.parse import urljoin, urlparse
 from extruct.dublincore import get_lower_attrib
 
 
-def _uopengraph(extracted, with_og_array=False):
+def _uopengraph(
+    extracted: list[dict[str, Any]], with_og_array: bool = False
+) -> list[dict[str, Any]]:
     out = []
     for obj in extracted:
         # In order of appearance in the page
@@ -37,7 +40,9 @@ def _uopengraph(extracted, with_og_array=False):
     return out
 
 
-def _umicrodata_microformat(extracted, schema_context):
+def _umicrodata_microformat(
+    extracted: list[dict[str, Any]] | dict[str, Any], schema_context: str
+) -> list[dict[str, Any]]:
     res = []
     if isinstance(extracted, list):
         for obj in extracted:
@@ -47,7 +52,7 @@ def _umicrodata_microformat(extracted, schema_context):
     return res
 
 
-def _udublincore(extracted):
+def _udublincore(extracted: list[dict[str, Any]]) -> list[dict[str, Any]]:
     out = []
     extracted_cpy = copy.deepcopy(extracted)
     for obj in extracted_cpy:
@@ -64,7 +69,7 @@ def _udublincore(extracted):
     return out
 
 
-def _flatten(element, schema_context):
+def _flatten(element: Any, schema_context: str) -> Any:
     if isinstance(element, dict):
         element = flatten_dict(element, schema_context, False)
     elif isinstance(element, list):
@@ -75,7 +80,9 @@ def _flatten(element, schema_context):
     return element
 
 
-def flatten_dict(d, schema_context, add_context):
+def flatten_dict(
+    d: dict[str, Any], schema_context: str, add_context: bool
+) -> dict[str, Any]:
     out = dict(d)
     typ = out.pop("type", None)
     if not typ:
@@ -105,7 +112,7 @@ def flatten_dict(d, schema_context, add_context):
     return out
 
 
-def infer_context(typ, context="http://schema.org"):
+def infer_context(typ: str, context: str = "http://schema.org") -> tuple[str, str]:
     parsed_context = urlparse(typ)
     if parsed_context.netloc:
         base = "".join([parsed_context.scheme, "://", parsed_context.netloc])

@@ -5,3 +5,14 @@ from .opengraph import OpenGraphExtractor
 from .rdfa import RDFaExtractor
 from .w3cmicrodata import MicrodataExtractor
 from .xmldom import XmlDomHTMLParser
+
+__all__ = [
+    "SYNTAXES",
+    "JsonLdExtractor",
+    "MicrodataExtractor",
+    "MicroformatExtractor",
+    "OpenGraphExtractor",
+    "RDFaExtractor",
+    "XmlDomHTMLParser",
+    "extract",
+]

@@ -58,171 +58,84 @@ The simplest example how to use extruct is to call
 ``extruct.extract(htmlstring, base_url=base_url)``
 with some HTML string and an optional base URL.
 
-Let's try this on a webpage that uses all the syntaxes supported (RDFa with `ogp`_).
-
-First fetch the HTML using python-requests and then feed the response body to ``extruct``::
+Let's try this on a webpage that uses all the syntaxes supported (RDFa with `ogp`_)::
 
   >>> import extruct
-  >>> import requests
   >>> import pprint
-  >>> from w3lib.html import get_base_url
   >>>
   >>> pp = pprint.PrettyPrinter(indent=2)
-  >>> r = requests.get('https://www.optimizesmart.com/how-to-use-open-graph-protocol/')
-  >>> base_url = get_base_url(r.text, r.url)
-  >>> data = extruct.extract(r.text, base_url=base_url)
+  >>> html = """<html prefix="og: http://ogp.me/ns#">
+  ... <head>
+  ...   <title>Blue mug</title>
+  ...   <meta name="description" content="A blue ceramic mug.">
+  ...   <meta property="og:title" content="Blue mug">
+  ...   <meta property="og:type" content="product">
+  ...   <script type="application/ld+json">
+  ...     {"@context": "https://schema.org", "@type": "Organization", "name": "Example Shop"}
+  ...   </script>
+  ... </head>
+  ... <body>
+  ...   <div itemscope itemtype="http://schema.org/Product">
+  ...     <span itemprop="name">Blue mug</span>
+  ...     <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+  ...       <span itemprop="price">9.99</span>
+  ...     </div>
+  ...   </div>
+  ...   <div class="h-card"><span class="p-name">Jane Doe</span></div>
+  ... </body>
+  ... </html>"""
+  >>> base_url = "https://example.com/mug"
+  >>> data = extruct.extract(html, base_url=base_url)
   >>>
   >>> pp.pprint(data)
   { 'dublincore': [ { 'elements': [ { 'URI': 'http://purl.org/dc/elements/1.1/description',
-                                        'content': 'What is Open Graph Protocol '
-                                                   'and why you need it? Learn to '
-                                                   'implement Open Graph Protocol '
-                                                   'for Facebook on your website. '
-                                                   'Open Graph Protocol Meta Tags.',
-                                        'name': 'description'}],
-                        'namespaces': {},
-                        'terms': []}],
-
-  'json-ld': [ { '@context': 'https://schema.org',
-                   '@id': '#organization',
+                                      'content': 'A blue ceramic mug.',
+                                      'name': 'description'}],
+                      'namespaces': {},
+                      'terms': []}],
+    'json-ld': [ { '@context': 'https://schema.org',
                    '@type': 'Organization',
-                   'logo': 'https://www.optimizesmart.com/wp-content/uploads/2016/03/optimize-smart-Twitter-logo.jpg',
-                   'name': 'Optimize Smart',
-                   'sameAs': [ 'https://www.facebook.com/optimizesmart/',
-                               'https://uk.linkedin.com/in/analyticsnerd',
-                               'https://www.youtube.com/user/optimizesmart',
-                               'https://twitter.com/analyticsnerd'],
-                   'url': 'https://www.optimizesmart.com/'}],
-    'microdata': [ { 'properties': {'headline': ''},
-                     'type': 'http://schema.org/WPHeader'}],
-    'microformat': [ { 'children': [ { 'properties': { 'category': [ 'specialized-tracking'],
-                                                       'name': [ 'Open Graph '
-                                                                 'Protocol for '
-                                                                 'Facebook '
-                                                                 'explained with '
-                                                                 'examples\n'
-                                                                 '\n'
-                                                                 'Specialized '
-                                                                 'Tracking\n'
-                                                                 '\n'
-                                                                 '\n'
-                                                                 (...)
-                                                                 'Follow '
-                                                                 '@analyticsnerd\n'
-                                                                 '!function(d,s,id){var '
-                                                                 "js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, "
-                                                                 "'script', "
-                                                                 "'twitter-wjs');"]},
-                                       'type': ['h-entry']}],
-                       'properties': { 'name': [ 'Open Graph Protocol for '
-                                                 'Facebook explained with '
-                                                 'examples\n'
-                                                 (...)
-                                                 'Follow @analyticsnerd\n'
-                                                 '!function(d,s,id){var '
-                                                 "js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, "
-                                                 "'script', 'twitter-wjs');"]},
-                       'type': ['h-feed']}],
+                   'name': 'Example Shop'}],
+    'microdata': [ { 'properties': { 'name': 'Blue mug',
+                                     'offers': { 'properties': {'price': '9.99'},
+                                                 'type': 'http://schema.org/Offer'}},
+                     'type': 'http://schema.org/Product'}],
+    'microformat': [{'properties': {'name': ['Jane Doe']}, 'type': ['h-card']}],
     'opengraph': [ { 'namespace': {'og': 'http://ogp.me/ns#'},
-                     'properties': [ ('og:locale', 'en_US'),
-                                     ('og:type', 'article'),
-                                     ( 'og:title',
-                                       'Open Graph Protocol for Facebook '
-                                       'explained with examples'),
-                                     ( 'og:description',
-                                       'What is Open Graph Protocol and why you '
-                                       'need it? Learn to implement Open Graph '
-                                       'Protocol for Facebook on your website. '
-                                       'Open Graph Protocol Meta Tags.'),
-                                     ( 'og:url',
-                                       'https://www.optimizesmart.com/how-to-use-open-graph-protocol/'),
-                                     ('og:site_name', 'Optimize Smart'),
-                                     ( 'og:updated_time',
-                                       '2018-03-09T16:26:35+00:00'),
-                                     ( 'og:image',
-                                       'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'),
-                                     ( 'og:image:secure_url',
-                                       'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg')]}],
-    'rdfa': [ { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/#header',
-                'http://www.w3.org/1999/xhtml/vocab#role': [ { '@id': 'http://www.w3.org/1999/xhtml/vocab#banner'}]},
-              { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/',
-                'article:modified_time': [ { '@value': '2018-03-09T16:26:35+00:00'}],
-                'article:published_time': [ { '@value': '2010-07-02T18:57:23+00:00'}],
-                'article:publisher': [ { '@value': 'https://www.facebook.com/optimizesmart/'}],
-                'article:section': [{'@value': 'Specialized Tracking'}],
-                'http://ogp.me/ns#description': [ { '@value': 'What is Open '
-                                                              'Graph Protocol '
-                                                              'and why you need '
-                                                              'it? Learn to '
-                                                              'implement Open '
-                                                              'Graph Protocol '
-                                                              'for Facebook on '
-                                                              'your website. '
-                                                              'Open Graph '
-                                                              'Protocol Meta '
-                                                              'Tags.'}],
-                'http://ogp.me/ns#image': [ { '@value': 'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'}],
-                'http://ogp.me/ns#image:secure_url': [ { '@value': 'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'}],
-                'http://ogp.me/ns#locale': [{'@value': 'en_US'}],
-                'http://ogp.me/ns#site_name': [{'@value': 'Optimize Smart'}],
-                'http://ogp.me/ns#title': [ { '@value': 'Open Graph Protocol for '
-                                                        'Facebook explained with '
-                                                        'examples'}],
-                'http://ogp.me/ns#type': [{'@value': 'article'}],
-                'http://ogp.me/ns#updated_time': [ { '@value': '2018-03-09T16:26:35+00:00'}],
-                'http://ogp.me/ns#url': [ { '@value': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/'}],
-                'https://api.w.org/': [ { '@id': 'https://www.optimizesmart.com/wp-json/'}]}]}
+                     'properties': [ ('og:title', 'Blue mug'),
+                                     ('og:type', 'product')]}],
+    'rdfa': [ { '@id': 'https://example.com/mug',
+                'http://ogp.me/ns#title': [{'@value': 'Blue mug'}],
+                'http://ogp.me/ns#type': [{'@value': 'product'}]}]}
+
+To extract data from a live webpage, fetch it first, e.g. with python-requests::
+
+  >>> import requests
+  >>> from w3lib.html import get_base_url
+  >>>
+  >>> r = requests.get('https://example.com')
+  >>> data = extruct.extract(r.text, base_url=get_base_url(r.text, r.url))
 
 Select syntaxes
 +++++++++++++++
 It is possible to select which syntaxes to extract by passing a list with the desired ones to extract. Valid values: 'microdata', 'json-ld', 'opengraph', 'microformat', 'rdfa' and 'dublincore'. If no list is passed all syntaxes will be extracted and returned::
 
-  >>> r = requests.get('http://www.songkick.com/artists/236156-elysian-fields')
-  >>> base_url = get_base_url(r.text, r.url)
-  >>> data = extruct.extract(r.text, base_url, syntaxes=['microdata', 'opengraph', 'rdfa'])
+  >>> data = extruct.extract(html, base_url, syntaxes=['microdata', 'opengraph'])
   >>>
   >>> pp.pprint(data)
-  { 'microdata': [],
-    'opengraph': [ { 'namespace': { 'concerts': 'http://ogp.me/ns/fb/songkick-concerts#',
-                                    'fb': 'http://www.facebook.com/2008/fbml',
-                                    'og': 'http://ogp.me/ns#'},
-                     'properties': [ ('fb:app_id', '308540029359'),
-                                     ('og:site_name', 'Songkick'),
-                                     ('og:type', 'songkick-concerts:artist'),
-                                     ('og:title', 'Elysian Fields'),
-                                     ( 'og:description',
-                                       'Find out when Elysian Fields is next '
-                                       'playing live near you. List of all '
-                                       'Elysian Fields tour dates and concerts.'),
-                                     ( 'og:url',
-                                       'https://www.songkick.com/artists/236156-elysian-fields'),
-                                     ( 'og:image',
-                                       'http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg')]}],
-    'rdfa': [ { '@id': 'https://www.songkick.com/artists/236156-elysian-fields',
-                'al:ios:app_name': [{'@value': 'Songkick Concerts'}],
-                'al:ios:app_store_id': [{'@value': '438690886'}],
-                'al:ios:url': [ { '@value': 'songkick://artists/236156-elysian-fields'}],
-                'http://ogp.me/ns#description': [ { '@value': 'Find out when '
-                                                              'Elysian Fields is '
-                                                              'next playing live '
-                                                              'near you. List of '
-                                                              'all Elysian '
-                                                              'Fields tour dates '
-                                                              'and concerts.'}],
-                'http://ogp.me/ns#image': [ { '@value': 'http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg'}],
-                'http://ogp.me/ns#site_name': [{'@value': 'Songkick'}],
-                'http://ogp.me/ns#title': [{'@value': 'Elysian Fields'}],
-                'http://ogp.me/ns#type': [{'@value': 'songkick-concerts:artist'}],
-                'http://ogp.me/ns#url': [ { '@value': 'https://www.songkick.com/artists/236156-elysian-fields'}],
-                'http://www.facebook.com/2008/fbmlapp_id': [ { '@value': '308540029359'}]}]}
+  { 'microdata': [ { 'properties': { 'name': 'Blue mug',
+                                     'offers': { 'properties': {'price': '9.99'},
+                                                 'type': 'http://schema.org/Offer'}},
+                     'type': 'http://schema.org/Product'}],
+    'opengraph': [ { 'namespace': {'og': 'http://ogp.me/ns#'},
+                     'properties': [ ('og:title', 'Blue mug'),
+                                     ('og:type', 'product')]}]}
 
 Alternatively, if you already parsed the HTML before calling extruct, you can use the tree instead of the HTML string: ::
 
-  >>> # using the request from the previous example
-  >>> base_url = get_base_url(r.text, r.url)
   >>> from extruct.utils import parse_html
-  >>> tree = parse_html(r.text)
-  >>> data = extruct.extract(tree, base_url, syntaxes=['microdata', 'opengraph', 'rdfa'])
+  >>> tree = parse_html(html, encoding="UTF-8")
+  >>> data = extruct.extract(tree, base_url, syntaxes=['microdata', 'opengraph'])
 
 Microformat format doesn't support the HTML tree, so you need to use a HTML string.
 
@@ -237,41 +150,16 @@ Another option is to uniform the output of microformat, opengraph, microdata, du
 
 To do so set ``uniform=True`` when calling ``extract``, it's false by default for backward compatibility. Here the same example as before but with uniform set to True: ::
 
-  >>> r = requests.get('http://www.songkick.com/artists/236156-elysian-fields')
-  >>> base_url = get_base_url(r.text, r.url)
-  >>> data = extruct.extract(r.text, base_url, syntaxes=['microdata', 'opengraph', 'rdfa'], uniform=True)
+  >>> data = extruct.extract(html, base_url, syntaxes=['microdata', 'opengraph'], uniform=True)
   >>>
   >>> pp.pprint(data)
-  { 'microdata': [],
-    'opengraph': [ { '@context': { 'concerts': 'http://ogp.me/ns/fb/songkick-concerts#',
-                                 'fb': 'http://www.facebook.com/2008/fbml',
-                                 'og': 'http://ogp.me/ns#'},
-                   '@type': 'songkick-concerts:artist',
-                   'fb:app_id': '308540029359',
-                   'og:description': 'Find out when Elysian Fields is next '
-                                     'playing live near you. List of all '
-                                     'Elysian Fields tour dates and concerts.',
-                   'og:image': 'http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg',
-                   'og:site_name': 'Songkick',
-                   'og:title': 'Elysian Fields',
-                   'og:url': 'https://www.songkick.com/artists/236156-elysian-fields'}],
-    'rdfa': [ { '@id': 'https://www.songkick.com/artists/236156-elysian-fields',
-                'al:ios:app_name': [{'@value': 'Songkick Concerts'}],
-                'al:ios:app_store_id': [{'@value': '438690886'}],
-                'al:ios:url': [ { '@value': 'songkick://artists/236156-elysian-fields'}],
-                'http://ogp.me/ns#description': [ { '@value': 'Find out when '
-                                                              'Elysian Fields is '
-                                                              'next playing live '
-                                                              'near you. List of '
-                                                              'all Elysian '
-                                                              'Fields tour dates '
-                                                              'and concerts.'}],
-                'http://ogp.me/ns#image': [ { '@value': 'http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg'}],
-                'http://ogp.me/ns#site_name': [{'@value': 'Songkick'}],
-                'http://ogp.me/ns#title': [{'@value': 'Elysian Fields'}],
-                'http://ogp.me/ns#type': [{'@value': 'songkick-concerts:artist'}],
-                'http://ogp.me/ns#url': [ { '@value': 'https://www.songkick.com/artists/236156-elysian-fields'}],
-                'http://www.facebook.com/2008/fbmlapp_id': [ { '@value': '308540029359'}]}]}
+  { 'microdata': [ { '@context': 'http://schema.org',
+                     '@type': 'Product',
+                     'name': 'Blue mug',
+                     'offers': {'@type': 'Offer', 'price': '9.99'}}],
+    'opengraph': [ { '@context': {'og': 'http://ogp.me/ns#'},
+                     '@type': 'product',
+                     'og:title': 'Blue mug'}]}
 
 NB rdfa structure is not uniformed yet.
 
@@ -285,30 +173,14 @@ To use that, just set the ``return_html_node`` option of ``extract`` method to `
 As the result, an additional key "nodeHtml" will be included in the result for every
 item. Each node is of ``lxml.etree.Element`` type: ::
 
-  >>> r = requests.get('http://www.rugpadcorner.com/shop/no-muv/')
-  >>> base_url = get_base_url(r.text, r.url)
-  >>> data = extruct.extract(r.text, base_url, syntaxes=['microdata'], return_html_node=True)
+  >>> data = extruct.extract(html, base_url, syntaxes=['microdata'], return_html_node=True)
   >>>
   >>> pp.pprint(data)
-  { 'microdata': [ { 'htmlNode': <Element div at 0x7f10f8e6d3b8>,
-                     'properties': { 'description': 'KEEP RUGS FLAT ON CARPET!\n'
-                                                    'Not your thin sticky pad, '
-                                                    'No-Muv is truly the best!',
-                                     'image': ['', ''],
-                                     'name': ['No-Muv', 'No-Muv'],
-                                     'offers': [ { 'htmlNode': <Element div at 0x7f10f8e6d138>,
-                                                   'properties': { 'availability': 'http://schema.org/InStock',
-                                                                   'price': 'Price:  '
-                                                                            '$45'},
-                                                   'type': 'http://schema.org/Offer'},
-                                                 { 'htmlNode': <Element div at 0x7f10f8e60f48>,
-                                                   'properties': { 'availability': 'http://schema.org/InStock',
-                                                                   'price': '(Select '
-                                                                            'Size/Shape '
-                                                                            'for '
-                                                                            'Pricing)'},
-                                                   'type': 'http://schema.org/Offer'}],
-                                     'ratingValue': ['5.00', '5.00']},
+  { 'microdata': [ { 'htmlNode': <Element div at 0x7b6ac142eaf0>,
+                     'properties': { 'name': 'Blue mug',
+                                     'offers': { 'htmlNode': <Element div at 0x7b6ac14336b0>,
+                                                 'properties': {'price': '9.99'},
+                                                 'type': 'http://schema.org/Offer'}},
                      'type': 'http://schema.org/Product'}]}
 
 Single extractors

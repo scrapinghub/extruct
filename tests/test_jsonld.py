@@ -2,7 +2,7 @@
 import json
 import unittest
 
-from extruct.jsonld import JsonLdExtractor, _repair_escapes
+from extruct.jsonld import JsonLdExtractor, _repair_escapes, _repair_quotes
 from tests import get_testdata
 
 
@@ -107,6 +107,58 @@ class TestJsonLD(unittest.TestCase):
         self.assertEqual(
             jsonlde.extract(body), [{"path": r"C:\Users\x", "name": "caf\u00e9"}]
         )
+
+    def test_jsonld_with_unescaped_quotes(self):
+        # https://github.com/scrapinghub/extruct/issues/53
+        # https://github.com/scrapinghub/extruct/issues/175
+        self.assertJsonLdCorrect(
+            folder="custom.invalid", page="JSONLD_with_unescaped_quotes"
+        )
+
+    def test_jsonld_with_unescaped_quotes_over_several_lines(self):
+        # the value itself spans lines, as in the page reported in #175;
+        # written inline so the test does not depend on the fixture's newlines
+        jsonlde = JsonLdExtractor()
+        body = (
+            '<script type="application/ld+json">'
+            '{"description": "<p style="left">Open daily.\nCall ahead.</p>"}'
+            "</script>"
+        )
+        self.assertEqual(
+            jsonlde.extract(body),
+            [{"description": '<p style="left">Open daily.\nCall ahead.</p>'}],
+        )
+
+    def test_repair_quotes_leaves_valid_json_alone(self):
+        for source in [
+            '{"a": "x", "b": ["y", "z"], "c": {"d": 1}}',
+            r'{"a": "he said \"hi\" loudly"}',
+            '{"a": "", "b": "x"}',
+            '{"url": "http://x.com/a:b", "n": 1}',
+            '{"a": "ends here", "b": 2}',
+        ]:
+            with self.subTest(source=source):
+                self.assertEqual(_repair_quotes(source), source)
+
+    def test_repair_quotes_escapes_inner_quotes(self):
+        cases = [
+            ('{"a": "two "buttons" here"}', r'{"a": "two \"buttons\" here"}'),
+            ('{"a": "<p style="left">x</p>"}', r'{"a": "<p style=\"left\">x</p>"}'),
+        ]
+        for source, expected in cases:
+            with self.subTest(source=source):
+                self.assertEqual(_repair_quotes(source), expected)
+
+    def test_guessed_quotes_are_logged(self):
+        body = (
+            '<script type="application/ld+json">'
+            '{"a": "two "buttons" here"}'
+            "</script>"
+        )
+        with self.assertLogs("extruct.jsonld", level="WARNING") as cm:
+            data = JsonLdExtractor().extract(body)
+        self.assertEqual(data, [{"a": 'two "buttons" here'}])
+        self.assertIn("Guessed which quotes", cm.output[0])
 
     def test_jsonld_with_trailing_brace(self):
         # https://github.com/scrapinghub/extruct/issues/87

@@ -63,3 +63,7 @@ class TestOpengraph(unittest.TestCase):
                 }
             ],
         )
+
+    def test_opengraph_none(self):
+        body = b'<head><meta property="c:y" content="2"></head>'
+        self.assertEqual(OpenGraphExtractor().extract(body), [])

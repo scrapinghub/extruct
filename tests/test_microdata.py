@@ -23,11 +23,9 @@ class TestMicrodata(unittest.TestCase):
 
     def test_schemaorg_CreativeWork(self):
         for i in [1]:
-            body = get_testdata("schema.org", "CreativeWork.{:03d}.html".format(i))
+            body = get_testdata("schema.org", f"CreativeWork.{i:03d}.html")
             expected = json.loads(
-                get_testdata("schema.org", "CreativeWork.{:03d}.json".format(i)).decode(
-                    "UTF-8"
-                )
+                get_testdata("schema.org", f"CreativeWork.{i:03d}.json").decode("UTF-8")
             )
 
             mde = MicrodataExtractor()
@@ -36,11 +34,11 @@ class TestMicrodata(unittest.TestCase):
 
     def test_schemaorg_LocalBusiness(self):
         for i in [2, 3]:
-            body = get_testdata("schema.org", "LocalBusiness.{:03d}.html".format(i))
+            body = get_testdata("schema.org", f"LocalBusiness.{i:03d}.html")
             expected = json.loads(
-                get_testdata(
-                    "schema.org", "LocalBusiness.{:03d}.json".format(i)
-                ).decode("UTF-8")
+                get_testdata("schema.org", f"LocalBusiness.{i:03d}.json").decode(
+                    "UTF-8"
+                )
             )
 
             mde = MicrodataExtractor()
@@ -49,11 +47,11 @@ class TestMicrodata(unittest.TestCase):
 
     def test_schemaorg_MusicRecording(self):
         for i in [1]:
-            body = get_testdata("schema.org", "MusicRecording.{:03d}.html".format(i))
+            body = get_testdata("schema.org", f"MusicRecording.{i:03d}.html")
             expected = json.loads(
-                get_testdata(
-                    "schema.org", "MusicRecording.{:03d}.json".format(i)
-                ).decode("UTF-8")
+                get_testdata("schema.org", f"MusicRecording.{i:03d}.json").decode(
+                    "UTF-8"
+                )
             )
 
             mde = MicrodataExtractor()
@@ -62,11 +60,9 @@ class TestMicrodata(unittest.TestCase):
 
     def test_schemaorg_Event(self):
         for i in [1, 2, 3, 4, 8]:
-            body = get_testdata("schema.org", "Event.{:03d}.html".format(i))
+            body = get_testdata("schema.org", f"Event.{i:03d}.html")
             expected = json.loads(
-                get_testdata("schema.org", "Event.{:03d}.json".format(i)).decode(
-                    "UTF-8"
-                )
+                get_testdata("schema.org", f"Event.{i:03d}.json").decode("UTF-8")
             )
 
             mde = MicrodataExtractor()

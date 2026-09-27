@@ -63,16 +63,14 @@ class TestUniform(unittest.TestCase):
             [
                 {
                     "properties": [
-                        ("prop_{}".format(k), "value_{}".format(v))
-                        for k in range(5)
-                        for v in range(5)
+                        (f"prop_{k}", f"value_{v}") for k in range(5) for v in range(5)
                     ],
                     "namespace": "namespace",
                 }
             ]
         )
         for k in range(5):
-            assert data[0]["prop_{}".format(k)] == "value_0"
+            assert data[0][f"prop_{k}"] == "value_0"
 
         # Ensures that empty is not returned if a property contains any
         # non empty value
@@ -104,9 +102,7 @@ class TestUniform(unittest.TestCase):
             [
                 {
                     "properties": [
-                        ("prop_{}".format(k), "value_{}".format(v))
-                        for k in range(5)
-                        for v in range(5)
+                        (f"prop_{k}", f"value_{v}") for k in range(5) for v in range(5)
                     ],
                     "namespace": "namespace",
                 }
@@ -114,7 +110,7 @@ class TestUniform(unittest.TestCase):
             with_og_array=True,
         )
         for k in range(5):
-            assert data[0]["prop_{}".format(k)] == [
+            assert data[0][f"prop_{k}"] == [
                 "value_0",
                 "value_1",
                 "value_2",

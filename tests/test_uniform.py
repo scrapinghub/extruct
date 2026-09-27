@@ -147,6 +147,53 @@ class TestUniform(unittest.TestCase):
         assert data[0]["prop_non_empty2"] == "value!"
         assert data[0]["prop_non_empty3"] == ["value!", "other value"]
 
+    def test_uopengraph_og_structured(self):
+        properties = [
+            ("og:image:width", "100"),
+            ("og:image", " "),
+            ("og:image:width", "200"),
+            ("og:image", "a.png"),
+            ("og:image", "b.png"),
+            ("og:image:width", "400"),
+            ("og:image:width", "500"),
+            ("og:locale", "en_US"),
+            ("og:locale:alternate", "es_ES"),
+            ("og:locale:alternate", "fr_FR"),
+        ]
+        extracted = [{"properties": properties, "namespace": {}}]
+        data = _uopengraph(extracted, og_structured=True)
+        assert data[0] == {
+            "og:image:width": "100",
+            "og:image": {"og:image": "a.png"},
+            "og:locale": "en_US",
+            "og:locale:alternate": "es_ES",
+            "@context": {},
+        }
+        data = _uopengraph(extracted, with_og_array=True, og_structured=True)
+        assert data[0] == {
+            "og:image:width": "100",
+            "og:image": [
+                {"og:image": "a.png"},
+                {"og:image": "b.png", "og:image:width": "400"},
+            ],
+            "og:locale": "en_US",
+            "og:locale:alternate": ["es_ES", "fr_FR"],
+            "@context": {},
+        }
+
+    def test_extract_og_structured(self):
+        body = (
+            '<html><head><meta property="og:image" content="a.png">'
+            '<meta property="og:image:width" content="400"></head></html>'
+        )
+        data = extruct.extract(
+            body, syntaxes=["opengraph"], uniform=True, og_structured=True
+        )
+        assert data["opengraph"][0]["og:image"] == {
+            "og:image": "a.png",
+            "og:image:width": "400",
+        }
+
     def test_umicroformat(self):
         expected = [
             {

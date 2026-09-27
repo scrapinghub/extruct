@@ -275,6 +275,16 @@ To do so set ``uniform=True`` when calling ``extract``, it's false by default fo
 
 NB rdfa structure is not uniformed yet.
 
+For opengraph, repeated properties keep only their first non-empty value. Set
+``with_og_array=True`` to get a list of all their values instead, and
+``og_structured=True`` to group `structured properties
+<https://ogp.me/#structured>`_ with their parent property, so that each image
+keeps its own size: ::
+
+  >>> data = extruct.extract(html, syntaxes=['opengraph'], uniform=True, with_og_array=True, og_structured=True)
+  >>> data['opengraph'][0]['og:image']
+  [{'og:image': 'a.png'}, {'og:image': 'b.png', 'og:image:width': '400'}]
+
 Returning HTML node
 +++++++++++++++++++
 

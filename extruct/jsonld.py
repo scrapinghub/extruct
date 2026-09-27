@@ -54,10 +54,51 @@ def _repair_escapes(script):
 JSON_SPACE = " \t\r\n"
 
 
+_STRUCTURAL_CHARS = set(",}]:")
+
+
 def _skip_space(script, index):
     while index < len(script) and script[index] in JSON_SPACE:
         index += 1
     return index
+
+
+def _repair_quotes(script):
+    """Escape double quotes that appear inside a JSON string.
+
+    A quote is taken to close the string only when the next non-space
+    character is structural; anywhere else it is content that the page failed
+    to escape. A quote that does sit right before a structural character is
+    still read as the end of the string, so this can truncate a value, but it
+    cannot alter well-formed JSON, where every closing quote is followed by a
+    structural character.
+    """
+    out = []
+    index = 0
+    length = len(script)
+    in_string = False
+    while index < length:
+        char = script[index]
+        if not in_string:
+            out.append(char)
+            in_string = char == '"'
+            index += 1
+        elif char == "\\" and index + 1 < length:
+            # an escape sequence, consumed whole
+            out.append(script[index : index + 2])
+            index += 2
+        elif char == '"':
+            lookahead = _skip_space(script, index + 1)
+            if lookahead >= length or script[lookahead] in _STRUCTURAL_CHARS:
+                out.append(char)
+                in_string = False
+            else:
+                out.append('\\"')
+            index += 1
+        else:
+            out.append(char)
+            index += 1
+    return "".join(out)
 
 
 def _decode_leading_values(script):
@@ -109,14 +150,23 @@ def _iter_jsonld(script):
             try:
                 data = jstyleson.loads(repaired, strict=False)
             except ValueError:
-                # the script may still start with one or more valid values,
-                # followed by trailing junk
-                values = _decode_leading_values(repaired)
-                if not values:
-                    raise
-                for value in values:
-                    yield from _iter_items(value)
-                return
+                # quotes left unescaped inside a string value, which can only
+                # be told apart from the end of the string by guessing
+                requoted = _repair_quotes(repaired)
+                try:
+                    data = jstyleson.loads(requoted, strict=False)
+                except ValueError:
+                    # the script may still start with one or more valid values,
+                    # followed by trailing junk
+                    values = _decode_leading_values(requoted)
+                    if not values:
+                        raise
+                    for value in values:
+                        yield from _iter_items(value)
+                    return
+                # reached only when the guess changed something, since the
+                # unaltered text has already failed above
+                logger.warning("Guessed which quotes a JSON-LD script left unescaped")
     yield from _iter_items(data)
 
 

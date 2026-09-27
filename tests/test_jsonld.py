@@ -69,3 +69,48 @@ class TestJsonLD(unittest.TestCase):
         body = '<script type="application/ld+json">   \n\n  </script>'
         data = jsonlde.extract(body)
         self.assertEqual(data, [])
+
+    def test_jsonld_with_trailing_brace(self):
+        # https://github.com/scrapinghub/extruct/issues/87
+        self.assertJsonLdCorrect(
+            folder="custom.invalid", page="JSONLD_with_trailing_brace"
+        )
+
+    def test_jsonld_with_trailing_junk(self):
+        jsonlde = JsonLdExtractor()
+        expected = [{"@type": "Product", "name": "a"}]
+        for script in [
+            '{"@type": "Product", "name": "a"}}',
+            '{"@type": "Product", "name": "a"};',
+            '[{"@type": "Product", "name": "a"}]}',
+            '{"@type": "Product", "name": "a"} oops trailing words',
+        ]:
+            with self.subTest(script=script):
+                body = '<script type="application/ld+json">{}</script>'.format(script)
+                self.assertEqual(jsonlde.extract(body), expected)
+
+    def test_jsonld_concatenated_values(self):
+        jsonlde = JsonLdExtractor()
+        body = (
+            '<script type="application/ld+json">'
+            '{"@type": "Product", "name": "a"}{"@type": "Offer", "price": "1"}'
+            "</script>"
+        )
+        self.assertEqual(
+            jsonlde.extract(body),
+            [{"@type": "Product", "name": "a"}, {"@type": "Offer", "price": "1"}],
+        )
+
+    def test_jsonld_trailing_junk_is_logged(self):
+        body = '<script type="application/ld+json">{"name": "a"} junk</script>'
+        with self.assertLogs("extruct.jsonld", level="WARNING") as cm:
+            JsonLdExtractor().extract(body)
+        self.assertIn("Ignoring 4 trailing characters", cm.output[0])
+
+    def test_truncated_jsonld_still_raises(self):
+        jsonlde = JsonLdExtractor()
+        for script in ['{"@type": "Product", "name":', "hello world"]:
+            with self.subTest(script=script):
+                body = '<script type="application/ld+json">{}</script>'.format(script)
+                with self.assertRaises(ValueError):
+                    jsonlde.extract(body)

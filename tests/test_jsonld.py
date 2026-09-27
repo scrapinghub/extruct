@@ -3,6 +3,7 @@ import json
 import unittest
 from unittest.mock import patch
 
+from extruct import jsonld
 from extruct.jsonld import JsonLdExtractor, _repair_escapes, _repair_quotes
 from tests import get_testdata
 
@@ -108,6 +109,57 @@ class TestJsonLD(unittest.TestCase):
         self.assertEqual(
             jsonlde.extract(body), [{"path": r"C:\Users\x", "name": "caf\u00e9"}]
         )
+
+    def test_jsonld_with_cdata_section(self):
+        # https://github.com/scrapinghub/extruct/issues/143
+        self.assertJsonLdCorrect(folder="custom.invalid", page="JSONLD_with_CDATA")
+
+    def test_jsonld_with_framing(self):
+        jsonlde = JsonLdExtractor()
+        payload = '{"@context": "http://schema.org/", "name": "Lubelska"}'
+        expected = [{"@context": "http://schema.org/", "name": "Lubelska"}]
+        wrappers = [
+            "// <![CDATA[\n{}\n// ]]>",
+            "/* <![CDATA[ */\n{}\n/* ]]> */",
+            "<![CDATA[\n{}\n]]>",
+            "<!--\n{}\n-->",
+            "<!--\n{}\n--!>",
+            "// leading comment\n{}",
+            "{}\n// trailing comment",
+        ]
+        for wrapper in wrappers:
+            with self.subTest(wrapper=wrapper):
+                body = '<script type="application/ld+json">{}</script>'.format(
+                    wrapper.format(payload)
+                )
+                # the framing is removed outright, so the trailing-junk step
+                # never runs and nothing is reported as ignored
+                with patch.object(jsonld.logger, "warning") as warning:
+                    self.assertEqual(jsonlde.extract(body), expected)
+                warning.assert_not_called()
+
+    def test_framing_does_not_touch_slashes_in_values(self):
+        jsonlde = JsonLdExtractor()
+        body = (
+            '<script type="application/ld+json">\n'
+            "// <![CDATA[\n"
+            '{"url": "http://example.com/a//b"}\n'
+            "// ]]>\n"
+            "</script>"
+        )
+        self.assertEqual(jsonlde.extract(body), [{"url": "http://example.com/a//b"}])
+
+    def test_framing_keeps_unicode_line_separators(self):
+        jsonlde = JsonLdExtractor()
+        name = "a\u2028b"
+        body = (
+            '<script type="application/ld+json">\n'
+            "// <![CDATA[\n"
+            '{"name": "' + name + '"}\n'
+            "// ]]>\n"
+            "</script>"
+        )
+        self.assertEqual(jsonlde.extract(body), [{"name": name}])
 
     def test_jsonld_with_unescaped_quotes(self):
         # https://github.com/scrapinghub/extruct/issues/53

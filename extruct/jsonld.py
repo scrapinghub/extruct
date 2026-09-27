@@ -102,10 +102,11 @@ def _decode_leading_values(script):
             break
         values.append(value)
         index = _skip_space(script, index)
-    if values and index < len(script):
+    ignored = script[index:].rstrip()
+    if values and ignored:
         logger.warning(
             "Ignoring {} trailing characters after the JSON-LD value".format(
-                len(script) - index
+                len(ignored)
             )
         )
     return values
@@ -147,11 +148,11 @@ class JsonLdExtractor:
             # sometimes JSON-decoding errors are due to leading HTML or JavaScript
             # comments, or to the CDATA/comment framing used to hide JSON-LD from
             # HTML parsers
-            unwrapped = HTML_OR_JS_COMMENTLINE.sub("", _strip_framing(script))
+            # jstyleson only strips a "//" comment that is terminated by a
+            # newline, and the trailing one was removed above
+            unwrapped = HTML_OR_JS_COMMENTLINE.sub("", _strip_framing(script)) + "\n"
             try:
-                # jstyleson only strips a "//" comment that is terminated by a
-                # newline, and the trailing one was removed above
-                data = jstyleson.loads(unwrapped + "\n", strict=False)
+                data = jstyleson.loads(unwrapped, strict=False)
             except ValueError:
                 # invalid escape sequences such as \' or \x27 come from
                 # JavaScript string literals finding their way into JSON

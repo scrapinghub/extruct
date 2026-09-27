@@ -139,7 +139,6 @@ class TestJsonLD(unittest.TestCase):
                 warning.assert_not_called()
 
     def test_framing_does_not_touch_slashes_in_values(self):
-        # framed, so that the fallback this is about actually runs
         jsonlde = JsonLdExtractor()
         body = (
             '<script type="application/ld+json">\n'
@@ -151,8 +150,6 @@ class TestJsonLD(unittest.TestCase):
         self.assertEqual(jsonlde.extract(body), [{"url": "http://example.com/a//b"}])
 
     def test_framing_keeps_unicode_line_separators(self):
-        # str.splitlines() would break on U+2028 and rejoining would turn it
-        # into a newline inside the value
         jsonlde = JsonLdExtractor()
         name = "a\u2028b"
         body = (

@@ -2,7 +2,7 @@
 import json
 import unittest
 
-from extruct.jsonld import JsonLdExtractor, _repair_escapes
+from extruct.jsonld import JsonLdExtractor, _is_framing_line, _repair_escapes
 from tests import get_testdata
 
 
@@ -107,6 +107,48 @@ class TestJsonLD(unittest.TestCase):
         self.assertEqual(
             jsonlde.extract(body), [{"path": r"C:\Users\x", "name": "caf\u00e9"}]
         )
+
+    def test_jsonld_with_cdata_section(self):
+        # https://github.com/scrapinghub/extruct/issues/143
+        self.assertJsonLdCorrect(folder="custom.invalid", page="JSONLD_with_CDATA")
+
+    def test_jsonld_with_framing(self):
+        jsonlde = JsonLdExtractor()
+        payload = '{"@context": "http://schema.org/", "name": "Lubelska"}'
+        expected = [{"@context": "http://schema.org/", "name": "Lubelska"}]
+        wrappers = [
+            "// <![CDATA[\n{}\n// ]]>",
+            "/* <![CDATA[ */\n{}\n/* ]]> */",
+            "<![CDATA[\n{}\n]]>",
+            "<!--\n{}\n-->",
+            "<!--\n{}\n--!>",
+            "// leading comment\n{}",
+            "{}\n// trailing comment",
+        ]
+        for wrapper in wrappers:
+            with self.subTest(wrapper=wrapper):
+                body = '<script type="application/ld+json">{}</script>'.format(
+                    wrapper.format(payload)
+                )
+                self.assertEqual(jsonlde.extract(body), expected)
+
+    def test_is_framing_line(self):
+        # HTML allows a comment to end with either "-->" or "--!>"
+        for line in ["<!--", "-->", "--!>", "<![CDATA[", "]]>", "// ]]>", "  ", ""]:
+            with self.subTest(line=line):
+                self.assertTrue(_is_framing_line(line))
+        for line in ["{", '"a": 1', "}", "// a real comment"]:
+            with self.subTest(line=line):
+                self.assertFalse(_is_framing_line(line))
+
+    def test_framing_does_not_touch_slashes_in_values(self):
+        jsonlde = JsonLdExtractor()
+        body = (
+            '<script type="application/ld+json">\n'
+            '{\n"url": "http://example.com/a//b"\n}\n'
+            "</script>"
+        )
+        self.assertEqual(jsonlde.extract(body), [{"url": "http://example.com/a//b"}])
 
     def test_jsonld_with_trailing_brace(self):
         # https://github.com/scrapinghub/extruct/issues/87

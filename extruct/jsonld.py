@@ -50,6 +50,32 @@ def _repair_escapes(script):
     return _ESCAPE_SEQUENCE.sub(_repair_escape, script)
 
 
+# Framing that pages use to hide JSON-LD from HTML/XML parsers: HTML comments,
+# CDATA sections, and the JavaScript line comments that often accompany them.
+# HTML allows a comment to end with either "-->" or "--!>".
+_FRAMING_TOKENS = re.compile(r"//|/\*|\*/|<!--|--!?>|<!\[CDATA\[|\]\]>|\s+")
+
+
+def _is_framing_line(line):
+    """Whether a line consists only of wrapper framing and whitespace."""
+    return not _FRAMING_TOKENS.sub("", line)
+
+
+def _strip_framing(script):
+    """Drop wrapper framing lines from both ends of a script.
+
+    Only whole lines are removed, and only from the ends, so that ``//``
+    sequences inside JSON string values are left alone.
+    """
+    lines = script.splitlines()
+    start, end = 0, len(lines)
+    while start < end and _is_framing_line(lines[start]):
+        start += 1
+    while end > start and _is_framing_line(lines[end - 1]):
+        end -= 1
+    return "\n".join(lines[start:end])
+
+
 JSON_SPACE = " \t\r\n"
 
 
@@ -118,10 +144,14 @@ class JsonLdExtractor:
             # TODO: `strict=False` can be configurable if needed
             data = json.loads(script, strict=False)
         except ValueError:
-            # sometimes JSON-decoding errors are due to leading HTML or JavaScript comments
-            unwrapped = HTML_OR_JS_COMMENTLINE.sub("", script)
+            # sometimes JSON-decoding errors are due to leading HTML or JavaScript
+            # comments, or to the CDATA/comment framing used to hide JSON-LD from
+            # HTML parsers
+            unwrapped = HTML_OR_JS_COMMENTLINE.sub("", _strip_framing(script))
             try:
-                data = jstyleson.loads(unwrapped, strict=False)
+                # jstyleson only strips a "//" comment that is terminated by a
+                # newline, and the trailing one was removed above
+                data = jstyleson.loads(unwrapped + "\n", strict=False)
             except ValueError:
                 # invalid escape sequences such as \' or \x27 come from
                 # JavaScript string literals finding their way into JSON

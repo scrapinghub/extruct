@@ -706,6 +706,12 @@ Usage
 Downloads "http://example.com" and outputs the Microdata, JSON-LD and RDFa, Open Graph
 and Microformat metadata to `stdout`.
 
+To extract metadata from HTML you already have, pass a file path, or ``-`` to
+read from stdin, and use ``--base-url`` to resolve relative URLs. This lets you
+use any HTTP client you like to download the page::
+
+    curl -H "Accept-Language: es" "http://example.com" | extruct - --base-url "http://example.com"
+
 Supported Parameters
 ++++++++++++++++++++
 

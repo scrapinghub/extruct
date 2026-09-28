@@ -1,0 +1,34 @@
+[
+    {
+        "namespace": {
+            "og": "http://ogp.me/ns#",
+            "custom": "https://example.com/ns/custom#"
+        },
+        "properties": [
+            [
+                "og:title",
+                "Head Title"
+            ],
+            [
+                "og:type",
+                "article"
+            ]
+        ]
+    },
+    {
+        "namespace": {
+            "og": "http://ogp.me/ns#",
+            "custom": "https://example.com/ns/custom#"
+        },
+        "properties": [
+            [
+                "og:url",
+                "https://example.com/head-and-body.html"
+            ],
+            [
+                "custom:extra",
+                "body-value"
+            ]
+        ]
+    }
+]

@@ -255,25 +255,21 @@ To do so set ``uniform=True`` when calling ``extract``, it's false by default fo
                    'og:site_name': 'Songkick',
                    'og:title': 'Elysian Fields',
                    'og:url': 'https://www.songkick.com/artists/236156-elysian-fields'}],
-    'rdfa': [ { '@id': 'https://www.songkick.com/artists/236156-elysian-fields',
-                'al:ios:app_name': [{'@value': 'Songkick Concerts'}],
-                'al:ios:app_store_id': [{'@value': '438690886'}],
-                'al:ios:url': [ { '@value': 'songkick://artists/236156-elysian-fields'}],
-                'http://ogp.me/ns#description': [ { '@value': 'Find out when '
-                                                              'Elysian Fields is '
-                                                              'next playing live '
-                                                              'near you. List of '
-                                                              'all Elysian '
-                                                              'Fields tour dates '
-                                                              'and concerts.'}],
-                'http://ogp.me/ns#image': [ { '@value': 'http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg'}],
-                'http://ogp.me/ns#site_name': [{'@value': 'Songkick'}],
-                'http://ogp.me/ns#title': [{'@value': 'Elysian Fields'}],
-                'http://ogp.me/ns#type': [{'@value': 'songkick-concerts:artist'}],
-                'http://ogp.me/ns#url': [ { '@value': 'https://www.songkick.com/artists/236156-elysian-fields'}],
-                'http://www.facebook.com/2008/fbmlapp_id': [ { '@value': '308540029359'}]}]}
-
-NB rdfa structure is not uniformed yet.
+    'rdfa': [ { '@context': 'http://schema.org',
+                '@id': 'https://www.songkick.com/artists/236156-elysian-fields',
+                'al:ios:app_name': 'Songkick Concerts',
+                'al:ios:app_store_id': '438690886',
+                'al:ios:url': 'songkick://artists/236156-elysian-fields',
+                'http://ogp.me/ns#description': 'Find out when Elysian Fields is '
+                                                'next playing live near you. '
+                                                'List of all Elysian Fields tour '
+                                                'dates and concerts.',
+                'http://ogp.me/ns#image': 'http://images.sk-static.com/images/media/img/col4/20100330-103600-169450.jpg',
+                'http://ogp.me/ns#site_name': 'Songkick',
+                'http://ogp.me/ns#title': 'Elysian Fields',
+                'http://ogp.me/ns#type': 'songkick-concerts:artist',
+                'http://ogp.me/ns#url': 'https://www.songkick.com/artists/236156-elysian-fields',
+                'http://www.facebook.com/2008/fbmlapp_id': '308540029359'}]}
 
 Returning HTML node
 +++++++++++++++++++

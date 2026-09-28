@@ -228,6 +228,47 @@ class TestUniform(unittest.TestCase):
         data = extruct.extract(body, syntaxes=["microdata"], uniform=True)
         self.assertEqual(data["microdata"], expected)
 
+    def test_urdfa(self):
+        body = """<html><head><meta property="og:image" content="a"/>
+<meta property="og:image" content="b"/></head>
+<body vocab="http://schema.org/">
+<div about="#p" typeof="Product">
+<span property="name">X</span>
+<span property="sku" content="Y" datatype="Text"></span>
+<link property="offers" href="#o"/>
+</div>
+<div about="#o" typeof="Offer">
+<span property="price">3</span>
+</div></body></html>"""
+        expected = [
+            {
+                "@context": "http://schema.org",
+                "@id": "http://e.com/#p",
+                "@type": "Product",
+                "name": "X",
+                "sku": {"@type": "http://schema.org/Text", "@value": "Y"},
+                "offers": {"@id": "http://e.com/#o"},
+            },
+            {
+                "@context": "http://schema.org",
+                "@id": "http://e.com/",
+                "http://ogp.me/ns#image": ["a", "b"],
+                "http://www.w3.org/ns/rdfa#usesVocabulary": {
+                    "@id": "http://schema.org/"
+                },
+            },
+            {
+                "@context": "http://schema.org",
+                "@id": "http://e.com/#o",
+                "@type": "Offer",
+                "price": "3",
+            },
+        ]
+        data = extruct.extract(
+            body, base_url="http://e.com/", syntaxes=["rdfa"], uniform=True
+        )
+        self.assertCountEqual(data["rdfa"], expected)
+
     def test_udublincore(self):
         expected = [
             {

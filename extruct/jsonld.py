@@ -51,6 +51,20 @@ def _repair_escapes(script):
     return _ESCAPE_SEQUENCE.sub(_repair_escape, script)
 
 
+# A string, matched as a unit so that colons inside it are skipped, or a colon
+# followed by nothing but the end of its object, array or member.
+_STRING_OR_EMPTY_VALUE = re.compile(
+    r'"(?:\\.|[^"\\])*"|:(?=[ \t\r\n]*(?:[,}\]]|$))', re.S
+)
+
+
+def _repair_empty_values(script):
+    """Fill in ``null`` where a member has no value, as in ``"latitude":,``."""
+    return _STRING_OR_EMPTY_VALUE.sub(
+        lambda match: ":null" if match.group(0) == ":" else match.group(0), script
+    )
+
+
 # Framing that pages use to hide JSON-LD from HTML/XML parsers: HTML comments,
 # CDATA sections, and the JavaScript line comments that often accompany them.
 # HTML allows a comment to end with either "-->" or "--!>".
@@ -174,8 +188,9 @@ def _iter_jsonld(script):
             data = jstyleson.loads(unwrapped, strict=False)
         except ValueError:
             # invalid escape sequences such as \' or \x27 come from
-            # JavaScript string literals finding their way into JSON
-            repaired = _repair_escapes(unwrapped)
+            # JavaScript string literals finding their way into JSON, and
+            # missing values from templates rendering an empty variable
+            repaired = _repair_empty_values(_repair_escapes(unwrapped))
             try:
                 data = jstyleson.loads(repaired, strict=False)
             except ValueError:

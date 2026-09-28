@@ -11,7 +11,7 @@ from extruct.jsonld import JsonLdExtractor
 from extruct.microformat import MicroformatExtractor
 from extruct.opengraph import OpenGraphExtractor
 from extruct.rdfa import RDFaExtractor
-from extruct.uniform import _udublincore, _umicrodata_microformat, _uopengraph
+from extruct.uniform import _udublincore, _umicrodata_microformat, _uopengraph, _urdfa
 from extruct.utils import parse_html, parse_xmldom_html
 from extruct.w3cmicrodata import MicrodataExtractor
 
@@ -165,6 +165,15 @@ def extract(
                     _uopengraph,
                     output["opengraph"],
                     None,
+                )
+            )
+        if "rdfa" in syntaxes:
+            uniform_processors.append(
+                (
+                    "rdfa",
+                    _urdfa,
+                    output["rdfa"],
+                    schema_context,
                 )
             )
         if "dublincore" in syntaxes:

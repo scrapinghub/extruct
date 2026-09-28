@@ -42,6 +42,20 @@ cleaner = Cleaner(
     safe_attrs_only=False,
 )
 
+_URL_ATTRS = {
+    "a": "href",
+    "area": "href",
+    "audio": "src",
+    "embed": "src",
+    "iframe": "src",
+    "img": "src",
+    "link": "href",
+    "object": "data",
+    "source": "src",
+    "track": "src",
+    "video": "src",
+}
+
 
 class LxmlMicrodataExtractor:
     # iterate in document order (used below for fast get_docid)
@@ -195,6 +209,10 @@ class LxmlMicrodataExtractor:
         )
         return [(p, value) for p in props]
 
+    def _extract_url(self, url, base_url):
+        url = strip_html5_whitespace(url)
+        return urljoin(base_url, url) if url else ""
+
     def _extract_property_value(self, node, items_seen, base_url, itemids, force=False):
         # http://www.w3.org/TR/microdata/#values
         if not force and node.get("itemscope") is not None:
@@ -205,35 +223,19 @@ class LxmlMicrodataExtractor:
             else:
                 return {"iid_ref": self.get_docid(node, itemids)}
 
-        elif node.tag == "meta":
-            return node.get("content", "")
+        elif (content := node.get("content")) is not None:
+            if node.tag in _URL_ATTRS:
+                return self._extract_url(content, base_url)
+            return content
 
-        elif node.tag in (
-            "audio",
-            "embed",
-            "iframe",
-            "img",
-            "source",
-            "track",
-            "video",
-        ):
-            return urljoin(base_url, strip_html5_whitespace(node.get("src", "")))
-
-        elif node.tag in ("a", "area", "link"):
-            return urljoin(base_url, strip_html5_whitespace(node.get("href", "")))
-
-        elif node.tag in ("object",):
-            return urljoin(base_url, strip_html5_whitespace(node.get("data", "")))
+        elif url_attr := _URL_ATTRS.get(node.tag):
+            return self._extract_url(node.get(url_attr, ""), base_url)
 
         elif node.tag in ("data", "meter"):
             return node.get("value", "")
 
         elif node.tag in ("time",):
             return node.get("datetime", "")
-
-        # not in W3C specs but used in schema.org examples
-        elif node.get("content"):
-            return node.get("content")
 
         # https://schema.org/docs/actions.html#part-4
         elif (itemprop := node.get("itemprop")) and (

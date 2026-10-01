@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# mypy: disallow_untyped_defs=False
 import json
 import unittest
 
@@ -10,31 +10,25 @@ class TestOpengraph(unittest.TestCase):
 
     maxDiff = None
 
-    def test_opengraph(self):
-        body = get_testdata('misc', 'opengraph_test.html')
-        expected = json.loads(get_testdata('misc', 'opengraph_test.json').decode('UTF-8'))
+    def _test_opengraph(self, name):
+        body = get_testdata("misc", name + ".html")
+        expected = json.loads(get_testdata("misc", name + ".json").decode("UTF-8"))
 
         opengraphe = OpenGraphExtractor()
         data = opengraphe.extract(body)
         self.assertEqual(jsonize_dict(data), expected)
+
+    def test_opengraph(self):
+        self._test_opengraph("opengraph_test")
+
+    def test_opengraph_ns_product(self):
+        self._test_opengraph("opengraph_ns_product_test")
 
     def test_opengraph_in_body(self):
         # OpenGraph tags are sometimes found in the body instead of (or
         # nested inside a wrapper element in) the head, e.g. when injected
         # dynamically by client-side code.
-        body = get_testdata('misc', 'opengraph_body_test.html')
-        expected = json.loads(
-            get_testdata('misc', 'opengraph_body_test.json').decode('UTF-8'))
-
-        opengraphe = OpenGraphExtractor()
-        data = opengraphe.extract(body)
-        self.assertEqual(jsonize_dict(data), expected)
+        self._test_opengraph("opengraph_body_test")
 
     def test_opengraph_in_head_and_body(self):
-        body = get_testdata('misc', 'opengraph_head_and_body_test.html')
-        expected = json.loads(
-            get_testdata('misc', 'opengraph_head_and_body_test.json').decode('UTF-8'))
-
-        opengraphe = OpenGraphExtractor()
-        data = opengraphe.extract(body)
-        self.assertEqual(jsonize_dict(data), expected)
+        self._test_opengraph("opengraph_head_and_body_test")

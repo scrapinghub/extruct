@@ -1,10 +1,11 @@
 # project requirements, install them using following command:
 # pip install -r requirements.txt
 lxml
+lxml-html-clean
 requests
-rdflib
-rdflib-jsonld
+rdflib>=6.0.0
+pyrdfa3
 mf2py>=1.1.0
-six>=1.11
 w3lib
 html-text
+jstyleson

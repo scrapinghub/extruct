@@ -1,0 +1,12 @@
+[
+	{
+		"@context": "http://schema.org",
+		"@type": "NewsArticle",
+		"thumbnailUrl": "https://uc.udn.com.tw/photo/2019/11/11/99/7053890.jpg",
+		"keywords": "",
+		"url": "https://money.udn.com/money/story/5635/4158094",
+		"mainEntityOfPage": "https://money.udn.com/money/story/5635/4158094",
+		"headline": "讓AI挑出感興趣 SparkAmplify精準行銷當紅",
+		"articleSection": "商情"
+	}
+]

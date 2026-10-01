@@ -1,0 +1,100 @@
+[
+  {
+    "https://ogp.me/ns#url": [
+      {
+        "@value": "http://www.nytimes.com/2016/12/15/arts/music/from-steet-theater-to-wagner-on-the-opera-stage.html"
+      }
+    ], 
+    "http://ogp.me/ns/profile#first_name": [
+      {
+        "@value": "John"
+      }
+    ], 
+    "https://ogp.me/ns#type": [
+      {
+        "@value": "article"
+      }
+    ], 
+    "http://ogp.me/ns/article#section": [
+      {
+        "@value": "Music"
+      }
+    ], 
+    "http://ogp.me/ns/music#duration": [
+      {
+        "@value": "60"
+      }
+    ], 
+    "http://ogp.me/ns/article#modified": [
+      {
+        "@value": "2016-12-15T06:19:30-05:00"
+      }
+    ], 
+    "http://ogp.me/ns/video#tag": [
+      {
+        "@value": "Exhilerating"
+      }
+    ], 
+    "https://ogp.me/ns#site_name": [
+      {
+        "@value": "Event Education"
+      }
+    ], 
+    "http://ogp.me/ns/profile#last_name": [
+      {
+        "@value": "Lennon"
+      }
+    ], 
+    "https://www.facebook.com/2008/fbmladmins": [
+      {
+        "@value": "himanshu160"
+      }
+    ], 
+    "http://ogp.me/ns/article#section_url": [
+      {
+        "@value": "http://www.nytimes.com/section/arts"
+      }
+    ], 
+    "https://ogp.me/ns#title": [
+      {
+        "@value": "From Street Theater to Wagner on the Opera Stage"
+      }
+    ], 
+    "https://www.facebook.com/2008/fbmlapp_id": [
+      {
+        "@value": "9869919170"
+      }
+    ], 
+    "https://ogp.me/ns#image": [
+      {
+        "@value": "https://www.eventeducation.com/images/982336_wedding_dayandouan_th.jpg"
+      }
+    ], 
+    "http://ogp.me/ns/book#release_date": [
+      {
+        "@value": "2016-12-15T06:19:30-05:00"
+      }
+    ], 
+    "http://ogp.me/ns/article#section-taxonomy-id": [
+      {
+        "@value": "C5BFA7D5-359C-427B-90E6-6B7245A6CDD8"
+      }
+    ], 
+    "http://ogp.me/ns/article#published": [
+      {
+        "@value": "2016-12-15T05:55:55-05:00"
+      }
+    ], 
+    "https://ogp.me/ns#description": [
+      {
+        "@value": "which he set in Bangladesh instead of Norway. The production opens in Madrid on Saturday."
+      }
+    ], 
+    "@id": "http://www.example.com/index.html", 
+    "http://ogp.me/ns/article#top-level-section": [
+      {
+        "@value": "arts"
+      }
+    ]
+  }
+]

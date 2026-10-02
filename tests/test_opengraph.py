@@ -32,3 +32,16 @@ class TestOpengraph(unittest.TestCase):
 
     def test_opengraph_in_head_and_body(self):
         self._test_opengraph("opengraph_head_and_body_test")
+
+    def test_opengraph_no_head(self):
+        body = b'<body><meta property="og:title" content="T"></body>'
+        data = OpenGraphExtractor().extract(body)
+        self.assertEqual(
+            data,
+            [
+                {
+                    "namespace": {"og": "http://ogp.me/ns#"},
+                    "properties": [("og:title", "T")],
+                }
+            ],
+        )

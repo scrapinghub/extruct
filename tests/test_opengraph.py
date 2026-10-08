@@ -25,9 +25,6 @@ class TestOpengraph(unittest.TestCase):
         self._test_opengraph("opengraph_ns_product_test")
 
     def test_opengraph_in_body(self):
-        # OpenGraph tags are sometimes found in the body instead of (or
-        # nested inside a wrapper element in) the head, e.g. when injected
-        # dynamically by client-side code.
         self._test_opengraph("opengraph_body_test")
 
     def test_opengraph_in_head_and_body(self):

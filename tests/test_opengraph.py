@@ -1,4 +1,5 @@
-# mypy: disallow_untyped_defs=False
+from __future__ import annotations
+
 import json
 import unittest
 
@@ -10,7 +11,7 @@ class TestOpengraph(unittest.TestCase):
 
     maxDiff = None
 
-    def _test_opengraph(self, name):
+    def _test_opengraph(self, name: str) -> None:
         body = get_testdata("misc", name + ".html")
         expected = json.loads(get_testdata("misc", name + ".json").decode("UTF-8"))
 
@@ -18,19 +19,19 @@ class TestOpengraph(unittest.TestCase):
         data = opengraphe.extract(body)
         self.assertEqual(jsonize_dict(data), expected)
 
-    def test_opengraph(self):
+    def test_opengraph(self) -> None:
         self._test_opengraph("opengraph_test")
 
-    def test_opengraph_ns_product(self):
+    def test_opengraph_ns_product(self) -> None:
         self._test_opengraph("opengraph_ns_product_test")
 
-    def test_opengraph_in_body(self):
+    def test_opengraph_in_body(self) -> None:
         self._test_opengraph("opengraph_body_test")
 
-    def test_opengraph_in_head_and_body(self):
+    def test_opengraph_in_head_and_body(self) -> None:
         self._test_opengraph("opengraph_head_and_body_test")
 
-    def test_opengraph_no_head(self):
+    def test_opengraph_no_head(self) -> None:
         body = b'<body><meta property="og:title" content="T"></body>'
         data = OpenGraphExtractor().extract(body)
         self.assertEqual(

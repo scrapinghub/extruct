@@ -1,4 +1,3 @@
-# mypy: disallow_untyped_defs=False
 import os
 
 from setuptools import find_packages, setup
@@ -37,7 +36,7 @@ setup(
             "tests",
         ]
     ),
-    package_data={"extruct": ["VERSION"]},
+    package_data={"extruct": ["VERSION", "py.typed"]},
     python_requires=">=3.8",
     install_requires=[
         "lxml",
@@ -67,5 +66,6 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Typing :: Typed",
     ],
 )

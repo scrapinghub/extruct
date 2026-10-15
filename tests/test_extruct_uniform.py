@@ -1,6 +1,10 @@
-# mypy: disallow_untyped_defs=False
+from __future__ import annotations
+
 import json
 import unittest
+from typing import Any
+
+from lxml.html import HtmlElement
 
 import extruct
 from extruct.utils import parse_html
@@ -11,7 +15,7 @@ class TestFlatten(unittest.TestCase):
 
     maxDiff = None
 
-    def test_microdata(self):
+    def test_microdata(self) -> None:
         body, tree, expected = self._testdata_html_and_tree(
             "schema.org",
             "CreativeWork.001.html",
@@ -24,7 +28,7 @@ class TestFlatten(unittest.TestCase):
         data = extruct.extract(tree, uniform=True, syntaxes=[syntax])
         self.assertEqual(jsonize_dict(data[syntax]), expected[syntax])
 
-    def test_opengraph(self):
+    def test_opengraph(self) -> None:
         body, tree, expected = self._testdata_html_and_tree(
             "misc",
             "opengraph_test.html",
@@ -37,7 +41,7 @@ class TestFlatten(unittest.TestCase):
         data = extruct.extract(tree, uniform=True, syntaxes=[syntax])
         self.assertEqual(jsonize_dict(data[syntax]), expected)
 
-    def test_microdata_with_returning_node(self):
+    def test_microdata_with_returning_node(self) -> None:
         body, tree, expected = self._testdata_html_and_tree(
             "schema.org",
             "CreativeWork.001.html",
@@ -56,7 +60,7 @@ class TestFlatten(unittest.TestCase):
         replace_node_ref_with_node_id(data[syntax])
         self.assertEqual(jsonize_dict(data[syntax]), expected[syntax])
 
-    def test_microformat(self):
+    def test_microformat(self) -> None:
         body = get_testdata("misc", "microformat_test.html")
         expected = json.loads(
             get_testdata("misc", "microformat_flat_test.json").decode("UTF-8")
@@ -64,7 +68,9 @@ class TestFlatten(unittest.TestCase):
         data = extruct.extract(body, uniform=True, syntaxes=["microformat"])
         self.assertEqual(jsonize_dict(data["microformat"]), expected)
 
-    def _testdata_html_and_tree(self, root, path1, path2):
+    def _testdata_html_and_tree(
+        self, root: str, path1: str, path2: str
+    ) -> tuple[bytes, HtmlElement, Any]:
         body = get_testdata(root, path1)
         tree = parse_html(body, encoding="UTF-8")
         expected = json.loads(get_testdata(root, path2).decode("UTF-8"))

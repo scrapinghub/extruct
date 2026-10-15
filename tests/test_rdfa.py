@@ -1,7 +1,10 @@
-# mypy: disallow_untyped_defs=False
+from __future__ import annotations
+
 import json
 import unittest
 from pprint import pformat
+from typing import Any
+from unittest import mock
 
 from lxml.etree import XML, canonicalize
 
@@ -9,7 +12,7 @@ from extruct.rdfa import RDFaExtractor
 from tests import get_testdata
 
 
-def tupleize(d):
+def tupleize(d: Any) -> Any:
     if isinstance(d, list):
         return sorted(tupleize(e) for e in d)
     if isinstance(d, dict):
@@ -25,7 +28,9 @@ class TestRDFa(unittest.TestCase):
 
     maxDiff = None
 
-    def assertJsonLDEqual(self, a, b, normalize_bnode_ids=True):
+    def assertJsonLDEqual(
+        self, a: Any, b: Any, normalize_bnode_ids: bool = True
+    ) -> None:
         sa = json.dumps(
             a, indent=2, separators=(",", ": "), sort_keys=True, ensure_ascii=True
         )
@@ -37,7 +42,7 @@ class TestRDFa(unittest.TestCase):
             sb = self.normalize_bnode_ids(sb)
         self.assertEqual(tupleize(json.loads(sa)), tupleize(json.loads(sb)))
 
-    def normalize_bnode_ids(self, jsld):
+    def normalize_bnode_ids(self, jsld: str) -> str:
         import re
 
         bnode_ids = set(re.findall(r'"_:(\w+)"', jsld))
@@ -45,7 +50,7 @@ class TestRDFa(unittest.TestCase):
             jsld = jsld.replace(bnid, "%06d" % i)
         return jsld
 
-    def prettify(self, a, normalize_bnode_ids=True):
+    def prettify(self, a: Any, normalize_bnode_ids: bool = True) -> str:
         output = json.dumps(
             a, indent=2, separators=(",", ": "), sort_keys=True, ensure_ascii=True
         )
@@ -53,7 +58,7 @@ class TestRDFa(unittest.TestCase):
             output = self.normalize_bnode_ids(output)
         return output
 
-    def test_w3c_rdfalite(self):
+    def test_w3c_rdfalite(self) -> None:
         for i in [3, 4, 5]:
             fileprefix = "w3c.rdfalite.example{:03d}".format(i)
             body = get_testdata("w3crdfa", fileprefix + ".html")
@@ -65,7 +70,7 @@ class TestRDFa(unittest.TestCase):
             data = rdfae.extract(body, base_url="http://www.example.com/index.html")
             self.assertJsonLDEqual(data, expected)
 
-    def test_w3c_rdf11primer(self):
+    def test_w3c_rdf11primer(self) -> None:
         for i in [14]:
             fileprefix = "w3c.rdf11primer.example{:03d}".format(i)
             body = get_testdata("w3crdfa", fileprefix + ".html")
@@ -77,7 +82,7 @@ class TestRDFa(unittest.TestCase):
             data = rdfae.extract(body, base_url="http://www.example.com/index.html")
             self.assertJsonLDEqual(data, expected)
 
-    def test_w3c_rdfaprimer(self):
+    def test_w3c_rdfaprimer(self) -> None:
         for i in [5, 6, 7, 8, 9, 10, 11, 15]:
             fileprefix = "w3c.rdfaprimer.example{:03d}".format(i)
             print(fileprefix)
@@ -92,14 +97,11 @@ class TestRDFa(unittest.TestCase):
 
             # This is for testing that the fix to issue 116 does not affect
             # severely rdfa output even in a presence of a bug in the code
-            def mocked_fix_order(x, y, z):
-                raise Exception()
-
-            rdfae._fix_order = mocked_fix_order  # type: ignore[assignment]
-            data = rdfae.extract(body, base_url="http://www.example.com/index.html")
+            with mock.patch.object(rdfae, "_fix_order", side_effect=Exception):
+                data = rdfae.extract(body, base_url="http://www.example.com/index.html")
             self.assertJsonLDEqual(data, expected)
 
-    def test_wikipedia_xhtml_rdfa(self):
+    def test_wikipedia_xhtml_rdfa(self) -> None:
         fileprefix = "xhtml+rdfa"
         body = get_testdata("wikipedia", fileprefix + ".html")
         expected = json.loads(
@@ -111,7 +113,7 @@ class TestRDFa(unittest.TestCase):
 
         self.assertJsonLDEqual(data, expected)
 
-    def test_wikipedia_xhtml_rdfa_no_prefix(self):
+    def test_wikipedia_xhtml_rdfa_no_prefix(self) -> None:
         body = get_testdata("misc", "Portfolio_Niels_Lubberman.html")
         expected = json.loads(
             get_testdata("misc", "Portfolio_Niels_Lubberman.json").decode("UTF-8")
@@ -122,7 +124,7 @@ class TestRDFa(unittest.TestCase):
 
         self.assertJsonLDEqual(data, expected)
 
-    def test_expanded_opengraph_support(self):
+    def test_expanded_opengraph_support(self) -> None:
         body = get_testdata("misc", "expanded_OG_support_test.html")
         expected = json.loads(
             get_testdata("misc", "expanded_OG_support_test.json").decode("UTF-8")

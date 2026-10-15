@@ -1,9 +1,16 @@
-# mypy: disallow_untyped_defs=False
-import re
+from __future__ import annotations
 
+import re
+from collections.abc import Iterator
+from typing import TYPE_CHECKING, Any
+
+from lxml.html import HtmlElement
 from w3lib.html import strip_html5_whitespace
 
 from extruct.utils import parse_html
+
+if TYPE_CHECKING:
+    from lxml.etree import _Attrib
 
 _DC_ELEMENTS = (
     {  # Defined according DCMES(DCM Version 1.1): http://dublincore.org/documents/dces/
@@ -106,7 +113,7 @@ _DC_TERMS = {  # Defined according: http://dublincore.org/documents/2008/01/14/d
 _URL_NAMESPACES = ["http://purl.org/dc/terms/", "http://purl.org/dc/elements/1.1/"]
 
 
-def get_lower_attrib(name):
+def get_lower_attrib(name: str) -> str:
     # get attribute to compare against _DC_TERMS or _DC_ELEMENTS
     return re.sub(r".*\.", "", name).lower()
 
@@ -114,19 +121,26 @@ def get_lower_attrib(name):
 class DublinCoreExtractor:
     """DublinCore extractor following extruct API."""
 
-    def extract(self, htmlstring, base_url=None, encoding="UTF-8"):
+    def extract(
+        self,
+        htmlstring: str | bytes,
+        base_url: str | None = None,
+        encoding: str = "UTF-8",
+    ) -> list[dict[str, Any]]:
         tree = parse_html(htmlstring, encoding=encoding)
         return list(self.extract_items(tree, base_url=base_url))
 
-    def extract_items(self, document, base_url=None):
-        elements = []
-        terms = []
+    def extract_items(
+        self, document: HtmlElement, base_url: str | None = None
+    ) -> Iterator[dict[str, Any]]:
+        elements: list[dict[str, str]] = []
+        terms: list[dict[str, str]] = []
 
-        def attrib_to_dict(attribs):
+        def attrib_to_dict(attribs: _Attrib) -> dict[str, str]:
             # convert _attrib type to dict
             return dict(attribs.items())
 
-        def populate_results(node, main_attrib):
+        def populate_results(node: HtmlElement, main_attrib: str) -> None:
             # fill list with DC Elements or DC Terms
             node_attrib = node.attrib
             if main_attrib not in node_attrib:
@@ -143,7 +157,7 @@ class DublinCoreExtractor:
                 terms.append(attrib_to_dict(node.attrib))
 
         namespaces_nodes = document.xpath('//link[contains(@rel,"schema")]')
-        namespaces = {}
+        namespaces: dict[str, str] = {}
         for i in namespaces_nodes:
             url = strip_html5_whitespace(i.attrib["href"])
             if url in _URL_NAMESPACES:

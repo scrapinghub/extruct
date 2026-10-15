@@ -1,4 +1,5 @@
-# mypy: disallow_untyped_defs=False
+from __future__ import annotations
+
 import json
 import unittest
 
@@ -10,7 +11,7 @@ class TestMicroformat(unittest.TestCase):
 
     maxDiff = None
 
-    def test_microformat(self):
+    def test_microformat(self) -> None:
         body = get_testdata("misc", "microformat_test.html")
         expected = json.loads(
             get_testdata("misc", "microformat_test.json").decode("UTF-8")

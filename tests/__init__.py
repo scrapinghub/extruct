@@ -1,22 +1,24 @@
-# mypy: disallow_untyped_defs=False
+from __future__ import annotations
+
 import json
 import os
+from typing import Any
 
 tests_datadir = os.path.join(os.path.abspath(os.path.dirname(__file__)), "samples")
 
 
-def get_testdata(*paths):
+def get_testdata(*paths: str) -> bytes:
     """Return test data"""
     path = os.path.join(tests_datadir, *paths)
     with open(path, "rb") as f_in:
         return f_in.read()
 
 
-def jsonize_dict(d):
+def jsonize_dict(d: Any) -> Any:
     return json.loads(json.dumps(d))
 
 
-def replace_node_ref_with_node_id(item):
+def replace_node_ref_with_node_id(item: Any) -> None:
     if isinstance(item, list):
         for i in item:
             replace_node_ref_with_node_id(i)

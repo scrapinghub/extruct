@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import warnings
+from collections.abc import Iterable
 from typing import Any, Callable
 
 from lxml.html import HtmlElement
@@ -86,7 +87,7 @@ def extract(
                 "or passing an HTML string or bytes."
             )
         tree = htmlstring_or_tree
-    processors = []
+    processors: list[tuple[str, Callable[..., Iterable[Any]], Any]] = []
     if "microdata" in syntaxes:
         processors.append(
             (

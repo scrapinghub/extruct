@@ -1,4 +1,5 @@
-# mypy: disallow_untyped_defs=False
+from __future__ import annotations
+
 import unittest
 
 import extruct
@@ -10,7 +11,7 @@ class TestUniform(unittest.TestCase):
 
     maxDiff = None
 
-    def test_uopengraph(self):
+    def test_uopengraph(self) -> None:
         expected = [
             {
                 "@context": {
@@ -31,7 +32,7 @@ class TestUniform(unittest.TestCase):
         data = extruct.extract(body, syntaxes=["opengraph"], uniform=True)
         self.assertEqual(data["opengraph"], expected)
 
-    def test_uopengraph_with_og_array(self):
+    def test_uopengraph_with_og_array(self) -> None:
         expected = [
             {
                 "@context": {
@@ -57,7 +58,7 @@ class TestUniform(unittest.TestCase):
         )
         self.assertEqual(data["opengraph"], expected)
 
-    def test_uopengraph_duplicated_priorities(self):
+    def test_uopengraph_duplicated_priorities(self) -> None:
         # Ensures that first seen property is kept when flattening
         data = _uopengraph(
             [
@@ -98,7 +99,7 @@ class TestUniform(unittest.TestCase):
         assert data[0]["prop_non_empty2"] == "value!"
         assert data[0]["prop_non_empty3"] == "value!"
 
-    def test_uopengraph_duplicated_with_og_array(self):
+    def test_uopengraph_duplicated_with_og_array(self) -> None:
         # Ensures that first seen property is kept when flattening
         data = _uopengraph(
             [
@@ -147,7 +148,7 @@ class TestUniform(unittest.TestCase):
         assert data[0]["prop_non_empty2"] == "value!"
         assert data[0]["prop_non_empty3"] == ["value!", "other value"]
 
-    def test_umicroformat(self):
+    def test_umicroformat(self) -> None:
         expected = [
             {
                 "@context": "http://microformats.org/wiki/",
@@ -198,7 +199,7 @@ class TestUniform(unittest.TestCase):
         data = extruct.extract(body, syntaxes=["microformat"], uniform=True)
         self.assertEqual(data["microformat"], expected)
 
-    def test_umicrodata(self):
+    def test_umicrodata(self) -> None:
         expected = [
             {
                 "@context": "http://schema.org",
@@ -228,7 +229,7 @@ class TestUniform(unittest.TestCase):
         data = extruct.extract(body, syntaxes=["microdata"], uniform=True)
         self.assertEqual(data["microdata"], expected)
 
-    def test_udublincore(self):
+    def test_udublincore(self) -> None:
         expected = [
             {
                 "elements": [
@@ -296,7 +297,7 @@ class TestUniform(unittest.TestCase):
         data = extruct.extract(body, syntaxes=["dublincore"], uniform=True)
         self.assertEqual(data["dublincore"], expected)
 
-    def test_infer_context(self):
+    def test_infer_context(self) -> None:
         context = "http://schema.org/UsedCondition"
         self.assertEqual(infer_context(context), ("http://schema.org", "UsedCondition"))
 
@@ -306,7 +307,7 @@ class TestUniform(unittest.TestCase):
         context = "http://ogp.me/ns/fb#app_id"
         self.assertEqual(infer_context(context), ("http://ogp.me/ns/fb", "app_id"))
 
-    def test_flatten_dict(self):
+    def test_flatten_dict(self) -> None:
         d = {
             "type": "SPANISH INQUISITION",
             "properties": {
@@ -327,7 +328,7 @@ class TestUniform(unittest.TestCase):
             expected,
         )
 
-    def test_flatten(self):
+    def test_flatten(self) -> None:
         d = {
             "children": [
                 {

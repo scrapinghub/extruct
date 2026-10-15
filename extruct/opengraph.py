@@ -37,21 +37,20 @@ class OpenGraphExtractor:
         self, document: HtmlElement, base_url: str | None = None
     ) -> Iterator[dict[str, Any]]:
         # OpenGraph defines a web page as a single rich object.
-        for head in document.xpath("//head"):
-            html_elems = head.xpath("parent::html")
-            namespaces = self.get_namespaces(html_elems[0]) if html_elems else {}
-            namespaces.update(self.get_namespaces(head))
-            props = []
-            for el in head.xpath("meta[@property and @content]"):
-                prop = el.attrib["property"]
-                val = el.attrib["content"]
-                ns = prop.partition(":")[0]
-                if ns in _OG_NAMESPACES:
-                    namespaces[ns] = _OG_NAMESPACES[ns]
-                if ns in namespaces:
-                    props.append((prop, val))
-            if props:
-                yield {"namespace": namespaces, "properties": props}
+        namespaces: dict[str, str] = {}
+        for el in document.xpath("//html | //head"):
+            namespaces.update(self.get_namespaces(el))
+        props: list[tuple[str, str]] = []
+        for el in document.xpath("//meta[@property and @content]"):
+            prop = el.attrib["property"]
+            val = el.attrib["content"]
+            ns = prop.partition(":")[0]
+            if ns in _OG_NAMESPACES:
+                namespaces[ns] = _OG_NAMESPACES[ns]
+            if ns in namespaces:
+                props.append((prop, val))
+        if props:
+            yield {"namespace": namespaces, "properties": props}
 
     def get_namespaces(self, element: HtmlElement) -> dict[str, str]:
         return dict(_PREFIX_PATTERN.findall(element.attrib.get("prefix", "")))

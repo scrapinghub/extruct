@@ -204,6 +204,12 @@ class JsonLdExtractor:
         'descendant-or-self::script[@type="application/ld+json"]'
     )
 
+    def __init__(self, errors="strict"):
+        """With *errors* set to ``"log"`` or ``"ignore"``, scripts that are not
+        valid JSON are skipped, logging the error or not respectively, instead
+        of raising an exception."""
+        self._errors = errors
+
     def extract(self, htmlstring, base_url=None, encoding="UTF-8"):
         tree = parse_html(htmlstring, encoding=encoding)
         return self.extract_items(tree, base_url=base_url)
@@ -221,6 +227,16 @@ class JsonLdExtractor:
         script = node.xpath("string()").strip()
         if not script:
             return
+        try:
+            yield from self._iter_script(script)
+        except ValueError:
+            if self._errors == "strict":
+                raise
+            if self._errors == "log":
+                logger.exception(f"Skipping invalid JSON-LD: {script!r}")
+
+    @staticmethod
+    def _iter_script(script):
         try:
             yield from _iter_jsonld(script)
         except ValueError:

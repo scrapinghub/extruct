@@ -78,6 +78,19 @@ class TestGeneric(unittest.TestCase):
         }
         return body, expected
 
+    def test_markup_after_closing_html_tag(self):
+        # See https://github.com/scrapinghub/extruct/issues/194
+        body = """<html><body></body></html>
+        <script type="application/ld+json">{"@type": "Thing"}</script>
+        <div itemscope itemtype="http://schema.org/Thing"></div>"""
+        expected = [{"@type": "Thing"}]
+        for syntaxes in (["json-ld", "microdata"], ["json-ld", "microdata", "rdfa"]):
+            data = extruct.extract(body, syntaxes=syntaxes)
+            self.assertEqual(data["json-ld"], expected)
+            self.assertEqual(
+                data["microdata"], [{"type": "http://schema.org/Thing", "value": ""}]
+            )
+
     def test_errors(self):
         body = ""
 

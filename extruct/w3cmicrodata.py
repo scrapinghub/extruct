@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import collections
 from functools import partial
-from typing import Any, Set
+from typing import Any
 from urllib.parse import urljoin
 
 import html_text

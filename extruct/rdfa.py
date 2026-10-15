@@ -4,6 +4,7 @@ RDFa extractor
 
 Based on pyrdfa3 and rdflib
 """
+
 import json
 import logging
 import re

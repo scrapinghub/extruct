@@ -159,6 +159,30 @@ class TestMicrodata(unittest.TestCase):
         data = mde.extract(body, "http://www.example.com/microdata/test")
         self.assertEqual(data, expected)
 
+    def test_content_attribute(self):
+        body = b"""<div itemscope itemtype="http://schema.org/Event">
+        <img itemprop="image" data-src="lazy.jpg" content="http://example.com/a.jpg">
+        <img itemprop="image" src="placeholder.gif" content="b.jpg">
+        <img itemprop="image">
+        <a itemprop="url">x</a>
+        <time itemprop="startDate" datetime="2026-01-01" content="2026-01-02">x</time>
+        <span itemprop="name" content="">x</span>
+        </div>"""
+        data = MicrodataExtractor().extract(body, "http://example.com/p.html")
+        self.assertEqual(
+            data[0]["properties"],
+            {
+                "image": [
+                    "http://example.com/a.jpg",
+                    "http://example.com/b.jpg",
+                    "",
+                ],
+                "url": "",
+                "startDate": "2026-01-02",
+                "name": "",
+            },
+        )
+
 
 class TestMicrodataFlat(unittest.TestCase):
 

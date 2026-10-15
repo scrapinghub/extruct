@@ -24,6 +24,25 @@ class TestOpengraph(unittest.TestCase):
     def test_opengraph_ns_product(self):
         self._test_opengraph("opengraph_ns_product_test")
 
+    def test_opengraph_in_body(self):
+        self._test_opengraph("opengraph_body_test")
+
+    def test_opengraph_in_head_and_body(self):
+        self._test_opengraph("opengraph_head_and_body_test")
+
+    def test_opengraph_no_head(self):
+        body = b'<body><meta property="og:title" content="T"></body>'
+        data = OpenGraphExtractor().extract(body)
+        self.assertEqual(
+            data,
+            [
+                {
+                    "namespace": {"og": "http://ogp.me/ns#"},
+                    "properties": [("og:title", "T")],
+                }
+            ],
+        )
+
     def test_opengraph_outside_head(self):
         body = b"""<html prefix="a: http://a.example/"><head prefix="b: http://b.example/">
             <meta property="og:title" content="Title">
@@ -47,19 +66,6 @@ class TestOpengraph(unittest.TestCase):
                         ("og:type", "website"),
                         ("b:x", "1"),
                     ],
-                }
-            ],
-        )
-
-    def test_opengraph_no_head(self):
-        body = b'<p>x</p><meta property="og:title" content="Title">'
-        data = OpenGraphExtractor().extract(body)
-        self.assertEqual(
-            data,
-            [
-                {
-                    "namespace": {"og": "http://ogp.me/ns#"},
-                    "properties": [("og:title", "Title")],
                 }
             ],
         )

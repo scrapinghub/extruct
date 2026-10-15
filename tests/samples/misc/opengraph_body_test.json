@@ -1,0 +1,34 @@
+[
+    {
+        "namespace": {
+            "og": "http://ogp.me/ns#",
+            "article": "http://ogp.me/ns/article#"
+        },
+        "properties": [
+            [
+                "og:title",
+                "OpenGraph in the Body"
+            ],
+            [
+                "og:type",
+                "article"
+            ],
+            [
+                "og:url",
+                "https://example.com/opengraph-in-body.html"
+            ],
+            [
+                "og:image",
+                "https://example.com/images/test.jpg"
+            ],
+            [
+                "og:site_name",
+                "Example Site"
+            ],
+            [
+                "article:published_time",
+                "2020-04-08T08:40:28-00:00"
+            ]
+        ]
+    }
+]

@@ -47,6 +47,34 @@ def _umicrodata_microformat(extracted, schema_context):
     return res
 
 
+def _urdfa(extracted, schema_context):
+    prefix = schema_context.rstrip("/") + "/"
+
+    def compact_iri(iri):
+        return iri[len(prefix) :] if iri.startswith(prefix) else iri
+
+    def compact_value(value):
+        if isinstance(value, dict) and value.keys() == {"@value"}:
+            return value["@value"]
+        return value
+
+    def unwrap(values):
+        return values[0] if len(values) == 1 else values
+
+    out = []
+    for node in extracted:
+        obj = {"@context": schema_context}
+        for key, value in node.items():
+            if key == "@type":
+                obj["@type"] = unwrap([compact_iri(t) for t in value])
+            elif key.startswith("@"):
+                obj[key] = value
+            else:
+                obj[compact_iri(key)] = unwrap([compact_value(v) for v in value])
+        out.append(obj)
+    return out
+
+
 def _udublincore(extracted):
     out = []
     extracted_cpy = copy.deepcopy(extracted)

@@ -4,7 +4,12 @@ import unittest
 from unittest.mock import patch
 
 from extruct import jsonld
-from extruct.jsonld import JsonLdExtractor, _repair_escapes, _repair_quotes
+from extruct.jsonld import (
+    JsonLdExtractor,
+    _repair_empty_values,
+    _repair_escapes,
+    _repair_quotes,
+)
 from tests import get_testdata
 
 
@@ -98,6 +103,39 @@ class TestJsonLD(unittest.TestCase):
         for source, expected in cases:
             with self.subTest(source=source):
                 self.assertEqual(_repair_escapes(source), expected)
+
+    def test_repair_empty_values(self):
+        cases = [
+            ('{"a":, "b": [1], "c":\n}', '{"a":null, "b": [1], "c":null\n}'),
+            ('{"a": {"b":}}', '{"a": {"b":null}}'),
+            # colons inside strings are left alone
+            ('{"a": "b:, \\":}"}', '{"a": "b:, \\":}"}'),
+        ]
+        for source, expected in cases:
+            with self.subTest(source=source):
+                self.assertEqual(_repair_empty_values(source), expected)
+
+    def test_jsonld_with_empty_values(self):
+        # https://github.com/scrapinghub/extruct/issues/45
+        body = (
+            '<script type="application/ld+json">{\n'
+            '"@type": "Restaurant",\n'
+            '"geo": {\n"@type": "GeoCoordinates",\n"latitude":,\n"longitude":\n}\n'
+            "}</script>"
+        )
+        self.assertEqual(
+            JsonLdExtractor().extract(body),
+            [
+                {
+                    "@type": "Restaurant",
+                    "geo": {
+                        "@type": "GeoCoordinates",
+                        "latitude": None,
+                        "longitude": None,
+                    },
+                }
+            ],
+        )
 
     def test_valid_escapes_survive_extraction(self):
         jsonlde = JsonLdExtractor()

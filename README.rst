@@ -25,6 +25,7 @@ Currently, *extruct* supports:
 - `Facebook's Open Graph`_
 - (experimental) `RDFa`_ via `rdflib`_
 - `Dublin Core Metadata (DC-HTML-2003)`_
+- `Twitter Cards`_
 
 .. _W3C's HTML Microdata: http://www.w3.org/TR/microdata/
 .. _embedded JSON-LD: http://www.w3.org/TR/json-ld/#embedding-json-ld-in-html-documents
@@ -34,6 +35,7 @@ Currently, *extruct* supports:
 .. _mf2py: https://github.com/microformats/mf2py
 .. _Facebook's Open Graph: http://ogp.me/
 .. _Dublin Core Metadata (DC-HTML-2003): https://www.dublincore.org/specifications/dublin-core/dcq-html/2003-11-30/
+.. _Twitter Cards: https://web.archive.org/web/20260201012312/https://developer.x.com/en/docs/x-for-websites/cards/overview/markup
 
 The microdata algorithm is a revisit of `this Scrapinghub blog post`_ showing how to use EXSLT extensions.
 
@@ -175,7 +177,7 @@ First fetch the HTML using python-requests and then feed the response body to ``
 
 Select syntaxes
 +++++++++++++++
-It is possible to select which syntaxes to extract by passing a list with the desired ones to extract. Valid values: 'microdata', 'json-ld', 'opengraph', 'microformat', 'rdfa' and 'dublincore'. If no list is passed all syntaxes will be extracted and returned::
+It is possible to select which syntaxes to extract by passing a list with the desired ones to extract. Valid values: 'microdata', 'json-ld', 'opengraph', 'microformat', 'rdfa', 'dublincore' and 'twittercard'. If no list is passed all syntaxes will be extracted and returned::
 
   >>> r = requests.get('http://www.songkick.com/artists/236156-elysian-fields')
   >>> base_url = get_base_url(r.text, r.url)
@@ -677,6 +679,20 @@ DublinCore extraction
                      'href': 'http://dublincore.org/documents/2000/08/15/dcq-html/',
                      'hreflang': 'en',
                      'rel': 'DCTERMS.replaces'}]}]
+
+Twitter Card extraction
++++++++++++++++++++++++
+
+Twitter Card properties are read from both ``name`` and ``property``
+attributes::
+
+    >>> from extruct.twittercard import TwitterCardExtractor
+    >>> html = '''<head>
+    ... <meta name="twitter:card" content="summary">
+    ... <meta property="twitter:site" content="@example">
+    ... </head>'''
+    >>> TwitterCardExtractor().extract(html)
+    [{'properties': [('twitter:card', 'summary'), ('twitter:site', '@example')]}]
 
 
 

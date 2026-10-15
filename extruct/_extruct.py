@@ -11,12 +11,21 @@ from extruct.jsonld import JsonLdExtractor
 from extruct.microformat import MicroformatExtractor
 from extruct.opengraph import OpenGraphExtractor
 from extruct.rdfa import RDFaExtractor
+from extruct.twittercard import TwitterCardExtractor
 from extruct.uniform import _udublincore, _umicrodata_microformat, _uopengraph
 from extruct.utils import parse_html, parse_xmldom_html
 from extruct.w3cmicrodata import MicrodataExtractor
 
 logger = logging.getLogger(__name__)
-SYNTAXES = ["microdata", "opengraph", "json-ld", "microformat", "rdfa", "dublincore"]
+SYNTAXES = [
+    "microdata",
+    "opengraph",
+    "json-ld",
+    "microformat",
+    "rdfa",
+    "dublincore",
+    "twittercard",
+]
 
 
 def extract(
@@ -125,6 +134,8 @@ def extract(
                 tree,
             )
         )
+    if "twittercard" in syntaxes:
+        processors.append(("twittercard", TwitterCardExtractor().extract_items, tree))
     output: dict[str, list[dict[str, Any]]] = {}
     for syntax, extract, document in processors:
         try:

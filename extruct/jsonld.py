@@ -199,23 +199,48 @@ def _iter_jsonld(script):
     yield from _iter_items(data)
 
 
+def _unescape_strings(data):
+    if isinstance(data, str):
+        return html.unescape(data)
+    if isinstance(data, list):
+        return [_unescape_strings(value) for value in data]
+    if isinstance(data, dict):
+        return {
+            _unescape_strings(key): _unescape_strings(value)
+            for key, value in data.items()
+        }
+    return data
+
+
 class JsonLdExtractor:
+    """Extracts JSON-LD items.
+
+    If *unescape_entities* is ``True``, HTML entities in keys and string
+    values are decoded, e.g. ``"Foo &amp; Bar"`` becomes ``"Foo & Bar"``.
+    """
+
     _xp_jsonld = lxml.etree.XPath(
         'descendant-or-self::script[@type="application/ld+json"]'
     )
+
+    def __init__(self, unescape_entities=False):
+        self.unescape_entities = unescape_entities
 
     def extract(self, htmlstring, base_url=None, encoding="UTF-8"):
         tree = parse_html(htmlstring, encoding=encoding)
         return self.extract_items(tree, base_url=base_url)
 
     def extract_items(self, document, base_url=None):
-        return [
+        items = [
             item
             for items in map(self._extract_items, self._xp_jsonld(document))  # type: ignore[arg-type]
             if items
             for item in items
             if item
         ]
+        if self.unescape_entities:
+            items = _unescape_strings(items)
+        return items
 
     def _extract_items(self, node):
         script = node.xpath("string()").strip()

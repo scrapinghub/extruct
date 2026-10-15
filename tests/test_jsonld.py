@@ -3,6 +3,7 @@ import json
 import unittest
 from unittest.mock import patch
 
+import extruct
 from extruct import jsonld
 from extruct.jsonld import JsonLdExtractor, _repair_escapes, _repair_quotes
 from tests import get_testdata
@@ -349,3 +350,23 @@ class TestJsonLD(unittest.TestCase):
 
         self.assertIs(cm.exception, original_error)
         self.assertEqual(iter_jsonld.call_count, 1)
+
+    def test_unescape_entities(self):
+        body = (
+            '<script type="application/ld+json">'
+            '{"@type": "Organization", "name": "Foo &amp; Bar",'
+            ' "sameAs": ["&lt;a&gt;", 1]}'
+            "</script>"
+        )
+        self.assertEqual(
+            JsonLdExtractor(unescape_entities=True).extract(body),
+            [{"@type": "Organization", "name": "Foo & Bar", "sameAs": ["<a>", 1]}],
+        )
+        self.assertEqual(
+            extruct.extract(body, syntaxes=["json-ld"], unescape_jsonld_entities=True),
+            {
+                "json-ld": [
+                    {"@type": "Organization", "name": "Foo & Bar", "sameAs": ["<a>", 1]}
+                ]
+            },
+        )

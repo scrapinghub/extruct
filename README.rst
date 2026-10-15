@@ -413,6 +413,10 @@ JSON-LD extraction
     'name': 'John Doe',
     'url': 'http://www.example.com'}]
 
+JSON-LD values keep any HTML entities they contain, e.g. ``&amp;``. To decode
+them, pass ``unescape_entities=True`` to ``JsonLdExtractor``, or
+``unescape_jsonld_entities=True`` to ``extruct.extract``.
+
 
 RDFa extraction (experimental)
 ++++++++++++++++++++++++++++++

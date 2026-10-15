@@ -29,6 +29,7 @@ def extract(
     return_html_node: bool = False,
     schema_context: str = "http://schema.org",
     with_og_array: bool = False,
+    unescape_jsonld_entities: bool = False,
     url: str | None = None,  # deprecated
 ) -> dict[str, list[dict[str, Any]]]:
     """
@@ -48,7 +49,9 @@ def extract(
                       respective embedded metadata under 'htmlNode' key.
                       The feature is supported only by microdata syntax.
                       Each node is of `lxml.etree.Element` type.
-    schema_context: schema's context for current page"""
+    schema_context: schema's context for current page
+    unescape_jsonld_entities: if True, HTML entities in JSON-LD keys and
+                              string values are decoded."""
     if base_url is None and url is not None:
         warnings.warn(
             '"url" argument is deprecated, please use "base_url"',
@@ -99,7 +102,9 @@ def extract(
         processors.append(
             (
                 "json-ld",
-                JsonLdExtractor().extract_items,
+                JsonLdExtractor(
+                    unescape_entities=unescape_jsonld_entities
+                ).extract_items,
                 tree,
             )
         )

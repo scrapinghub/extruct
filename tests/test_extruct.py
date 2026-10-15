@@ -92,3 +92,16 @@ class TestGeneric(unittest.TestCase):
         # ignore exceptions
         data = extruct.extract(body, errors="log")
         assert data == {}
+
+    def test_str_with_xml_encoding_declaration(self):
+        # See https://github.com/scrapinghub/extruct/issues/142
+        body = (
+            '<?xml version="1.0" encoding="iso-8859-1"?>\n'
+            '<html><head><meta charset="iso-8859-1"></head>'
+            '<body itemscope itemtype="http://schema.org/Thing">'
+            '<span itemprop="name">é€</span></body></html>'
+        )
+        expected = [{"type": "http://schema.org/Thing", "properties": {"name": "é€"}}]
+        for syntaxes in (["microdata"], ["microdata", "rdfa"]):
+            data = extruct.extract(body, syntaxes=syntaxes)
+            assert data["microdata"] == expected

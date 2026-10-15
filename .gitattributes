@@ -1,1 +1,2 @@
 tests/samples/** linguist-vendored
+tests/samples/** text eol=lf

@@ -143,9 +143,7 @@ First fetch the HTML using python-requests and then feed the response body to ``
                                        'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg'),
                                      ( 'og:image:secure_url',
                                        'https://www.optimizesmart.com/wp-content/uploads/2010/07/open-graph-protocol.jpg')]}],
-    'rdfa': [ { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/#header',
-                'http://www.w3.org/1999/xhtml/vocab#role': [ { '@id': 'http://www.w3.org/1999/xhtml/vocab#banner'}]},
-              { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/',
+    'rdfa': [ { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/',
                 'article:modified_time': [ { '@value': '2018-03-09T16:26:35+00:00'}],
                 'article:published_time': [ { '@value': '2010-07-02T18:57:23+00:00'}],
                 'article:publisher': [ { '@value': 'https://www.facebook.com/optimizesmart/'}],
@@ -171,7 +169,9 @@ First fetch the HTML using python-requests and then feed the response body to ``
                 'http://ogp.me/ns#type': [{'@value': 'article'}],
                 'http://ogp.me/ns#updated_time': [ { '@value': '2018-03-09T16:26:35+00:00'}],
                 'http://ogp.me/ns#url': [ { '@value': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/'}],
-                'https://api.w.org/': [ { '@id': 'https://www.optimizesmart.com/wp-json/'}]}]}
+                'https://api.w.org/': [ { '@id': 'https://www.optimizesmart.com/wp-json/'}]},
+              { '@id': 'https://www.optimizesmart.com/how-to-use-open-graph-protocol/#header',
+                'http://www.w3.org/1999/xhtml/vocab#role': [ { '@id': 'http://www.w3.org/1999/xhtml/vocab#banner'}]}]}
 
 Select syntaxes
 +++++++++++++++

@@ -29,6 +29,7 @@ def extract(
     return_html_node: bool = False,
     schema_context: str = "http://schema.org",
     with_og_array: bool = False,
+    og_structured: bool = False,
     url: str | None = None,  # deprecated
 ) -> dict[str, list[dict[str, Any]]]:
     """
@@ -48,7 +49,13 @@ def extract(
                       respective embedded metadata under 'htmlNode' key.
                       The feature is supported only by microdata syntax.
                       Each node is of `lxml.etree.Element` type.
-    schema_context: schema's context for current page"""
+    schema_context: schema's context for current page
+    with_og_array: if True, with uniform, repeated OpenGraph properties are
+                   lists of all their values instead of their first value.
+    og_structured: if True, with uniform, OpenGraph structured properties
+                   (e.g. og:image:width) are grouped with their parent
+                   property in a dict (e.g. {'og:image': ...,
+                   'og:image:width': ...})."""
     if base_url is None and url is not None:
         warnings.warn(
             '"url" argument is deprecated, please use "base_url"',
@@ -180,7 +187,9 @@ def extract(
         for syntax, uniform_fn, raw, schema_ctx in uniform_processors:
             try:
                 if syntax == "opengraph":
-                    output[syntax] = uniform_fn(raw, with_og_array=with_og_array)
+                    output[syntax] = uniform_fn(
+                        raw, with_og_array=with_og_array, og_structured=og_structured
+                    )
                 elif syntax == "dublincore":
                     output[syntax] = uniform_fn(raw)
                 else:

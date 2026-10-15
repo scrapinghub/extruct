@@ -5,26 +5,57 @@ from urllib.parse import urljoin, urlparse
 
 from extruct.dublincore import get_lower_attrib
 
+# Looks like a structured property of og:locale, but is an array of its own.
+_OG_UNSTRUCTURED = {"og:locale:alternate"}
 
-def _uopengraph(extracted, with_og_array=False):
+
+def _og_group_structured(properties):
+    """Return *properties* with each structured property, e.g.
+    ``og:image:width``, moved into a dict with the preceding occurrence of its
+    parent property, e.g. ``og:image``."""
+    keys = {k for k, _ in properties}
+    parents = {k.rpartition(":")[0] for k in keys if k not in _OG_UNSTRUCTURED} & keys
+    grouped = []
+    current: dict[str, dict[str, str]] = {}
+    for k, v in properties:
+        parent = k.rpartition(":")[0]
+        if parent in current and k not in _OG_UNSTRUCTURED:
+            current[parent].setdefault(k, v)
+            continue
+        if k in parents:
+            current[k] = {k: v}
+            v = current[k]
+        grouped.append((k, v))
+    return grouped
+
+
+def _og_is_blank(k, v):
+    if isinstance(v, dict):
+        v = v[k]
+    return not v or not v.strip()
+
+
+def _uopengraph(extracted, with_og_array=False, og_structured=False):
     out = []
     for obj in extracted:
         # In order of appearance in the page
         properties = list(obj["properties"])
+        if og_structured:
+            properties = _og_group_structured(properties)
         flattened: dict[Any, Any] = {}
 
         for k, v in properties:
             if k not in flattened.keys():
                 flattened[k] = v
-            elif v and v.strip():
+            elif not _og_is_blank(k, v):
                 # If og_array isn't required add first non empty value
                 if not with_og_array:
-                    if not flattened[k] or not flattened[k].strip():
+                    if _og_is_blank(k, flattened[k]):
                         flattened[k] = v
                 else:
                     if isinstance(flattened[k], list):
                         flattened[k].append(v)
-                    elif flattened[k] and flattened[k].strip():
+                    elif not _og_is_blank(k, flattened[k]):
                         flattened[k] = [flattened[k], v]
                     else:
                         flattened[k] = v

@@ -1,12 +1,13 @@
 # mypy: disallow_untyped_defs=False
 import json
+import os
 import unittest
 import unittest.mock as mock
 
 from requests.exceptions import HTTPError
 
 from extruct.tool import main, metadata_from_url
-from tests import get_testdata, jsonize_dict
+from tests import get_testdata, jsonize_dict, tests_datadir
 
 
 class TestTool(unittest.TestCase):
@@ -178,6 +179,28 @@ class TestTool(unittest.TestCase):
 
         data = main([self.url, "--syntax", "opengraph", "microdata"])
         self.assertEqual(data, expected)
+
+    def test_main_file(self):
+        data = {"opengraph": self.expected["opengraph"]}
+        expected = json.dumps(data, indent=2, sort_keys=True)
+        path = os.path.join(tests_datadir, "songkick", "tovestyrke.html")
+        self.assertEqual(main([path, "--syntax", "opengraph"]), expected)
+
+    def test_main_stdin(self):
+        html = (
+            b'<html><body><div itemscope><a itemprop="url" href="b">x</a>'
+            b"</div></body></html>"
+        )
+        stdin = mock.Mock()
+        stdin.buffer.read.return_value = html
+        with mock.patch("extruct.tool.sys.stdin", stdin):
+            data = main(
+                ["-", "--base-url", "https://example.com/a", "--syntax", "microdata"]
+            )
+        self.assertEqual(
+            json.loads(data)["microdata"][0]["properties"]["url"],
+            "https://example.com/b",
+        )
 
 
 def build_mock_response(url, encoding="utf-8", content="", reason="OK", status=200):

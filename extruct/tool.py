@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from typing import Any
 
 import requests
@@ -42,7 +43,14 @@ def metadata_from_url(
 def main(args: Any | None = None) -> Any:
     parser = argparse.ArgumentParser(prog="extruct", description=__doc__)
     arg = parser.add_argument
-    arg("url", help="The target URL")
+    arg(
+        "input",
+        help="URL to download, path to an HTML file, or - to read HTML from stdin",
+    )
+    arg(
+        "--base-url",
+        help="Base URL of HTML read from a file or stdin",
+    )
     arg(
         "--syntaxes",
         nargs="+",
@@ -75,7 +83,22 @@ def main(args: Any | None = None) -> Any:
         " them or 'strict' to raise them",
     )
     args = parser.parse_args(args)
-    metadata = metadata_from_url(
-        args.url, args.syntaxes, args.uniform, args.schema_context, args.errors
-    )
+    if args.input.startswith(("http://", "https://")):
+        metadata = metadata_from_url(
+            args.input, args.syntaxes, args.uniform, args.schema_context, args.errors
+        )
+    else:
+        if args.input == "-":
+            html = sys.stdin.buffer.read()
+        else:
+            with open(args.input, "rb") as f:
+                html = f.read()
+        metadata = extruct.extract(
+            html,
+            base_url=args.base_url,
+            syntaxes=args.syntaxes,
+            uniform=args.uniform,
+            schema_context=args.schema_context,
+            errors=args.errors,
+        )
     return json.dumps(metadata, indent=2, sort_keys=True)

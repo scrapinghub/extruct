@@ -79,16 +79,29 @@ class TestGeneric(unittest.TestCase):
         return body, expected
 
     def test_errors(self):
-        body = ""
+        body = "<p>foo</p>"
+        encoding = "invalid"
 
         # raise exceptions
         with self.assertRaises(Exception):
-            data = extruct.extract(body)
+            data = extruct.extract(body, encoding=encoding)
 
         # ignore exceptions
-        data = extruct.extract(body, errors="ignore")
+        data = extruct.extract(body, encoding=encoding, errors="ignore")
         assert data == {}
 
         # ignore exceptions
-        data = extruct.extract(body, errors="log")
+        data = extruct.extract(body, encoding=encoding, errors="log")
         assert data == {}
+
+
+@pytest.mark.parametrize("body", ["", " \n", b"", "\x00", b" \x00 "])
+def test_empty(body):
+    assert extruct.extract(body) == {
+        "microdata": [],
+        "json-ld": [],
+        "opengraph": [],
+        "microformat": [],
+        "rdfa": [],
+        "dublincore": [{"namespaces": {}, "elements": [], "terms": []}],
+    }
